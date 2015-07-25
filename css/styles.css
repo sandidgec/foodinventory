@@ -1,0 +1,39 @@
+body {
+	background: ;
+	height: ;
+	margin: ;
+	padding: ;
+	width: ;
+}
+.container {
+	margin: 0 auto;
+	padding: 10px;
+	width: 1000px;
+}
+h1 {
+	text-align: center;
+}
+nav {
+
+}
+nav ul {
+	background-color: ;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+nav li {
+	border-bottom: none;
+	display: inline-block;
+	font-size: 1.4em;
+	height: 35px;
+	line-height: 35px;
+	margin-right: -4px;
+	width: 120px;
+}
+nav a {
+	color: ;
+	display: block;
+	text-decoration: none;
+}
