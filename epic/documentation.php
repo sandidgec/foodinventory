@@ -31,7 +31,7 @@
 		With Inventory text, Deanna is able to receive alerts based on inventory items and levels she sets. These
 		alerts allow her plenty of lead time in ordering raw material and scheduling product completion so the
 		proverbial shelves never go empty. The applications ability to not only take out a sold item from inventory but
-		also the raw product from backroom raw material stock is essentially having an extra dedicated employee that
+		also the raw product from backroom stock is essentially having an extra dedicated employee that
 		she would not otherwise be able to afford.</br>
 
 		As the administrator for Inventory text, Deanna will assign an employee to act as a warehouse agent and that
