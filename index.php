@@ -8,7 +8,8 @@
 	<body>
 		<div class="container">
 			<header>
-				<h1><strong>Capstone: </strong>Food Inventory</h1>
+				<h1><strong>Capstone: <
+						/strong>Food Inventory</h1>
 				<nav>
 					<ul>
 						<li><a class="" href="#">Home</a></li>
