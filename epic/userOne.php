@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 	<head lang="en">
 		<meta charset="UTF-8">
 		<title> User Persona - Deanna, Small Business Owner.</title>
@@ -37,10 +37,12 @@
 			As the administrator for Inventory text, Deanna will assign an employee to act as a warehouse agent and that
 			employee will add products and raw materials into inventory as needed and log sold inventory that sales in their
 			retail location as well insure the web sales and shopping cart plugin are up to date and accurate. Deanna
-			will be responsible for adding new unique items to the database as they are made and then they can be accessed
+			will add new unique items to the database as they are made and then they can be accessed
 			by the warehouse agent account with its unique set of permissions. Every item that was removed from inventory
 			by the employee would be logged so that Deanna could review and keep up with all outgoing products. She could
-			also see what was popular and trending from the current product selections and adjust her decisions accordingly.
+			also see what was popular and trending from the current product selections and adjust her decisions accordingly. </br>
+
+
 		</p>
 
 
