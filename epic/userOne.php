@@ -32,7 +32,7 @@
 			alerts allow her plenty of lead time in ordering raw material and scheduling product completion so the
 			proverbial shelves never go empty. The applications ability to not only take out a sold item from inventory but
 			also the raw product from backroom stock is essentially having an extra dedicated employee that
-			she would not otherwise be able to afford.  </br>
+			she would not otherwise be able to afford.  <br/>
 
 			As the administrator for Inventory text, Deanna will assign an employee to act as a warehouse agent and that
 			employee will add products and raw materials into inventory as needed and log sold inventory that sales in their
@@ -40,7 +40,7 @@
 			will add new unique items to the database as they are made and then they can be accessed
 			by the warehouse agent account with its unique set of permissions. Every item that was removed from inventory
 			by the employee would be logged so that Deanna could review and keep up with all outgoing products. She could
-			also see what was popular and trending from the current product selections and adjust her decisions accordingly. </br>
+			also see what was popular and trending from the current product selections and adjust her decisions accordingly. <br/>
 
 
 		</p>
