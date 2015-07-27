@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8" />
-		<title>Deanna, Small Business Owner</title>
+		<title>Wireframe</title>
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" />
 		<link rel="stylesheet" type="text/css" href="../css/personas.css" />
 	</head>
