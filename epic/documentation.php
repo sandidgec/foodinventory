@@ -6,5 +6,12 @@
 		<link rel="stylesheet" type="text/css" href="css/styles.css" />
 	</head>
 	<body>
+		<h2> System Goals</h2>
+		<p> The main focus of "Inventory Text" is to fill a gap for small business owners that could use an
+			inventory system that acts as an extra employee. By responding intuitively via text and a web application,
+			the software will give the business owner accurate and prompt information so that they can
+			reorder items before running out, decide what has been most popular among the inventory and see
+			what items need to be promoted or price adjusted due to low sales. The software will also keep track of raw
+			materials and send alerts based on user preference so that no time or money is lost due to lack of resources </p>
 	</body>
 </html>
