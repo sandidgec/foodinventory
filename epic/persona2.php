@@ -18,6 +18,7 @@
 						<li><a href="./documentation.php">Epic</a></li>
 						<li><a href="./persona1.php">Persona 1</a></li>
 						<li><a href="./persona3.php">Persona 3</a></li>
+						<li><a href="./sitemap.php">Site Map</a></li>
 						<li><a href="./wireframes.php">Wireframes</a></li>
 					</ul>
 				</nav>
@@ -29,7 +30,7 @@
 					small business&mdash;inventory is appropriately received, stored, handled, and removed from
 					warehouse/backstock as needed to meet business needs.
 				</p>
-				My duties compose of four key work activities:
+				My duties compose of five key work activities:
 				<ol>
 					<li>receiving inventory into warehouse</li>
 					<li>storage of inventory within warehouse</li>
@@ -37,6 +38,7 @@
 					<li>dispatching inventory from the warehouse</li>
 					<li>returning inventory back to stock</li>
 				</ol>
+
 
 				<h2>User Cases</h2>
 
