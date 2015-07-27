@@ -6,7 +6,7 @@
 
 	<head>
 		<title>User Persona&mdash;Warehouse/Backstock Manager/Clerk</title>
-		<link href="styles.css" rel="stylesheet" type="text/css" media="all" />
+		<link href="../css/styles.css" rel="stylesheet" type="text/css" media="all" />
 	</head>
 
 
