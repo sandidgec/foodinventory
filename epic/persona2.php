@@ -16,8 +16,8 @@
 					<ul>
 						<li><a href="../index.php">Home</a></li>
 						<li><a href="./documentation.php">Epic</a></li>
-								<li><a href="persona1.php">Persona 1</a></li>
-								<li><a href="persona3.php">Persona 3</a></li>
+						<li><a href="./persona1.php">Persona 1</a></li>
+						<li><a href="./persona3.php">Persona 3</a></li>
 					</ul>
 				</nav>
 			</header>
