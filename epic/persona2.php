@@ -30,7 +30,7 @@
 					small business&mdash;inventory is appropriately received, stored, handled, and removed from
 					warehouse/backstock as needed to meet business needs.
 				</p>
-				My duties compose of four key work activities:
+				My duties compose of five key work activities:
 				<ol>
 					<li>receiving inventory into warehouse</li>
 					<li>storage of inventory within warehouse</li>
@@ -38,6 +38,7 @@
 					<li>dispatching inventory from the warehouse</li>
 					<li>returning inventory back to stock</li>
 				</ol>
+
 
 				<h2>User Cases</h2>
 
