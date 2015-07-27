@@ -22,7 +22,7 @@
 		product is a perfect solution since she's often on the go and can't otherwise check in with her physical
 		inventory any other way.<br/>
 
-		Deanna as many other small business owners do, tried excel spreadsheets and a subscription to QuickBooks and its
+		Deanna as many other small business owners do, tried excel spreadsheets and QuickBooks and its
 		inventory application plugin. At first these seemed viable and helpful but there was no way of staying ahead
 		of the inventory game unless she constantly opened cumbersome software and read between the lines of
 		accounting in order to decipher how many green beads were out of inventory and at what point was it crucial
