@@ -23,7 +23,7 @@
 				</nav>
 			</header>
 			<main>
-				<h2>User Persona - Deanna, Small Business Owner</h2>
+				<h2>User Persona - Mel, Warehouse/Backstock Clerk</h2>
 
 
 		<p><strong>User story:</strong> As a warehouse/backstock clerk, I play a key role in the supply chain of a small business&mdash;inventory is appropriately received, stored, handled, and removed from warehouse/backstock as needed to meet business needs.
