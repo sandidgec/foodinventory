@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8" />
-		<title>User Persona&mdash;Warehouse/Backstock Manager/Clerk</title>
+		<title>Warehouse/Backstock Manager/Clerk</title>
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" />
 		<link rel="stylesheet" type="text/css" href="../css/personas.css" />
 	</head>
@@ -10,7 +10,7 @@
 		<div class="container">
 			<header>
 				<h1>
-					Persona <strong>3</strong>
+					Persona <strong>2</strong>
 				</h1>
 				<nav>
 					<ul>
@@ -20,7 +20,7 @@
 				</nav>
 			</header>
 			<main>
-				<h2>User Persona&mdash;Warehouse/Backstock Manager/Clerk</h2>
+				<h2>User Persona - Warehouse/Backstock Manager/Clerk</h2>
 				<img class="diagram" src="../images/warehouse-diagram.jpg" alt="warehouse-diagram" title="warehouse-diagram" />
 				<p><small>Resource: http://log.logcluster.org/mobile/response/warehouse-management/index.html</small></p>
 				<p></p>

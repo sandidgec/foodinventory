@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8" />
-		<title>User Persona - Deanna, Small Business Owner</title>
+		<title>Deanna, Small Business Owner</title>
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" />
 		<link rel="stylesheet" type="text/css" href="../css/personas.css" />
 	</head>
@@ -10,7 +10,7 @@
 		<div class="container">
 			<header>
 				<h1>
-					Persona <strong>3</strong>
+					Persona <strong>1</strong>
 				</h1>
 				<nav>
 					<ul>
@@ -20,7 +20,7 @@
 				</nav>
 			</header>
 			<main>
-				<h2>Persona</h2>
+				<h2>User Persona - Deanna, Small Business Owner</h2>
 				<p>
 					Deanna is the owner of a small business that employees five jewelry makers.
 					Her vision was an online store that would market the original handmade pieces to the world
@@ -47,6 +47,8 @@
 					accounting in order to decipher how many green beads were out of inventory and at what point was it crucial
 					she order more.
 				</p>
+
+				<h2>Use Cases</h2>
 				<p>
 					With "Inventory text", Deanna is able to receive alerts based on inventory items and levels she sets. These
 					alerts allow her plenty of lead time in ordering raw material and scheduling product completion so the
@@ -63,9 +65,6 @@
 					by the employee would be logged so that Deanna could review and keep up with all outgoing products. She could
 					also see what was popular and trending from the current product selections and adjust her decisions accordingly.
 				</p>
-
-				<h2>Use Cases</h2>
-				<p></p>
 			</main>
 		</div>
 	</body>

@@ -13,6 +13,9 @@ body {
 h1 {
 	text-align: center;
 }
+h2 {
+	text-decoration: solid underline;
+}
 nav {
 
 }
@@ -37,6 +40,12 @@ nav a {
 	display: block;
 	text-decoration: none;
 }
+.schema {
+	padding: 0 20px;
+}
+p {
+	padding: 0 20px;
+ }
 
 /* diagram image box */
 
