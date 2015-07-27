@@ -6,7 +6,9 @@
 
 	<head>
 		<title>User Persona&mdash;Warehouse/Backstock Clerk</title>
-		<link href="styles.css" rel="stylesheet" type="text/css" media="all" />
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" />
+	</head>
+		<header>
 		<nav>
 			<ul>
 				<li><a href="../index.php">Home</a></li>
@@ -16,7 +18,7 @@
 				<li><a href="./wireframes.php">Wireframes</a></li>
 			</ul>
 		</nav>
-	</head>
+		</header>
 
 
 	<body>
