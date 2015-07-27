@@ -34,9 +34,6 @@
 					<h3>Movement to Location; Location to Movement</h3>
 					<p>one movement can have many locations</p>
 					<p>one location can have one and only one movement</p>
-					<h3>Movement to productLocation; productLocation to Movement</h3>
-					<p>one movement can have many productLocations</p>
-					<p>one productLocation can have one and only one movement</p>
 
 					<h3>Product to Location; Location to Product</h3>
 					<p>one product can have many locations</p>
@@ -47,6 +44,16 @@
 					<h3>Location to productLocation; productLocation to Location</h3>
 					<p>one location can have one and only one productLocation</p>
 					<p>one productLocation can have many locations</p>
+
+					<h3>productLocation to notification; notification to productLocation</h3>
+					<p>one productLocation can have many notifications</p>
+					<p>one notification can have one and only one productLocation</p>
+					<h3>productLocation to unitOfMeasure; unitOfMeasure to productLocation</h3>
+					<p>one productLocation can have one and only one unitOfMeasure</p>
+					<p>one unitOfMeasure can have many productLocations</p>
+					<h3>movement to unitOfMeasure; unitOfMeasure to movement</h3>
+					<p>one movement can have one and only one unitOfMeasure</p>
+					<p>one unitOfMeasure can have many movement</p>
 				</div>
 				<h2>Inventory Text ERD:</h2>
 				<img src="../images/inventory-text.jpg" alt="Inventory Text ERD" width="1000"/>
