@@ -5,17 +5,25 @@ body {
 	padding: ;
 	width: ;
 }
+
+
 .container {
 	margin: 0 auto;
 	padding: 10px;
 	width: 1000px;
 }
+
+
 h1 {
 	text-align: center;
 }
+
+
 nav {
 
 }
+
+
 nav ul {
 	background-color: ;
 	list-style: none;
@@ -23,6 +31,8 @@ nav ul {
 	padding: 0;
 	text-align: center;
 }
+
+
 nav li {
 	border-bottom: none;
 	display: inline-block;
@@ -32,8 +42,19 @@ nav li {
 	margin-right: -4px;
 	width: 120px;
 }
+
+
 nav a {
 	color: ;
 	display: block;
 	text-decoration: none;
+}
+
+
+/* diagram image box */
+
+.diagram {
+	width: 360px;
+	height: 226;
+	margin: 10px;
 }
