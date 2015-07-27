@@ -6,7 +6,7 @@
 
 	<head>
 		<title>User Persona&mdash;Warehouse/Backstock Manager/Clerk</title>
-		<link href="style.css" rel="stylesheet" type="text/css" media="all" />
+		<link href="styles.css" rel="stylesheet" type="text/css" media="all" />
 	</head>
 
 
@@ -16,7 +16,7 @@
 		<h1>User Persona&mdash;Warehouse/Backstock Manager/Clerk</h1>
 
 		<div>
-		<img class="diagram" src="images/warehouse-diagram.jpg" alt="warehouse-diagram" title="warehouse-diagram" />
+		<img class="diagram" src="../images/warehouse-diagram.jpg" alt="warehouse-diagram" title="warehouse-diagram" />
 		<p><small>Resource: http://log.logcluster.org/mobile/response/warehouse-management/index.html</small></p>
 		</div>
 
