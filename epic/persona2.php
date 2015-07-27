@@ -107,6 +107,8 @@
 
 
 
+
+
 		<!--
 				<div>
 					<img class="diagram" src="images/warehouse_diagram.jpg" alt="warehouse-diagram" title="warehouse-diagram" />
