@@ -1,38 +1,28 @@
 body {
-	background: ;
-	height: ;
-	margin: ;
-	padding: ;
-	width: ;
+	background: #ffffff;
+	height: 100%;
+	margin: 5px;
+	padding: 5px;
+	width: 100%;
 }
-
-
 .container {
 	margin: 0 auto;
 	padding: 10px;
 	width: 1000px;
 }
-
-
 h1 {
 	text-align: center;
 }
-
-
 nav {
 
 }
-
-
 nav ul {
-	background-color: ;
+	background-color: #888888;
 	list-style: none;
 	margin: 0;
 	padding: 0;
 	text-align: center;
 }
-
-
 nav li {
 	border-bottom: none;
 	display: inline-block;
@@ -42,19 +32,16 @@ nav li {
 	margin-right: -4px;
 	width: 120px;
 }
-
-
 nav a {
-	color: ;
+	color: #ffffff;
 	display: block;
 	text-decoration: none;
 }
-
 
 /* diagram image box */
 
 .diagram {
 	width: 360px;
-	height: 226;
+	height: 226px;
 	margin: 10px;
 }

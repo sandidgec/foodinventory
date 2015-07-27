@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html>
-	<head>
+	<head lang="en">
 		<meta charset="UTF-8" />
-		<title>Food Inventory</title>
+		<title>Inventory Text</title>
 		<link rel="stylesheet" type="text/css" href="css/styles.css" />
 	</head>
 	<body>
 		<div class="container">
 			<header>
-				<h1><strong>Capstone: </strong>
-						"Inventory Text"</h1>
+				<h1>
+					<strong>Capstone: </strong>
+						"Inventory Text"
+				</h1>
 				<nav>
 					<ul>
-						<li><a class="" href="#">Home</a></li>
+						<li><a class="active" href="#">Home</a></li>
 						<li><a href="./epic/documentation.php">Epic</a></li>
-						<li><a href="epic/persona1.php">User Case 1</a></li>
-						<li><a href="epic/persona2.php">User Case 2</a></li>
-						<li><a href="epic/persona3.php">User Case 3</a></li>
-
 					</ul>
 				</nav>
 			</header>
