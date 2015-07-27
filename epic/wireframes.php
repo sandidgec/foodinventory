@@ -25,5 +25,7 @@
 			</header>
 		</div>
 		<img src="../images/wireframe-inventory1.jpg" alt="wireframe">
+		<img src="../images/wireframe-inventory2.jpg" alt="wireframe 2">
 	</body>
 </html>
+
