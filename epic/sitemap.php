@@ -20,8 +20,8 @@
 				</nav>
 			</header>
 			<main>
-				<h2>User Persona - Nick, Manager at Napoli's Coffee House</h2>
-				<img src="../images/inventory_text_site-map.jpg" alt="Inventory-Text Sitemap" width=""/>
+				<h2>Site Map - Inventory Text</h2>
+				<img src="../images/inventory_text_site-map.jpg" alt="Inventory-Text Sitemap" width="800"/>
 			</main>
 	</body>
 </html>
