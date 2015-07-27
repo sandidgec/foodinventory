@@ -23,3 +23,4 @@
 
 		<img src="../images/wireframe-inventory1.jpg" alt="inventory text wireframe"
 	</body>
+</html>
