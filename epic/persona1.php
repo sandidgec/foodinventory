@@ -18,6 +18,7 @@
 						<li><a href="./documentation.php">Epic</a></li>
 						<li><a href="./persona2.php">Persona 2</a></li>
 						<li><a href="./persona3.php">Persona 3</a></li>
+						<li><a href="./wireframes.php">Wireframes</a></li>
 					</ul>
 				</nav>
 			</header>
