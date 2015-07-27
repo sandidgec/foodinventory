@@ -38,6 +38,7 @@
 					<li>returning inventory back to stock</li>
 				</ol>
 
+
 				<h2>User Cases</h2>
 
 				<p>Use Case 1&mdash;Receiving products into warehouse:</p>
