@@ -26,7 +26,7 @@
 					Her vision was an online store that would market the original handmade pieces to the world
 					so that the local New Mexican flare could be seen everywhere. Her company made some great
 					contacts early on and was able to sell pieces to some large stores in New York and other fashion
-					destinations.
+					destination around the world.
 				</p>
 				<p>
 					The problem has never been sales for Deanna, the problem has been keeping up with those sales
