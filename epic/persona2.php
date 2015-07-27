@@ -1,31 +1,29 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/html">
-	<head lang="en">
-		<meta charset="UTF-8">
-
-
+<html>
 	<head>
-		<title>User Persona&mdash;Warehouse/Backstock Clerk</title>
+		<meta charset="UTF-8" />
+		<title>Warehouse/Backstock Clerk</title>
 		<link rel="stylesheet" type="text/css" href="../css/styles.css" />
+		<link rel="stylesheet" type="text/css" href="../css/personas.css" />
 	</head>
-		<header>
-		<nav>
-			<ul>
-				<li><a href="../index.php">Home</a></li>
-				<li><a href="./documentation.php">Epic</a></li>
-				<li><a href="./persona1.php">Persona 1</a></li>
-				<li><a href="./persona3.php">Persona 3</a></li>
-				<li><a href="./wireframes.php">Wireframes</a></li>
-			</ul>
-		</nav>
-		</header>
-
-
 	<body>
-
-
-		<h1>User Persona Two <br/>
-			Warehouse/Backstock Clerk</h1>
+		<div class="container">
+			<header>
+				<h1>
+					Persona <strong>2</strong>
+				</h1>
+				<nav>
+					<ul>
+						<li><a href="../index.php">Home</a></li>
+						<li><a href="./documentation.php">Epic</a></li>
+						<li><a href="./persona1.php">Persona 1</a></li>
+						<li><a href="./persona3.php">Persona 3</a></li>
+						<li><a href="./wireframes.php">Wireframes</a></li>
+					</ul>
+				</nav>
+			</header>
+			<main>
+				<h2>User Persona - Deanna, Small Business Owner</h2>
 
 
 		<p><strong>User story:</strong> As a warehouse/backstock clerk, I play a key role in the supply chain of a small business&mdash;inventory is appropriately received, stored, handled, and removed from warehouse/backstock as needed to meet business needs.
@@ -114,6 +112,6 @@
 		-->
 
 
-
+		</main>
 	</body>
 </html>
