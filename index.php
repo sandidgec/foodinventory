@@ -22,7 +22,9 @@
 			<main>
 				<div class="section">
 					<h2>Welcome to our site!</h2>
-					<p></p>
+					<p>
+						<img src="./images/phoneExample.png" alt="phone image">
+					</p>
 				</div>
 				<div class="section">
 					<h2></h2>
