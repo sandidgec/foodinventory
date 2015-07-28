@@ -54,9 +54,9 @@
 				</ol>
 
 
-				<h2>User Cases</h2>
+				<h2>User Cases:</h2>
 
-				<p>Use Case 1&mdash;Receiving products into warehouse:</p>
+				<p><strong>Use Case 1</strong>&mdash;Receiving products into warehouse:</p>
 				<ul>
 					<li><strong>input</strong> delivered/received products into data inventory application</li>
 					<li>verify quality of delivered products </li>
@@ -69,7 +69,7 @@
 				</ul>
 
 
-				<p>Use Case 2&mdash;Storage of inventory within warehouse</p>
+				<p><strong>Use Case 2</strong>&mdash;Storage of inventory within warehouse</p>
 				<ul>
 					<li><strong>assign</strong> storage location for newly received stock into data inventory application</li>
 					<ul>
@@ -87,7 +87,7 @@
 				</ul>
 
 
-				<p>Use Case 3&mdash;Picking inventory from stock:</p>
+				<p><strong>Use Case 3</strong>&mdash;Picking inventory from stock:</p>
 				<ul>
 					<li>if picking products from stock, <strong>remove</strong> product count from data inventory application</li>
 					<ul>
@@ -97,7 +97,7 @@
 				</ul>
 
 
-				<p>Use Case 4&mdash;Dispatching inventory from the warehouse:</p>
+				<p><strong>Use Case 4</strong>&mdash;Dispatching inventory from the warehouse:</p>
 				<ul>
 					<li>picked products are taken to dispatched area for removal of product from warehouse as instructed</li>
 					<ul>
@@ -107,7 +107,7 @@
 				</ul>
 
 
-				<p>Use Case 5&mdash;Returning products back to stock:</p>
+				<p><strong>Use Case 5</strong>&mdash;Returning products back to stock:</p>
 				<ul>
 					<li><strong>input</strong> returning products into data inventory application</li>
 					<li><strong>assign</strong> storage location for returning products into data inventory application</li>
