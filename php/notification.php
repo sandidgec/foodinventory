@@ -38,6 +38,6 @@ class Notification {
 	 **/
 	private $twillioId;
 	/**
-	 *
+	 * this
 	 */
 }
