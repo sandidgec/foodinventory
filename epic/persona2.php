@@ -117,13 +117,6 @@
 					</ul>
 				</ul>
 
-
-				<!--
-						<div>
-							<img class="diagram" src="images/warehouse_diagram.jpg" alt="warehouse-diagram" title="warehouse-diagram" />
-							<p><small>Resource: http://log.logcluster.org/mobile/response/warehouse-management/index.html</small></p>
-						</div>
-				-->
 		</main>
 	</body>
 </html>
