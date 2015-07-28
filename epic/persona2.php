@@ -25,12 +25,26 @@
 			</header>
 			<main>
 				<h2>User Persona - Mel, Warehouse/Backstock Clerk</h2>
+
 				<p>
-					<strong>User story:</strong> As a warehouse/backstock clerk, I play a key role in the supply chain of a
+					<strong>Profession: </strong>Melanie plays a key role in the supply chain of a small business working as a warehouse/backstock clerk.
+				</p>
+				<p>
+					<strong>Attitudes and Behaviors: </strong>Melanie is a cheerful lady that loves to listen to her music as see picks items from the inventory stock for customer orders. She's speedy-quick, accurate, and detail-oriented. She loves joy-riding around the warehouse on the fork-lift.
+				</p>
+				<p>
+					<strong>Frustrations and Needs: </strong>Melanie's biggest frustration is when the main server goes out and the inventory data software is not available&hellip;that and when somebody walks away from the copy machine when it has a paper jam or needs toner.
+				</p>
+				<p>
+					<strong>Goals: </strong>Melanie aspires to become the manager of the warehouse within one year.
+				</p>
+
+				<p>
+					<strong>User story:</strong> As a warehouse/backstock clerk, Melanie plays a key role in the supply chain of a
 					small business&mdash;inventory is appropriately received, stored, handled, and removed from
 					warehouse/backstock as needed to meet business needs.
 				</p>
-				My duties compose of five key work activities:
+				Melanie's duties compose of five key work activities:
 				<ol>
 					<li>receiving inventory into warehouse</li>
 					<li>storage of inventory within warehouse</li>
