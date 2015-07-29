@@ -118,6 +118,8 @@ class Movement {
 	 * mutator method for movementId
 	 *
 	 * @param int $newMovementId new value of movementId
+	 * @throws InvalidArgumentException if $newMovementId is not an integer
+	 * @throws RangeException if $newMovementId is not positive
 	 **/
 	public function setMovementId($newMovementId) {
 		// base case: if the movementId is null,
@@ -155,6 +157,8 @@ class Movement {
 	 * mutator method for fromLocationId
 	 *
 	 * @param int $newFromLocationId
+	 * @throws InvalidArgumentException if $newFromLocationId is not an integer
+	 * @throws RangeException if $newFromLocationId is not positive
 	 */
 	public function setFromLocationId($newFromLocationId) {
 		// verify the fromLocationId is valid
@@ -185,6 +189,8 @@ class Movement {
 	 * mutator method for toLocationId
 	 *
 	 * @param int $newToLocationId
+	 * @throws InvalidArgumentException if $newToLocationId is not an integer
+	 * @throws RangeException if $newToLocationId is not positive
 	 **/
 	public function setToLocationId($newToLocationId) {
 		// verify the toLocationId is valid
@@ -215,9 +221,23 @@ class Movement {
 	 * mutator method for productId
 	 *
 	 * @param int $newProductId
+	 * @throws InvalidArgumentException if $newProductId is not an integer
+	 * @throws RangeException if $newFromProductId is not positive
 	 **/
 	public function setProductId($newProductId) {
+		// verify the productId is valid
+		$newProductId = filter_var($newProductId, FILTER_VALIDATE_INT);
+		if($newProductId === false) {
+			throw(new InvalidArgumentException("productId is not a valid integer"));
+		}
 
+		// verify the productId is positive
+		if($newProductId <= 0) {
+			throw(new RangeException("productId is not positive"));
+		}
+
+		// convert and store the productId
+		$this->productId = intval($newProductId);
 	}
 
 	/**
@@ -233,9 +253,23 @@ class Movement {
 	 * mutator method for unitId
 	 *
 	 * @param int $newUnitId
+	 * @throws InvalidArgumentException if $newUnitId is not an integer
+	 * @throws RangeException if $newUnitId is not positive
 	 */
 	public function setUnitId($newUnitId) {
+		// verify the unitId is valid
+		$newUnitId = filter_var($newUnitId, FILTER_VALIDATE_INT);
+		if($newUnitId === false) {
+			throw(new InvalidArgumentException("unitId is not a valid integer"));
+		}
 
+		// verify the unitId is positive
+		if($newUnitId <= 0) {
+			throw(new RangeException("unitId is not positive"));
+		}
+
+		// convert and store the unitId
+		$this->unitId = intval($newUnitId);
 	}
 
 	/**
@@ -253,13 +287,25 @@ class Movement {
 	 * @param float $newCost
 	 */
 	public function setCost($newCost) {
+		// verify the cost is valid
+		$newCost = filter_var($newCost, FILTER_VALIDATE_FLOAT, FILTER_FLAG_ALLOW_THOUSAND);
+		if($newCost === false) {
+			throw(new InvalidArgumentException("cost is not a valid float"));
+		}
 
+		// verify the cost is positive
+		if($newCost <= 0) {
+			throw(new RangeException("cost is not positive"));
+		}
+
+		// convert and store the cost
+		$this->cost = floatval($newCost);
 	}
 
 	/**
 	 * accessor method for movementDate
 	 *
-	 * @return string value of movementId
+	 * @return string value of movementDate
 	 */
 	public function getMovementDate() {
 		return $this->movementDate;
@@ -271,7 +317,7 @@ class Movement {
 	 * @param string $newMovementDate
 	 */
 	public function setMovementDate($newMovementDate) {
-
+		// hdskjhdsgh
 	}
 
 	/**
@@ -287,9 +333,24 @@ class Movement {
 	 * mutator method for movementType
 	 *
 	 * @param string $newMovementType
+	 * @throws InvalidArgumentException if $newMovementType is not a string
+	 * @throws RangeException if $newMovementType is not 1 character long
 	 */
 	public function setMovementType($newMovementType) {
+		// verify the movementType is secure
+		$newMovementType = trim($newMovementType);
+		$newMovementType = filter_var($newMovementType, FILTER_SANITIZE_STRING);
+		if(empty($newMovementType) === true) {
+			throw(new InvalidArgumentException("movementType is empty or insecure"));
+		}
 
+		// verify the movementType will fit in the database
+		if(strlen($newMovementType) > 1) {
+			throw(new RangeException("movementType is too large"));
+		}
+
+		// store the movementType
+		$this->movementType = $newMovementType;
 	}
 
 	/**
@@ -307,6 +368,18 @@ class Movement {
 	 * @param float $newPrice
 	 */
 	public function setPrice($newPrice) {
+		// verify the price is valid
+		$newPrice = filter_var($newPrice, FILTER_VALIDATE_FLOAT, FILTER_FLAG_ALLOW_THOUSAND);
+		if($newPrice === false) {
+			throw(new InvalidArgumentException("price is not a valid float"));
+		}
 
+		// verify the price is positive
+		if($newPrice <= 0) {
+			throw(new RangeException("price is not positive"));
+		}
+
+		// convert and store the price
+		$this->price = floatval($newPrice);
 	}
 }
