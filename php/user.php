@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: sandidgec
- * Date: 7/28/2015
- * Time: 4:01 PM
- */
 
 class User {
 
@@ -34,7 +28,10 @@ class User {
 	 **/
 	private $phoneNumber;
 	/**
-	 *
-	 *
+	 *password hash for userId;
+	 * @var string $passwordHash
 	 **/
-	private $password;
+	private $passwordHash;
+
+
+}
