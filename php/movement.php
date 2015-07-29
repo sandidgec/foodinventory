@@ -117,10 +117,29 @@ class Movement {
 	/**
 	 * mutator method for movementId
 	 *
-	 * @param int $movementId
+	 * @param int $newMovementId new value of movementId
 	 **/
 	public function setMovementId($newMovementId) {
+		// base case: if the movementId is null,
+		// this is a new movement without a mySQL assigned id (yet)
+		if($newMovementId === null) {
+			$this->movementId = null;
+			return;
+		}
 
+		// verify the movementId is valid
+		$newMovementId = filter_var($newMovementId, FILTER_VALIDATE_INT);
+		if($newMovementId === false) {
+			throw(new InvalidArgumentException("movementId is not a valid integer"));
+		}
+
+		// verify the movementId is positive
+		if($newMovementId <= 0) {
+			throw(new RangeException("movementId is not positive"));
+		}
+
+		// convert and store the movementId
+		$this->movementId = intval($newMovementId);
 	}
 
 	/**
@@ -135,10 +154,22 @@ class Movement {
 	/**
 	 * mutator method for fromLocationId
 	 *
-	 * @param int $fromLocationId
+	 * @param int $newFromLocationId
 	 */
 	public function setFromLocationId($newFromLocationId) {
+		// verify the fromLocationId is valid
+		$newFromLocationId = filter_var($newFromLocationId, FILTER_VALIDATE_INT);
+		if($newFromLocationId === false) {
+			throw(new InvalidArgumentException("fromLocationId is not a valid integer"));
+		}
 
+		// verify the fromLocationId is positive
+		if($newFromLocationId <= 0) {
+			throw(new RangeException("fromLocationId is not positive"));
+		}
+
+		// convert and store the fromLocationId
+		$this->fromLocationId = intval($newFromLocationId);
 	}
 
 	/**
@@ -153,10 +184,22 @@ class Movement {
 	/**
 	 * mutator method for toLocationId
 	 *
-	 * @param int $toLocationId
+	 * @param int $newToLocationId
 	 **/
 	public function setToLocationId($newToLocationId) {
+		// verify the toLocationId is valid
+		$newToLocationId = filter_var($newToLocationId, FILTER_VALIDATE_INT);
+		if($newToLocationId === false) {
+			throw(new InvalidArgumentException("toLocationId is not a valid integer"));
+		}
 
+		// verify the toLocationId is positive
+		if($newToLocationId <= 0) {
+			throw(new RangeException("toLocationId is not positive"));
+		}
+
+		// convert and store the toLocationId
+		$this->toLocationId = intval($newToLocationId);
 	}
 
 	/**
@@ -171,7 +214,7 @@ class Movement {
 	/**
 	 * mutator method for productId
 	 *
-	 * @param int $productId
+	 * @param int $newProductId
 	 **/
 	public function setProductId($newProductId) {
 
@@ -189,7 +232,7 @@ class Movement {
 	/**
 	 * mutator method for unitId
 	 *
-	 * @param int $unitId
+	 * @param int $newUnitId
 	 */
 	public function setUnitId($newUnitId) {
 
@@ -207,7 +250,7 @@ class Movement {
 	/**
 	 * mutator method for cost
 	 *
-	 * @param float $cost
+	 * @param float $newCost
 	 */
 	public function setCost($newCost) {
 
@@ -225,7 +268,7 @@ class Movement {
 	/**
 	 * mutator method for movementDate
 	 *
-	 * @param string $movementDate
+	 * @param string $newMovementDate
 	 */
 	public function setMovementDate($newMovementDate) {
 
@@ -243,7 +286,7 @@ class Movement {
 	/**
 	 * mutator method for movementType
 	 *
-	 * @param string $movementType
+	 * @param string $newMovementType
 	 */
 	public function setMovementType($newMovementType) {
 
@@ -261,7 +304,7 @@ class Movement {
 	/**
 	 * mutator method for price
 	 *
-	 * @param float $price
+	 * @param float $newPrice
 	 */
 	public function setPrice($newPrice) {
 
