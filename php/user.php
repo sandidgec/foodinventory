@@ -84,7 +84,56 @@ class User {
 		if(strlen($newLastName)> 32){
 			throw new RangeException("Last Name content too large");
 		}
-
 		$this->lastName = $newLastName;
 	}
+
+	/**
+	 * accessor method for First Name
+	 * @return string
+	 */
+
+	public function getFirstName() {
+		return ($this->firstName);
+	}
+
+	/**
+	 * Mutator method for First Name
+	 * @param $newFirstName
+	 */
+	public function setFirstName ($newFirstName) {
+		// verify first name is valid
+	$newFirstName = filter_var($newFirstName,FILTER_SANITIZE_STRING);
+		if(empty($newFirstName) === true) {
+			throw new InvalidArgumentException("content invalid");
+		}
+		if(strlen($newFirstName)> 32) {
+			throw new RangeException ("First Name content too large");
+		}
+		$this->firstName = $newFirstName;
+	}
+
+	/**
+	 * accessor for email
+	 * @return string
+	 */
+	public function getEmail() {
+		return ($this->email);
+	}
+
+	/**
+	 * Mutator for Email
+	 * @param $newEmail
+	 */
+	public function setEmail ($newEmail) {
+		// verify email is valid
+		$newEmail = filter_var($newEmail, FILTER_SANITIZE_EMAIL);
+			if(empty($newEmail) === true) {
+				throw new InvalidArgumentException ("content invalid");
+			}
+			if (strlen($newEmail)>64) {
+				throw new RangeException ("Email content too large");
+			}
+		$this->email = $newEmail;
+	}
 }
+
