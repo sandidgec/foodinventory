@@ -49,9 +49,9 @@ class User {
 		return ($this->userId);
 	}
 
-	/** mutator method for profile id
-	 *
-	 * @throws InvalidArgumentException if $userId is not a int
+	/**
+	 * mutator for the userId
+	 * @param $newUserId
 	 */
 
 	public function setUserId($newUserId) {
@@ -60,6 +60,7 @@ class User {
 		if(empty($newUserId) === true) {
 			throw (new InvalidArgumentException ("content invalid"));
 		}
+		$this->userId = $newUserId;
 	}
 	/**
 	 * accessor method for Last Name
