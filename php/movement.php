@@ -52,7 +52,7 @@ class Movement {
 	private $movementDate;
 
 	/**
-	 * the type of the movement;
+	 * the type of the movement
 	 * - M for Move
 	 * - S for Sold
 	 * - T for Trashed
@@ -65,6 +65,45 @@ class Movement {
 	 * @var double $price
 	 **/
 	private $price;
+
+	/**
+	 * @param int $newMovementId id for this Movement
+	 * @param int $newFromLocationId id for the product's current location
+	 * @param int $newToLocationId id for the product's new location
+	 * @param int $newProductId id for the product being moved
+	 * @param int $newUnitId id for the units being moved
+	 * @param double $newCost cost of the product being moved
+	 * @param string $newMovementDate the date of the movement
+	 * @param string$newMovementType the type of the movement
+	 * @param double $newPrice price of the product being moved
+	 * @throws InvalidArgumentException if data types are not valid
+	 * @throws RangeException if data values are out of bounds (e.g., strings too long, negative integers)
+	 * @throws Exception if some other exception is thrown
+	 */
+
+	public function __construct($newMovementId, $newFromLocationId, $newToLocationId, $newProductId,
+										 $newUnitId, $newCost, $newMovementDate, $newMovementType, $newPrice) {
+		try {
+			$this->setMovementId($newMovementId);
+			$this->setFromLocationId($newFromLocationId);
+			$this->setToLocationId($newToLocationId);
+			$this->setProductId($newProductId);
+			$this->setUnitId($newUnitId);
+			$this->setCost($newCost);
+			$this->setMovementDate($newMovementDate);
+			$this->setMovementType($newMovementType);
+			$this->setPrice($newPrice);
+		} catch(InvalidArgumentException $invalidArgument) {
+			// rethrow the exception to the caller
+			throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
+		} catch(RangeException $range) {
+			// rethrow the exception to the caller
+			throw(new RangeException($range->getMessage(), 0, $range));
+		} catch(Exception $exception) {
+			// rethrow the generic exception to the caller
+			throw(new Exception($exception->getMessage(), 0, $exception));
+		}
+	}
 
 	/**
 	 * accessor method for movementId
@@ -80,8 +119,8 @@ class Movement {
 	 *
 	 * @param int $movementId
 	 **/
-	public function setMovementId($movementId) {
-		$this->movementId = $movementId;
+	public function setMovementId($newMovementId) {
+
 	}
 
 	/**
@@ -98,8 +137,8 @@ class Movement {
 	 *
 	 * @param int $fromLocationId
 	 */
-	public function setFromLocationId($fromLocationId) {
-		$this->fromLocationId = $fromLocationId;
+	public function setFromLocationId($newFromLocationId) {
+
 	}
 
 	/**
@@ -116,8 +155,8 @@ class Movement {
 	 *
 	 * @param int $toLocationId
 	 **/
-	public function setToLocationId($toLocationId) {
-		$this->toLocationId = $toLocationId;
+	public function setToLocationId($newToLocationId) {
+
 	}
 
 	/**
@@ -134,8 +173,8 @@ class Movement {
 	 *
 	 * @param int $productId
 	 **/
-	public function setProductId($productId) {
-		$this->productId = $productId;
+	public function setProductId($newProductId) {
+
 	}
 
 	/**
@@ -152,8 +191,8 @@ class Movement {
 	 *
 	 * @param int $unitId
 	 */
-	public function setUnitId($unitId) {
-		$this->unitId = $unitId;
+	public function setUnitId($newUnitId) {
+
 	}
 
 	/**
@@ -170,8 +209,8 @@ class Movement {
 	 *
 	 * @param float $cost
 	 */
-	public function setCost($cost) {
-		$this->cost = $cost;
+	public function setCost($newCost) {
+
 	}
 
 	/**
@@ -188,8 +227,8 @@ class Movement {
 	 *
 	 * @param string $movementDate
 	 */
-	public function setMovementDate($movementDate) {
-		$this->movementDate = $movementDate;
+	public function setMovementDate($newMovementDate) {
+
 	}
 
 	/**
@@ -206,8 +245,8 @@ class Movement {
 	 *
 	 * @param string $movementType
 	 */
-	public function setMovementType($movementType) {
-		$this->movementType = $movementType;
+	public function setMovementType($newMovementType) {
+
 	}
 
 	/**
@@ -224,7 +263,7 @@ class Movement {
 	 *
 	 * @param float $price
 	 */
-	public function setPrice($price) {
-		$this->price = $price;
+	public function setPrice($newPrice) {
+
 	}
 }
