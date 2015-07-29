@@ -229,7 +229,7 @@ public function getNotificationId() {
 		}
 
 		// verify the notification content will fit in the database
-		if(strlen($newNotificationContent) > 2500) {
+		if(strlen($newNotificationContent) > 160) {
 			throw(new RangeException("notification content too large"));
 		}
 		// store the notification content
