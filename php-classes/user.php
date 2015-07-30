@@ -420,7 +420,15 @@ class User {
 			$this->hash = $newSalt;
 		}
 	}
-}
+	public function insert(PDO &$pdo) {
+		// make sure user doesn't already exist
+		if($this->userId !== null) {
+			throw (new PDOException("existing user"));
+		}
+
+	}
+	}
+
 
 
 
