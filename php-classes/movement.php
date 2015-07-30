@@ -481,6 +481,47 @@ class Movement {
 	}
 
 	/**
+	 * gets the Movement by movementId
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int $newMovementId the movementId to search for
+	 * @return mixed Movement found or null if not found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getMovementByMovementId(PDO &$pdo, $newMovementId) {
+		// sanitize the movementId before searching
+		$newMovementId = filter_var($newMovementId, FILTER_VALIDATE_INT);
+		if($newMovementId === false) {
+			throw(new PDOException("movementId is not an integer"));
+		}
+		if($newMovementId <= 0) {
+			throw(new PDOException("movementId is not positive"));
+		}
+
+		// create query template
+		$query	 = "SELECT movementId, fromLocationId, toLocationId, productId, unitId, cost, movementDate, movementType, price FROM movement WHERE movementId = :movementId" ;
+		$statement = $pdo->prepare($query);
+
+		// bind the movementId to the place holder in the template
+		$parameters = array("movementId" => $newMovementId);
+		$statement->execute($parameters);
+
+		// grab the movement from mySQL
+		try {
+			$movement = null;
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$row   = $statement->fetch();
+			if($row !== false) {
+				$movement = new Movement($row["movementId"], $row["fromLocationId"], $row["toLocationId"], $row["productId"], $row["unitId"], $row["cost"], $row["movementDate"], $row["movementType"], $row["price"]);
+			}
+		} catch(Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($movement);
+	}
+
+	/**
 	 * gets all movements
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
