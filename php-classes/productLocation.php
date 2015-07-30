@@ -3,7 +3,7 @@
 /**
  * The productLocation class for inventoryText
  *
- * This class will attach a location to each individual item
+ * This class will attach a location to each individual product
  * multi-line
  *
  * @author Christopher Collopy <ccollopy@cnm.edu>
@@ -32,6 +32,34 @@ class productLocation {
 	 * @var int $quantity
 	 **/
 	private $quantity;
+
+	/**
+	 * @param int $newLocationId id for the location
+	 * @param int $newProductId id for the product at the location
+	 * @param int $newUnitId id for the units of the product at the location
+	 * @param int $newQuantity quantity of the product at the location
+	 * @throws InvalidArgumentException if data types are not valid
+	 * @throws RangeException if data values are out of bounds (e.g., strings too long, negative integers)
+	 * @throws Exception if some other exception is thrown
+	 */
+
+	public function __construct($newLocationId, $newProductId, $newUnitId, $newQuantity) {
+		try {
+			$this->setLocationId($newLocationId);
+			$this->setProductId($newProductId);
+			$this->setUnitId($newUnitId);
+			$this->setQuantity($newQuantity);
+		} catch(InvalidArgumentException $invalidArgument) {
+			// rethrow the exception to the caller
+			throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
+		} catch(RangeException $range) {
+			// rethrow the exception to the caller
+			throw(new RangeException($range->getMessage(), 0, $range));
+		} catch(Exception $exception) {
+			// rethrow the generic exception to the caller
+			throw(new Exception($exception->getMessage(), 0, $exception));
+		}
+	}
 
 	/**
 	 * accessor method for locationId
@@ -152,6 +180,4 @@ class productLocation {
 		// convert and store the quantity
 		$this->quantity = intval($newQuantity);
 	}
-
-
 }
