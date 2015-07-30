@@ -38,10 +38,11 @@ class Notification {
 	 * @var string $notificationContent
 	 **/
 	private $notificationContent;
+
 	/**
 	 * constructor for this Notification
 	 *
-	 * @param mixed $newNotificationId id of this Notification or null if unknown notification
+	 * @param int $newNotificationId id of this Notification or null if unknown notification
 	 * @param int $newAlertId id for alert level sent with this notification
 	 * @param int $newTwilioId id sent from twilio for each notification
 	 * @param string $newDateTime date and time of when each notification was sent or null if set to current date and time
@@ -49,6 +50,7 @@ class Notification {
 	 * @param string $newNotificationContent string containing conent of notification
 	 * @throws InvalidArgumentException if data types are not valid
 	 * @throws RangeException if data values are out of bounds (e.g., strings too long, negative integers)
+	 * @throws Exception if some other exception is thrown
 	 **/
 	public function __construct($newNotificationId, $newAlertId, $newTwilioId, $newDateTime, $newNotificationHandle,
 										 $newNotificationContent = null) {
@@ -65,26 +67,28 @@ class Notification {
 		} catch(RangeException $range) {
 			// rethrow the exception to the caller
 			throw(new RangeException($range->getMessage(), 0, $range));
-		} catch (Exception $exception) {
+		} catch(Exception $exception) {
 			//rethrow generic mysqli_sql_exception
 			throw(new Exception($exception->getMessage(), 0, $exception));
 		}
 	}
-/**
- * accessor method for notification id
- *
- * @return mixed value of notification id
- **/
-public function getNotificationId() {
-	return ($this->notificationId);
-}
+
 	/**
- 	* mutator method for notification id
- 	*
- 	* @param int $NotificationId new value of notification id
- 	* @throws InvalidArgumentException if $newNotificationId is not an integer
- 	* @throws RangeException if $newNotificationId is not positive
- 	**/
+	 * accessor method for notification id
+	 *
+	 * @return mixed value of notification id
+	 **/
+	public function getNotificationId() {
+		return ($this->notificationId);
+	}
+
+	/**
+	 * mutator method for notification id
+	 *
+	 * @param int $NotificationId new value of notification id
+	 * @throws InvalidArgumentException if $newNotificationId is not an integer
+	 * @throws RangeException if $newNotificationId is not positive
+	 **/
 	public function setNotificationId($newNotificationId) {
 		// base case: if the notification id is null, this a new notification without a mySQL assigned id (yet)
 		if($newNotificationId === null) {
@@ -93,7 +97,7 @@ public function getNotificationId() {
 		}
 
 		// verify the notification id is valid
-	$newNotificationId = filter_var($newNotificationId, FILTER_VALIDATE_INT);
+		$newNotificationId = filter_var($newNotificationId, FILTER_VALIDATE_INT);
 		if($newNotificationId === false) {
 			throw(new InvalidArgumentException("notification id is not a valid integer"));
 		}
@@ -104,6 +108,7 @@ public function getNotificationId() {
 		// convert and store the notification id
 		$this->notificationId = intval($newNotificationId);
 	}
+
 	/**
 	 * accessor method for alert id
 	 *
@@ -112,6 +117,7 @@ public function getNotificationId() {
 	public function getalertId() {
 		return ($this->alertId);
 	}
+
 	/**
 	 * mutator method for alert id
 	 *
@@ -138,6 +144,7 @@ public function getNotificationId() {
 		// convert and store the alert id
 		$this->alertId = intval($newAlertId);
 	}
+
 	/**
 	 * accessor method for twilio id
 	 *
@@ -146,6 +153,7 @@ public function getNotificationId() {
 	public function gettwilioId() {
 		return ($this->twilioId);
 	}
+
 	/**
 	 * mutator method for twilio id
 	 *
@@ -172,13 +180,14 @@ public function getNotificationId() {
 		// convert and store the twillio id
 		$this->twilioId = intval($newTwilioId);
 	}
+
 	/**
 	 * accessor method for notification date
 	 *
 	 * @return DateTime value of notification date
 	 **/
-	public function getNotificationdate() {
-		return($this->dateTime);
+	public function getDateTime() {
+		return ($this->dateTime);
 	}
 
 	/**
@@ -206,11 +215,40 @@ public function getNotificationId() {
 		$this->dateTime = $newDateTime;
 	}
 	/**
+	 * accessor method for notification handle
+	 *
+	 * @return mixed value of notification handle
+	 **/
+	public function getNotificationHangle(){
+		return($this->notificationHandle);
+	}
+	/**
+	 * mutator method for notification handle
+	 *
+	 * @param string $newNotificationHandle new value of notification handle
+	 * @throws InvalidArgumentException if $newNotificationHangle is not a string or insecure
+	 * @throws RangeException if $newNotificationHandle is > 10 characters
+	 **/
+	public function setNotificationHandle($newNotificationHandle) {
+		//verify the notification handle is secure
+		$newNotificationHandle=trim($newNotificationHandle);
+		$newNotificationHandle=filter_var($newNotificationHandle, FILTER_SANITIZE_STRING);
+		if(empty($newNotificationHandle)=== true) {
+			throw(new InvalidArgumentException("notification handle is empty or insecure"));
+		}
+		//verify the notification handle will fit into database
+		if(strlen($newNotificationHandle)>10){
+			throw(new RangeException("notification handle is too large"));
+		}
+		//store the notification handle
+		$this->notificationHandle=$newNotificationHandle;
+	}
+	/**
 	 * accessor method for notification content
 	 *
 	 * @return mixed value of notification content
 	 **/
-	public function getNotification() {
+	public function getNotificationContent() {
 		return ($this->notificationContent);
 	}
 	/**
@@ -218,7 +256,7 @@ public function getNotificationId() {
 	 *
 	 * @param string $newNotificationContent new value of notification content
 	 * @throws InvalidArgumentException if $newNotificationContent is not a string or insecure
-	 * @throws RangeException if $newNotificationContent is > 2500 characters
+	 * @throws RangeException if $newNotificationContent is > 160 characters
 	 **/
 	public function setNotificationContent($newNotificationContent) {
 		// verify the notification content is secure
@@ -235,3 +273,4 @@ public function getNotificationId() {
 		// store the notification content
 		$this->notificationContent = $newNotificationContent;
 	}
+}
