@@ -409,6 +409,75 @@ class Movement {
 	}
 
 	/**
+	 * inserts this Movement into mySQL
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public function insert(PDO &$pdo) {
+		// enforce the movementId is null (i.e., don't insert a movement that already exists)
+		if($this->movementId !== null) {
+			throw(new PDOException("not a new movement"));
+		}
+
+		// create query template
+		$query = "INSERT INTO movement(movementId, fromLocationId, toLocationId, productId, unitId, cost, movementDate, movementType, price)
+ 					 VALUES(:movementId, :fromLocationId, :toLocationId, :productId, :unitId, :cost, :movementDate, :movementType, :price)";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holders in the template
+		$parameters = array("fromLocationId" => $this->fromLocationId, "toLocationId" => $this->toLocationId, "productId" => $this->productId, "unitId" => $this->unitId,
+								  "cost" => $this->cost, "movementDate" => $this->movementDate, "movementType" => $this->movementType, "price" => $this->price);
+		$statement->execute($parameters);
+
+		// update the null movementId with what mySQL just gave us
+		$this->movementId = intval($pdo->lastInsertId());
+	}
+
+
+	/**
+	 * deletes this Movement from mySQL
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public function delete(PDO &$pdo) {
+		// enforce the movementId is not null (i.e., don't delete a movement that hasn't been inserted)
+		if($this->movementId === null) {
+			throw(new PDOException("unable to delete a movement that does not exist"));
+		}
+
+		// create query template
+		$query = "DELETE FROM movement WHERE movementId = :movementId";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holder in the template
+		$parameters = array("movementId" => $this->movementId);
+		$statement->execute($parameters);
+	}
+
+	/**
+	 * updates this Movement in mySQL
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public function update(PDO &$pdo) {
+		// enforce the movementId is not null (i.e., don't update a movement that hasn't been inserted)
+		if($this->movementId === null) {
+			throw(new PDOException("unable to update a movement that does not exist"));
+		}
+
+		// create query template
+		$query = "UPDATE movement SET cost = :cost, price = :price WHERE productId = :productId";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holders in the template
+		$parameters = array("productId" => $this->productId, "cost" => $this->cost, "price" => $this->price);
+		$statement->execute($parameters);
+	}
+
+	/**
 	 * gets all movements
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
