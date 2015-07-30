@@ -1,6 +1,6 @@
 <?php
 /**
- * product class for foodinventory
+ * Product class for foodinventory
  *
  * This product class is a single class within the overall product for foodinventory
  *
