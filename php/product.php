@@ -19,10 +19,7 @@ class Product {
 	 * @var int $descriptionId
 	 **/
 	private $descriptionId;
-	/**
-	 * actual textual content of this Tweet
-	 * @var string $tweetContent
-	 **/
+
 
 
 
