@@ -445,6 +445,20 @@ class User {
 		//update null userId with what mySQL just gave us
 		$this->userId = intval($pdo->lastInsertId());
 	}
+	public function delete(PDO &$pdo) {
+		// enforce the user is not null
+		if($this->userId === null) {
+			throw(new PDOException("unable to delete a user that does not exist"));
+		}
+
+		//create query template
+		$query = "DELETE FROM user WHERE userId = :userId";
+		$statement = $pdo->prepare($query);
+
+		//bind the member variables to the place holder in the template
+		$parameters = array("userId" => $this->userId);
+		$statement->execute($parameters);
+	}
 }
 
 
