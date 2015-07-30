@@ -46,8 +46,8 @@ class Movement {
 	private $cost;
 
 	/**
-	 * the date of the movement
-	 * @var string $movementDate
+	 * the date and time of the movement
+	 * @var DateTime $movementDate
 	 **/
 	private $movementDate;
 
@@ -66,6 +66,8 @@ class Movement {
 	 **/
 	private $price;
 
+	use validateDate;
+
 	/**
 	 * @param int $newMovementId id for this Movement
 	 * @param int $newFromLocationId id for the product's current location
@@ -73,8 +75,8 @@ class Movement {
 	 * @param int $newProductId id for the product being moved
 	 * @param int $newUnitId id for the units being moved
 	 * @param double $newCost cost of the product being moved
-	 * @param string $newMovementDate the date of the movement
-	 * @param string$newMovementType the type of the movement
+	 * @param DateTime $newMovementDate the date of the movement
+	 * @param string $newMovementType the type of the movement
 	 * @param double $newPrice price of the product being moved
 	 * @throws InvalidArgumentException if data types are not valid
 	 * @throws RangeException if data values are out of bounds (e.g., strings too long, negative integers)
@@ -103,6 +105,15 @@ class Movement {
 			// rethrow the generic exception to the caller
 			throw(new Exception($exception->getMessage(), 0, $exception));
 		}
+	}
+
+
+	public function __toString() {
+		return "<tr><td><strong>Movement ID: </strong>" . $this->getMovementId() . "</td><td><strong>From Location ID: </strong>" . $this->getFromLocationId() .
+				 "</td><td><strong>To Location ID: </strong>" . $this->getFromLocationId() . "</td><td><strong>Product ID: </strong>" . $this->getProductId() .
+				 "</td><td><strong>Unit ID: </strong>" . $this->getUnitId() . "</td><td><strong>Cost: </strong>" . $this->getCost() .
+				 "</td><td><strong>Movement Date: </strong>" . $this->getMovementDate() . "</td><td><strong>Movement Type: </strong>" . $this->getMovementType() .
+				 "</td><td><strong>Price: </strong>" . $this->getPrice() . "</td></tr>";
 	}
 
 	/**
@@ -314,10 +325,24 @@ class Movement {
 	/**
 	 * mutator method for movementDate
 	 *
-	 * @param string $newMovementDate
+	 * @param DateTime $newMovementDate
 	 */
 	public function setMovementDate($newMovementDate) {
-		// hdskjhdsgh
+		// base case: if the date is null, use the current date and time
+		if($newMovementDate === null) {
+			$this->movementDate = new DateTime();
+			return;
+		}
+
+		// store the movementDate
+		try {
+			$newMovementDate = validateDate::validateDate($newMovementDate);
+		} catch(InvalidArgumentException $invalidArgument) {
+			throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
+		} catch(RangeException $range) {
+			throw(new RangeException($range->getMessage(), 0, $range));
+		}
+		$this->movementDate = $newMovementDate;
 	}
 
 	/**
@@ -381,5 +406,34 @@ class Movement {
 
 		// convert and store the price
 		$this->price = floatval($newPrice);
+	}
+
+	/**
+	 * gets all movements
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @return SplFixedArray all movements found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getAllMovements(PDO &$pdo) {
+		// create query template
+		$query = "SELECT movementId, fromLocationId, toLocationId, productId, unitId, cost, movementDate, movementType, price FROM profile";
+		$statement = $pdo->prepare($query);
+		$statement->execute();
+
+		// build an array of movements
+		$movements = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$movement = new Movement($row["movementId"], $row["fromLocationId"], $row["toLocationId"], $row["productId"], $row["unitId"], $row["cost"], $row["movementDate"], $row["movementType"], $row["price"]);
+				$movements[$movements->key()] = $movement;
+				$movements->next();
+			} catch(Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($movements);
 	}
 }
