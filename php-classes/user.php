@@ -135,5 +135,31 @@ class User {
 			}
 		$this->email = $newEmail;
 	}
+
+	/**
+	 * Accessor for Phone Number
+	 * @return int
+	 */
+	public function getPhoneNumber() {
+		return ($this->phoneNumber);
+	}
+
+	/**
+	 * Mutator for Phone Number
+	 * @param $newPhoneNumber
+	 */
+	public function setPhoneNumber ($newPhoneNumber) {
+		//verify phone number is valid and digits only
+		$newPhoneNumber = filter_var($newPhoneNumber,ctype_digit(10));
+			if (empty($newPhoneNumber) === true) {
+				throw new InvalidArgumentException ("content invalid");
+			}
+			if (strlen($newPhoneNumber)>32) {
+				throw new RangeException ("Phone Number should be formatted 5055558787");
+			}
+		$this->phoneNumber = $newPhoneNumber;
+	}
 }
+
+
 
