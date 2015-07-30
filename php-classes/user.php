@@ -62,6 +62,7 @@ class User {
 		}
 		$this->userId = $newUserId;
 	}
+
 	/**
 	 * accessor method for Last Name
 	 *
@@ -77,11 +78,11 @@ class User {
 	 */
 	public function setLastName($newLastName) {
 		//verify last name is valid
-	$newLastName = filter_var($newLastName, FILTER_SANITIZE_STRING);
+		$newLastName = filter_var($newLastName, FILTER_SANITIZE_STRING);
 		if(empty($newLastName) === true) {
 			throw new InvalidArgumentException("content invalid");
 		}
-		if(strlen($newLastName)> 32){
+		if(strlen($newLastName) > 32) {
 			throw new RangeException("Last Name content too large");
 		}
 		$this->lastName = $newLastName;
@@ -100,13 +101,13 @@ class User {
 	 * Mutator method for First Name
 	 * @param $newFirstName
 	 */
-	public function setFirstName ($newFirstName) {
+	public function setFirstName($newFirstName) {
 		// verify first name is valid
-	$newFirstName = filter_var($newFirstName,FILTER_SANITIZE_STRING);
+		$newFirstName = filter_var($newFirstName, FILTER_SANITIZE_STRING);
 		if(empty($newFirstName) === true) {
 			throw new InvalidArgumentException("content invalid");
 		}
-		if(strlen($newFirstName)> 32) {
+		if(strlen($newFirstName) > 32) {
 			throw new RangeException ("First Name content too large");
 		}
 		$this->firstName = $newFirstName;
@@ -124,15 +125,15 @@ class User {
 	 * Mutator for Email
 	 * @param $newEmail
 	 */
-	public function setEmail ($newEmail) {
+	public function setEmail($newEmail) {
 		// verify email is valid
 		$newEmail = filter_var($newEmail, FILTER_SANITIZE_EMAIL);
-			if(empty($newEmail) === true) {
-				throw new InvalidArgumentException ("content invalid");
-			}
-			if (strlen($newEmail)>64) {
-				throw new RangeException ("Email content too large");
-			}
+		if(empty($newEmail) === true) {
+			throw new InvalidArgumentException ("content invalid");
+		}
+		if(strlen($newEmail) > 64) {
+			throw new RangeException ("Email content too large");
+		}
 		$this->email = $newEmail;
 	}
 
@@ -148,18 +149,72 @@ class User {
 	 * Mutator for Phone Number
 	 * @param $newPhoneNumber
 	 */
-	public function setPhoneNumber ($newPhoneNumber) {
+	public function setPhoneNumber($newPhoneNumber) {
 		//verify phone number is valid and digits only
-		$newPhoneNumber = filter_var($newPhoneNumber,ctype_digit(10));
-			if (empty($newPhoneNumber) === true) {
-				throw new InvalidArgumentException ("content invalid");
-			}
-			if (strlen($newPhoneNumber)>32) {
-				throw new RangeException ("Phone Number should be formatted 5055558787");
-			}
+		if((ctype_digit($newPhoneNumber)) === false) {
+			throw new InvalidArgumentException ("content invalid");
+		}
+		if(strlen($newPhoneNumber) > 10) {
+			throw new RangeException ("Phone Number should be formatted 5055558787");
+		}
 		$this->phoneNumber = $newPhoneNumber;
 	}
+
+	/**
+	 * accessor for Hash
+	 * @return string
+	 */
+	public function getHash() {
+		return ($this->hash);
+	}
+
+	/**
+	 * Mutator for hash
+	 * @param $newHash
+	 */
+
+	public function setHash($newHash) {
+		// verify Hash is exactly string of 128
+		if((ctype_digit($newHash)) === false) {
+			if(empty($newHash) === true) {
+				throw new InvalidArgumentException ("content invalid");
+			}
+			if(strlen($newHash) !== 128) {
+				throw new RangeException ("hash not valid");
+			}
+			$this->hash = $newHash;
+		}
+	}
+
+	/**
+	 * accessor for Salt
+	 * @return string
+	 */
+	public
+	function getSalt() {
+		return ($this->salt);
+	}
+
+
+	/**
+	 * mutator for Salt
+	 * @param $newSalt
+	 */
+	public function setSalt($newSalt) {
+		// verify Hash is exactly string of 128
+		if((ctype_digit($newSalt)) === false) {
+			if(empty($newSalt) === true) {
+				throw new InvalidArgumentException ("content invalid");
+			}
+			if(strlen($newSalt) !== 64) {
+				throw new RangeException ("hash not valid");
+			}
+			$this->hash = $newSalt;
+		}
+
+	}
 }
+
 
 
 
