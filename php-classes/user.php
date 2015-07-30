@@ -420,14 +420,32 @@ class User {
 			$this->hash = $newSalt;
 		}
 	}
+
+	/**
+	 * Inserts this userId into mySQL
+	 * @param PDO $pdo
+	 */
 	public function insert(PDO &$pdo) {
 		// make sure user doesn't already exist
 		if($this->userId !== null) {
 			throw (new PDOException("existing user"));
 		}
+		//create query template
+		$query
+	= "INSERT INTO user(lastName, firstName, attention, addressLineOne, addressLineTwo, city, state, zipCode,email, salt, hash)
+		VALUES (:lastName, :firstName, :attention, :addressLineOne, :addressLineTwo, :city, :state, :zipCode, :email, :salt, :hash)";
+			$statement = $pdo->prepare($query);
 
+		// bind the variables to the place holders in the template
+		$parameters = array("lastName" => $this->lastName, "firstName" => $this->firstName, "attention" => $this->attention,
+			"addressLineOne" => $this->addressLineOne, "addressLineTwo" => $this->addressLineTwo, "city" => $this->city,
+			"state" => $this->state, "zipCode" => $this->zipCode, "email" => $this->email, "salt" => $this->salt,"hash" => $this->hash);
+		$statement->execute($parameters);
+
+		//update null userId with what mySQL just gave us
+		$this->userId = intval($pdo->lastInsertId());
 	}
-	}
+}
 
 
 
