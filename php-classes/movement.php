@@ -42,6 +42,12 @@ class Movement {
 	private $unitId;
 
 	/**
+	 * id for the user creating the movement; this is a foreign key
+	 * @var int $userId
+	 **/
+	private $userId;
+
+	/**
 	 * cost of the product being moved
 	 * @var double $cost
 	 **/
@@ -76,6 +82,7 @@ class Movement {
 	 * @param int $newToLocationId id for the product's new location
 	 * @param int $newProductId id for the product being moved
 	 * @param int $newUnitId id for the units being moved
+	 * @param int $newUserId id for the user creating the movement
 	 * @param double $newCost cost of the product being moved
 	 * @param DateTime $newMovementDate the date of the movement
 	 * @param string $newMovementType the type of the movement
@@ -85,14 +92,15 @@ class Movement {
 	 * @throws Exception if some other exception is thrown
 	 */
 
-	public function __construct($newMovementId, $newFromLocationId, $newToLocationId, $newProductId,
-										 $newUnitId, $newCost, $newMovementDate, $newMovementType, $newPrice) {
+	public function __construct($newMovementId, $newFromLocationId, $newToLocationId, $newProductId, $newUnitId,
+										 $newUserId, $newCost, $newMovementDate, $newMovementType, $newPrice) {
 		try {
 			$this->setMovementId($newMovementId);
 			$this->setFromLocationId($newFromLocationId);
 			$this->setToLocationId($newToLocationId);
 			$this->setProductId($newProductId);
 			$this->setUnitId($newUnitId);
+			$this->setUserId($newUserId);
 			$this->setCost($newCost);
 			$this->setMovementDate($newMovementDate);
 			$this->setMovementType($newMovementType);
@@ -286,6 +294,36 @@ class Movement {
 	}
 
 	/**
+	 * accessor method for userId
+	 *
+	 * @return int value of userId
+	 */
+	public function getUserId() {
+		return $this->userId;
+	}
+
+	/**
+	 * mutator method for userId
+	 *
+	 * @param int $newUserId
+	 */
+	public function setUserId($newUserId) {
+		// verify the unitId is valid
+		$newUserId = filter_var($newUserId, FILTER_VALIDATE_INT);
+		if($newUserId === false) {
+			throw(new InvalidArgumentException("userId is not a valid integer"));
+		}
+
+		// verify the unitId is positive
+		if($newUserId <= 0) {
+			throw(new RangeException("userId is not positive"));
+		}
+
+		// convert and store the unitId
+		$this->userId = intval($newUserId);
+}
+
+	/**
 	 * accessor method for cost
 	 *
 	 * @return float value of cost
@@ -423,61 +461,18 @@ class Movement {
 		}
 
 		// create query template
-		$query = "INSERT INTO movement(fromLocationId, toLocationId, productId, unitId, cost, movementDate, movementType, price)
- 					 VALUES(:fromLocationId, :toLocationId, :productId, :unitId, :cost, :movementDate, :movementType, :price)";
+		$query = "INSERT INTO movement(fromLocationId, toLocationId, productId, unitId, userId, cost, movementDate, movementType, price)
+ 					 VALUES(:fromLocationId, :toLocationId, :productId, :unitId, :userId, :cost, :movementDate, :movementType, :price)";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
 		$formattedDate = $this->movementDate->format("Y-m-d H:i:s");
 		$parameters = array("fromLocationId" => $this->fromLocationId, "toLocationId" => $this->toLocationId, "productId" => $this->productId, "unitId" => $this->unitId,
-								  "cost" => $this->cost, "movementDate" => $formattedDate, "movementType" => $this->movementType, "price" => $this->price);
+								  "userId" => $this->userId, "cost" => $this->cost, "movementDate" => $formattedDate, "movementType" => $this->movementType, "price" => $this->price);
 		$statement->execute($parameters);
 
 		// update the null movementId with what mySQL just gave us
 		$this->movementId = intval($pdo->lastInsertId());
-	}
-
-
-	/**
-	 * deletes this Movement from mySQL
-	 *
-	 * @param PDO $pdo pointer to PDO connection, by reference
-	 * @throws PDOException when mySQL related errors occur
-	 **/
-	public function delete(PDO &$pdo) {
-		// enforce the movementId is not null (i.e., don't delete a movement that hasn't been inserted)
-		if($this->movementId === null) {
-			throw(new PDOException("unable to delete a movement that does not exist"));
-		}
-
-		// create query template
-		$query = "DELETE FROM movement WHERE movementId = :movementId";
-		$statement = $pdo->prepare($query);
-
-		// bind the member variables to the place holder in the template
-		$parameters = array("movementId" => $this->movementId);
-		$statement->execute($parameters);
-	}
-
-	/**
-	 * updates this Movement in mySQL
-	 *
-	 * @param PDO $pdo pointer to PDO connection, by reference
-	 * @throws PDOException when mySQL related errors occur
-	 **/
-	public function update(PDO &$pdo) {
-		// enforce the movementId is not null (i.e., don't update a movement that hasn't been inserted)
-		if($this->movementId === null) {
-			throw(new PDOException("unable to update a movement that does not exist"));
-		}
-
-		// create query template
-		$query = "UPDATE movement SET cost = :cost, price = :price WHERE productId = :productId";
-		$statement = $pdo->prepare($query);
-
-		// bind the member variables to the place holders in the template
-		$parameters = array("productId" => $this->productId, "cost" => $this->cost, "price" => $this->price);
-		$statement->execute($parameters);
 	}
 
 	/**
@@ -499,7 +494,7 @@ class Movement {
 		}
 
 		// create query template
-		$query	 = "SELECT movementId, fromLocationId, toLocationId, productId, unitId, cost, movementDate, movementType, price FROM movement WHERE movementId = :movementId" ;
+		$query	 = "SELECT movementId, fromLocationId, toLocationId, productId, unitId, userId, cost, movementDate, movementType, price FROM movement WHERE movementId = :movementId" ;
 		$statement = $pdo->prepare($query);
 
 		// bind the movementId to the place holder in the template
@@ -512,7 +507,7 @@ class Movement {
 			$statement->setFetchMode(PDO::FETCH_ASSOC);
 			$row   = $statement->fetch();
 			if($row !== false) {
-				$movement = new Movement($row["movementId"], $row["fromLocationId"], $row["toLocationId"], $row["productId"], $row["unitId"], $row["cost"], $row["movementDate"], $row["movementType"], $row["price"]);
+				$movement = new Movement($row["movementId"], $row["fromLocationId"], $row["toLocationId"], $row["productId"], $row["unitId"], $row["userId"], $row["cost"], $row["movementDate"], $row["movementType"], $row["price"]);
 			}
 		} catch(Exception $exception) {
 			// if the row couldn't be converted, rethrow it
@@ -530,7 +525,7 @@ class Movement {
 	 **/
 	public static function getAllMovements(PDO &$pdo) {
 		// create query template
-		$query = "SELECT movementId, fromLocationId, toLocationId, productId, unitId, cost, movementDate, movementType, price FROM movement";
+		$query = "SELECT movementId, fromLocationId, toLocationId, productId, unitId, userId, cost, movementDate, movementType, price FROM movement";
 		$statement = $pdo->prepare($query);
 		$statement->execute();
 
@@ -539,7 +534,7 @@ class Movement {
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$movement = new Movement($row["movementId"], $row["fromLocationId"], $row["toLocationId"], $row["productId"], $row["unitId"], $row["cost"], $row["movementDate"], $row["movementType"], $row["price"]);
+				$movement = new Movement($row["movementId"], $row["fromLocationId"], $row["toLocationId"], $row["productId"], $row["unitId"], $row["userId"], $row["cost"], $row["movementDate"], $row["movementType"], $row["price"]);
 				$movements[$movements->key()] = $movement;
 				$movements->next();
 			} catch(Exception $exception) {
