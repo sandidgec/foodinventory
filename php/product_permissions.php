@@ -21,9 +21,10 @@ class Product {
 	 **/
 	private $userId;
 	/**
-	 * actual textual content of this Tweet
-	 * @var string $tweetContent
+	 * id for the access level of this product
+	 * @var string $accessLevelid
 	 **/
+	private $accessLevelId;
 
 
 
