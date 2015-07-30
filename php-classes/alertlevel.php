@@ -2,7 +2,7 @@
 /**
  * this is the alertLevel class for the inventoryText capstone project
  *
- * this alertLevel class will configure the user preferences for alerts, including how oftern and what the alert tells
+ * this alertLevel class will configure the user preferences for alerts, including how often and what the alert tells
  * the customer.
  *
  * @author James Huber <jhuber8@cnm.edu>
