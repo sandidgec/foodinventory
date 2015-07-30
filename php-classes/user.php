@@ -18,6 +18,36 @@ class User {
 	 **/
 	private $firstName;
 	/**
+	 * attention line
+	 * @var string $attention;
+	 */
+	private $attention;
+	/**
+	 * address line 1
+	 * @var string $addressLineOne
+	 */
+	private $addressLineOne;
+	/**
+	 * address line 2
+	 * @var string $addressLineTwo;
+	 */
+	private $addressLineTwo;
+	/**
+	 * City
+	 * @var string $city
+	 */
+	private $city;
+	/**
+	 * state
+	 * @var string $state
+	 */
+	private $state;
+	/**
+	 * ZipCode
+	 * @var int $zipCode;
+	 */
+	private $zipCode;
+	/**
 	 * email of userId
 	 * @var string $email
 	 **/
@@ -37,6 +67,32 @@ class User {
 	 * @var string $passwordSalt
 	 */
 	private $salt;
+
+
+	/**
+	 * Constructor for User Id
+	 *
+	 * @param $newUserId
+	 * @param $newLastName
+	 * @param $newFirstName
+	 * @param $newEmail
+	 * @param $newSalt
+	 * @param $newHash
+	 */
+	public
+	function __construct($newUserId, $newLastName, $newFirstName, $newEmail, $newSalt, $newHash) {
+		try {
+			$this->setUserId($newUserId);
+			$this->setLastName($newLastName);
+			$this->setFirstName($newFirstName);
+			$this->setEmail($newEmail);
+			$this->setSalt($newSalt);
+			$this->setHash($newHash);
+		} catch(InvalidArgumentException $invalidArgument) {
+			//rethrow the exception to the caller
+			throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
+		}
+	}
 
 
 	/**
@@ -211,9 +267,10 @@ class User {
 			}
 			$this->hash = $newSalt;
 		}
-
 	}
 }
+
+
 
 
 
