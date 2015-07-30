@@ -180,4 +180,53 @@ class productLocation {
 		// convert and store the quantity
 		$this->quantity = intval($newQuantity);
 	}
+
+	/**
+	 * inserts this productLocation into mySQL
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public function insert(PDO &$pdo) {
+		// create query template
+		$query = "INSERT INTO productLocation(locationId, productId, unitId, quantity)
+ 					 VALUES(:locationId, :productId, :unitId, :quantity)";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holders in the template
+		$parameters = array("locationId" => $this->locationId, "productId" => $this->productId, "unitId" => $this->unitId, "quantity" => $this->quantity);
+		$statement->execute($parameters);
+	}
+
+	/**
+	 * deletes this productLocation from mySQL
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public function delete(PDO &$pdo) {
+		// create query template
+		$query = "DELETE FROM productLocation WHERE locationId = :locationId AND productId = :productId AND unitId = :unitId";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holder in the template
+		$parameters = array("locationId" => $this->locationId, "productId" => $this->productId, "unitId" => $this->unitId);
+		$statement->execute($parameters);
+	}
+
+	/**
+	 * updates this productLocation in mySQL
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public function update(PDO &$pdo) {
+		// create query template
+		$query = "UPDATE productLocation SET quantity = :quantity WHERE locationId = :locationId AND productId = :productId AND unitId = :unitId";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holders in the template
+		$parameters = array("locationId" => $this->locationId, "productId" => $this->productId, "unitId" => $this->unitId);
+		$statement->execute($parameters);
+	}
 }
