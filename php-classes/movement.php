@@ -1,5 +1,7 @@
 <?php
 
+require_once("../traits/validateDate.php");
+
 /**
  * The movement class for inventoryText
  *
@@ -109,11 +111,11 @@ class Movement {
 
 
 	public function __toString() {
-		return "<tr><td><strong>Movement ID: </strong>" . $this->getMovementId() . "</td><td><strong>From Location ID: </strong>" . $this->getFromLocationId() .
-				 "</td><td><strong>To Location ID: </strong>" . $this->getFromLocationId() . "</td><td><strong>Product ID: </strong>" . $this->getProductId() .
-				 "</td><td><strong>Unit ID: </strong>" . $this->getUnitId() . "</td><td><strong>Cost: </strong>" . $this->getCost() .
-				 "</td><td><strong>Movement Date: </strong>" . $this->getMovementDate() . "</td><td><strong>Movement Type: </strong>" . $this->getMovementType() .
-				 "</td><td><strong>Price: </strong>" . $this->getPrice() . "</td></tr>";
+		$formattedDate = $this->movementDate->format("Y-m-d H:i:s");
+
+		return "<tr><td>" . $this->getMovementId() . "</td><td>" . $this->getFromLocationId() . "</td><td>" . $this->getFromLocationId() .
+				 "</td><td>" . $this->getProductId() . "</td><td>" . $this->getUnitId() . "</td><td>" . $this->getCost() .
+				 "</td><td>" . $formattedDate . "</td><td>" . $this->getMovementType() . "</td><td>" . $this->getPrice() . "</td></tr>";
 	}
 
 	/**
@@ -316,7 +318,7 @@ class Movement {
 	/**
 	 * accessor method for movementDate
 	 *
-	 * @return string value of movementDate
+	 * @return DateTime value of movementDate
 	 */
 	public function getMovementDate() {
 		return $this->movementDate;
@@ -421,13 +423,14 @@ class Movement {
 		}
 
 		// create query template
-		$query = "INSERT INTO movement(movementId, fromLocationId, toLocationId, productId, unitId, cost, movementDate, movementType, price)
- 					 VALUES(:movementId, :fromLocationId, :toLocationId, :productId, :unitId, :cost, :movementDate, :movementType, :price)";
+		$query = "INSERT INTO movement(fromLocationId, toLocationId, productId, unitId, cost, movementDate, movementType, price)
+ 					 VALUES(:fromLocationId, :toLocationId, :productId, :unitId, :cost, :movementDate, :movementType, :price)";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
+		$formattedDate = $this->movementDate->format("Y-m-d H:i:s");
 		$parameters = array("fromLocationId" => $this->fromLocationId, "toLocationId" => $this->toLocationId, "productId" => $this->productId, "unitId" => $this->unitId,
-								  "cost" => $this->cost, "movementDate" => $this->movementDate, "movementType" => $this->movementType, "price" => $this->price);
+								  "cost" => $this->cost, "movementDate" => $formattedDate, "movementType" => $this->movementType, "price" => $this->price);
 		$statement->execute($parameters);
 
 		// update the null movementId with what mySQL just gave us
@@ -486,7 +489,7 @@ class Movement {
 	 **/
 	public static function getAllMovements(PDO &$pdo) {
 		// create query template
-		$query = "SELECT movementId, fromLocationId, toLocationId, productId, unitId, cost, movementDate, movementType, price FROM profile";
+		$query = "SELECT movementId, fromLocationId, toLocationId, productId, unitId, cost, movementDate, movementType, price FROM movement";
 		$statement = $pdo->prepare($query);
 		$statement->execute();
 
