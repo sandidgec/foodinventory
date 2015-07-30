@@ -70,17 +70,24 @@ class User {
 
 
 	/**
-	 * Constructor for User Id
+	 * Constructor for user id
 	 *
 	 * @param $newUserId
 	 * @param $newLastName
 	 * @param $newFirstName
+	 * @param $newAttention
+	 * @param $newAddressLineOne
+	 * @param $newAddressLineTwo
+	 * @param $newCity
+	 * @param $newState
+	 * @param $newZipCode
 	 * @param $newEmail
 	 * @param $newSalt
 	 * @param $newHash
 	 */
 	public
-	function __construct($newUserId, $newLastName, $newFirstName, $newEmail, $newSalt, $newHash) {
+	function __construct($newUserId, $newLastName, $newFirstName,$newAttention,$newAddressLineOne,$newAddressLineTwo,
+								$newCity,$newState,$newZipCode,$newEmail, $newSalt, $newHash) {
 		try {
 			$this->setUserId($newUserId);
 			$this->setLastName($newLastName);
@@ -88,6 +95,12 @@ class User {
 			$this->setEmail($newEmail);
 			$this->setSalt($newSalt);
 			$this->setHash($newHash);
+			$this->setAttention($newAttention);
+			$this->setAddressLineOne($newAddressLineOne);
+			$this->setAddressLineTwo($newAddressLineTwo);
+			$this->setCity($newCity);
+			$this->setState($newState);
+			$this->setZipCode($newZipCode);
 		} catch(InvalidArgumentException $invalidArgument) {
 			//rethrow the exception to the caller
 			throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
@@ -167,6 +180,145 @@ class User {
 			throw new RangeException ("First Name content too large");
 		}
 		$this->firstName = $newFirstName;
+	}
+	/**
+	 * accessor for attention
+	 * @return string
+	 */
+	public function getAttention() {
+		return ($this->attention);
+	}
+
+	/**
+	 * Mutator for Attention
+	 * @param $newAttention
+	 */
+	public function setAttention($newAttention) {
+		//verify attention is no more than 64 varchar
+		$newAttention = filter_var($newAttention, FILTER_SANITIZE_STRING);
+		if(empty($newAttention) === true) {
+			throw new InvalidArgumentException ("content invalid");
+		}
+		if(strlen($newAttention)>64) {
+			throw new RangeException ("Address Line One too Long");
+		}
+		$this->attention = $newAttention;
+	}
+
+	/**
+	 * accessor for address line one
+	 * @return string
+	 */
+	public function getAddressLineOne() {
+		return ($this->addressLineOne);
+	}
+
+	/**
+	 * Mutator for Address Line One
+	 * @param $newAddressLineOne
+	 */
+	public function setAddressLineOne($newAddressLineOne) {
+		//verify address is no more than 64 varchar
+		$newAddressLineOne = filter_var($newAddressLineOne, FILTER_SANITIZE_STRING);
+		if(empty($newAddressLineOne) === true) {
+			throw new InvalidArgumentException ("content invalid");
+		}
+		if(strlen($newAddressLineOne)>64) {
+			throw new RangeException ("Address Line One too Long");
+		}
+		$this->addressLineOne = $newAddressLineOne;
+	}
+
+	/**
+	 * accessor for address line two
+	 * @return string
+	 */
+	public function getAddressLineTwo() {
+		return ($this->addressLineTwo);
+	}
+
+	/**
+	 * Mutator for Address Line Two
+	 * @param $newAddressLineTwo
+	 */
+	public function setAddressLineTwo($newAddressLineTwo) {
+		//verify address is no more than 64 varchar
+		$newAddressLineTwo = filter_var($newAddressLineTwo, FILTER_SANITIZE_STRING);
+		if(empty($newAddressLineTwo) === true) {
+			throw new InvalidArgumentException ("content invalid");
+		}
+		if(strlen($newAddressLineTwo)>64) {
+			throw new RangeException ("Address Line Two too Long");
+		}
+		$this->addressLineTwo = $newAddressLineTwo;
+	}
+	/**
+	 * accessor for City
+	 * @return string
+	 */
+	public function getCity() {
+		return ($this->city);
+	}
+
+	/**
+	 * Mutator for City
+	 * @param $newCity
+	 */
+	public function setCity($newCity) {
+		//verify city is no more than 64 varchar
+		$newCity = filter_var($newCity, FILTER_SANITIZE_STRING);
+		if(empty($newCity) === true) {
+			throw new InvalidArgumentException ("content invalid");
+		}
+		if(strlen($newCity)>64) {
+			throw new RangeException ("City too Long");
+		}
+		$this->attention = $newCity;
+	}
+	/**
+	 * accessor for State
+	 * @return string
+	 */
+	public function getState() {
+		return ($this->state);
+	}
+	/**
+	 * Mutator for State
+	 * @param $newState
+	 */
+	public function setState($newState) {
+		//verify State is no more than 2 char
+		$newState = filter_var($newState, FILTER_SANITIZE_STRING);
+		if(empty($newState) === true) {
+			throw new InvalidArgumentException ("content invalid");
+		}
+		if(strlen($newState)!==2) {
+			throw new RangeException ("Invalid State Entry");
+		}
+		$this->attention = $newState;
+	}
+	/**
+	 * accessor for zipCode
+	 * @return int
+	 */
+	public function getZipCode() {
+		return ($this->zipCode);
+	}
+
+	/**
+	 * Mutator for zipCode
+	 * @param $newZipCode
+	 */
+	public function setZipCode($newZipCode) {
+		//verify address is no more than 64 varchar
+		$newZipCode = filter_var($newZipCode, FILTER_SANITIZE_STRING);
+		if(empty($newZipCode) === true) {
+			throw new InvalidArgumentException ("content invalid");
+		}
+		if(strlen($newZipCode)>10) {
+			throw new RangeException ("ZipCode too Long");
+		}
+		$this->zipCode = $newZipCode;
 	}
 
 	/**
