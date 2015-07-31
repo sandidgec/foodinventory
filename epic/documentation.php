@@ -57,7 +57,7 @@
 					<p>one unitOfMeasure can have many movement</p>
 				</div>
 				<h2>Inventory Text ERD:</h2>
-				<img src="../images/inventory-text.jpg" alt="Inventory Text ERD" width="1000"/>
+				<img src="../images/inventory-text-2.jpg" alt="Inventory Text ERD" width="1000"/>
 
 				<h2>System Goals</h2>
 				<p> The main focus of "Inventory Text" is to fill a gap for small business owners that could use an
