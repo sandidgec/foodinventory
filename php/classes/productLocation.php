@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The productLocation class for inventoryText
+ * The productLocation class for InventoryMessage
  *
  * This class will attach a location to each individual product
  * multi-line
@@ -16,20 +16,20 @@ class productLocation {
 	private $locationId;
 
 	/**
-	 * id for the product; this is a foreign key
+	 * id for the product at the location; this is a foreign key
 	 * @var int $productId
 	 **/
 	private $productId;
 
 	/**
-	 * id for the units of the product; this is a foreign key
+	 * id for the units of the product at the location; this is a foreign key
 	 * @var int $unitId
 	 **/
 	private $unitId;
 
 	/**
 	 * number of products at the location
-	 * @var int $quantity
+	 * @var float $quantity
 	 **/
 	private $quantity;
 
@@ -37,7 +37,7 @@ class productLocation {
 	 * @param int $newLocationId id for the location
 	 * @param int $newProductId id for the product at the location
 	 * @param int $newUnitId id for the units of the product at the location
-	 * @param int $newQuantity quantity of the product at the location
+	 * @param int $newQuantity number of the products at the location
 	 * @throws InvalidArgumentException if data types are not valid
 	 * @throws RangeException if data values are out of bounds (e.g., strings too long, negative integers)
 	 * @throws Exception if some other exception is thrown
@@ -74,6 +74,8 @@ class productLocation {
 	 * mutator method for locationId
 	 *
 	 * @param int $newLocationId
+	 * @throws InvalidArgumentException if $newLocationId is not a valid integer
+	 * @throws RangeException if $newLocationId is not positive
 	 */
 	public function setLocationId($newLocationId) {
 		// verify the locationId is valid
@@ -104,6 +106,8 @@ class productLocation {
 	 * mutator method for productId
 	 *
 	 * @param int $newProductId
+	 * @throws InvalidArgumentException if $newProductId is not a valid integer
+	 * @throws RangeException if $newProductId is not positive
 	 */
 	public function setProductId($newProductId) {
 		// verify the productId is valid
@@ -134,6 +138,8 @@ class productLocation {
 	 * mutator method for unitId
 	 *
 	 * @param int $newUnitId
+	 * @throws InvalidArgumentException if $newUnitId is not a valid integer
+	 * @throws RangeException if $newUnitId is not positive
 	 */
 	public function setUnitId($newUnitId) {
 		// verify the unitId is valid
@@ -154,7 +160,7 @@ class productLocation {
 	/**
 	 * accessor method for quantity
 	 *
-	 * @return int value of quantity
+	 * @return float value of quantity
 	 */
 	public function getQuantity() {
 		return $this->quantity;
@@ -163,13 +169,15 @@ class productLocation {
 	/**
 	 * mutator method for quantity
 	 *
-	 * @param int $newQuantity
+	 * @param float $newQuantity
+	 * @throws InvalidArgumentException if $newLocationId is not a valid float
+	 * @throws RangeException if $newLocationId is not positive
 	 */
 	public function setQuantity($newQuantity) {
 		// verify the quantity is valid
-		$newQuantity = filter_var($newQuantity, FILTER_VALIDATE_INT);
+		$newQuantity = filter_var($newQuantity, FILTER_VALIDATE_FLOAT);
 		if($newQuantity === false) {
-			throw(new InvalidArgumentException("quantity is not a valid integer"));
+			throw(new InvalidArgumentException("quantity is not a valid float"));
 		}
 
 		// verify the quantity is positive
@@ -178,7 +186,7 @@ class productLocation {
 		}
 
 		// convert and store the quantity
-		$this->quantity = intval($newQuantity);
+		$this->quantity = floatval($newQuantity);
 	}
 
 	/**
@@ -228,5 +236,34 @@ class productLocation {
 		// bind the member variables to the place holders in the template
 		$parameters = array("locationId" => $this->locationId, "productId" => $this->productId, "unitId" => $this->unitId);
 		$statement->execute($parameters);
+	}
+
+	/**
+	 * gets all productLocations
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @return SplFixedArray all productLocations found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getAllProductLocations(PDO &$pdo) {
+		// create query template
+		$query = "SELECT locationId, productId, unitId, quantity FROM productLocation";
+		$statement = $pdo->prepare($query);
+		$statement->execute();
+
+		// build an array of productLocations
+		$productLocations = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$productLocation = new ProductLocation($row["locationId"], $row["productId"], $row["unitId"], $row["quantity"]);
+				$productLocations[$productLocations->key()] = $productLocation;
+				$productLocations->next();
+			} catch(Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($productLocations);
 	}
 }
