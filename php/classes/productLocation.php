@@ -61,6 +61,10 @@ class productLocation {
 		}
 	}
 
+	public function __toString() {
+		return "<tr><td>" . $this->getLocationId() . "</td><td>" . $this->getProductId() . "</td><td>" . $this->getUnitId() . "</td><td>" . $this->getQuantity() . "</td></tr>";
+	}
+
 	/**
 	 * accessor method for locationId
 	 *
