@@ -4,6 +4,8 @@ DROP TABLE IF EXISTS notification;
 DROP TABLE IF EXISTS alertLevel;
 DROP TABLE IF EXISTS movement;
 DROP TABLE IF EXISTS location;
+DROP TABLE IF EXISTS vendor;
+DROP TABLE IF EXISTS finishedProduct;
 DROP TABLE IF EXISTS product;
 DROP TABLE IF EXISTS unitOfMeasure;
 DROP TABLE IF EXISTS user;
@@ -36,8 +38,31 @@ CREATE TABLE unitOfMeasure(
 
 CREATE TABLE product(
 	productId INT UNSIGNED AUTO_INCREMENT NOT NULL,
+	vendorId INT UNSIGNED,
+	sku VARCHAR(64),
+	leadTimes VARCHAR(10),
 	description VARCHAR(128),
+	FOREIGN KEY (vendorId)REFERENCES vendor(vendorId),
 	PRIMARY KEY (productId)
+);
+
+CREATE TABLE finishedProduct(
+	productId INT UNSIGNED NOT NULL,
+	rawMaterialId INT UNSIGNED NOT NULL,
+	rawQuantity INT UNSIGNED NOT NULL,
+	FOREIGN KEY(productId)REFERENCES product(productId)
+);
+
+CREATE TABLE vendor(
+	vendorId INT UNSIGNED AUTO_INCREMENT NOT NULL,
+	name VARCHAR(64)NOT NULL ,
+	contactName VARCHAR(64),
+	email Varchar(128),
+	phoneNumber CHAR(10),
+	INDEX (name),
+	INDEX (email),
+	INDEX (contactName),
+	PRIMARY KEY (vendorId)
 );
 
 CREATE TABLE location(
@@ -83,14 +108,14 @@ CREATE TABLE alertLevel(
 CREATE TABLE notification(
 	notificationId INT UNSIGNED AUTO_INCREMENT NOT NULL,
 	alertId INT UNSIGNED NOT NULL,
-	twilioId CHAR(34),
-	twilioStatus CHAR(1),
+	emailId CHAR(34),
+	emailStatus CHAR(1),
 	notificationHandle VARCHAR(10),
 	notificationDateTime DATETIME NOT NULL,
-	notificationContent VARCHAR(160),
-	INDEX (twilioId),
+	notificationContent VARCHAR(2800),
+	INDEX (emailId),
 	INDEX (alertId),
-	INDEX (twilioStatus),
+	INDEX (emailStatus),
 	FOREIGN KEY(alertId) REFERENCES alertLevel(alertId),
 	PRIMARY KEY (notificationId)
 );
