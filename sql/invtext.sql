@@ -108,7 +108,7 @@ CREATE TABLE alertLevel(
 CREATE TABLE notification(
 	notificationId INT UNSIGNED AUTO_INCREMENT NOT NULL,
 	alertId INT UNSIGNED NOT NULL,
-	emailId CHAR(10),
+	emailId INT UNSIGNED NOT NULL,
 	emailStatus CHAR(1),
 	notificationHandle VARCHAR(10),
 	notificationDateTime DATETIME NOT NULL,
