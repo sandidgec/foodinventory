@@ -19,7 +19,7 @@ class User {
 	private $firstName;
 	/**
 	 * attention line
-	 * @var string $attention;
+	 * @var string $attention ;
 	 */
 	private $attention;
 	/**
@@ -29,7 +29,7 @@ class User {
 	private $addressLineOne;
 	/**
 	 * address line 2
-	 * @var string $addressLineTwo;
+	 * @var string $addressLineTwo ;
 	 */
 	private $addressLineTwo;
 	/**
@@ -44,7 +44,7 @@ class User {
 	private $state;
 	/**
 	 * ZipCode
-	 * @var int $zipCode;
+	 * @var int $zipCode ;
 	 */
 	private $zipCode;
 	/**
@@ -86,8 +86,8 @@ class User {
 	 * @param $newHash
 	 */
 	public
-	function __construct($newUserId, $newLastName, $newFirstName,$newAttention,$newAddressLineOne,$newAddressLineTwo,
-								$newCity,$newState,$newZipCode,$newEmail, $newSalt, $newHash) {
+	function __construct($newUserId, $newLastName, $newFirstName, $newAttention, $newAddressLineOne, $newAddressLineTwo,
+								$newCity, $newState, $newZipCode, $newEmail, $newSalt, $newHash) {
 		try {
 			$this->setUserId($newUserId);
 			$this->setLastName($newLastName);
@@ -181,6 +181,7 @@ class User {
 		}
 		$this->firstName = $newFirstName;
 	}
+
 	/**
 	 * accessor for attention
 	 * @return string
@@ -199,7 +200,7 @@ class User {
 		if(empty($newAttention) === true) {
 			throw new InvalidArgumentException ("content invalid");
 		}
-		if(strlen($newAttention)>64) {
+		if(strlen($newAttention) > 64) {
 			throw new RangeException ("Address Line One too Long");
 		}
 		$this->attention = $newAttention;
@@ -223,7 +224,7 @@ class User {
 		if(empty($newAddressLineOne) === true) {
 			throw new InvalidArgumentException ("content invalid");
 		}
-		if(strlen($newAddressLineOne)>64) {
+		if(strlen($newAddressLineOne) > 64) {
 			throw new RangeException ("Address Line One too Long");
 		}
 		$this->addressLineOne = $newAddressLineOne;
@@ -247,11 +248,12 @@ class User {
 		if(empty($newAddressLineTwo) === true) {
 			throw new InvalidArgumentException ("content invalid");
 		}
-		if(strlen($newAddressLineTwo)>64) {
+		if(strlen($newAddressLineTwo) > 64) {
 			throw new RangeException ("Address Line Two too Long");
 		}
 		$this->addressLineTwo = $newAddressLineTwo;
 	}
+
 	/**
 	 * accessor for City
 	 * @return string
@@ -270,11 +272,12 @@ class User {
 		if(empty($newCity) === true) {
 			throw new InvalidArgumentException ("content invalid");
 		}
-		if(strlen($newCity)>64) {
+		if(strlen($newCity) > 64) {
 			throw new RangeException ("City too Long");
 		}
 		$this->attention = $newCity;
 	}
+
 	/**
 	 * accessor for State
 	 * @return string
@@ -282,6 +285,7 @@ class User {
 	public function getState() {
 		return ($this->state);
 	}
+
 	/**
 	 * Mutator for State
 	 * @param $newState
@@ -292,11 +296,12 @@ class User {
 		if(empty($newState) === true) {
 			throw new InvalidArgumentException ("content invalid");
 		}
-		if(strlen($newState)!==2) {
+		if(strlen($newState) !== 2) {
 			throw new RangeException ("Invalid State Entry");
 		}
 		$this->attention = $newState;
 	}
+
 	/**
 	 * accessor for zipCode
 	 * @return int
@@ -315,7 +320,7 @@ class User {
 		if(empty($newZipCode) === true) {
 			throw new InvalidArgumentException ("content invalid");
 		}
-		if(strlen($newZipCode)>10) {
+		if(strlen($newZipCode) > 10) {
 			throw new RangeException ("ZipCode too Long");
 		}
 		$this->zipCode = $newZipCode;
@@ -432,19 +437,24 @@ class User {
 		}
 		//create query template
 		$query
-	= "INSERT INTO user(lastName, firstName, attention, addressLineOne, addressLineTwo, city, state, zipCode,email, salt, hash)
+			= "INSERT INTO user(lastName, firstName, attention, addressLineOne, addressLineTwo, city, state, zipCode,email, salt, hash)
 		VALUES (:lastName, :firstName, :attention, :addressLineOne, :addressLineTwo, :city, :state, :zipCode, :email, :salt, :hash)";
-			$statement = $pdo->prepare($query);
+		$statement = $pdo->prepare($query);
 
 		// bind the variables to the place holders in the template
 		$parameters = array("lastName" => $this->lastName, "firstName" => $this->firstName, "attention" => $this->attention,
 			"addressLineOne" => $this->addressLineOne, "addressLineTwo" => $this->addressLineTwo, "city" => $this->city,
-			"state" => $this->state, "zipCode" => $this->zipCode, "email" => $this->email, "salt" => $this->salt,"hash" => $this->hash);
+			"state" => $this->state, "zipCode" => $this->zipCode, "email" => $this->email, "salt" => $this->salt, "hash" => $this->hash);
 		$statement->execute($parameters);
 
 		//update null userId with what mySQL just gave us
 		$this->userId = intval($pdo->lastInsertId());
 	}
+
+	/**
+	 * Deletes userId
+	 * @param PDO $pdo
+	 */
 	public function delete(PDO &$pdo) {
 		// enforce the user is not null
 		if($this->userId === null) {
@@ -459,7 +469,27 @@ class User {
 		$parameters = array("userId" => $this->userId);
 		$statement->execute($parameters);
 	}
+
+	/**
+	 * @param PDO $pdo
+	 */
+	public function update(PDO &$pdo) {
+
+		// create query template
+		$query	 = "UPDATE user SET firstName = :firstName, lastName = :lastName, attention = :attention, addressLineOne = :addressLineOne,
+ 		addressLineTwo = :addressLineTwo, city = :city, state = :state, zipCode = :zipCode, email = :email, phoneNumber = :phoneNumber,
+ 		WHERE userId = :userId";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables
+		$parameters = array("firstName" => $this->firstName, "lastName" => $this->lastName, "attention" => $this->attention,
+			"addressLineOne" => $this->addressLineOne, "addressLineTwo" => $this->addressLineTwo, "city" => $this->city, "state" => $this->state,
+			"zipCode" => $this->zipCode, "email" => $this->email, "phoneNumber" => $this->phoneNumber,"userId" => $this->userId);
+		$statement->execute($parameters);
+	}
 }
+
+
 
 
 
