@@ -3,7 +3,7 @@
 require_once("../traits/validateDate.php");
 
 /**
- * The movement class for inventoryText
+ * The movement class for InventoryMessage
  *
  * This class will monitor the movement of products in and
  * out of the inventory as well as the movement within inventory
@@ -36,20 +36,20 @@ class Movement {
 	private $productId;
 
 	/**
-	 * id for the units being moved; this is a foreign key
+	 * id for the units of product being moved; this is a foreign key
 	 * @var int $unitId
 	 **/
 	private $unitId;
 
 	/**
-	 * id for the user creating the movement; this is a foreign key
+	 * id for the user that creates the movement; this is a foreign key
 	 * @var int $userId
 	 **/
 	private $userId;
 
 	/**
 	 * cost of the product being moved
-	 * @var double $cost
+	 * @var float $cost
 	 **/
 	private $cost;
 
@@ -70,7 +70,7 @@ class Movement {
 
 	/**
 	 * price of the product being moved
-	 * @var double $price
+	 * @var float $price
 	 **/
 	private $price;
 
@@ -81,12 +81,12 @@ class Movement {
 	 * @param int $newFromLocationId id for the product's current location
 	 * @param int $newToLocationId id for the product's new location
 	 * @param int $newProductId id for the product being moved
-	 * @param int $newUnitId id for the units being moved
-	 * @param int $newUserId id for the user creating the movement
-	 * @param double $newCost cost of the product being moved
-	 * @param DateTime $newMovementDate the date of the movement
+	 * @param int $newUnitId id for the units of product being moved
+	 * @param int $newUserId id for the user that creates the movement
+	 * @param float $newCost cost of the product being moved
+	 * @param DateTime $newMovementDate the date and time of the movement
 	 * @param string $newMovementType the type of the movement
-	 * @param double $newPrice price of the product being moved
+	 * @param float $newPrice price of the product being moved
 	 * @throws InvalidArgumentException if data types are not valid
 	 * @throws RangeException if data values are out of bounds (e.g., strings too long, negative integers)
 	 * @throws Exception if some other exception is thrown
@@ -117,13 +117,12 @@ class Movement {
 		}
 	}
 
-
 	public function __toString() {
 		$formattedDate = $this->movementDate->format("Y-m-d H:i:s");
 
-		return "<tr><td>" . $this->getMovementId() . "</td><td>" . $this->getFromLocationId() . "</td><td>" . $this->getFromLocationId() .
-				 "</td><td>" . $this->getProductId() . "</td><td>" . $this->getUnitId() . "</td><td>" . $this->getCost() .
-				 "</td><td>" . $formattedDate . "</td><td>" . $this->getMovementType() . "</td><td>" . $this->getPrice() . "</td></tr>";
+		return "<tr><td>" . $this->getMovementId() . "</td><td>" . $this->getFromLocationId() . "</td><td>" . $this->getToLocationId() .
+				 "</td><td>" . $this->getProductId() . "</td><td>" . $this->getUnitId() . "</td><td>" . $this->getUserId() .
+				 "</td><td>" . $this->getCost() . "</td><td>" . $formattedDate . "</td><td>" . $this->getMovementType() . "</td><td>" . $this->getPrice() . "</td></tr>";
 	}
 
 	/**
@@ -139,7 +138,7 @@ class Movement {
 	 * mutator method for movementId
 	 *
 	 * @param int $newMovementId new value of movementId
-	 * @throws InvalidArgumentException if $newMovementId is not an integer
+	 * @throws InvalidArgumentException if $newMovementId is not a valid integer
 	 * @throws RangeException if $newMovementId is not positive
 	 **/
 	public function setMovementId($newMovementId) {
@@ -177,8 +176,8 @@ class Movement {
 	/**
 	 * mutator method for fromLocationId
 	 *
-	 * @param int $newFromLocationId
-	 * @throws InvalidArgumentException if $newFromLocationId is not an integer
+	 * @param int $newFromLocationId new value of fromLocationId
+	 * @throws InvalidArgumentException if $newFromLocationId is not a valid integer
 	 * @throws RangeException if $newFromLocationId is not positive
 	 */
 	public function setFromLocationId($newFromLocationId) {
@@ -209,8 +208,8 @@ class Movement {
 	/**
 	 * mutator method for toLocationId
 	 *
-	 * @param int $newToLocationId
-	 * @throws InvalidArgumentException if $newToLocationId is not an integer
+	 * @param int $newToLocationId new value of toLocationId
+	 * @throws InvalidArgumentException if $newToLocationId is not a valid integer
 	 * @throws RangeException if $newToLocationId is not positive
 	 **/
 	public function setToLocationId($newToLocationId) {
@@ -241,9 +240,9 @@ class Movement {
 	/**
 	 * mutator method for productId
 	 *
-	 * @param int $newProductId
-	 * @throws InvalidArgumentException if $newProductId is not an integer
-	 * @throws RangeException if $newFromProductId is not positive
+	 * @param int $newProductId new value of productId
+	 * @throws InvalidArgumentException if $newProductId is not a valid integer
+	 * @throws RangeException if $newProductId is not positive
 	 **/
 	public function setProductId($newProductId) {
 		// verify the productId is valid
@@ -273,8 +272,8 @@ class Movement {
 	/**
 	 * mutator method for unitId
 	 *
-	 * @param int $newUnitId
-	 * @throws InvalidArgumentException if $newUnitId is not an integer
+	 * @param int $newUnitId new value of unitId
+	 * @throws InvalidArgumentException if $newUnitId is not a valid integer
 	 * @throws RangeException if $newUnitId is not positive
 	 */
 	public function setUnitId($newUnitId) {
@@ -305,21 +304,23 @@ class Movement {
 	/**
 	 * mutator method for userId
 	 *
-	 * @param int $newUserId
+	 * @param int $newUserId new value of userId
+	 * @throws InvalidArgumentException if $newUserId is not a valid integer
+	 * @throws RangeException if $newUserId is not positive
 	 */
 	public function setUserId($newUserId) {
-		// verify the unitId is valid
+		// verify the userId is valid
 		$newUserId = filter_var($newUserId, FILTER_VALIDATE_INT);
 		if($newUserId === false) {
 			throw(new InvalidArgumentException("userId is not a valid integer"));
 		}
 
-		// verify the unitId is positive
+		// verify the userId is positive
 		if($newUserId <= 0) {
 			throw(new RangeException("userId is not positive"));
 		}
 
-		// convert and store the unitId
+		// convert and store the userId
 		$this->userId = intval($newUserId);
 }
 
@@ -335,7 +336,9 @@ class Movement {
 	/**
 	 * mutator method for cost
 	 *
-	 * @param float $newCost
+	 * @param float $newCost new value of cost
+	 * @throws InvalidArgumentException if $newCost is not a valid float
+	 * @throws RangeException if $newCost is not positive
 	 */
 	public function setCost($newCost) {
 		// verify the cost is valid
@@ -365,7 +368,9 @@ class Movement {
 	/**
 	 * mutator method for movementDate
 	 *
-	 * @param DateTime $newMovementDate
+	 * @param DateTime $newMovementDate new value of movementDate
+	 * @throws InvalidArgumentException if $newMovementDate is not a valid DateTime
+	 * @throws RangeException if $newMovementDate is what is expected
 	 */
 	public function setMovementDate($newMovementDate) {
 		// base case: if the date is null, use the current date and time
@@ -397,9 +402,9 @@ class Movement {
 	/**
 	 * mutator method for movementType
 	 *
-	 * @param string $newMovementType
+	 * @param string $newMovementType new value of movementType
 	 * @throws InvalidArgumentException if $newMovementType is not a string
-	 * @throws RangeException if $newMovementType is not 1 character long
+	 * @throws RangeException if $newMovementType is not 2 character long
 	 */
 	public function setMovementType($newMovementType) {
 		// verify the movementType is secure
@@ -410,8 +415,11 @@ class Movement {
 		}
 
 		// verify the movementType will fit in the database
-		if(strlen($newMovementType) > 1) {
+		if(strlen($newMovementType) > 2) {
 			throw(new RangeException("movementType is too large"));
+		}
+		if(strlen($newMovementType) < 2) {
+			throw(new RangeException("movementType is too small"));
 		}
 
 		// store the movementType
@@ -430,7 +438,9 @@ class Movement {
 	/**
 	 * mutator method for price
 	 *
-	 * @param float $newPrice
+	 * @param float $newPrice new value of price
+	 * @throws InvalidArgumentException if $newPrice is not a valid float
+	 * @throws RangeException if $newPrice is not positive
 	 */
 	public function setPrice($newPrice) {
 		// verify the price is valid
