@@ -1,6 +1,6 @@
 <?php
 
-require_once("../traits/validateDate.php");
+require_once("/home/ccollopy/public_html/foodinventory/php/traits/validateDate.php");
 
 /**
  * The movement class for InventoryMessage

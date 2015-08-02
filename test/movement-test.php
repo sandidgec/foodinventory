@@ -1,13 +1,13 @@
 <?php
 
 require_once("/etc/apache2/data-design/encrypted-config.php");
-require_once("../php/classes/movement.php");
+require_once("/home/ccollopy/public_html/foodinventory/php/classes/movement.php");
 
 $date = DateTime::createFromFormat('Y-m-d H:i:s', '2015-07-29 18:45:06');
 
 try {
 	$pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/invtext.ini");
-	$movement = new Movement(null, 1, 2, 2, 1, 1, 5.25, $date, "T", 7.50);
+	$movement = new Movement(null, 4, 3, 7, 8, 3, 5.25, $date, "TR", 7.50);
 	$movement->insert($pdo);
 	var_dump($movement);
 } catch(PDOException $pdoException) {
