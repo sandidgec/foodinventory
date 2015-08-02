@@ -19,22 +19,22 @@ class Notification {
 	 **/
 	private $alertId;
 	/**
-	 * this is the id for messages from twilio, this is a foreign key
-	 * @var int $twilioId
+	 * this is the id for each email for users notification, this is a foreign key
+	 * @var int $emailId
 	 **/
-	private $twilioId;
+	private $emailId;
 	/**
 	 *this is the time stamp for every notification
 	 * @var string $dateTime
 	 **/
 	private $dateTime;
 	/**
-	 * this is the data sent from twillio for specific requests from user
+	 * this is the data sent by email for specific requests from user
 	 * @var string $notificationHandle
 	 **/
 	private $notificationHandle;
 	/**
-	 * this is the content of the notifications telling customer specific information on their
+	 * this is the content of the notifications telling customer specific information on their inventory
 	 * @var string $notificationContent
 	 **/
 	private $notificationContent;
@@ -44,7 +44,7 @@ class Notification {
 	 *
 	 * @param int $newNotificationId id of this Notification or null if unknown notification
 	 * @param int $newAlertId id for alert level sent with this notification
-	 * @param int $newTwilioId id sent from twilio for each notification
+	 * @param int $newEmailId id generated for each notification
 	 * @param string $newDateTime date and time of when each notification was sent or null if set to current date and time
 	 * @param string $newNotificationHandle string containing data from twilio for notification
 	 * @param string $newNotificationContent string containing conent of notification
@@ -52,12 +52,12 @@ class Notification {
 	 * @throws RangeException if data values are out of bounds (e.g., strings too long, negative integers)
 	 * @throws Exception if some other exception is thrown
 	 **/
-	public function __construct($newNotificationId, $newAlertId, $newTwilioId, $newDateTime, $newNotificationHandle,
+	public function __construct($newNotificationId, $newAlertId, $newEmailId, $newDateTime, $newNotificationHandle,
 										 $newNotificationContent = null) {
 		try {
 			$this->setNotificationId($newNotificationId);
 			$this->setAlertId($newAlertId);
-			$this->setTwilioId($newTwilioId);
+			$this->setEmailId($newEmailId);
 			$this->setDateTime($newDateTime);
 			$this->setNotificationHandle($newNotificationHandle);
 			$this->setNotificationContent($newNotificationContent);
@@ -85,7 +85,7 @@ class Notification {
 	/**
 	 * mutator method for notification id
 	 *
-	 * @param int $NotificationId new value of notification id
+	 * @param int $newNotificationId new value of notification id
 	 * @throws InvalidArgumentException if $newNotificationId is not an integer
 	 * @throws RangeException if $newNotificationId is not positive
 	 **/
@@ -114,14 +114,14 @@ class Notification {
 	 *
 	 * @return mixed value of alert id
 	 **/
-	public function getalertId() {
+	public function getAlertId() {
 		return ($this->alertId);
 	}
 
 	/**
 	 * mutator method for alert id
 	 *
-	 * @param int $AlertId new value of alert id
+	 * @param int $newAlertId new value of alert id
 	 * @throws InvalidArgumentException if $newAlertId is not an integer
 	 * @throws RangeException if $newAlertId is not positive
 	 **/
@@ -146,39 +146,39 @@ class Notification {
 	}
 
 	/**
-	 * accessor method for twilio id
+	 * accessor method for email id
 	 *
-	 * @return mixed value of twilio id
+	 * @return mixed value of email id
 	 **/
-	public function gettwilioId() {
-		return ($this->twilioId);
+	public function getEmailId() {
+		return ($this->emailId);
 	}
 
 	/**
-	 * mutator method for twilio id
+	 * mutator method for email id
 	 *
-	 * @param int $TwilioId new value of twilio id
-	 * @throws InvalidArgumentException if $newTwilioId is not an integer
-	 * @throws RangeException if $newTwilioId is not positive
+	 * @param int $newEmailId new value of email id
+	 * @throws InvalidArgumentException if $newEmailId is not an integer
+	 * @throws RangeException if $newEmailId is not positive
 	 **/
-	public function setTwilioId($newTwilioId) {
-		// base case: if the twilio id is null, this a new twilio id without a mySQL assigned id (yet)
-		if($newTwilioId === null) {
-			$this->twilioId = null;
+	public function setEmailId($newEmailId) {
+		// base case: if the email id is null, this a new email id without a mySQL assigned id (yet)
+		if($newEmailId === null) {
+			$this->emailId = null;
 			return;
 		}
 
-		// verify the twillio id is valid
-		$newTwilioId = filter_var($newTwilioId, FILTER_VALIDATE_INT);
-		if($newTwilioId === false) {
-			throw(new InvalidArgumentException("twilio id is not a valid integer"));
+		// verify the email id is valid
+		$newEmailId = filter_var($newEmailId, FILTER_VALIDATE_INT);
+		if($newEmailId === false) {
+			throw(new InvalidArgumentException("email id is not a valid integer"));
 		}
-		// verify the twillio id is positive
-		if($newTwilioId <= 0) {
-			throw(new RangeException("twilio id is not positive"));
+		// verify the email id is positive
+		if($newEmailId <= 0) {
+			throw(new RangeException("email id is not positive"));
 		}
-		// convert and store the twillio id
-		$this->twilioId = intval($newTwilioId);
+		// convert and store the email id
+		$this->emailId = intval($newEmailId);
 	}
 
 	/**
@@ -206,7 +206,7 @@ class Notification {
 
 		// store the notification date
 		try {
-			$newDateTime = validateDate($newDateTime);
+			$newDateTime = valiDate($newDateTime);
 		} catch(InvalidArgumentException $invalidArgument) {
 			throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
 		} catch(RangeException $range) {
