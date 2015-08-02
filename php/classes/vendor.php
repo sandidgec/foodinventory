@@ -33,6 +33,36 @@ class Vendor {
 	 * @var int $vendorPhoneNumber
 	 **/
 	private $vendorPhoneNumber;
+	/**
+	 * constructor for this Notification
+	 *
+	 * @param int $newVendorId id of this vendor or null if unknown vendor
+	 * @param int $newContactName name of contact/salesperson for vendor
+	 * @param string $newVendorEmail string email address for vendor
+	 * @param string $newVendorName string names of vendor
+	 * @param int $newVendorPhoneNumber int phone number of vendor
+	 * @throws InvalidArgumentException if data types are not valid
+	 * @throws RangeException if data values are out of bounds (e.g., strings too long, negative integers)
+	 * @throws Exception if some other exception is thrown
+	 **/
+	public function __construct($newVendorId, $newContactName, $newVendorEmail, $newVendorName, $newVendorPhoneNumber = null) {
+		try {
+			$this->setVendorId($newVendorId);
+			$this->setContactName($newContactName);
+			$this->setVendorEmail($newVendorEmail);
+			$this->setVendorName($newVendorName);
+			$this->setVendorPhoneNumber($newVendorPhoneNumber);
+		} catch(InvalidArgumentException $invalidArgument) {
+			// rethrow the exception to the caller
+			throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
+		} catch(RangeException $range) {
+			// rethrow the exception to the caller
+			throw(new RangeException($range->getMessage(), 0, $range));
+		} catch(Exception $exception) {
+			//rethrow generic mysqli_sql_exception
+			throw(new Exception($exception->getMessage(), 0, $exception));
+		}
+	}
 
 	/**
 	 * accessor method for $vendorId
