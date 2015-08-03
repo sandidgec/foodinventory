@@ -41,17 +41,17 @@ abstract class InventoryTextTest extends PHPUnit_Extensions_Database_TestCase {
 
 		// add all the tables for the project here
 		// THESE TABLES *MUST* BE LISTED IN THE SAME ORDER THEY WERE CREATED!!!!
+		$dataset->addTable("user");
+		$dataset->addTable("unitOfMeasure");
 		$dataset->addTable("alertLevel");
+		$dataset->addTable("vendor");
+		$dataset->addTable("product");
 		$dataset->addTable("location");
+		$dataset->addTable("finishedProduct");
+		$dataset->addTable("productLocation");
 		$dataset->addTable("movement");
 		$dataset->addTable("notification");
-		$dataset->addTable("product");
-		$dataset->addTable("productLocation");
 		$dataset->addTable("productPermissions");
-		$dataset->addTable("unitOfMeasure");
-		$dataset->addTable("user");
-		$dataset->addTable("finishedProduct");
-		$dataset->addTable("vendor");
 		return($dataset);
 	}
 
