@@ -18,10 +18,11 @@ CREATE TABLE user(
 	phoneNumber CHAR(10) NOT NULL,
 	attention VARCHAR(64),
 	addressLineOne VARCHAR(64) NOT NULL,
-	addressLIneTwo VARCHAR(64),
+	addressLineTwo VARCHAR(64),
 	city VARCHAR(64)NOT NULL,
 	state CHAR(2) NOT NULL,
-	zip VARCHAR(10)NOT NULL,
+	zipCode VARCHAR(10)NOT NULL,
+	root CHAR(1) NOT NULL,
 	salt CHAR(64) NOT NULL,
 	hash CHAR(128) NOT NULL,
 	UNIQUE(email),
@@ -50,7 +51,9 @@ CREATE TABLE finishedProduct(
 	productId INT UNSIGNED NOT NULL,
 	rawMaterialId INT UNSIGNED NOT NULL,
 	rawQuantity INT UNSIGNED NOT NULL,
-	FOREIGN KEY(productId)REFERENCES product(productId)
+	FOREIGN KEY(productId)REFERENCES product(productId),
+	FOREIGN KEY (rawMaterialId)REFERENCES product(productId),
+	PRIMARY KEY (productId, rawMaterialId)
 );
 
 CREATE TABLE vendor(
@@ -108,7 +111,7 @@ CREATE TABLE alertLevel(
 CREATE TABLE notification(
 	notificationId INT UNSIGNED AUTO_INCREMENT NOT NULL,
 	alertId INT UNSIGNED NOT NULL,
-	emailId INT UNSIGNED NOT NULL,
+	emailId VARCHAR(34),
 	emailStatus CHAR(1),
 	notificationHandle VARCHAR(10),
 	notificationDateTime DATETIME NOT NULL,

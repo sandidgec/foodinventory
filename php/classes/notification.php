@@ -1,9 +1,10 @@
 <?php
+
 /**
  * this is the notification class for the inventoryText capstone project
  *
- * this notification class will interact with twilio, sending out notifications to twillio to send out a text
- * and also receiving and interpreting  information sent via the twilio app, from the end user.
+ * this notification class will sending out notifications via email, user can set frequency, content and which inventory
+ * items will trigger notificcations
  *
  * @author James Huber <jhuber8@cnm.edu>
  **/
@@ -25,9 +26,9 @@ class Notification {
 	private $emailId;
 	/**
 	 *this is the time stamp for every notification
-	 * @var string $dateTime
+	 * @var string $notificationDateTime
 	 **/
-	private $dateTime;
+	private $notificationDateTime;
 	/**
 	 * this is the data sent by email for specific requests from user
 	 * @var string $notificationHandle
@@ -45,20 +46,20 @@ class Notification {
 	 * @param int $newNotificationId id of this Notification or null if unknown notification
 	 * @param int $newAlertId id for alert level sent with this notification
 	 * @param int $newEmailId id generated for each notification
-	 * @param string $newDateTime date and time of when each notification was sent or null if set to current date and time
+	 * @param string $newNotificationDateTime date and time of when each notification was sent or null if set to current date and time
 	 * @param string $newNotificationHandle string containing data from twilio for notification
 	 * @param string $newNotificationContent string containing conent of notification
 	 * @throws InvalidArgumentException if data types are not valid
 	 * @throws RangeException if data values are out of bounds (e.g., strings too long, negative integers)
 	 * @throws Exception if some other exception is thrown
 	 **/
-	public function __construct($newNotificationId, $newAlertId, $newEmailId, $newDateTime, $newNotificationHandle,
+	public function __construct($newNotificationId, $newAlertId, $newEmailId, $newNotificationDateTime, $newNotificationHandle,
 										 $newNotificationContent = null) {
 		try {
 			$this->setNotificationId($newNotificationId);
 			$this->setAlertId($newAlertId);
 			$this->setEmailId($newEmailId);
-			$this->setDateTime($newDateTime);
+			$this->setNotificationDateTime($newNotificationDateTime);
 			$this->setNotificationHandle($newNotificationHandle);
 			$this->setNotificationContent($newNotificationContent);
 		} catch(InvalidArgumentException $invalidArgument) {
@@ -184,44 +185,46 @@ class Notification {
 	/**
 	 * accessor method for notification date
 	 *
-	 * @return DateTime value of notification date
+	 * @return dateTime value of notification date
 	 **/
-	public function getDateTime() {
-		return ($this->dateTime);
+	public function getNotificationDateTime() {
+		return ($this->notificationDateTime);
 	}
 
 	/**
 	 * mutator method for notification date and time
 	 *
-	 * @param mixed $newDateTime notification date as a DateTime object or string (or null to load the current time)
-	 * @throws InvalidArgumentException if $newDateTime is not a valid object or string
-	 * @throws RangeException if $newDateTime is a date that does not exist
+	 * @param mixed $newNotificationDateTime notification date as a DateTime object or string (or null to load the current time)
+	 * @throws InvalidArgumentException if $newNotificationDateTime is not a valid object or string
+	 * @throws RangeException if $newNotificationDateTime is a date that does not exist
 	 **/
-	public function setDateTime($newDateTime) {
+	public function setNotificationDateTime($newNotificationDateTime) {
 		// base case: if the date is null, use the current date and time
-		if($newDateTime === null) {
-			$this->dateTime = new DateTime();
+		if($newNotificationDateTime === null) {
+			$this->notificationDateTime = new DateTime();
 			return;
 		}
 
 		// store the notification date
 		try {
-			$newDateTime = valiDate($newDateTime);
+			$newNotificationDateTime = valiDate($newNotificationDateTime);
 		} catch(InvalidArgumentException $invalidArgument) {
 			throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
 		} catch(RangeException $range) {
 			throw(new RangeException($range->getMessage(), 0, $range));
 		}
-		$this->dateTime = $newDateTime;
+		$this->notificationDateTime = $newNotificationDateTime;
 	}
+
 	/**
 	 * accessor method for notification handle
 	 *
 	 * @return mixed value of notification handle
 	 **/
-	public function getNotificationHangle(){
-		return($this->notificationHandle);
+	public function getNotificationHangle() {
+		return ($this->notificationHandle);
 	}
+
 	/**
 	 * mutator method for notification handle
 	 *
@@ -231,18 +234,19 @@ class Notification {
 	 **/
 	public function setNotificationHandle($newNotificationHandle) {
 		//verify the notification handle is secure
-		$newNotificationHandle=trim($newNotificationHandle);
-		$newNotificationHandle=filter_var($newNotificationHandle, FILTER_SANITIZE_STRING);
-		if(empty($newNotificationHandle)=== true) {
+		$newNotificationHandle = trim($newNotificationHandle);
+		$newNotificationHandle = filter_var($newNotificationHandle, FILTER_SANITIZE_STRING);
+		if(empty($newNotificationHandle) === true) {
 			throw(new InvalidArgumentException("notification handle is empty or insecure"));
 		}
 		//verify the notification handle will fit into database
-		if(strlen($newNotificationHandle)>10){
+		if(strlen($newNotificationHandle) > 10) {
 			throw(new RangeException("notification handle is too large"));
 		}
 		//store the notification handle
-		$this->notificationHandle=$newNotificationHandle;
+		$this->notificationHandle = $newNotificationHandle;
 	}
+
 	/**
 	 * accessor method for notification content
 	 *
@@ -251,6 +255,7 @@ class Notification {
 	public function getNotificationContent() {
 		return ($this->notificationContent);
 	}
+
 	/**
 	 * mutator method for notification content
 	 *
@@ -273,4 +278,152 @@ class Notification {
 		// store the notification content
 		$this->notificationContent = $newNotificationContent;
 	}
+
+	/**
+	 * * inserts this Notification into mySQL
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public function insert(PDO &$pdo) {
+		// enforce the notificationId is null (i.e., don't insert a notification that already exists)
+		if($this->notificationId !== null) {
+			throw(new PDOException("not a new notification"));
+		}
+
+		// create query template
+		$query = "INSERT INTO notification(notificationId, alertId, emailId, notificationDateTime, notificationHandle, notificationContent)VALUES(:notificationId, :alertId, :emailId, :notificationDateTime, :notificationHandle, :notificationContent)";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holders in the template
+		$formattedDate = $this->notificationDateTime->format("Y-m-d H:i:s");
+		$parameters = array("notificationId" => $this->notificationId, "alertId" => $this->alertId, "emailId" => $this->emailId,
+			"notificationDateTime" => $formattedDate, "notificationHandle" => $this->notificationHandle, "notificationContent" => $this->notificationContent);
+		$statement->execute($parameters);
+
+		// update the null notificationId with what mySQL just gave us
+		$this->notificationId = intval($pdo->lastInsertId());
+	}
+
+	/**
+ * gets the Notification by notificationId
+ *
+ * @param PDO $pdo pointer to PDO connection, by reference
+ * @param int $notificationId notification id to search for
+ * @return mixed notification found or null if not found
+ * @throws PDOException when mySQL related errors occur
+ **/
+	public static function getNotificationByNotificationId(PDO &$pdo, $notificationId) {
+		// sanitize the notificationId before searching
+		$notificationId = filter_var($notificationId, FILTER_VALIDATE_INT);
+		if($notificationId === false) {
+			throw(new PDOException("notification id is not an integer"));
+		}
+		if($notificationId <= 0) {
+			throw(new PDOException("notification id is not positive"));
+		}
+
+		// create query template
+		$query = "SELECT notificationId, alertId, emailId, notificationDateTime, notificationHandle, notificationContent FROM notification WHERE notificationId = :notificationId";
+		$statement = $pdo->prepare($query);
+
+		// bind the notification id to the place holder in the template
+		$parameters = array("notificationId" => $notificationId);
+		$statement->execute($parameters);
+
+		// grab the notification from mySQL
+		try {
+			$notification = null;
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$notification = new Notification($row["notificationId"], $row["alertId"], $row["emailId"], $row["notificationDateTime"], $row["notificationHandle"], $row["notificationContent"]);
+			}
+		} catch(Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new PDOException($exception->getMessage(), 0, $exception));
+		}
+		return ($notification);
+	}
+	/**
+	 * gets the Notification by alertId
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int $alertId alert id to search for
+	 * @return mixed notification found or null if not found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getNotificationByAlertId(PDO &$pdo, $alertId) {
+		// sanitize the alertId before searching
+		$alertId = filter_var($alertId, FILTER_VALIDATE_INT);
+		if($alertId === false) {
+			throw(new PDOException("alert id is not an integer"));
+		}
+		if($alertId <= 0) {
+			throw(new PDOException("alert id is not positive"));
+		}
+
+		// create query template
+		$query = "SELECT notificationId, alertId, emailId, notificationDateTime, notificationHandle, notificationContent FROM notification WHERE alertId = :alertId";
+		$statement = $pdo->prepare($query);
+
+		// bind the alert id to the place holder in the template
+		$parameters = array("alertId" => $alertId);
+		$statement->execute($parameters);
+
+		// grab the notification from mySQL
+		try {
+			$notification = null;
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$notification = new Notification($row["notificationId"], $row["alertId"], $row["emailId"], $row["notificationDateTime"], $row["notificationHandle"], $row["notificationContent"]);
+			}
+		} catch(Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new PDOException($exception->getMessage(), 0, $exception));
+		}
+		return ($notification);
+	}
+	/**
+	 * gets the Notification by emailId
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int $emailId email id to search for
+	 * @return mixed notification found or null if not found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getNotificationByEmailId(PDO &$pdo, $emailId) {
+		// sanitize the emailId before searching
+		$emailId = filter_var($emailId, FILTER_VALIDATE_INT);
+		if($emailId === false) {
+			throw(new PDOException("email id is not an integer"));
+		}
+		if($emailId <= 0) {
+			throw(new PDOException("email id is not positive"));
+		}
+
+		// create query template
+		$query = "SELECT notificationId, alertId, emailId, notificationDateTime, notificationHandle, notificationContent FROM notification WHERE notificationId = :notificationId";
+		$statement = $pdo->prepare($query);
+
+		// bind the email id to the place holder in the template
+		$parameters = array("emailId" => $emailId);
+		$statement->execute($parameters);
+
+		// grab the notification from mySQL
+		try {
+			$notification = null;
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$notification = new Notification($row["notificationId"], $row["alertId"], $row["emailId"], $row["notificationDateTime"], $row["notificationHandle"], $row["notificationContent"]);
+			}
+		} catch(Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new PDOException($exception->getMessage(), 0, $exception));
+		}
+		return ($notification);
+	}
 }
+

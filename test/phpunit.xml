@@ -1,0 +1,8 @@
+<phpunit>
+	<testsuites>
+		<testsuite name="Inventory Message">
+			<file>movement-test.php</file>
+			<file>productLocation-test.php</file>
+		</testsuite>
+	</testsuites>
+</phpunit>
