@@ -1,8 +1,17 @@
 <phpunit>
 	<testsuites>
 		<testsuite name="Inventory Message">
-			<file>movement-test.php</file>
+			<file>user-test.php</file>
+			<file>unitOfMeasure-test.php</file>
+			<file>alertLevel-test.php</file>
+			<file>vendor-test.php</file>
+			<file>product-test.php</file>
+			<file>location-test.php</file>
+			<file>finishedProduct-test.php</file>
 			<file>productLocation-test.php</file>
+			<file>movement-test.php</file>
+			<file>notification-test.php</file>
+			<file>productPermissions-test.php</file>
 		</testsuite>
 	</testsuites>
 </phpunit>

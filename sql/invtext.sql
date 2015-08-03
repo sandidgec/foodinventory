@@ -1,12 +1,12 @@
 DROP TABLE IF EXISTS productPermissions;
-DROP TABLE IF EXISTS productLocation;
 DROP TABLE IF EXISTS notification;
-DROP TABLE IF EXISTS alertLevel;
 DROP TABLE IF EXISTS movement;
-DROP TABLE IF EXISTS location;
-DROP TABLE IF EXISTS vendor;
+DROP TABLE IF EXISTS productLocation;
 DROP TABLE IF EXISTS finishedProduct;
+DROP TABLE IF EXISTS location;
 DROP TABLE IF EXISTS product;
+DROP TABLE IF EXISTS vendor;
+DROP TABLE IF EXISTS alertLevel;
 DROP TABLE IF EXISTS unitOfMeasure;
 DROP TABLE IF EXISTS user;
 
@@ -37,23 +37,13 @@ CREATE TABLE unitOfMeasure(
 	PRIMARY KEY (unitId)
 );
 
-CREATE TABLE product(
-	productId INT UNSIGNED AUTO_INCREMENT NOT NULL,
-	vendorId INT UNSIGNED,
-	sku VARCHAR(64),
-	leadTimes VARCHAR(10),
-	description VARCHAR(128),
-	FOREIGN KEY (vendorId)REFERENCES vendor(vendorId),
-	PRIMARY KEY (productId)
-);
-
-CREATE TABLE finishedProduct(
-	productId INT UNSIGNED NOT NULL,
-	rawMaterialId INT UNSIGNED NOT NULL,
-	rawQuantity INT UNSIGNED NOT NULL,
-	FOREIGN KEY(productId)REFERENCES product(productId),
-	FOREIGN KEY (rawMaterialId)REFERENCES product(productId),
-	PRIMARY KEY (productId, rawMaterialId)
+CREATE TABLE alertLevel(
+	alertId INT UNSIGNED AUTO_INCREMENT NOT NULL,
+	alertCode VARCHAR(2) NOT NULL,
+	alertLevel DECIMAL(9,3) NOT NULL ,
+	alertFrequency VARCHAR(2)NOT NULL,
+	alertOperator CHAR(1) NOT NULL ,
+	PRIMARY KEY (alertId)
 );
 
 CREATE TABLE vendor(
@@ -68,11 +58,44 @@ CREATE TABLE vendor(
 	PRIMARY KEY (vendorId)
 );
 
+CREATE TABLE product(
+	productId INT UNSIGNED AUTO_INCREMENT NOT NULL,
+	vendorId INT UNSIGNED,
+	sku VARCHAR(64),
+	leadTimes VARCHAR(10),
+	description VARCHAR(128),
+	FOREIGN KEY (vendorId)REFERENCES vendor(vendorId),
+	PRIMARY KEY (productId)
+);
+
 CREATE TABLE location(
 	locationId INT UNSIGNED AUTO_INCREMENT NOT NULL,
 	description VARCHAR(128)NOT NULL,
 	storageCode VARCHAR(2) NOT NULL,
 	PRIMARY KEY (locationId)
+);
+
+CREATE TABLE finishedProduct(
+	productId INT UNSIGNED NOT NULL,
+	rawMaterialId INT UNSIGNED NOT NULL,
+	rawQuantity INT UNSIGNED NOT NULL,
+	FOREIGN KEY(productId)REFERENCES product(productId),
+	FOREIGN KEY (rawMaterialId)REFERENCES product(productId),
+	PRIMARY KEY (productId, rawMaterialId)
+);
+
+CREATE TABLE productLocation(
+	locationId INT UNSIGNED NOT NULL,
+	unitId INT UNSIGNED NOT NULL,
+	productId INT UNSIGNED NOT NULL,
+	quantity DECIMAL(9,3),
+	INDEX(locationId),
+	INDEX (unitId),
+	INDEX (productId),
+	FOREIGN KEY (locationId)REFERENCES location(locationId),
+	FOREIGN KEY (unitId)REFERENCES unitOfMeasure(unitId),
+	FOREIGN KEY (productId)REFERENCES product(productId),
+	PRIMARY KEY (locationId, unitId, productId)
 );
 
 CREATE TABLE movement(
@@ -99,15 +122,6 @@ CREATE TABLE movement(
 	PRIMARY KEY (movementId)
 );
 
-CREATE TABLE alertLevel(
-	alertId INT UNSIGNED AUTO_INCREMENT NOT NULL,
-	alertCode VARCHAR(2) NOT NULL,
-	alertLevel DECIMAL(9,3) NOT NULL ,
-	alertFrequency VARCHAR(2)NOT NULL,
-	alertOperator CHAR(1) NOT NULL ,
-	PRIMARY KEY (alertId)
-);
-
 CREATE TABLE notification(
 	notificationId INT UNSIGNED AUTO_INCREMENT NOT NULL,
 	alertId INT UNSIGNED NOT NULL,
@@ -121,20 +135,6 @@ CREATE TABLE notification(
 	INDEX (emailStatus),
 	FOREIGN KEY(alertId) REFERENCES alertLevel(alertId),
 	PRIMARY KEY (notificationId)
-);
-
-CREATE TABLE productLocation(
-	locationId INT UNSIGNED NOT NULL,
-	unitId INT UNSIGNED NOT NULL,
-	productId INT UNSIGNED NOT NULL,
-	quantity DECIMAL(9,3),
-	INDEX(locationId),
-	INDEX (unitId),
-	INDEX (productId),
-	FOREIGN KEY (locationId)REFERENCES location(locationId),
-	FOREIGN KEY (unitId)REFERENCES unitOfMeasure(unitId),
-	FOREIGN KEY (productId)REFERENCES product(productId),
-	PRIMARY KEY (locationId, unitId, productId)
 );
 
 CREATE TABLE productPermissions(
