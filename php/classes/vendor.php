@@ -200,4 +200,185 @@ class Vendor {
 		}
 		$this->vendorPhoneNumber=$newVendorPhoneNumber;
 	}
+	/**
+	 * * inserts this Vendor into mySQL
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public function insert(PDO &$pdo) {
+		// enforce the vendorId is null (i.e., don't insert a vendor that already exists)
+		if($this->vendorId !== null) {
+			throw(new PDOException("not a new vendor"));
+		}
+
+		// create query template
+		$query = "INSERT INTO vendor(vendorId, contactName, vendorEmail, vendorName, vendorPhoneNumber)VALUES(:vendorId, :contactNameId, :vendorEmailId, :vendorNames, :vendorPhoneNumber)";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holders in the template
+		$parameters = array("vendorId" => $this->vendorId, "contactName" => $this->contactName, "vendorEmail" => $this->vendorEmail,
+			 "vendorName" => $this->vendorName, "vendorPhoneNumber" => $this->vendorPhoneNumber);
+		$statement->execute($parameters);
+
+		// update the null vendorId with what mySQL just gave us
+		$this->vendorId = intval($pdo->lastInsertId());
+	}
+	/**
+	 * deletes this vendor from mySQL
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public function delete(PDO &$pdo) {
+		// enforce the vendorId is not null (i.e., don't delete a vendor that hasn't been inserted)
+		if($this->vendorId === null) {
+			throw(new PDOException("unable to delete a vendor that does not exist"));
+		}
+
+		// create query template
+		$query	 = "DELETE FROM vendor WHERE vendorId = :vendorId";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holder in the template
+		$parameters = array("vendorId" => $this->vendorId);
+		$statement->execute($parameters);
+	}
+	/**
+	 * updates this vendor in mySQL
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public function update(PDO &$pdo) {
+		// enforce the vendorId is not null (i.e., don't update a vendor that hasn't been inserted)
+		if($this->vendorId === null) {
+			throw(new PDOException("unable to update a vendor that does not exist"));
+		}
+
+		// create query template
+		$query	 = "UPDATE vendor SET contactName = :contactName, vendorEmail = :vendorEmail, vendorName = :vendorName, vendorPhoneNumber = :vendorPhoneNumber WHERE vendorId = :vendorId";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holders in the template
+		$parameters = array("contactName" => $this->contactName, "vendorEmail" => $this->vendorEmail,"vendorName" => $this-> vendorName, "vendorPhoneName" => $this-> vendorPhoneNumber, "vendorId" => $this->vendorId);
+		$statement->execute($parameters);
+	}
+	/**
+	 * gets the vendor by vendorId
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int $vendorId vendor id to search for
+	 * @return mixed Tweet found or null if not found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getVendorByVendorId(PDO &$pdo, $vendorId) {
+		// sanitize the vendorId before searching
+		$vendorId = filter_var($vendorId, FILTER_VALIDATE_INT);
+		if($vendorId === false) {
+			throw(new PDOException("vendor id is not an integer"));
+		}
+		if($vendorId <= 0) {
+			throw(new PDOException("vendor id is not positive"));
+		}
+
+		// create query template
+		$query	 = "SELECT contactName, vendorEmail, vendorNames, vendorPhoneNumber FROM vendor WHERE vendorId = :vendorId";
+		$statement = $pdo->prepare($query);
+
+		// bind the vendor id to the place holder in the template
+		$parameters = array("vendorId" => $vendorId);
+		$statement->execute($parameters);
+
+		// grab the vendor from mySQL
+		try {
+			$vendor = null;
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$row   = $statement->fetch();
+			if($row !== false) {
+				$vendor = new Vendor($row["vendorId"], $row["contactName"], $row["vendorEmail"], $row["vendorName"], $row["vendorPhoneNumber"]);
+			}
+		} catch(Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($vendor);
+	}
+	/**
+	 * gets the vendor by vendorEmail
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param string $vendorEmail vendor email to search for
+	 * @return mixed Tweet found or null if not found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getVendorByVendorEmail(PDO &$pdo, $vendorEmail) {
+		// sanitize the description before searching
+		$vendorEmail = trim($vendorEmail);
+		$vendorEmail = filter_var($vendorEmail, FILTER_SANITIZE_STRING);
+		if(empty($vendorEmail) === true) {
+			throw(new PDOException("vendor email is invalid"));
+		}
+
+		// create query template
+		$query	 = "SELECT vendorId, contactName, vendorNames, vendorPhoneNumber FROM vendor WHERE vendorEmail = :vendorEmail";
+		$statement = $pdo->prepare($query);
+
+		// bind the vendor email to the place holder in the template
+		$parameters = array("vendorEmail" => $vendorEmail);
+		$statement->execute($parameters);
+
+		// grab the vendor from mySQL
+		try {
+			$vendor = null;
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$row   = $statement->fetch();
+			if($row !== false) {
+				$vendor = new Vendor($row["vendorId"], $row["contactName"], $row["vendorEmail"], $row["vendorName"], $row["vendorPhoneNumber"]);
+			}
+		} catch(Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($vendor);
+	}
+	/**
+	 * gets the vendor by vendorName
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param string $vendorName vendor name to search for
+	 * @return mixed Tweet found or null if not found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getVendorByVendorName(PDO &$pdo, $vendorName) {
+		// sanitize the description before searching
+		$vendorName = trim($vendorName);
+		$vendorName = filter_var($vendorName, FILTER_SANITIZE_STRING);
+		if(empty($vendorName) === true) {
+			throw(new PDOException("vendor name is invalid"));
+		}
+
+		// create query template
+		$query	 = "SELECT vendorId, contactName, vendorNames, vendorPhoneNumber FROM vendor WHERE vendorName = :vendorName";
+		$statement = $pdo->prepare($query);
+
+		// bind the vendor name to the place holder in the template
+		$parameters = array("vendorNamel" => $vendorName);
+		$statement->execute($parameters);
+
+		// grab the vendor from mySQL
+		try {
+			$vendor = null;
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$row   = $statement->fetch();
+			if($row !== false) {
+				$vendor = new Vendor($row["vendorId"], $row["contactName"], $row["vendorEmail"], $row["vendorName"], $row["vendorPhoneNumber"]);
+			}
+		} catch(Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($vendor);
+	}
+
 }
