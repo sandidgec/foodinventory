@@ -18,6 +18,11 @@ class User {
 	 **/
 	private $firstName;
 	/**
+	 * root user level
+	 * @var string $root
+	 */
+	private $root;
+	/**
 	 * attention line
 	 * @var string $attention ;
 	 */
@@ -75,6 +80,7 @@ class User {
 	 * @param $newUserId
 	 * @param $newLastName
 	 * @param $newFirstName
+	 * @param $newRoot
 	 * @param $newAttention
 	 * @param $newAddressLineOne
 	 * @param $newAddressLineTwo
@@ -86,12 +92,13 @@ class User {
 	 * @param $newHash
 	 */
 	public
-	function __construct($newUserId, $newLastName, $newFirstName, $newAttention, $newAddressLineOne, $newAddressLineTwo,
+	function __construct($newUserId, $newLastName, $newFirstName, $newRoot, $newAttention, $newAddressLineOne, $newAddressLineTwo,
 								$newCity, $newState, $newZipCode, $newEmail, $newSalt, $newHash) {
 		try {
 			$this->setUserId($newUserId);
 			$this->setLastName($newLastName);
 			$this->setFirstName($newFirstName);
+			$this->setRoot($newRoot);
 			$this->setEmail($newEmail);
 			$this->setSalt($newSalt);
 			$this->setHash($newHash);
@@ -183,11 +190,35 @@ class User {
 	}
 
 	/**
+	 * accessor for Root
+	 * @return string
+	 */
+	public function isRoot() {
+		return ($this->root);
+	}
+
+	/**
 	 * accessor for attention
 	 * @return string
 	 */
 	public function getAttention() {
 		return ($this->attention);
+	}
+
+	/**
+	 * Mutator for Root
+	 * @param $newRoot
+	 */
+	public function setRoot($newRoot) {
+		//verify Root is no more than 1 char
+		$newRoot = filter_var($newRoot, FILTER_SANITIZE_STRING);
+		if(empty($newRoot) === true) {
+			throw new InvalidArgumentException ("content invalid");
+		}
+		if(strlen($newRoot) > 1) {
+			throw new RangeException ("Root too long");
+		}
+		$this->root = $newRoot;
 	}
 
 	/**
@@ -478,16 +509,90 @@ class User {
 		// create query template
 		$query	 = "UPDATE user SET firstName = :firstName, lastName = :lastName, attention = :attention, addressLineOne = :addressLineOne,
  		addressLineTwo = :addressLineTwo, city = :city, state = :state, zipCode = :zipCode, email = :email, phoneNumber = :phoneNumber,
- 		WHERE userId = :userId";
+		hash = :hash, salt = :salt WHERE userId = :userId";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables
 		$parameters = array("firstName" => $this->firstName, "lastName" => $this->lastName, "attention" => $this->attention,
 			"addressLineOne" => $this->addressLineOne, "addressLineTwo" => $this->addressLineTwo, "city" => $this->city, "state" => $this->state,
-			"zipCode" => $this->zipCode, "email" => $this->email, "phoneNumber" => $this->phoneNumber,"userId" => $this->userId);
+			"zipCode" => $this->zipCode, "email" => $this->email, "phoneNumber" => $this->phoneNumber, "hash" => $this->hash,
+			"salt" => $this->salt, "userId" => $this->userId);
 		$statement->execute($parameters);
 	}
+
+	/**
+	 * @param PDO $pdo
+	 * @param $userId
+	 * @return mixed|User
+	 */
+	public static function getUserByUserId(PDO &$pdo, $userId) {
+		// sanitize the userId before searching
+		$userId = filter_var($userId, FILTER_VALIDATE_INT);
+		if($userId === false) {
+			throw(new PDOException("user id is not an integer"));
+		}
+		if($userId <= 0) {
+			throw(new PDOException("user id is not positive"));
+		}
+
+		// create query template
+		$query = "SELECT user FROM user WHERE userId = :userId";
+		$statement = $pdo->prepare($query);
+
+		// bind the user id to the place holder in the template
+		$parameters = array("userId" => $userId);
+		$statement->execute($parameters);
+
+		// grab the user from mySQL
+		try {
+			$userId = null;
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$row   = $statement->fetch();
+			if($row !== false) {
+				$userId = new User ($row["userId"]);
+			}
+		} catch(Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($userId);
+	}
+
+	public static function getUserByEmail(PDO &$pdo, $email) {
+		// sanitize the tweetId before searching
+		$email = filter_var($email, FILTER_SANITIZE_EMAIL);
+		if($email === false) {
+			throw(new PDOException(""));
+		}
+		if($email <= 0) {
+			throw(new PDOException("user id is not positive"));
+		}
+
+		// create query template
+		$query = "SELECT user FROM user WHERE email = :email";
+		$statement = $pdo->prepare($query);
+
+		// bind the user id to the place holder in the template
+		$parameters = array("email" => $email);
+		$statement->execute($parameters);
+
+		// grab the user from mySQL
+		try {
+			$email = null;
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$row   = $statement->fetch();
+			if($row !== false) {
+				$email = new User ($row["email"]);
+			}
+		} catch(Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($email);
+	}
+
 }
+
 
 
 
