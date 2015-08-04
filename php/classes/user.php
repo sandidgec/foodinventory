@@ -91,8 +91,7 @@ class User {
 	 * @param $newSalt
 	 * @param $newHash
 	 */
-	public
-	function __construct($newUserId, $newLastName, $newFirstName, $newRoot, $newAttention, $newAddressLineOne, $newAddressLineTwo,
+	public function __construct($newUserId, $newLastName, $newFirstName, $newRoot, $newAttention, $newAddressLineOne, $newAddressLineTwo,
 								$newCity, $newState, $newZipCode, $newEmail, $newSalt, $newHash) {
 		try {
 			$this->setUserId($newUserId);
