@@ -154,5 +154,78 @@ try {
 		$parameters = array("storageCode" => $this->storageCode, "description" => $this->description, "locationId" => $this->locationId);
 		$statement->execute($parameters);
 	}
+
+
+	/**
+	 * get location by location Id
+	 * @param PDO $pdo
+	 * @param $locationId
+	 * @return mixed
+	 */
+	public static function getLocationByLocationId(PDO &$pdo, $locationId) {
+		// sanitize the location id before searching
+		$locationId = filter_var($locationId, FILTER_VALIDATE_INT);
+		if($locationId === false) {
+			throw(new PDOException("location id is not an integer"));
+		}
+		if($locationId <= 0) {
+			throw(new PDOException("location id is not positive"));
+		}
+
+		// create query template
+		$query = "SELECT locationId, storageCode, description FROM location WHERE locationId = :locationId";
+		$statement = $pdo->prepare($query);
+
+		// bind the user id to the place holder in the template
+		$parameters = array("locationId" => $locationId);
+		$statement->execute($parameters);
+
+		// grab the location from mySQL
+		try {
+			$location = null;
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$row   = $statement->fetch();
+			if($row !== false) {
+				$location = new Location ($row["locationId"], $row["storageCode"], $row["description"]);
+			}
+		} catch(Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($locationId);
+	}
+
+	public static function getLocationByStorageCode(PDO &$pdo, $location) {
+		// sanitize the storageCode before searching
+		$location = filter_var($location, FILTER_VALIDATE_INT);
+		if($location === false) {
+			throw(new PDOException(""));
+		}
+		if($location <= 0) {
+			throw(new PDOException("storage code is not positive"));
+		}
+
+		// create query template
+		$query = "SELECT locationId, storageCode, description FROM location WHERE storageCode = :storageCode";
+		$statement = $pdo->prepare($query);
+
+		// bind the location id to the place holder in the template
+		$parameters = array("storageCode" => $location);
+		$statement->execute($parameters);
+
+		// grab the location from mySQL
+		try {
+			$location = null;
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$row   = $statement->fetch();
+			if($row !== false) {
+				$location = new Location ($row["locationId"], $row["storageCode"], $row["description"]);
+			}
+		} catch(Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($location);
+	}
 }
 

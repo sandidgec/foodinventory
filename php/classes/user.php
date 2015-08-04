@@ -535,7 +535,8 @@ class User {
 		}
 
 		// create query template
-		$query = "SELECT user FROM user WHERE userId = :userId";
+		$query = "SELECT userId, email, firstName, lastName, phoneNumber, attention, addressLineOne,
+				addressLineTwo, city, state, zipCode, root, salt, hash FROM user WHERE userId = :userId";
 		$statement = $pdo->prepare($query);
 
 		// bind the user id to the place holder in the template
@@ -557,39 +558,47 @@ class User {
 		return($userId);
 	}
 
-	public static function getUserByEmail(PDO &$pdo, $email) {
+	/**
+	 * get user by email
+	 * @param PDO $pdo
+	 * @param $user
+	 * @return null|User
+	 */
+	public static function getUserByEmail(PDO &$pdo, $user) {
 		// sanitize the tweetId before searching
-		$email = filter_var($email, FILTER_SANITIZE_EMAIL);
-		if($email === false) {
+		$user = filter_var($user, FILTER_SANITIZE_EMAIL);
+		if($user === false) {
 			throw(new PDOException(""));
 		}
-		if($email <= 0) {
-			throw(new PDOException("user id is not positive"));
+		if($user <= 0) {
+			throw(new PDOException("email is not positive"));
 		}
 
 		// create query template
-		$query = "SELECT user FROM user WHERE email = :email";
+		$query = "SELECT userId, email, firstName, lastName, phoneNumber, attention, addressLineOne, addressLineTwo,
+					city, state, zipCode, root, salt, hash FROM user WHERE email = :email";
 		$statement = $pdo->prepare($query);
 
 		// bind the user id to the place holder in the template
-		$parameters = array("email" => $email);
+		$parameters = array("email" => $user);
 		$statement->execute($parameters);
 
 		// grab the user from mySQL
 		try {
-			$email = null;
+			$user = null;
 			$statement->setFetchMode(PDO::FETCH_ASSOC);
 			$row   = $statement->fetch();
 			if($row !== false) {
-				$email = new User ($row["email"]);
+				$user = new User ($row["userId"], $row["firstName"], $row["lastName"], $row["root"], $row["attention"],
+								$row["addressLineOne"], $row["addressLineTwo"], $row["city"], $row["state"], $row["zipCode"],
+								$row["email"], $row["salt"], $row["hash"]);
 			}
 		} catch(Exception $exception) {
 			// if the row couldn't be converted, rethrow it
 			throw(new PDOException($exception->getMessage(), 0, $exception));
 		}
-		return($email);
+		return($user);
 	}
-
 }
 
 
