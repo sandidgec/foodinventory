@@ -15,7 +15,7 @@ class Product {
 	 **/
 	private $productId;
 	/**
-	 * id for the Description of the related vendor; this is a foreign key
+	 * id for the related vendor; this is a foreign key
 	 * @var int $vendorId
 	 **/
 	private $vendorId;
@@ -40,7 +40,7 @@ class Product {
 	/**
 	 * constructor for this Product
 	 *
-	 * @param int $newProductId id of this Product or null if a new Product
+	 * @param int $newProductId id of this Product
 	 * @param int $newVendorId id of this Product vendor
 	 * @param string $newSku string containing actual product Sku
 	 * @param string $newLeadTime string containing actual product leadTime
@@ -73,7 +73,7 @@ class Product {
 	/**
 	 * accessor method for product id
 	 *
-	 * @return mixed value of product id
+	 * @return int value of product id
 	 **/
 	public function getProductId() {
 		return($this->productId);
@@ -156,7 +156,7 @@ class Product {
 	 * @throws InvalidArgumentException if $newSku is not a string
 	 * @throws RangeException if $newSku is greater than 128 characters
 	 */
-	public function setsku($newSku) {
+	public function setSku($newSku) {
 		// verify the sku is secure
 		$newSku = trim($newSku);
 		$newSku = filter_var($newSku, FILTER_SANITIZE_STRING);
@@ -165,7 +165,7 @@ class Product {
 		}
 
 		// verify the sku will fit in the database
-		if(strlen($newSku) > 128) {
+		if(strlen($newSku) > 64) {
 			throw(new RangeException("sku is too large"));
 		}
 
@@ -199,7 +199,7 @@ class Product {
 		}
 
 		// verify the leadTime will fit in the database
-		if(strlen($newLeadTime) > 128) {
+		if(strlen($newLeadTime) > 10) {
 			throw(new RangeException("leadTime too large"));
 		}
 
@@ -305,7 +305,7 @@ class Product {
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
-		$parameters = array("vendorId" => $this->vendorId, "sku" => $this->sku, "leadTime" => $leadTime, "productId" => $this->productId);
+		$parameters = array("vendorId" => $this->vendorId, "sku" => $this->sku, "leadTime" => $this->leadTime, "description" => $this->description, "productId" => $this->productId);
 		$statement->execute($parameters);
 	}
 
@@ -317,16 +317,16 @@ class Product {
 	 * @return SplFixedArray all product found for this description
 	 * @throws PDOException when mySQL related errors occur
 	 **/
-	public static function getProductByDescription(PDO &$pdo, $Sku) {
+	public static function getProductByDescription(PDO &$pdo, $newDescription) {
 		// sanitize the description before searching
-		$description = trim($description);
-		$description = filter_var($description, FILTER_SANITIZE_STRING);
-		if(empty($description) === true) {
+		$newDescription = trim($newDescription);
+		$newDescription = filter_var($newDescription, FILTER_SANITIZE_STRING);
+		if(empty($newDescription) === true) {
 			throw(new PDOException("description is invalid"));
 		}
 
 		// create query template
-		$query	 = "SELECT productId, vendorId, sku, leadTime FROM product WHERE description LIKE :description";
+		$query	 = "SELECT productId, vendorId, sku, leadTime, description FROM product WHERE description LIKE :description";
 		$statement = $pdo->prepare($query);
 
 		// bind the product description to the place holder in the template
@@ -358,13 +358,13 @@ class Product {
 	 * @return mixed product found or null if not found
 	 * @throws PDOException when mySQL related errors occur
 	 **/
-	public static function getProductByProductId(PDO &$pdo, $productId) {
+	public static function getProductByProductId(PDO &$pdo, $newProductId) {
 		// sanitize the productId before searching
-		$productId = filter_var($productId, FILTER_VALIDATE_INT);
-		if($productId === false) {
+		$newProductId = filter_var($newProductId, FILTER_VALIDATE_INT);
+		if($newProductId === false) {
 			throw(new PDOException("product id is not an integer"));
 		}
-		if($productId <= 0) {
+		if($newProductId <= 0) {
 			throw(new PDOException("product id is not positive"));
 		}
 
@@ -373,7 +373,7 @@ class Product {
 		$statement = $pdo->prepare($query);
 
 		// bind the product id to the place holder in the template
-		$parameters = array("productId" => $productId);
+		$parameters = array("productId" => $newProductId);
 		$statement->execute($parameters);
 
 		// grab the product from mySQL
