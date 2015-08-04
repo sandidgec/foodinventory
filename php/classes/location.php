@@ -195,6 +195,13 @@ try {
 		return($locationId);
 	}
 
+
+	/**
+	 * get Location by Storage Code
+	 * @param PDO $pdo
+	 * @param $location
+	 * @return Location|null
+	 */
 	public static function getLocationByStorageCode(PDO &$pdo, $location) {
 		// sanitize the storageCode before searching
 		$location = filter_var($location, FILTER_VALIDATE_INT);
