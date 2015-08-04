@@ -75,7 +75,7 @@ public function getAlertid (){
 /**
  * mutator method for alert id
  *
- * @param mixed $AlertId new value of alert id
+ * @param mixed $newAlertId new value of alert id
  * @throw InvalidArgumentException if $alertId is not an integer
  * @throw RangeException if $alertId is not positive
  **/
@@ -142,7 +142,7 @@ public function getAlertid (){
  *
  * @param string $newAlertFrequency value of alert frequency
  * @throws InvalidArgumentException if $newAlertFrequency is not a string or insecure
- * @throws RangeException if $newAlertFrequency is > 10 characters
+ * @throws RangeException if $newAlertFrequency is > 2 characters
  **/
 	public function setAlertFrequency($newAlertFrequency){
 		//verify alert frequency is secure
@@ -152,7 +152,7 @@ public function getAlertid (){
 			throw(new InvalidArgumentException("alert frequency is empty or insecure"));
 		}
 		//verify alert frequency will fit into database
-		if(strlen($newAlertFrequency)>10){
+		if(strlen($newAlertFrequency)>2){
 			throw(new RangeException("alert frequency is too large"));
 		}
 		//store alert frequency
@@ -171,7 +171,7 @@ public function getAlertid (){
  *
  * @param string $newAlertLevel value of alert level
  * @throws InvalidArgumentException if $newAlertLevel is not a string or insecure
- * @throws RangeException if $newAlertLevel is >10 characters
+ * @throws RangeException if $newAlertLevel is >2 characters
  **/
 	public function setAlertLevel($newAlertLevel) {
 		//verify alert level is secure
@@ -181,7 +181,7 @@ public function getAlertid (){
 			throw(new InvalidArgumentException("alert level is empty or insecure"));
 		}
 		//verify alert level will fit into database
-		if(strlen($newAlertLevel) > 10) {
+		if(strlen($newAlertLevel) > 2) {
 			throw(new RangeException("alert level is too large"));
 		}
 		//store alert level
@@ -216,4 +216,145 @@ public function getAlertid (){
 		//store alert operator
 		$this->alertLevel=$newAlertOperator;
 	}
+/**
+* * inserts this AlertLevel into mySQL
+*
+* @param PDO $pdo pointer to PDO connection, by reference
+* @throws PDOException when mySQL related errors occur
+**/
+	public function insert(PDO &$pdo) {
+		// enforce the notificationId is null (i.e., don't insert a alert level that already exists)
+		if($this->alertId !== null) {
+			throw(new PDOException("not a new alert level"));
+		}
+
+		// create query template
+		$query = "INSERT INTO alertLevel(alertId, alertCode, alertFrequency, alertLevel, alertOperator)VALUES(:alertId, :alertCode, :alertFrequency, :alertLevel, :alertOperator)";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holders in the template
+		$parameters = array("alertId" => $this->alertId, "alertCode" => $this->alertCode, "alertFrequency" => $this->alertFrequency, "alertLevel" => $this->alertLevel, "alertOperator" => $this->alertOperator);
+		$statement->execute($parameters);
+
+		// update the null alertId with what mySQL just gave us
+		$this->alertId = intval($pdo->lastInsertId());
+	}
+	/**
+	 * deletes this alertLevel from mySQL
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public function delete(PDO &$pdo) {
+		// enforce the alertId is not null (i.e., don't delete an alertlevel that hasn't been inserted)
+		if($this->alertId === null) {
+			throw(new PDOException("unable to delete a alertLevel that does not exist"));
+		}
+
+		// create query template
+		$query	 = "DELETE FROM alertLevel WHERE alertId = :alertId";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holder in the template
+		$parameters = array("alertId" => $this->alertId);
+		$statement->execute($parameters);
+	}
+	/**
+	 * updates this alertLevel in mySQL
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public function update(PDO &$pdo) {
+		// enforce the alertId is not null (i.e., don't update a alertLevel that hasn't been inserted)
+		if($this->alertId === null) {
+			throw(new PDOException("unable to update a alertLevel that does not exist"));
+		}
+
+		// create query template
+		$query	 = "UPDATE AlertLevel SET alertCode = :alertCode, alertFrequency = :alertFrequency, alertLevel = :alertLevel, alertOperator = :alertOperator WHERE alertId = :alertId";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holders in the template
+		$parameters = array("alertCode" => $this->alertCode, "alertFrequency" => $this->alertFrequency,"alertLevel" => $this-> alertLevel, "alertOperator" => $this->alertOperator, "alertId" => $this->alertId);
+		$statement->execute($parameters);
+	}
+	/**
+	 * gets the Alert by alertId
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int $alertId alert id to search for
+	 * @return mixed alert found or null if not found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getAlertByAlertId(PDO &$pdo, $alertId) {
+		// sanitize the alertId before searching
+		$alertId = filter_var($alertId, FILTER_VALIDATE_INT);
+		if($alertId === false) {
+			throw(new PDOException("alert id is not an integer"));
+		}
+		if($alertId <= 0) {
+			throw(new PDOException("alert id is not positive"));
+		}
+
+		// create query template
+		$query = "SELECT alertId, alertCode, alertFrequency, alertLevel, alertOperator FROM alertLevel WHERE alertId = :alertId";
+		$statement = $pdo->prepare($query);
+
+		// bind the alert id to the place holder in the template
+		$parameters = array("alertId" => $alertId);
+		$statement->execute($parameters);
+
+		// grab the notification from mySQL
+		try {
+			$alertLevel = null;
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$alertLevel = new alertLevel($row["alertId"], $row["alertCode"], $row["alertFrequency"], $row["alertLevel"], $row["alertOperator"]);
+			}
+		} catch(Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new PDOException($exception->getMessage(), 0, $exception));
+		}
+		return ($alertLevel);
+	}
+/**
+* gets the Alert by alertCode
+*
+* @param PDO $pdo pointer to PDO connection, by reference
+* @param string $alertCode alert code to search for
+* @return SplFixedArray all alertLevels found for this AlertCode
+* @throws PDOException when mySQL related errors occur
+**/
+	public static function getAlertByAlertCode(PDO &$pdo, $alertCode) {
+		// sanitize the alertCode before searching
+		$alertCode=trim($alertCode);
+		$alertCode = filter_var($alertCode, FILTER_SANITIZE_STRING);
+		if(empty($$alertCode) === true) {
+			throw(new PDOException("alert code is invalid"));
+		}
+		// create query template
+		$query = "SELECT alertId, alertCode, alertFrequency, alertLevel, alertOperator FROM alertLevel WHERE alertCode LIKE :alertCode";
+		$statement = $pdo->prepare($query);
+
+		// bind the alert Code to the place holder in the template
+		$alertCode= "%$alertCode%";
+		$parameters = array("alertCode" => $alertCode);
+		$statement->execute($parameters);
+
+		// build an array of alertCodes
+		$alertLevels= new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row=$statement->fetch())!==false) {
+			try {
+				$alertLevel = new AlertLevel($row["alertId"], $row["alertCode"], $row["alertFrequency"], $row["alertLevel"], $row["alertOperator"]);
+				$alertLevels[$alertLevels->key()] = $alertLevel;
+				$alertLevels->next();
+			} catch(Exception $exception) {
+				//if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($alertLevels);
 }
