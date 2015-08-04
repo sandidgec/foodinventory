@@ -140,6 +140,10 @@ try {
 		$statement->execute($parameters);
 	}
 
+	/**
+	 * update PDO
+	 * @param PDO $pdo
+	 */
 	public function update(PDO &$pdo) {
 
 		// create query template
