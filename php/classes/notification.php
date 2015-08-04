@@ -1,5 +1,7 @@
 <?php
 
+require_once("/home/jhuber8/public_html/foodinventory/php/traits/validateDate.php");
+
 /**
  * this is the notification class for the inventoryText capstone project
  *
@@ -26,7 +28,7 @@ class Notification {
 	private $emailId;
 	/**
 	 *this is the time stamp for every notification
-	 * @var string $notificationDateTime
+	 * @var dateTime $notificationDateTime
 	 **/
 	private $notificationDateTime;
 	/**
@@ -40,13 +42,15 @@ class Notification {
 	 **/
 	private $notificationContent;
 
+	use validateDate;
+
 	/**
 	 * constructor for this Notification
 	 *
 	 * @param int $newNotificationId id of this Notification or null if unknown notification
 	 * @param int $newAlertId id for alert level sent with this notification
 	 * @param int $newEmailId id generated for each notification
-	 * @param string $newNotificationDateTime date and time of when each notification was sent or null if set to current date and time
+	 * @param dateTime $newNotificationDateTime date and time of when each notification was sent or null if set to current date and time
 	 * @param string $newNotificationHandle string containing data from twilio for notification
 	 * @param string $newNotificationContent string containing conent of notification
 	 * @throws InvalidArgumentException if data types are not valid
@@ -207,7 +211,7 @@ class Notification {
 
 		// store the notification date
 		try {
-			$newNotificationDateTime = valiDate($newNotificationDateTime);
+			$newNotificationDateTime = validateDate::validateDate($newNotificationDateTime);
 		} catch(InvalidArgumentException $invalidArgument) {
 			throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
 		} catch(RangeException $range) {
