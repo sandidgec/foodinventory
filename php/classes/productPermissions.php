@@ -240,4 +240,100 @@ class productPermissions {
 		return ($permissions);
 	}
 
+	/**
+	 * gets the productPermissions by userId
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int $userId user id to search for
+	 * @return mixed productPermissions found or null if not found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getProductPermissionsByUserId(PDO &$pdo, $newUserId) {
+		// sanitize the userId before searching
+		$newUserId = filter_var($newUserId, FILTER_VALIDATE_INT);
+		if($newUserId === false) {
+			throw(new PDOException("user id is not an integer"));
+		}
+		if($newUserId <= 0) {
+			throw(new PDOException("user id is not positive"));
+		}
+
+		// create query template
+		$query	 = "SELECT userId, productId, accessLevel FROM productPermissions WHERE userId = :userId";
+		$statement = $pdo->prepare($query);
+
+		// bind the user id to the place holder in the template
+		$parameters = array("userId" => $newUserId);
+		$statement->execute($parameters);
+
+		// grab the productPermissions from mySQL
+		try {
+			$productPermissions = null;
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$row   = $statement->fetch();
+			if($row !== false) {
+				$productPermissions = new ProductPermissions($row["userId"], $row["productId"], $row["accessLevel"]);
+			}
+		} catch(Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($productPermissions);
+	}
+
+	/**
+	 * gets the productPermissions by productId
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int $productId product id to search for
+	 * @return mixed productPermissions found or null if not found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getProductPermissionsByProductId(PDO &$pdo, $newProductId) {
+		// sanitize the userId before searching
+		$newProductId = filter_var($newProductId, FILTER_VALIDATE_INT);
+		if($newProductId === false) {
+			throw(new PDOException("product id is not an integer"));
+		}
+		if($newProductId <= 0) {
+			throw(new PDOException("product id is not positive"));
+		}
+
+		// create query template
+		$query	 = "SELECT userId, productId, accessLevel FROM productPermissions WHERE productId = :productId";
+		$statement = $pdo->prepare($query);
+
+		// bind the product id to the place holder in the template
+		$parameters = array("productId" => $newProductId);
+		$statement->execute($parameters);
+
+		// grab the productPermissions from mySQL
+		try {
+			$productPermissions = null;
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$row   = $statement->fetch();
+			if($row !== false) {
+				$productPermissions = new ProductPermissions($row["userId"], $row["productId"], $row["accessLevel"]);
+			}
+		} catch(Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($productPermissions);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ?>
