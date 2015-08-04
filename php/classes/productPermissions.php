@@ -31,7 +31,7 @@ class productPermissions {
 	 *
 	 * @param int $newProductId id for the related product
 	 * @param int $newUserId id for the user
-	 * @param int $newAccessLevel access level of this permission
+	 * @param str $newAccessLevel access level of this permission
 	 * @throws InvalidArgumentException if data types are not valid
 	 * @throws RangeException if data values are out of bounds (e.g., strings too long, negative integers)
 	 * @throws Exception if some other exception is thrown
@@ -54,13 +54,22 @@ class productPermissions {
 		}
 	}
 
+	/**
+	 * accessor method for ProductId
+	 *
+	 * @return int value of ProductId
+	 */
+	public function getProductId() {
+		return $this->productId;
+	}
+
 
 	/**
 	 * mutator method for productId
 	 *
 	 * @param int $newProductId
 	 * @throws InvalidArgumentException if $newProductId is not an integer
-	 * @throws RangeException if $newFromProductId is not positive
+	 * @throws RangeException if $newProductId is not positive
 	 **/
 	public function setProductId($newProductId) {
 		// verify the productId is valid
@@ -93,7 +102,9 @@ class productPermissions {
 	 * mutator method for userId
 	 *
 	 * @param int $newUserId
-	 */
+	 * @throws InvalidArgumentException if $newUserId is not an integer
+	 * @throws RangeException if $newUserId is not positive
+	 **/
 	public function setUserId($newUserId) {
 		// verify the unitId is valid
 		$newUserId = filter_var($newUserId, FILTER_VALIDATE_INT);
@@ -123,27 +134,27 @@ class productPermissions {
 	/**
 	 * mutator method for accessLevel
 	 *
-	 * @param int $newAccessLevel
+	 * @param string $newAccessLevel
 	 */
 	public function setAccessLevel($newAccessLevel) {
-		// verify the accessLevel is valid
-		$newAccessLevel = filter_var($newAccessLevel, FILTER_VALIDATE_INT);
-		if($newAccessLevel === false) {
-			throw(new InvalidArgumentException("accessLevel is not a valid integer"));
+		// verify the sku is secure
+		$newAccessLevel = trim($newAccessLevel);
+		$newAccessLevel = filter_var($newAccessLevel, FILTER_SANITIZE_STRING);
+		if(empty($newAccessLevel) === true) {
+			throw(new InvalidArgumentException("sku is empty or insecure"));
 		}
 
-		// verify the accessLevel is positive
-		if($newAccessLevel <= 0) {
-			throw(new RangeException("accessLevel is not positive"));
+		// verify the sku will fit in the database
+		if(strlen($newAccessLevel) > 1) {
+			throw(new RangeException("sku is too large"));
 		}
 
-		// convert and store the unitId
-		$this->accessLevel = intval($newAccessLevel);
+		// store the accessLevel
+		$this->accessLevel = $newAccessLevel;
 	}
 
-
 	/**
-	 * inserts this accessLevel into mySQL
+	 * inserts this productPermissions into mySQL
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
 	 * @throws PDOException when mySQL related errors occur
@@ -157,6 +168,48 @@ class productPermissions {
 		$parameters = array("productId" => $this->productId, "userId" => $this->userId, "accessLevel" => accessLevel);
 		$statement->execute($parameters);
 	}
+
+	/**
+	 * deletes this productPermissions from mySQL
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public function delete(PDO &$pdo) {
+		// enforce the productPermissionsId is not null (i.e., don't delete a permission that hasn't been inserted)
+		if($this->productPermissionsId === null) {
+			throw(new PDOException("unable to delete a permission that does not exist"));
+		}
+
+		// create query template
+		$query	 = "DELETE FROM productPermissions WHERE userId = :userId AND productId = :productId";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holders in the template
+		$parameters = array("userId" => $this->userId, "productId" => $this->productId);
+		$statement->execute($parameters);
+	}
+
+
+
+	/**
+	 * updates this productPermissions in mySQL
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public function update(PDO &$pdo) {
+
+		// create query template
+		$query	 = "UPDATE productPermissions SET accessLevel = :accessLevel WHERE userId = :userId AND productId = :productId";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holders in the template
+		$parameters = array("accessLevel" => $this->accessLevel, "userId" => $this->userId, "productId" => $this->productId);
+		$statement->execute($parameters);
+	}
+
+
 
 	/**
 	 * gets all productPermissions
