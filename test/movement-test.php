@@ -1,57 +1,215 @@
 <?php
+// grab the project test parameters
+require_once("inventorytext.php");
 
-require_once("/etc/apache2/data-design/encrypted-config.php");
-require_once("/home/ccollopy/public_html/foodinventory/php/classes/movement.php");
+// grab the class under scrutiny
+require_once(dirname(__DIR__) . "/php/classes/movement.php");
 
-/****
-$date = DateTime::createFromFormat('Y-m-d H:i:s', '2015-07-29 18:45:06');
+/**
+ * Full PHPUnit test for the Movement class
+ *
+ * This is a complete PHPUnit test of the Movement class. It is complete because *ALL* mySQL/PDO enabled methods
+ * are tested for both invalid and valid inputs.
+ *
+ * @see Movement
+ * @author Christopher Collopy <ccollopy@cnm.edu>
+ **/
+class MovementTest extends InventoryTextTest {
+	/**
+	 * valid at handle to use
+	 * @var string $VALID_ATHANDLE
+	 **/
+	protected $VALID_ATHANDLE = "@phpunit";
+	/**
+	 * second valid at handle to use
+	 * @var string $VALID_ATHANDLE2
+	 **/
+	protected $VALID_ATHANDLE2 = "@passingtests";
+	/**
+	 * valid email to use
+	 * @var string $VALID_EMAIL
+	 **/
+	protected $VALID_EMAIL = "test@phpunit.de";
+	/**
+	 * valid phone number to use
+	 * @var string $VALID_PHONE
+	 **/
+	protected $VALID_PHONE = "+12125551212";
 
-try {
- * **/
-	$pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/invtext.ini");/**
-	$movement = new Movement(null, 2, 5, 3, 4, 4, 6.25, $date, "TR", 8.50);
-	$movement->insert($pdo);
-	var_dump($movement);
-} catch(PDOException $pdoException) {
-	// handle PDO errors
-	throw(new PDOException($pdoException->getMessage(), 0, $pdoException));
-} catch(Exception $exception) {
-	// handle other errors
-	throw(new Exception($exception->getMessage(), 0, $exception));
+	/**
+	 * test inserting a valid Profile and verify that the actual mySQL data matches
+	 **/
+	public function testInsertValidProfile() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("profile");
+
+		// create a new Profile and insert to into mySQL
+		$profile = new Profile(null, $this->VALID_ATHANDLE, $this->VALID_EMAIL, $this->VALID_PHONE);
+		$profile->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoProfile = Profile::getProfileByProfileId($this->getPDO(), $profile->getProfileId());
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("profile"));
+		$this->assertSame($pdoProfile->getAtHandle(), $this->VALID_ATHANDLE);
+		$this->assertSame($pdoProfile->getEmail(), $this->VALID_EMAIL);
+		$this->assertSame($pdoProfile->getPhone(), $this->VALID_PHONE);
+	}
+
+	/**
+	 * test inserting a Profile that already exists
+	 *
+	 * @expectedException PDOException
+	 **/
+	public function testInsertInvalidProfile() {
+		// create a profile with a non null profileId and watch it fail
+		$profile = new Profile(DataDesignTest::INVALID_KEY, $this->VALID_ATHANDLE, $this->VALID_EMAIL, $this->VALID_PHONE);
+		$profile->insert($this->getPDO());
+	}
+
+	/**
+	 * test inserting a Profile, editing it, and then updating it
+	 **/
+	public function testUpdateValidProfile() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("profile");
+
+		// create a new Profile and insert to into mySQL
+		$profile = new Profile(null, $this->VALID_ATHANDLE, $this->VALID_EMAIL, $this->VALID_PHONE);
+		$profile->insert($this->getPDO());
+
+		// edit the Profile and update it in mySQL
+		$profile->setAtHandle($this->VALID_ATHANDLE2);
+		$profile->update($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoProfile = Profile::getProfileByProfileId($this->getPDO(), $profile->getProfileId());
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("profile"));
+		$this->assertSame($pdoProfile->getAtHandle(), $this->VALID_ATHANDLE2);
+		$this->assertSame($pdoProfile->getEmail(), $this->VALID_EMAIL);
+		$this->assertSame($pdoProfile->getPhone(), $this->VALID_PHONE);
+	}
+
+	/**
+	 * test updating a Profile that does not exist
+	 *
+	 * @expectedException PDOException
+	 **/
+	public function testUpdateInvalidProfile() {
+		// create a Profile and try to update it without actually inserting it
+		$profile = new Profile(null, $this->VALID_ATHANDLE, $this->VALID_EMAIL, $this->VALID_PHONE);
+		$profile->update($this->getPDO());
+	}
+
+	/**
+	 * test creating a Profile and then deleting it
+	 **/
+	public function testDeleteValidProfile() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("profile");
+
+		// create a new Profile and insert to into mySQL
+		$profile = new Profile(null, $this->VALID_ATHANDLE, $this->VALID_EMAIL, $this->VALID_PHONE);
+		$profile->insert($this->getPDO());
+
+		// delete the Profile from mySQL
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("profile"));
+		$profile->delete($this->getPDO());
+
+		// grab the data from mySQL and enforce the Profile does not exist
+		$pdoProfile = Profile::getProfileByProfileId($this->getPDO(), $profile->getProfileId());
+		$this->assertNull($pdoProfile);
+		$this->assertSame($numRows, $this->getConnection()->getRowCount("profile"));
+	}
+
+	/**
+	 * test deleting a Profile that does not exist
+	 *
+	 * @expectedException PDOException
+	 **/
+	public function testDeleteInvalidProfile() {
+		// create a Profile and try to delete it without actually inserting it
+		$profile = new Profile(null, $this->VALID_ATHANDLE, $this->VALID_EMAIL, $this->VALID_PHONE);
+		$profile->delete($this->getPDO());
+	}
+
+	/**
+	 * test inserting a Profile and regrabbing it from mySQL
+	 **/
+	public function testGetValidProfileByProfileId() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("profile");
+
+		// create a new Profile and insert to into mySQL
+		$profile = new Profile(null, $this->VALID_ATHANDLE, $this->VALID_EMAIL, $this->VALID_PHONE);
+		$profile->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoProfile = Profile::getProfileByProfileId($this->getPDO(), $profile->getProfileId());
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("profile"));
+		$this->assertSame($pdoProfile->getAtHandle(), $this->VALID_ATHANDLE);
+		$this->assertSame($pdoProfile->getEmail(), $this->VALID_EMAIL);
+		$this->assertSame($pdoProfile->getPhone(), $this->VALID_PHONE);
+	}
+
+	/**
+	 * test grabbing a Profile that does not exist
+	 **/
+	public function testGetInvalidProfileByProfileId() {
+		// grab a profile id that exceeds the maximum allowable profile id
+		$profile = Profile::getProfileByProfileId($this->getPDO(), DataDesignTest::INVALID_KEY);
+		$this->assertNull($profile);
+	}
+
+	public function testGetValidProfileByAtHandle() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("profile");
+
+		// create a new Profile and insert to into mySQL
+		$profile = new Profile(null, $this->VALID_ATHANDLE, $this->VALID_EMAIL, $this->VALID_PHONE);
+		$profile->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoProfile = Profile::getProfileByAtHandle($this->getPDO(), $this->VALID_ATHANDLE);
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("profile"));
+		$this->assertSame($pdoProfile->getAtHandle(), $this->VALID_ATHANDLE);
+		$this->assertSame($pdoProfile->getEmail(), $this->VALID_EMAIL);
+		$this->assertSame($pdoProfile->getPhone(), $this->VALID_PHONE);
+	}
+
+	/**
+	 * test grabbing a Profile by at handle that does not exist
+	 **/
+	public function testGetInvalidProfileByAtHandle() {
+		// grab an at handle that does not exist
+		$profile = Profile::getProfileByAtHandle($this->getPDO(), "@doesnotexist");
+		$this->assertNull($profile);
+	}
+
+	/**
+	 * test grabbing a Profile by email
+	 **/
+	public function testGetValidProfileByEmail() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("profile");
+
+		// create a new Profile and insert to into mySQL
+		$profile = new Profile(null, $this->VALID_ATHANDLE, $this->VALID_EMAIL, $this->VALID_PHONE);
+		$profile->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoProfile = Profile::getProfileByEmail($this->getPDO(), $this->VALID_EMAIL);
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("profile"));
+		$this->assertSame($pdoProfile->getAtHandle(), $this->VALID_ATHANDLE);
+		$this->assertSame($pdoProfile->getEmail(), $this->VALID_EMAIL);
+		$this->assertSame($pdoProfile->getPhone(), $this->VALID_PHONE);
+	}
+
+	/**
+	 * test grabbing a Profile by an email that does not exists
+	 **/
+	public function testGetInvalidProfileByEmail() {
+		// grab an email that does not exist
+		$profile = Profile::getProfileByEmail($this->getPDO(), "does@not.exist");
+		$this->assertNull($profile);
+	}
 }
-****/
-
-$movement_dump = Movement::getAllMovements($pdo);
-
-$stringStart = "<table>";
-$tableHeaders = "<thead><tr><th>Movement ID</th><th>From Location ID</th><th>To Location ID</th><th>Product ID</th><th>Unit ID</th>
-									 <th>User ID</th><th>Cost</th><th>Movement Date</th><th>Movement Type</th><th>Price</th></tr></thead>";
-echo "$stringStart $tableHeaders";
-
-foreach($movement_dump as $index) {
-	echo $index;
-}
-
-echo "</table>";
-
-$allMovement3 = Movement::getMovementByMovementId($pdo, 4);
-
-$stringStart = "<table>";
-$tableHeaders = "<thead><tr><th>Movement ID</th><th>From Location ID</th><th>To Location ID</th><th>Product ID</th><th>Unit ID</th>
-									 <th>User ID</th><th>Cost</th><th>Movement Date</th><th>Movement Type</th><th>Price</th></tr></thead>";
-echo "$stringStart $tableHeaders $allMovement3";
-echo "</table>";
-
-$allMovementUser = Movement::getMovementByUserId($pdo, 1);
-
-$stringStart = "<table>";
-$tableHeaders = "<thead><tr><th>Movement ID</th><th>From Location ID</th><th>To Location ID</th><th>Product ID</th><th>Unit ID</th>
-									 <th>User ID</th><th>Cost</th><th>Movement Date</th><th>Movement Type</th><th>Price</th></tr></thead>";
-echo "$stringStart $tableHeaders";
-
-foreach($allMovementUser as $index) {
-	echo $index;
-}
-echo "</table>";
-
-?>
