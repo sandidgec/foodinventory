@@ -177,7 +177,7 @@ try {
 		$query = "SELECT locationId, storageCode, description FROM location WHERE locationId = :locationId";
 		$statement = $pdo->prepare($query);
 
-		// bind the user id to the place holder in the template
+		// bind the location id to the place holder in the template
 		$parameters = array("locationId" => $locationId);
 		$statement->execute($parameters);
 
@@ -235,5 +235,7 @@ try {
 		}
 		return($location);
 	}
+
+
 }
 

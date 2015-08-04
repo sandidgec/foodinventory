@@ -157,5 +157,84 @@ private $quantity;
 		$parameters = array("unitId" => $this->unitId, "unitCode" => $this->unitCode, "quantity" => $this->quantity);
 		$statement->execute($parameters);
 	}
+
+
+	/**
+	 * Get unitOfMeasure by unitId
+	 * @param PDO $pdo
+	 * @param $unitId
+	 * @return mixed
+	 */
+	public static function getUnitOfMeasureByUnitId(PDO &$pdo, $unitId) {
+		// sanitize the location id before searching
+		$unitId = filter_var($unitId, FILTER_VALIDATE_INT);
+		if($unitId=== false) {
+			throw(new PDOException("unit id is not an integer"));
+		}
+		if($unitId <= 0) {
+			throw(new PDOException("unit id is not positive"));
+		}
+
+		// create query template
+		$query = "SELECT unitId, unitCode, quantity FROM unitOfMeasure WHERE unitId = :unitId";
+		$statement = $pdo->prepare($query);
+
+		// bind the unit id to the place holder in the template
+		$parameters = array("unitId" => $unitId);
+		$statement->execute($parameters);
+
+		// grab the UnitOfMeasure from mySQL
+		try {
+			$UnitOfMeasure = null;
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$row   = $statement->fetch();
+			if($row !== false) {
+				$UnitOfMeasure = new UnitOfMeasure ($row["unitId"], $row["unitCode"], $row["quantity"]);
+			}
+		} catch(Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($unitId);
+	}
+
+	/**
+	 * get unitOfMeasure by unitCode
+	 * @param PDO $pdo
+	 * @param $unitOfMeasure
+	 * @return null|UnitOfMeasure
+	 */
+	public static function getUnitOfMeasureByUnitCode(PDO &$pdo, $unitOfMeasure) {
+		// sanitize the storageCode before searching
+		$unitOfMeasure = filter_var($unitOfMeasure, FILTER_VALIDATE_INT);
+		if($unitOfMeasure === false) {
+			throw(new PDOException(""));
+		}
+		if($unitOfMeasure <= 0) {
+			throw(new PDOException("unit code is not positive"));
+		}
+
+		// create query template
+		$query = "SELECT unitId, unitCode, quantity FROM unitOfMeasure WHERE unitCode = :unitCode";
+		$statement = $pdo->prepare($query);
+
+		// bind the unit code  to the place holder in the template
+		$parameters = array("unitCode" => $unitOfMeasure);
+		$statement->execute($parameters);
+
+		// grab the unit of measure from mySQL
+		try {
+			$unitOfMeasure = null;
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$row   = $statement->fetch();
+			if($row !== false) {
+				$unitOfMeasure = new unitOfMeasure($row["unitId"], $row["unitCode"], $row["quantity"]);
+			}
+		} catch(Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($unitOfMeasure);
+	}
 }
 
