@@ -108,12 +108,13 @@ try {
 		}
 		//create query template
 		$query
-			= "INSERT INTO location(storageCode, description)
-		VALUES (:storageCode, :description)";
+			= "INSERT INTO location(locationId, storageCode, description)
+		VALUES (:locationId, :storageCode, :description)";
 		$statement = $pdo->prepare($query);
 
 		// bind the variables to the place holders in the template
-		$parameters = array("storageCode" => $this->storageCode, "description" => $this->description);
+		$parameters = array("locationId" => $this->locationId, "storageCode" => $this->storageCode,
+									"description" => $this->description);
 
 		$statement->execute($parameters);
 
