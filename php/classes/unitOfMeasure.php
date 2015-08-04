@@ -19,20 +19,28 @@ private $quantity;
 
 
 	/**
-	 * Constructor for Unit of Measure
+	 * Constructor
 	 * @param $newUnitId
 	 * @param $newUnitCode
 	 * @param $newQuantity
+	 * @throws Exception
 	 */
 	public function __construct($newUnitId, $newUnitCode, $newQuantity) {
 		try {
-			$this->setUnitId($unitId);
-			$this->setUnitCode($unitCode);
-			$this->setQuantity($quantity);
+			$this->setUnitId($newUnitId);
+			$this->setUnitCode($newUnitCode);
+			$this->setQuantity($newQuantity);
 		} catch
 		(InvalidArgumentException $invalidArgument) {
 			//rethrow the exception to the caller
-			throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
+				throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
+		} catch
+		(RangeException $range)  {
+		// rethrow the exception to the caller
+				throw (new RangeException($range->getMessage(),0, $range));
+		} catch(Exception $exception) {
+			// rethrow generic exception
+				throw(new Exception($exception->getMessage(), 0, $exception));
 		}
 	}
 

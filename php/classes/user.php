@@ -75,8 +75,7 @@ class User {
 
 
 	/**
-	 * Constructor for user id
-	 *
+	 * Constructor
 	 * @param $newUserId
 	 * @param $newLastName
 	 * @param $newFirstName
@@ -90,6 +89,7 @@ class User {
 	 * @param $newEmail
 	 * @param $newSalt
 	 * @param $newHash
+	 * @throws Exception
 	 */
 	public function __construct($newUserId, $newLastName, $newFirstName, $newRoot, $newAttention, $newAddressLineOne, $newAddressLineTwo,
 								$newCity, $newState, $newZipCode, $newEmail, $newSalt, $newHash) {
@@ -110,6 +110,13 @@ class User {
 		} catch(InvalidArgumentException $invalidArgument) {
 			//rethrow the exception to the caller
 			throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
+		} catch
+		(RangeException $range)  {
+			// rethrow the exception to the caller
+			throw (new RangeException($range->getMessage(),0, $range));
+		} catch(Exception $exception) {
+			// rethrow generic exception
+			throw(new Exception($exception->getMessage(), 0, $exception));
 		}
 	}
 

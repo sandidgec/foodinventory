@@ -18,23 +18,33 @@ class Location {
 	 */
 	private $description;
 
+
 	/**
-	 * Constructor for Location Class
+	 * Constructor
 	 * @param $newLocationId
 	 * @param $newStorageCode
 	 * @param $newDescription
+	 * @throws Exception
 	 */
 public function __construct($newLocationId, $newStorageCode, $newDescription) {
-try {
-	$this->setLocationId($newLocationId);
-	$this->setStorageCode($newStorageCode);
-	$this->setDescription($newDescription);
-} catch
-(InvalidArgumentException $invalidArgument) {
-	//rethrow the exception to the caller
-	throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
+	try {
+		$this->setLocationId($newLocationId);
+		$this->setStorageCode($newStorageCode);
+		$this->setDescription($newDescription);
+	} catch
+	(InvalidArgumentException $invalidArgument) {
+		//rethrow the exception to the caller
+		throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
+	} catch
+	(RangeException $range) {
+		// rethrow the exception to the caller
+		throw (new RangeException($range->getMessage(), 0, $range));
+	} catch(Exception $exception) {
+		// rethrow generic exception
+		throw(new Exception($exception->getMessage(), 0, $exception));
 	}
 }
+
 
 	/**
 	 * accessor for location id
