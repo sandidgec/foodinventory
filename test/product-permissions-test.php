@@ -147,3 +147,5 @@ class Product PermissionsTest extends InventoryTextTest {
 		$this->assertNull($productPermissions);
 	}
 }
+
+
