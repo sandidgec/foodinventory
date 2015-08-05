@@ -278,3 +278,5 @@ class ProductTest extends InventoryTextTest {
 					$this->assertNull($product);
 				}
 			}
+
+	?>
