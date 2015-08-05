@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Class User
+ * The class to handle users
+ * @author Charles Sandidge sandidgec@gmail.com
+ */
+
 class User {
 
 	/**
@@ -451,7 +457,7 @@ class User {
 	 * @param $newSalt
 	 */
 	public function setSalt($newSalt) {
-		// verify Hash is exactly string of 128
+		// verify salt is exactly string of 64
 		if((ctype_digit($newSalt)) === false) {
 			if(empty($newSalt) === true) {
 				throw new InvalidArgumentException ("content invalid");
