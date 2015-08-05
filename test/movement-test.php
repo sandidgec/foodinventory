@@ -135,6 +135,62 @@ class MovementTest extends InventoryTextTest {
 	 **/
 	protected $INVALID_price = 4.75689;
 
+	public function setUp() {
+		parent::setUp();
+
+		$userId = null;
+		$firstName = "Jim";
+		$lastName = "Jim";
+		$root = "F";
+		$addressLineOne = "123 House St.";
+		$addressLineTwo = "";
+		$city = "Tattoine";
+		$state = "AK";
+		$zipCode = "52467";
+		$email = "jjim@naboomail.nb";
+		$phoneNumber = "5052253231";
+		$salt = bin2hex(openssl_random_pseudo_bytes(32));
+		$hash = hash_pbkdf2("sha512","password1234", $salt,262144, 128);
+
+		$user = new User($userId, $firstName, $lastName, $root, $addressLineOne, $addressLineTwo, $city, $state, $zipCode, $email, $phoneNumber, $hash, $salt);
+		$user->insert($this->getPDO());
+
+		$vendorId = null;
+		$name = "TruFork";
+		$contactName = "Trevor Rigler";
+		$email = "trier@cnm.edu";
+		$phoneNumber = "5053594687";
+
+		$vendor = new Vendor($vendorId, $name, $contactName, $email, $phoneNumber);
+		$vendor->insert($this->getPDO());
+
+		$productId = null;
+		$vendorId = null;
+		$description = "A glorius bead to use";
+		$leadTime = "10 days";
+		$sku = "thtfr354";
+		$title = "Bead-Green-Blue-Circular";
+
+		$product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
+		$product->insert($this->getPDO());
+
+		$locationId = null;
+		$description = "Back Stock";
+		$storageCode = "BS";
+
+		$location = new Location($locationId, $vendorId, $description, $storageCode);
+		$location->insert($this->getPDO());
+
+		$unitId = null;
+		$unitCode = "pk";
+		$quantity = "10.50";
+
+		$unitOfMeasure = new UnitOfMeasure($unitId, $unitCode, $quantity);
+		$unitOfMeasure->insert($this->getPDO());
+
+
+	}
+
 	/**
 	 * test inserting a valid Movement and verify that the actual mySQL data matches
 	 **/
