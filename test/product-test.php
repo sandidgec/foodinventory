@@ -75,7 +75,7 @@ class ProductTest extends InventoryTextTest {
 		$product->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProduct = Product::getProductByvendorId($this->getPDO(), $productPermissions->getvendorId());
+		$pdoProduct = Product::getProductByvendorId($this->getPDO(), $product->getvendorId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
 		$this->assertSame($pdoProduct->getproductId(), $this->VALID_productId);
 	}
@@ -119,32 +119,6 @@ class ProductTest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing a Product by productId
-	 **/
-	public function testGetValidProductByProductId() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("product");
-
-		// create a new Product and insert to into mySQL
-		$product = new Product(null, $this->VALID_productId, $this->VALID_vendorId, $this->VALID_leadTime, $this->VALID_description);
-		$product->insert($this->getPDO());
-
-		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProduct = Product::getProductByProductId($this->getPDO(), $product->getvendorId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
-		$this->assertSame($pdoProduct->getProductId(), $this->VALID_vendorId, $this->VALID_leadTime, $this->VALID_description);
-	}
-
-	/**
-	 * test grabbing a Product by productId that does not exist
-	 **/
-	public function testGetInvalidProductByProductId() {
-		// grab an productId that does not exist
-		$product = Product::getProductByProductId($this->getPDO(), InventoryTextTest::INVALID_KEY);
-		$this->assertNull($product);
-	}
-
-	/**
 	 * test grabbing a Product by vendorId
 	 **/
 	public function testGetValidProductByvendorId() {
@@ -160,15 +134,6 @@ class ProductTest extends InventoryTextTest {
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
 		$this->assertSame($pdoProduct->getProductId(), $this->VALID_vendorId, $this->VALID_leadTime, $this->VALID_description);
 		$this->assertSame($pdoProduct->getvendorId(), $this->VALID_vendorId);
-	}
-
-	/**
-	 * test grabbing a Product by productId that does not exist
-	 **/
-	public function testGetInvalidProductByProductId() {
-		// grab an productId that does not exist
-		$product = Product::getProductByvendorId($this->getPDO(), InventoryTextTest::INVALID_KEY);
-		$this->assertNull($product);
 	}
 }
 
