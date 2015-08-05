@@ -14,7 +14,7 @@ require_once(dirname(__DIR__) . "/php/classes/product-permissions.php");
  * @see Product Permissions
  * @author Marie Vigil <marie@jtdesignsolutions.com>
  **/
-class Product PermissionsTest extends InventoryTextTest {
+class ProductPermissionsTest extends InventoryTextTest {
 	/**
 	 * valid productId to use
 	 * @var int $VALID_productId
