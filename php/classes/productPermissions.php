@@ -322,18 +322,4 @@ class productPermissions {
 		return($productPermissions);
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ?>
