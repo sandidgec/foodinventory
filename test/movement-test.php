@@ -140,6 +140,50 @@ class MovementTest extends InventoryTextTest {
 	 **/
 	protected $INVALID_price = 4.75689;
 
+
+	/**
+	 * creating a null User object
+	 * for global scope
+	 * @var User $user
+	 **/
+	protected $user = null;
+
+	/**
+	 * creating a null Vendor object
+	 * for global scope
+	 * @var Vendor $vendor
+	 **/
+	protected $vendor = null;
+
+	/**
+	 * creating a null Product object
+	 * for global scope
+	 * @var Product $product
+	 **/
+	protected $product = null;
+
+	/**
+	 * creating a null fromLocation object
+	 * for global scope
+	 * @var Location $fromLocation
+	 **/
+	protected $fromLocation = null;
+
+	/**
+	 * creating a null toLocation object
+	 * for global scope
+	 * @var Location $toLocation
+	 **/
+	protected $toLocation = null;
+
+	/**
+	 * creating a null UnitOfMeasure object
+	 * for global scope
+	 * @var UnitOfMeasure $unitOfMeasure
+	 **/
+	protected $unitOfMeasure = null;
+
+
 	public function setUp() {
 		parent::setUp();
 
@@ -183,8 +227,15 @@ class MovementTest extends InventoryTextTest {
 		$description = "Back Stock";
 		$storageCode = "BS";
 
-		$location = new Location($locationId, $vendorId, $description, $storageCode);
-		$location->insert($this->getPDO());
+		$fromLocation = new Location($locationId, $vendorId, $description, $storageCode);
+		$fromLocation->insert($this->getPDO());
+
+		$locationId = null;
+		$description = "Front Stock";
+		$storageCode = "FS";
+
+		$toLocation = new Location($locationId, $vendorId, $description, $storageCode);
+		$toLocation->insert($this->getPDO());
 
 		$unitId = null;
 		$unitCode = "pk";
