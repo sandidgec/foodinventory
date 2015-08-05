@@ -135,7 +135,7 @@ class ProductPermissionsTest extends InventoryTextTest {
 	public function testDeleteInvalidProductPermissions() {
 		// create a ProductPermissions and try to delete it without actually inserting it
 		$product = new ProductPermissions(null, $this->VALID_ATHANDLE, $this->VALID_PRODUCT, $this->VALID_USER, $this->VALID_ACCESSLEVEL);
-		$ProductPermissions->delete($this->getPDO());
+		$productPermissions->delete($this->getPDO());
 	}
 
 	/**
