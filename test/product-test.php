@@ -60,10 +60,10 @@ class ProductTest extends InventoryTextTest {
 		$pdoProduct = Product::getProductByProductId($this->getPDO(), $product->getProductId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
 		$this->assertSame($pdoProduct->getAtHandle(), $this->VALID_ATHANDLE);
-		$this->assertSame($pdoProduct->getEmail(), $this->VALID_VENDOR);
-		$this->assertSame($pdoProduct->getPhone(), $this->VALID_SKU);
-		$this->assertSame($pdoProduct->getEmail(), $this->VALID_LEADTIME);
-		$this->assertSame($pdoProduct->getPhone(), $this->VALID_DESCRIPTION);
+		$this->assertSame($pdoProduct->getVendor(), $this->VALID_VENDOR);
+		$this->assertSame($pdoProduct->getSku(), $this->VALID_SKU);
+		$this->assertSame($pdoProduct->getLeadTime(), $this->VALID_LEADTIME);
+		$this->assertSame($pdoProduct->getDescription(), $this->VALID_DESCRIPTION);
 	}
 
 	/**
@@ -93,7 +93,7 @@ class ProductTest extends InventoryTextTest {
 		$product->update($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProduct = Product::getProductByProductId($this->getPDO(), $product->getProductId());
+		$pdoProduct = Product::getProductByProductId($this->getPDO(), $Product->getProductId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
 		$this->assertSame($pdoProduct->getAtHandle(), $this->VALID_ATHANDLE2);
 		$this->assertSame($pdoProduct->getEmail(), $this->VALID_VENDOR);
@@ -142,7 +142,7 @@ class ProductTest extends InventoryTextTest {
 	public function testDeleteInvalidProduct() {
 		// create a Product and try to delete it without actually inserting it
 		$product = new Product(null, $this->VALID_ATHANDLE, $this->VALID_VENDOR, $this->VALID_SKU, $this->VALID_LEADTIME, $this->VALID_DESCRIPTION);
-		$product->delete($this->getPDO());
+		$Product->delete($this->getPDO());
 	}
 
 	/**
