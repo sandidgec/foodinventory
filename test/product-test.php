@@ -96,10 +96,10 @@ class ProductTest extends InventoryTextTest {
 		$pdoProduct = Product::getProductByProductId($this->getPDO(), $Product->getProductId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
 		$this->assertSame($pdoProduct->getAtHandle(), $this->VALID_ATHANDLE2);
-		$this->assertSame($pdoProduct->getEmail(), $this->VALID_VENDOR);
-		$this->assertSame($pdoProduct->getPhone(), $this->VALID_SKU);
-		$this->assertSame($pdoProduct->getEmail(), $this->VALID_LEADTIME);
-		$this->assertSame($pdoProduct->getPhone(), $this->VALID_DESCRIPTION);
+		$this->assertSame($pdoProduct->getVendor(), $this->VALID_VENDOR);
+		$this->assertSame($pdoProduct->getSku(), $this->VALID_SKU);
+		$this->assertSame($pdoProduct->getLeadTime(), $this->VALID_LEADTIME);
+		$this->assertSame($pdoProduct->getDescription(), $this->VALID_DESCRIPTION);
 	}
 
 	/**
@@ -160,10 +160,10 @@ class ProductTest extends InventoryTextTest {
 		$pdoProduct = Product::getProductByProductId($this->getPDO(), $product->getProductId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
 		$this->assertSame($pdoProduct->getAtHandle(), $this->VALID_ATHANDLE);
-		$this->assertSame($pdoProduct->getEmail(), $this->VALID_VENDOR);
-		$this->assertSame($pdoProduct->getPhone(), $this->VALID_SKU);
-		$this->assertSame($pdoProduct->getEmail(), $this->VALID_LEADTIME);
-		$this->assertSame($pdoProduct->getPhone(), $this->VALID_DESCRIPTION);
+		$this->assertSame($pdoProduct->getVendor(), $this->VALID_VENDOR);
+		$this->assertSame($pdoProduct->getSku(), $this->VALID_SKU);
+		$this->assertSame($pdoProduct->getLeadTIme(), $this->VALID_LEADTIME);
+		$this->assertSame($pdoProduct->getDescription(), $this->VALID_DESCRIPTION);
 	}
 
 	/**
@@ -187,10 +187,10 @@ class ProductTest extends InventoryTextTest {
 		$pdoProduct = Product::getProductByAtHandle($this->getPDO(), $this->VALID_ATHANDLE);
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
 		$this->assertSame($pdoProduct->getAtHandle(), $this->VALID_ATHANDLE);
-		$this->assertSame($pdoProduct->getEmail(), $this->VALID_VENDOR);
-		$this->assertSame($pdoProduct->getPhone(), $this->VALID_SKU);
-		$this->assertSame($pdoProduct->getEmail(), $this->VALID_LEADTIME);
-		$this->assertSame($pdoProduct->getPhone(), $this->VALID_DESCRIPTION);
+		$this->assertSame($pdoProduct->getVendor(), $this->VALID_VENDOR);
+		$this->assertSame($pdoProduct->getSku(), $this->VALID_SKU);
+		$this->assertSame($pdoProduct->getLeadTime(), $this->VALID_LEADTIME);
+		$this->assertSame($pdoProduct->getDescription(), $this->VALID_DESCRIPTION);
 	}
 
 	/**
@@ -238,10 +238,10 @@ class ProductTest extends InventoryTextTest {
 					$pdoProduct = Product::getProductByVendor($this->getPDO(), $this->VALID_SKU, $this->VALID_LEADTIME, $this->VALID_DESCRIPTION);
 					$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
 					$this->assertSame($pdoProduct->getAtHandle(), $this->VALID_ATHANDLE);
-					$this->assertSame($pdoProduct->getEmail(), $this->VALID_VENDOR);
-					$this->assertSame($pdoProduct->getPhone(), $this->VALID_SKU);
-					$this->assertSame($pdoProduct->getEmail(), $this->VALID_LEADTIME);
-					$this->assertSame($pdoProduct->getPhone(), $this->VALID_DESCRIPTION);
+					$this->assertSame($pdoProduct->getVendor(), $this->VALID_VENDOR);
+					$this->assertSame($pdoProduct->getSku(), $this->VALID_SKU);
+					$this->assertSame($pdoProduct->getLeadTime(), $this->VALID_LEADTIME);
+					$this->assertSame($pdoProduct->getDescription(), $this->VALID_DESCRIPTION);
 				}
 
 				/**
