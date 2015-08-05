@@ -4,6 +4,11 @@ require_once("inventorytext.php");
 
 // grab the class under scrutiny
 require_once(dirname(__DIR__) . "/php/classes/movement.php");
+require_once(dirname(__DIR__) . "/php/classes/user.php");
+require_once(dirname(__DIR__) . "/php/classes/product.php");
+require_once(dirname(__DIR__) . "/php/classes/vendor.php");
+require_once(dirname(__DIR__) . "/php/classes/location.php");
+require_once(dirname(__DIR__) . "/php/classes/unit-of-measure.php");
 
 /**
  * Full PHPUnit test for the Movement class
