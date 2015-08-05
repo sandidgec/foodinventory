@@ -210,14 +210,6 @@ class User {
 	}
 
 	/**
-	 * accessor for attention
-	 * @return string
-	 */
-	public function getAttention() {
-		return ($this->attention);
-	}
-
-	/**
 	 * Mutator for Root
 	 * @param $newRoot
 	 */
@@ -231,6 +223,14 @@ class User {
 			throw new RangeException ("Root too long");
 		}
 		$this->root = $newRoot;
+	}
+
+	/**
+	 * accessor for attention
+	 * @return string
+	 */
+	public function getAttention() {
+		return ($this->attention);
 	}
 
 	/**

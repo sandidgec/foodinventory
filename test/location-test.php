@@ -48,7 +48,7 @@ class LocationTest extends InventoryTextTest {
 
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoUser = Location::getLocationByLocationId($this->getPDO(), $location->getLocationId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("user"));
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("location"));
 		$this->assertSame($pdoUser->getStorageCode(), $this->VALID_storageCode);
 		$this->assertSame($pdoUser->getDescription(), $this->VALID_description);
 	}
@@ -60,7 +60,7 @@ class LocationTest extends InventoryTextTest {
 	 **/
 	public function testInsertInvalidLocation() {
 		// create a location with a non null profileId and watch it fail
-		$location = new Location(DataDesignTest::INVALID_KEY, $this->VALID_storageCode, $this->VALID_description);
+		$location = new Location(InventoryTextTest::INVALID_KEY, $this->VALID_storageCode, $this->VALID_description);
 
 		$location->insert($this->getPDO());
 	}
@@ -77,12 +77,12 @@ class LocationTest extends InventoryTextTest {
 
 		$location->insert($this->getPDO());
 
-		// edit the user and update it in mySQL
+		// edit the location and update it in mySQL
 		$location->setStorageCode($this->VALID_storageCode);
 		$location->update($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoLocation = Location::getLocationByLocationId($this->getPDO(), $location->getLocationId());
+		$pdoLocation = Location::getLocationByLocationId($this->getPDO(), $location->getUnitId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("location"));
 		$this->assertSame($pdoLocation->getStorageCode(), $this->VALID_storageCode);
 		$this->assertSame($pdoLocation->getDescription(), $this->VALID_description);
@@ -90,7 +90,7 @@ class LocationTest extends InventoryTextTest {
 	}
 
 	/**
-	 * test updating a Locationthat does not exist
+	 * test updating a Location that does not exist
 	 *
 	 * @expectedException PDOException
 	 **/
@@ -129,7 +129,7 @@ class LocationTest extends InventoryTextTest {
 	 **/
 	public function testDeleteInvalidLocation() {
 		// create a Location and try to delete it without actually inserting it
-		$location = new User(null, $this->VALID_storageCode, $this->VALID_description);
+		$location = new Location(null, $this->VALID_storageCode, $this->VALID_description);
 		$location->delete($this->getPDO());
 	}
 
@@ -138,26 +138,26 @@ class LocationTest extends InventoryTextTest {
 	 **/
 	public function testGetValidLocationrByLocationId() {
 		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("user");
+		$numRows = $this->getConnection()->getRowCount("location");
 
 		// create a new location and insert to into mySQL
 		$location = new Location(null, $this->VALID_storageCode, $this->VALID_description);
 		$location->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoUser = User::getLocationByLocationId($this->getPDO(), $location->getLocationId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("user"));
-		$this->assertSame($pdoUser->getStorageCode(), $this->VALID_storageCode);
-		$this->assertSame($pdoUser->getDescription(), $this->VALID_description);
+		$pdoLocation = Location::getLocationByLocationId($this->getPDO(), $location->getLocationId());
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("location"));
+		$this->assertSame($pdoLocation->getStorageCode(), $this->VALID_storageCode);
+		$this->assertSame($pdoLocation->getDescription(), $this->VALID_description);
 
 	}
 
 	/**
-	 * test grabbing a User that does not exist
+	 * test grabbing a Location that does not exist
 	 **/
-	public function testGetInvalidUserByUserId() {
-		// grab a user id that exceeds the maximum allowable profile id
-		$location = Location::getLocationByLocationId($this->getPDO(), DataDesignTest::INVALID_KEY);
+	public function testGetInvalidLocationByLocationId() {
+		// grab a location id that exceeds the maximum allowable location id
+		$location = Location::getLocationByLocationId($this->getPDO(), InventoryTextTest::INVALID_KEY);
 		$this->assertNull($location);
 	}
 
@@ -173,8 +173,8 @@ class LocationTest extends InventoryTextTest {
 		$location->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoLocation = User::getLocationByStorageCode($this->getPDO(), $this->VALID_storageCode);
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("user"));
+		$pdoLocation = Location::getLocationByStorageCode($this->getPDO(), $this->VALID_storageCode);
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("Location"));
 		$this->assertSame($pdoLocation->getStorageCode(), $this->VALID_storageCode);
 		$this->assertSame($pdoLocation->getDescription(), $this->VALID_description);
 
@@ -185,7 +185,7 @@ class LocationTest extends InventoryTextTest {
 	 **/
 	public function testGetInvalidLocationByStorageCode() {
 		// grab an storage code that does not exist
-		$location = User::getLocationByStorageCode($this->getPDO(), "does@not.exist");
+		$location = Location::getLocationByStorageCode($this->getPDO(), "does@not.exist");
 		$this->assertNull($location);
 	}
 }

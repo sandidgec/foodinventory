@@ -8,12 +8,12 @@ class UnitOfMeasure {
 private $unitId;
 
 	/**
-	 * @var int $unitCode
+	 * @var string $unitCode
 	 */
 private $unitCode;
 
 	/**
-	 * @var string $quantity
+	 * @var int $quantity
 	 */
 private $quantity;
 
@@ -80,10 +80,13 @@ private $quantity;
 	 */
 	public function setUnitCode($newUnitCode) {
 		//verify the locationId is valid
-		$newUnitCode = filter_var($newUnitCode, FILTER_VALIDATE_INT);
+		$newUnitCode = filter_var($newUnitCode, FILTER_SANITIZE_STRING);
 		if(empty($newUnitCode) === true) {
 			throw (new InvalidArgumentException ("content invalid"));
 		}
+			if(strlen($newUnitCode) !== 2) {
+				throw new RangeException ("Invalid State Entry");
+			}
 		$this->unitCode = $newUnitCode;
 	}
 
