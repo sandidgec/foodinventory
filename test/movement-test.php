@@ -163,7 +163,7 @@ class MovementTest extends InventoryTextTest {
 	protected $product = null;
 
 	/**
-	 * creating a null fromLocation object
+	 * creating a null fromLocatio540'\2 object
 	 * for global scope
 	 * @var Location $fromLocation
 	 **/
