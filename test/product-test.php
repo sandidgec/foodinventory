@@ -268,6 +268,7 @@ class ProductTest extends InventoryTextTest {
 					$product = Product::getProductByLeadTime($this->getPDO(), "does@not.exist");
 					$this->assertNull($product);
 				}
+
 				/**
 				 * test grabbing a Product by a description that does not exists
 				 **/
