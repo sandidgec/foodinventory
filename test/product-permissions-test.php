@@ -89,15 +89,20 @@ class ProductPermissionsTest extends InventoryTextTest {
 	}
 
 	/**
-	 * test updating a ProductPermissions that does not exist
-	 *
-	 * @expectedException PDOException
+	 * test grabbing a ProductPermission that does not exist
 	 **/
-	public function testUpdateInvalidProductPermissions() {
-		// create a ProductPermissions and try to update it without actually inserting it
-		$product = new ProductPermissions(null, $this->VALID_ATHANDLE, $this->VALID_PRODUCT, $this->VALID_USER, $this->VALID_ACCESSLEVEL);
-		$product->update($this->getPDO());
+	public function testGetInvalidProductPermissionByUserId() {
+		// grab a user id that exceeds the maximum allowable user id
+		$productPermission = ProductPermission::getProductPermissionByUserId($this->getPDO(), InventoryTextTest::INVALID_KEY);
+		$this->assertNull($productPermission);
 	}
+
+	public function testGetInvalidProductPermissionByProductId() {
+		// grab a user id that exceeds the maximum allowable user id
+		$productPermission = ProductPermission::getProductPermissionByProductId($this->getPDO(), InventoryTextTest::INVALID_KEY);
+		$this->assertNull($productPermission);
+	}
+
 
 	/**
 	 * test creating a ProductPermissions and then deleting it
