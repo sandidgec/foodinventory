@@ -93,7 +93,7 @@ class ProductTest extends InventoryTextTest {
 		$product->update($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProduct = Product::getProductByProductId($this->getPDO(), $Product->getProductId());
+		$pdoProduct = Product::getProductByProductId($this->getPDO(), $product->getProductId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
 		$this->assertSame($pdoProduct->getAtHandle(), $this->VALID_ATHANDLE2);
 		$this->assertSame($pdoProduct->getVendor(), $this->VALID_VENDOR);
@@ -142,7 +142,7 @@ class ProductTest extends InventoryTextTest {
 	public function testDeleteInvalidProduct() {
 		// create a Product and try to delete it without actually inserting it
 		$product = new Product(null, $this->VALID_ATHANDLE, $this->VALID_VENDOR, $this->VALID_SKU, $this->VALID_LEADTIME, $this->VALID_DESCRIPTION);
-		$Product->delete($this->getPDO());
+		$product->delete($this->getPDO());
 	}
 
 	/**
