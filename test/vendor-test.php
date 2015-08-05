@@ -39,37 +39,37 @@ class VendorTest extends InventoryTextTest {
 	 * invalid contact name to use
 	 * @var string $INVALID_contactName
 	 **/
-	protected $INVALID_contactName = "";
+	protected $INVALID_contactName = "-6";
 	/**
 	 * valid vendor email to use
 	 * @var string $VALID_vendorEmail
 	 **/
-	protected $VALID_vendorEmail = "1";
+	protected $VALID_vendorEmail = "topersucks@myunit.test";
 	/**
 	 * invalid vendor email to use
 	 * @var int $VALID_emailStatus
 	 **/
-	protected $INVALID_vendorEmail = "4294967296";
+	protected $INVALID_vendorEmail = "@myunit.test";
 	/**
 	 * valid vendorName to use
 	 * @var string $VALID_vendorName
 	 **/
-	protected $VALID_vendorName = "php  unittest Co";
+	protected $VALID_vendorName = "php  unit test Co";
 	/**
 	 * invalid vendor email to use
 	 * @var string $INVALID_vendorEmail
 	 **/
-	protected $INVALID_vendorName = "";
+	protected $INVALID_vendorName = "Bobbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
 	/**
 	 * valid vendor phone number to use
 	 * @var string $VALID-vendorPhoneNumber
 	 **/
-	protected $VALID_vendorPhoneNumber = "unit test";
+	protected $VALID_vendorPhoneNumber = "5555555555";
 	/**
 	 * second valid notification to use
 	 * @var string $VALID_notificationHandle2
 	 **/
-	protected $INVALID_vendorPhoneNumber = "this is only a test";
+	protected $INVALID_vendorPhoneNumber = "555555555555555555555";
 
 	/**
 	 * test inserting a valid Vendor and verify that the actual mySQL data matches
