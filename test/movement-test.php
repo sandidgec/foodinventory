@@ -16,36 +16,178 @@ require_once(dirname(__DIR__) . "/php/classes/movement.php");
  **/
 class MovementTest extends InventoryTextTest {
 	/**
-	 * valid at handle to use
-	 * @var string $VALID_ATHANDLE
+	 * valid movementId to use
+	 * @var int $VALID_movementId
 	 **/
-	protected $VALID_ATHANDLE = "@phpunit";
-	/**
-	 * second valid at handle to use
-	 * @var string $VALID_ATHANDLE2
-	 **/
-	protected $VALID_ATHANDLE2 = "@passingtests";
-	/**
-	 * valid email to use
-	 * @var string $VALID_EMAIL
-	 **/
-	protected $VALID_EMAIL = "test@phpunit.de";
-	/**
-	 * valid phone number to use
-	 * @var string $VALID_PHONE
-	 **/
-	protected $VALID_PHONE = "+12125551212";
+	protected $VALID_movementId = 1;
 
 	/**
-	 * test inserting a valid Profile and verify that the actual mySQL data matches
+	 * invalid movementId to use
+	 * @var int $INVALID_movementId
 	 **/
-	public function testInsertValidProfile() {
+	protected $INVALID_movementId = 4294967296;
+
+	/**
+	 * valid fromLocationId to use
+	 * @var int $VALID_fromLocationId
+	 **/
+	protected $VALID_fromLocationId = ;
+
+	/**
+	 * invalid fromLocationId to use
+	 * @var int $INVALID_fromLocationId
+	 **/
+	protected $INVALID_fromLocationId = 4294967296;
+
+	/**
+	 * valid toLocationId to use
+	 * @var int $VALID_toLocationId
+	 **/
+	protected $VALID_toLocationId;
+
+	/**
+	 * invalid toLocationId to use
+	 * @var int $INVALID_toLocationId
+	 **/
+	protected $INVALID_toLocationId = 4294967296;
+
+	/**
+	 * valid productId to use
+	 * @var int $VALID_productId
+	 **/
+	protected $VALID_productId;
+
+	/**
+	 * invalid productId to use
+	 * @var int $INVALID_productId
+	 **/
+	protected $INVALID_productId = 4294967296;
+
+	/**
+	 * valid unitId to use
+	 * @var int $VALID_unitId
+	 **/
+	protected $VALID_unitId;
+
+	/**
+	 * invalid unitId to use
+	 * @var int $INVALID_unitId
+	 **/
+	protected $INVALID_unitId = 4294967296;
+
+	/**
+	 * valid userId to use
+	 * @var int $VALID_userId
+	 **/
+	protected $VALID_userId;
+
+	/**
+	 * invalid userId to use
+	 * @var int $INVALID_userId
+	 **/
+	protected $INVALID_userId = 4294967296;
+
+	/**
+	 * valid cost to use
+	 * @var float $VALID_cost
+	 **/
+	protected $VALID_cost;
+
+	/**
+	 * valid second cost to use
+	 * @var float $VALID_cost2
+	 **/
+	protected $VALID_cost2;
+
+	/**
+	 * invalid cost to use
+	 * @var float $INVALID_cost
+	 **/
+	protected $INVALID_cost;
+
+	/**
+	 * valid movementDate to use
+	 * @var DateTime $VALID_movementDate
+	 **/
+	protected $VALID_movementDate;
+
+	/**
+	 * invalid movementDate to use
+	 * @var DateTime $INVALID_movementDate
+	 **/
+	protected $INVALID_movementDate;
+
+	/**
+	 * valid movementType to use
+	 * @var string $VALID_movementType
+	 **/
+	protected $VALID_movementType;
+
+	/**
+	 * invalid movementType to use
+	 * @var string $INVALID_movementType
+	 **/
+	protected $INVALID_movementType;
+
+	/**
+	 * valid price to use
+	 * @var float $VALID_price
+	 **/
+	protected $VALID_price;
+
+	/**
+	 * invalid price to use
+	 * @var float $INVALID_price
+	 **/
+	protected $INVALID_price;
+
+	/**
+	 * test inserting a valid Movement and verify that the actual mySQL data matches
+	 **/
+	public function testInsertValidMovement() {
 		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("profile");
+		$numRows = $this->getConnection()->getRowCount("movement");
 
-		// create a new Profile and insert to into mySQL
-		$profile = new Profile(null, $this->VALID_ATHANDLE, $this->VALID_EMAIL, $this->VALID_PHONE);
-		$profile->insert($this->getPDO());
+		// create a new Movement and insert to into mySQL
+		$movement = new Movement(null, $this->VALID_fromLocationId, $this->VALID_toLocationId, $this->VALID_productId, $this->VALID_unitId, $this->VALID_userId, $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
+		$movement->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoMovement = Movement::getMovementByMovementId($this->getPDO(), $movement->getMovementId());
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("movement"));
+		$this->assertSame($pdoMovement->getFormLocationId(), $this->VALID_fromLocationId);
+		$this->assertSame($pdoMovement->getToLocationId(), $this->VALID_toLocationId);
+		$this->assertSame($pdoMovement->getProductId(), $this->VALID_productId);
+		$this->assertSame($pdoMovement->getUnitId(), $this->VALID_unitId);
+		$this->assertSame($pdoMovement->getUserId(), $this->VALID_userId);
+		$this->assertSame($pdoMovement->getCost(), $this->VALID_cost);
+		$this->assertSame($pdoMovement->getMovementDate(), $this->VALID_movementDate);
+		$this->assertSame($pdoMovement->getMovementType(), $this->VALID_movementType);
+		$this->assertSame($pdoMovement->getPrice(), $this->VALID_price);
+	}
+
+	/**
+	 * test inserting a Movement that already exists
+	 *
+	 * @expectedException PDOException
+	 **/
+	public function testInsertInvalidMovement() {
+		// create a movement with a non null movementId and watch it fail
+		$movement = new Movement(InventoryTextTest::INVALID_KEY, $this->INVALID_fromLocationId, $this->INVALID_toLocationId, $this->INVALID_productId, $this->INVALID_unitId, $this->INVALID_userId, $this->INVALID_cost, $this->INVALID_movementDate, $this->INVALID_movementType, $this->INVALID_price);
+		$movement->insert($this->getPDO());
+	}
+
+	/**
+	 * test inserting a Movement and regrabbing it from mySQL
+	 **/
+	?????????????????????????????????????????????????????????????????????????????????????????????
+	public function testGetValidMovementByMovementId() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("movement");
+
+		// create a new Movement and insert it into mySQL
+		$movement = new Movement(null, $this->VALID_fromLocationId, $this->VALID_toLocationId, $this->VALID_productId, $this->VALID_unitId, $this->VALID_userId, $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
+		$movement->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoProfile = Profile::getProfileByProfileId($this->getPDO(), $profile->getProfileId());
@@ -56,110 +198,17 @@ class MovementTest extends InventoryTextTest {
 	}
 
 	/**
-	 * test inserting a Profile that already exists
-	 *
-	 * @expectedException PDOException
+	 * test grabbing a Movement that does not exist
 	 **/
-	public function testInsertInvalidProfile() {
-		// create a profile with a non null profileId and watch it fail
-		$profile = new Profile(DataDesignTest::INVALID_KEY, $this->VALID_ATHANDLE, $this->VALID_EMAIL, $this->VALID_PHONE);
-		$profile->insert($this->getPDO());
-	}
-
-	/**
-	 * test inserting a Profile, editing it, and then updating it
-	 **/
-	public function testUpdateValidProfile() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("profile");
-
-		// create a new Profile and insert to into mySQL
-		$profile = new Profile(null, $this->VALID_ATHANDLE, $this->VALID_EMAIL, $this->VALID_PHONE);
-		$profile->insert($this->getPDO());
-
-		// edit the Profile and update it in mySQL
-		$profile->setAtHandle($this->VALID_ATHANDLE2);
-		$profile->update($this->getPDO());
-
-		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProfile = Profile::getProfileByProfileId($this->getPDO(), $profile->getProfileId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("profile"));
-		$this->assertSame($pdoProfile->getAtHandle(), $this->VALID_ATHANDLE2);
-		$this->assertSame($pdoProfile->getEmail(), $this->VALID_EMAIL);
-		$this->assertSame($pdoProfile->getPhone(), $this->VALID_PHONE);
-	}
-
-	/**
-	 * test updating a Profile that does not exist
-	 *
-	 * @expectedException PDOException
-	 **/
-	public function testUpdateInvalidProfile() {
-		// create a Profile and try to update it without actually inserting it
-		$profile = new Profile(null, $this->VALID_ATHANDLE, $this->VALID_EMAIL, $this->VALID_PHONE);
-		$profile->update($this->getPDO());
-	}
-
-	/**
-	 * test creating a Profile and then deleting it
-	 **/
-	public function testDeleteValidProfile() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("profile");
-
-		// create a new Profile and insert to into mySQL
-		$profile = new Profile(null, $this->VALID_ATHANDLE, $this->VALID_EMAIL, $this->VALID_PHONE);
-		$profile->insert($this->getPDO());
-
-		// delete the Profile from mySQL
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("profile"));
-		$profile->delete($this->getPDO());
-
-		// grab the data from mySQL and enforce the Profile does not exist
-		$pdoProfile = Profile::getProfileByProfileId($this->getPDO(), $profile->getProfileId());
-		$this->assertNull($pdoProfile);
-		$this->assertSame($numRows, $this->getConnection()->getRowCount("profile"));
-	}
-
-	/**
-	 * test deleting a Profile that does not exist
-	 *
-	 * @expectedException PDOException
-	 **/
-	public function testDeleteInvalidProfile() {
-		// create a Profile and try to delete it without actually inserting it
-		$profile = new Profile(null, $this->VALID_ATHANDLE, $this->VALID_EMAIL, $this->VALID_PHONE);
-		$profile->delete($this->getPDO());
-	}
-
-	/**
-	 * test inserting a Profile and regrabbing it from mySQL
-	 **/
-	public function testGetValidProfileByProfileId() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("profile");
-
-		// create a new Profile and insert to into mySQL
-		$profile = new Profile(null, $this->VALID_ATHANDLE, $this->VALID_EMAIL, $this->VALID_PHONE);
-		$profile->insert($this->getPDO());
-
-		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProfile = Profile::getProfileByProfileId($this->getPDO(), $profile->getProfileId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("profile"));
-		$this->assertSame($pdoProfile->getAtHandle(), $this->VALID_ATHANDLE);
-		$this->assertSame($pdoProfile->getEmail(), $this->VALID_EMAIL);
-		$this->assertSame($pdoProfile->getPhone(), $this->VALID_PHONE);
-	}
-
-	/**
-	 * test grabbing a Profile that does not exist
-	 **/
-	public function testGetInvalidProfileByProfileId() {
+	public function testGetInvalidMovementByMovementId() {
 		// grab a profile id that exceeds the maximum allowable profile id
-		$profile = Profile::getProfileByProfileId($this->getPDO(), DataDesignTest::INVALID_KEY);
-		$this->assertNull($profile);
+		$movement = Movement::getMovementByMovementId($this->getPDO(), InventoryTextTest::INVALID_KEY);
+		$this->assertNull($movement);
 	}
 
+	/**
+	 * test grabbing a Profile by at handle
+	 **/
 	public function testGetValidProfileByAtHandle() {
 		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("profile");

@@ -3,7 +3,7 @@
 require_once("/home/ccollopy/public_html/foodinventory/php/traits/validateDate.php");
 
 /**
- * The movement class for InventoryMessage
+ * The movement class for Inventory
  *
  * This class will monitor the movement of products in and
  * out of the inventory as well as the movement within inventory
@@ -527,6 +527,183 @@ class Movement {
 	}
 
 	/**
+	 * gets the Movement by fromLocationId
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int $newFromLocationId the fromLocationId to search for
+	 * @return mixed Movement(s) found or null if not found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getMovementByFromLocationId(PDO &$pdo, $newFromLocationId) {
+		// sanitize the fromLocationId before searching
+		$newFromLocationId = filter_var($newFromLocationId, FILTER_VALIDATE_INT);
+		if($newFromLocationId === false) {
+			throw(new PDOException("fromLocationId is not an integer"));
+		}
+		if($newFromLocationId <= 0) {
+			throw(new PDOException("fromLocationId is not positive"));
+		}
+
+		// create query template
+		$query	 = "SELECT movementId, fromLocationId, toLocationId, productId, unitId, userId, cost, movementDate, movementType, price FROM movement WHERE fromLocationId = :fromLocationId" ;
+		$statement = $pdo->prepare($query);
+
+		// bind the fromLocationId to the place holder in the template
+		$parameters = array("fromLocationId" => $newFromLocationId);
+		$statement->execute($parameters);
+
+		// build an array of movements
+		$movements = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$movement = new Movement($row["movementId"], $row["fromLocationId"], $row["toLocationId"], $row["productId"], $row["unitId"], $row["userId"], $row["cost"], $row["movementDate"], $row["movementType"], $row["price"]);
+				$movements[$movements->key()] = $movement;
+				$movements->next();
+			} catch(Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($movements);
+	}
+
+	/**
+	 * gets the Movement by toLocationId
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int $newToLocationId the toLocationId to search for
+	 * @return mixed Movement(s) found or null if not found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getMovementByToLocationId(PDO &$pdo, $newToLocationId) {
+		// sanitize the toLocationId before searching
+		$newToLocationId = filter_var($newToLocationId, FILTER_VALIDATE_INT);
+		if($newToLocationId === false) {
+			throw(new PDOException("toLocationId is not an integer"));
+		}
+		if($newToLocationId <= 0) {
+			throw(new PDOException("toLocationId is not positive"));
+		}
+
+		// create query template
+		$query	 = "SELECT movementId, fromLocationId, toLocationId, productId, unitId, userId, cost, movementDate, movementType, price FROM movement WHERE toLocationId = :toLocationId" ;
+		$statement = $pdo->prepare($query);
+
+		// bind the toLocationId to the place holder in the template
+		$parameters = array("toLocationId" => $newToLocationId);
+		$statement->execute($parameters);
+
+		// build an array of movements
+		$movements = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$movement = new Movement($row["movementId"], $row["fromLocationId"], $row["toLocationId"], $row["productId"], $row["unitId"], $row["userId"], $row["cost"], $row["movementDate"], $row["movementType"], $row["price"]);
+				$movements[$movements->key()] = $movement;
+				$movements->next();
+			} catch(Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($movements);
+	}
+
+	/**
+	 * gets the Movement by fromLocationId & toLocationId
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int $newFromLocationId the fromLocationId to search for
+	 * @param int $newToLocationId the toLocationId to search for
+	 * @return mixed Movement(s) found or null if not found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getMovementByFromLocationIdAndToLocationId(PDO &$pdo, $newFromLocationId, $newToLocationId) {
+		// sanitize the fromLocationId before searching
+		$newFromLocationId = filter_var($newFromLocationId, FILTER_VALIDATE_INT);
+		if($newFromLocationId === false) {
+			throw(new PDOException("fromLocationId is not an integer"));
+		}
+		if($newFromLocationId <= 0) {
+			throw(new PDOException("fromLocationId is not positive"));
+		}
+		// sanitize the toLocationId before searching
+		$newToLocationId = filter_var($newToLocationId, FILTER_VALIDATE_INT);
+		if($newToLocationId === false) {
+			throw(new PDOException("toLocationId is not an integer"));
+		}
+		if($newToLocationId <= 0) {
+			throw(new PDOException("toLocationId is not positive"));
+		}
+
+		// create query template
+		$query	 = "SELECT movementId, fromLocationId, toLocationId, productId, unitId, userId, cost, movementDate, movementType, price FROM movement WHERE fromLocationId = :fromLocationId AND toLocationId = :toLocationId" ;
+		$statement = $pdo->prepare($query);
+
+		// bind the toLocationId to the place holder in the template
+		$parameters = array("fromLocationId" => $newFromLocationId, "toLocationId" => $newToLocationId);
+		$statement->execute($parameters);
+
+		// build an array of movements
+		$movements = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$movement = new Movement($row["movementId"], $row["fromLocationId"], $row["toLocationId"], $row["productId"], $row["unitId"], $row["userId"], $row["cost"], $row["movementDate"], $row["movementType"], $row["price"]);
+				$movements[$movements->key()] = $movement;
+				$movements->next();
+			} catch(Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($movements);
+	}
+
+	/**
+	 * gets the Movement by productId
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int $newProductId the productId to search for
+	 * @return mixed Movement(s) found or null if not found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getMovementByProductId(PDO &$pdo, $newProductId) {
+		// sanitize the productId before searching
+		$newProductId = filter_var($newProductId, FILTER_VALIDATE_INT);
+		if($newProductId === false) {
+			throw(new PDOException("productId is not an integer"));
+		}
+		if($newProductId <= 0) {
+			throw(new PDOException("productId is not positive"));
+		}
+
+		// create query template
+		$query	 = "SELECT movementId, fromLocationId, toLocationId, productId, unitId, userId, cost, movementDate, movementType, price FROM movement WHERE productId = :productId" ;
+		$statement = $pdo->prepare($query);
+
+		// bind the productId to the place holder in the template
+		$parameters = array("productId" => $newProductId);
+		$statement->execute($parameters);
+
+		// build an array of movements
+		$movements = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$movement = new Movement($row["movementId"], $row["fromLocationId"], $row["toLocationId"], $row["productId"], $row["unitId"], $row["userId"], $row["cost"], $row["movementDate"], $row["movementType"], $row["price"]);
+				$movements[$movements->key()] = $movement;
+				$movements->next();
+			} catch(Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($movements);
+	}
+
+	/**
 	 * gets the Movement by userId
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
@@ -548,7 +725,7 @@ class Movement {
 		$query	 = "SELECT movementId, fromLocationId, toLocationId, productId, unitId, userId, cost, movementDate, movementType, price FROM movement WHERE userId = :userId" ;
 		$statement = $pdo->prepare($query);
 
-		// bind the movementId to the place holder in the template
+		// bind the userId to the place holder in the template
 		$parameters = array("userId" => $newUserId);
 		$statement->execute($parameters);
 
