@@ -421,6 +421,4 @@ class Product {
 	}
 }
 
-
-
 ?>
