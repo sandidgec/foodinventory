@@ -149,13 +149,6 @@ class MovementTest extends InventoryTextTest {
 	protected $user = null;
 
 	/**
-	 * creating a null Vendor object
-	 * for global scope
-	 * @var Vendor $vendor
-	 **/
-	protected $vendor = null;
-
-	/**
 	 * creating a null Product object
 	 * for global scope
 	 * @var Product $product
@@ -163,7 +156,7 @@ class MovementTest extends InventoryTextTest {
 	protected $product = null;
 
 	/**
-	 * creating a null fromLocatio540'\2 object
+	 * creating a null fromLocation object
 	 * for global scope
 	 * @var Location $fromLocation
 	 **/
@@ -214,37 +207,35 @@ class MovementTest extends InventoryTextTest {
 		$vendor->insert($this->getPDO());
 
 		$productId = null;
-		$vendorId = null;
+		$vendorId = $vendor->getVendorId();
 		$description = "A glorius bead to use";
 		$leadTime = "10 days";
 		$sku = "thtfr354";
 		$title = "Bead-Green-Blue-Circular";
 
-		$product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
-		$product->insert($this->getPDO());
+		$this->product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
+		$this->product->insert($this->getPDO());
 
 		$locationId = null;
 		$description = "Back Stock";
 		$storageCode = "BS";
 
-		$fromLocation = new Location($locationId, $vendorId, $description, $storageCode);
-		$fromLocation->insert($this->getPDO());
+		$this->fromLocation = new Location($locationId, $vendorId, $description, $storageCode);
+		$this->fromLocation->insert($this->getPDO());
 
 		$locationId = null;
 		$description = "Front Stock";
 		$storageCode = "FS";
 
-		$toLocation = new Location($locationId, $vendorId, $description, $storageCode);
-		$toLocation->insert($this->getPDO());
+		$this->toLocation = new Location($locationId, $vendorId, $description, $storageCode);
+		$this->toLocation->insert($this->getPDO());
 
 		$unitId = null;
 		$unitCode = "pk";
 		$quantity = "10.50";
 
-		$unitOfMeasure = new UnitOfMeasure($unitId, $unitCode, $quantity);
-		$unitOfMeasure->insert($this->getPDO());
-
-
+		$this->unitOfMeasure = new UnitOfMeasure($unitId, $unitCode, $quantity);
+		$this->unitOfMeasure->insert($this->getPDO());
 	}
 
 	/**
@@ -255,17 +246,17 @@ class MovementTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("movement");
 
 		// create a new Movement and insert to into mySQL
-		$movement = new Movement(null, $this->VALID_fromLocationId, $this->VALID_toLocationId, $this->VALID_productId, $this->VALID_unitId, $this->VALID_userId, $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
+		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
 		$movement->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoMovement = Movement::getMovementByMovementId($this->getPDO(), $movement->getMovementId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("movement"));
-		$this->assertSame($pdoMovement->getFromLocationId(), $this->VALID_fromLocationId);
-		$this->assertSame($pdoMovement->getToLocationId(), $this->VALID_toLocationId);
-		$this->assertSame($pdoMovement->getProductId(), $this->VALID_productId);
-		$this->assertSame($pdoMovement->getUnitId(), $this->VALID_unitId);
-		$this->assertSame($pdoMovement->getUserId(), $this->VALID_userId);
+		$this->assertSame($pdoMovement->getFromLocationId(), $this->fromLocation->getLocationId());
+		$this->assertSame($pdoMovement->getToLocationId(), $this->toLocation->getLocationId());
+		$this->assertSame($pdoMovement->getProductId(), $this->product->getProductId());
+		$this->assertSame($pdoMovement->getUnitId(), $this->unitOfMeasure->getUnitId());
+		$this->assertSame($pdoMovement->getUserId(), $this->user->getUserId());
 		$this->assertSame($pdoMovement->getCost(), $this->VALID_cost);
 		$this->assertSame($pdoMovement->getMovementDate(), $this->VALID_movementDate);
 		$this->assertSame($pdoMovement->getMovementType(), $this->VALID_movementType);
@@ -291,17 +282,17 @@ class MovementTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("movement");
 
 		// create a new Movement and insert it into mySQL
-		$movement = new Movement(null, $this->VALID_fromLocationId, $this->VALID_toLocationId, $this->VALID_productId, $this->VALID_unitId, $this->VALID_userId, $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
+		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
 		$movement->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoMovement = Movement::getMovementByMovementId($this->getPDO(), $movement->getMovementId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("movement"));
-		$this->assertSame($pdoMovement->getFromLocationId(), $this->VALID_fromLocationId);
-		$this->assertSame($pdoMovement->getToLocationId(), $this->VALID_toLocationId);
-		$this->assertSame($pdoMovement->getProductId(), $this->VALID_productId);
-		$this->assertSame($pdoMovement->getUnitId(), $this->VALID_unitId);
-		$this->assertSame($pdoMovement->getUserId(), $this->VALID_userId);
+		$this->assertSame($pdoMovement->getFromLocationId(), $this->fromLocation->getLocationId());
+		$this->assertSame($pdoMovement->getToLocationId(), $this->toLocation->getLocationId());
+		$this->assertSame($pdoMovement->getProductId(), $this->product->getProductId());
+		$this->assertSame($pdoMovement->getUnitId(), $this->unitOfMeasure->getUnitId());
+		$this->assertSame($pdoMovement->getUserId(), $this->user->getUserId());
 		$this->assertSame($pdoMovement->getCost(), $this->VALID_cost);
 		$this->assertSame($pdoMovement->getMovementDate(), $this->VALID_movementDate);
 		$this->assertSame($pdoMovement->getMovementType(), $this->VALID_movementType);
@@ -325,17 +316,17 @@ class MovementTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("movement");
 
 		// create a new Movement and insert to into mySQL
-		$movement = new Movement(null, $this->VALID_fromLocationId, $this->VALID_toLocationId, $this->VALID_productId, $this->VALID_unitId, $this->VALID_userId, $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
+		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
 		$movement->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoMovement = Movement::getMovementByFromLocationId($this->getPDO(), $movement->getFromLocationId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("movement"));
-		$this->assertSame($pdoMovement->getFromLocationId(), $this->VALID_fromLocationId);
-		$this->assertSame($pdoMovement->getToLocationId(), $this->VALID_toLocationId);
-		$this->assertSame($pdoMovement->getProductId(), $this->VALID_productId);
-		$this->assertSame($pdoMovement->getUnitId(), $this->VALID_unitId);
-		$this->assertSame($pdoMovement->getUserId(), $this->VALID_userId);
+		$this->assertSame($pdoMovement->getFromLocationId(), $this->fromLocation->getLocationId());
+		$this->assertSame($pdoMovement->getToLocationId(), $this->toLocation->getLocationId());
+		$this->assertSame($pdoMovement->getProductId(), $this->product->getProductId());
+		$this->assertSame($pdoMovement->getUnitId(), $this->unitOfMeasure->getUnitId());
+		$this->assertSame($pdoMovement->getUserId(), $this->user->getUserId());
 		$this->assertSame($pdoMovement->getCost(), $this->VALID_cost);
 		$this->assertSame($pdoMovement->getMovementDate(), $this->VALID_movementDate);
 		$this->assertSame($pdoMovement->getMovementType(), $this->VALID_movementType);
@@ -359,17 +350,17 @@ class MovementTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("movement");
 
 		// create a new Movement and insert to into mySQL
-		$movement = new Movement(null, $this->VALID_fromLocationId, $this->VALID_toLocationId, $this->VALID_productId, $this->VALID_unitId, $this->VALID_userId, $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
+		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
 		$movement->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoMovement = Movement::getMovementByToLocationId($this->getPDO(), $movement->getToLocationId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("movement"));
-		$this->assertSame($pdoMovement->getFromLocationId(), $this->VALID_fromLocationId);
-		$this->assertSame($pdoMovement->getToLocationId(), $this->VALID_toLocationId);
-		$this->assertSame($pdoMovement->getProductId(), $this->VALID_productId);
-		$this->assertSame($pdoMovement->getUnitId(), $this->VALID_unitId);
-		$this->assertSame($pdoMovement->getUserId(), $this->VALID_userId);
+		$this->assertSame($pdoMovement->getFromLocationId(), $this->fromLocation->getLocationId());
+		$this->assertSame($pdoMovement->getToLocationId(), $this->toLocation->getLocationId());
+		$this->assertSame($pdoMovement->getProductId(), $this->product->getProductId());
+		$this->assertSame($pdoMovement->getUnitId(), $this->unitOfMeasure->getUnitId());
+		$this->assertSame($pdoMovement->getUserId(), $this->user->getUserId());
 		$this->assertSame($pdoMovement->getCost(), $this->VALID_cost);
 		$this->assertSame($pdoMovement->getMovementDate(), $this->VALID_movementDate);
 		$this->assertSame($pdoMovement->getMovementType(), $this->VALID_movementType);
