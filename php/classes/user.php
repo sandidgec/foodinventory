@@ -578,7 +578,7 @@ class User {
 	 * @return null|User
 	 */
 	public static function getUserByEmail(PDO &$pdo, $user) {
-		// sanitize the tweetId before searching
+		// sanitize the email before searching
 		$user = filter_var($user, FILTER_SANITIZE_EMAIL);
 		if($user === false) {
 			throw(new PDOException(""));

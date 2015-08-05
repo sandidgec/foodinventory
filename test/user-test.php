@@ -109,13 +109,13 @@ class UserTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("user");
 
 		// create a new User and insert to into mySQL
-		$profile = new User(null, $this->VALID_firstName, $this->VALID_lastName, $this->VALID_root, $this->VALID_addressLineOne,
+		$user = new User(null, $this->VALID_firstName, $this->VALID_lastName, $this->VALID_root, $this->VALID_addressLineOne,
 				$this->VALID_addressLineTwo, $this->VALID_city, $this->VALID_state, $this->VALID_zipCode, $this->VALID_email,
 				$this->VALID_phoneNumber, $this->VALID_hash, $this->VALID_salt);
-		$profile->insert($this->getPDO());
+		$user->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoUser = User::getUserByUserId($this->getPDO(), $profile->getUserId());
+		$pdoUser = User::getUserByUserId($this->getPDO(), $user->getUserId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("user"));
 		$this->assertSame($pdoUser->getLastName(), $this->VALID_lastName);
 		$this->assertSame($pdoUser->getFirstName(), $this->VALID_firstName);
@@ -147,13 +147,13 @@ class UserTest extends InventoryTextTest {
 	}
 
 	/**
-	 * test inserting a Profile, editing it, and then updating it
+	 * test inserting a User, editing it, and then updating it
 	 **/
-	public function testUpdateValidProfile() {
+	public function testUpdateValidUser() {
 		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("profile");
+		$numRows = $this->getConnection()->getRowCount("user");
 
-		// create a new Profile and insert to into mySQL
+		// create a new User and insert to into mySQL
 		$user = new User(null, $this->VALID_firstName, $this->VALID_lastName, $this->VALID_root,
 					$this->VALID_attention, $this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city,
 					$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_hash,
@@ -187,7 +187,7 @@ class UserTest extends InventoryTextTest {
 	 *
 	 * @expectedException PDOException
 	 **/
-	public function testUpdateInvalidProfile() {
+	public function testUpdateInvalidUser() {
 		// create a User and try to update it without actually inserting it
 		$user = new User (null, $this->VALID_firstName, $this->VALID_lastName, $this->VALID_root,
 			$this->VALID_attention, $this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city,
@@ -201,7 +201,7 @@ class UserTest extends InventoryTextTest {
 	 **/
 	public function testDeleteValidUser() {
 		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("profile");
+		$numRows = $this->getConnection()->getRowCount("user");
 
 		// create a new User and insert to into mySQL
 		$user = new User(null, $this->VALID_firstName, $this->VALID_lastName, $this->VALID_root,
@@ -227,7 +227,10 @@ class UserTest extends InventoryTextTest {
 	 **/
 	public function testDeleteInvalidUser() {
 		// create a User and try to delete it without actually inserting it
-		$user = new User(null, $this->VALID_ATHANDLE, $this->VALID_EMAIL, $this->VALID_PHONE);
+		$user = new User(null, $this->VALID_firstName, $this->VALID_lastName, $this->VALID_root,
+			$this->VALID_attention, $this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city,
+			$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_hash,
+			$this->VALID_salt);
 		$user->delete($this->getPDO());
 	}
 
