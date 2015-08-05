@@ -127,7 +127,7 @@ class productPermissions {
 	 * @return int value of accessLevel
 	 **/
 	public function getAccessLevel() {
-		return($this->accessLevel);
+		return ($this->accessLevel);
 	}
 
 
@@ -161,7 +161,7 @@ class productPermissions {
 	 **/
 	public function insert(PDO &$pdo) {
 		// create query template
-		$query	 = "INSERT INTO productPermissions(productId, userId, accessLevel) VALUES(:productId, :userId, :accessLevel)";
+		$query = "INSERT INTO productPermissions(productId, userId, accessLevel) VALUES(:productId, :userId, :accessLevel)";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
@@ -182,14 +182,13 @@ class productPermissions {
 		}
 
 		// create query template
-		$query	 = "DELETE FROM productPermissions WHERE userId = :userId AND productId = :productId";
+		$query = "DELETE FROM productPermissions WHERE userId = :userId AND productId = :productId";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
 		$parameters = array("userId" => $this->userId, "productId" => $this->productId);
 		$statement->execute($parameters);
 	}
-
 
 
 	/**
@@ -201,14 +200,13 @@ class productPermissions {
 	public function update(PDO &$pdo) {
 
 		// create query template
-		$query	 = "UPDATE productPermissions SET accessLevel = :accessLevel WHERE userId = :userId AND productId = :productId";
+		$query = "UPDATE productPermissions SET accessLevel = :accessLevel WHERE userId = :userId AND productId = :productId";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
 		$parameters = array("accessLevel" => $this->accessLevel, "userId" => $this->userId, "productId" => $this->productId);
 		$statement->execute($parameters);
 	}
-
 
 
 	/**
@@ -259,7 +257,7 @@ class productPermissions {
 		}
 
 		// create query template
-		$query	 = "SELECT userId, productId, accessLevel FROM productPermissions WHERE userId = :userId";
+		$query = "SELECT userId, productId, accessLevel FROM productPermissions WHERE userId = :userId";
 		$statement = $pdo->prepare($query);
 
 		// bind the user id to the place holder in the template
@@ -270,7 +268,7 @@ class productPermissions {
 		try {
 			$productPermissions = null;
 			$statement->setFetchMode(PDO::FETCH_ASSOC);
-			$row   = $statement->fetch();
+			$row = $statement->fetch();
 			if($row !== false) {
 				$productPermissions = new ProductPermissions($row["userId"], $row["productId"], $row["accessLevel"]);
 			}
@@ -278,7 +276,7 @@ class productPermissions {
 			// if the row couldn't be converted, rethrow it
 			throw(new PDOException($exception->getMessage(), 0, $exception));
 		}
-		return($productPermissions);
+		return ($productPermissions);
 	}
 
 	/**
@@ -300,7 +298,7 @@ class productPermissions {
 		}
 
 		// create query template
-		$query	 = "SELECT userId, productId, accessLevel FROM productPermissions WHERE productId = :productId";
+		$query = "SELECT userId, productId, accessLevel FROM productPermissions WHERE productId = :productId";
 		$statement = $pdo->prepare($query);
 
 		// bind the product id to the place holder in the template
@@ -311,7 +309,7 @@ class productPermissions {
 		try {
 			$productPermissions = null;
 			$statement->setFetchMode(PDO::FETCH_ASSOC);
-			$row   = $statement->fetch();
+			$row = $statement->fetch();
 			if($row !== false) {
 				$productPermissions = new ProductPermissions($row["userId"], $row["productId"], $row["accessLevel"]);
 			}
@@ -319,7 +317,6 @@ class productPermissions {
 			// if the row couldn't be converted, rethrow it
 			throw(new PDOException($exception->getMessage(), 0, $exception));
 		}
-		return($productPermissions);
+		return ($productPermissions);
 	}
-
-?>
+}
