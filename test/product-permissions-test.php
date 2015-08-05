@@ -149,13 +149,4 @@ class ProductPermissionsTest extends InventoryTextTest {
 		$this->assertSame($pdoProductPermissions->getProductId(), $this->VALID_userId);
 		$this->assertSame($pdoProductPermissions->getUserId(), $this->VALID_userId);
 	}
-
-	/**
-	 * test grabbing a Product Permissions by productId that does not exist
-	 **/
-	public function testGetInvalidProductPermissionsByProductId() {
-		// grab an productId that does not exist
-		$productPermissions = ProductPermissions::getProductPermissionsByUserId($this->getPDO(), InventoryTextTest::INVALID_KEY);
-		$this->assertNull($productPermissions);
-	}
 }
