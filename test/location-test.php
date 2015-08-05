@@ -3,263 +3,153 @@
 require_once("inventorytext.php");
 
 // grab the class under scrutiny
-require_once(dirname(__DIR__) . "/php/classes/user.php");
+require_once(dirname(__DIR__) . "/php/classes/location.php");
 
 
 /**
- * Full PHPUnit test for the User class
+ * Full PHPUnit test for the Location class
  *
- * This is a complete test for the User Class. It is complete because *ALL* mySQL/PDO
+ * This is a complete test for the Location Class. It is complete because *ALL* mySQL/PDO
  * enabled methods are tested for both invalid and valid inputs.
  *
- * @see User
+ * @see Location
  * @author Charles Sandidge <sandidgec@gmail.com>
  **/
-class UserTest extends InventoryTextTest {
+class LocationTest extends InventoryTextTest {
 
 	/**
-	 * Valid userId
-	 * @var int
+	 * Valid locationId
+	 * @var int $locationId
 	 */
-	protected $VALID_userId = "7";
+	protected $VALID_locationId = "7";
 	/**
-	 * valid lastName of userId
-	 * @var string $lastName
+	 * valid storageCode
+	 * @var int $storageCode
 	 **/
-	protected $VALID_lastName = "sandidge";
+	protected $VALID_storageCode = "2";
 	/**
-	 * valid firstName of userId
-	 * @var string $firstName
+	 * valid description of locationId
+	 * @var string $description
 	 **/
-	protected $VALID_firstName = "charles";
-	/**
-	 * valid root user level
-	 * @var string $root
-	 */
-	protected $VALID_root = "T";
-	/**
-	 * valid attention line
-	 * @var string $attention ;
-	 */
-	protected $VALID_attention = "for mr. roboto";
-	/**
-	 * valid address line 1
-	 * @var string $addressLineOne
-	 */
-	protected $VALID_addressLineOne = "7383 San Diego Dr.";
-	/**
-	 * valid address line 2
-	 * @var string $addressLineTwo ;
-	 */
-	protected $VALID_addressLineTwo = "Suite 42939";
-	/**
-	 * valid City
-	 * @var string $city
-	 */
-	protected $VALID_city = "San Diego";
-	/**
-	 * valid state
-	 * @var string $state
-	 */
-	protected $VALID_state = "CA";
-	/**
-	 * valid ZipCode
-	 * @var int $zipCode ;
-	 */
-	protected $VALID_zipCode = "92104";
-	/**
-	 * valid email of userId
-	 * @var string $email
-	 **/
-	protected $VALID_email = "topher@mindyobiz.com";
-	/**
-	 * valid email 2
-	 * @var string $email2
-	 */
-	protected $VALID_email2 = "tophersotheremail@mindurbiz.com";
-	/**
-	 * valid phoneNumber of userId
-	 * @var int $phoneNumber
-	 **/
-	protected $VALID_phoneNumber = "5055551212";
-	/**
-	 * valid password hash for userId;
-	 * @var string $passwordHash
-	 **/
-	protected $VALID_hash;
-	/**
-	 * valid password salt for userId;
-	 * @var string $passwordSalt
-	 */
-	protected $VALID_salt;
+	protected $VALID_description = "back shelf";
 
 
-	public function setUp() {
-		parent::setUp();
-
-		$this->VALID_salt = bin2hex(openssl_random_pseudo_bytes(32));
-		$this->VALID_hash = hash_pbkdf2("sha512","password1234", $this->VALID_salt,262144, 128);
-	}
 
 	/**
-	 * test inserting a valid User and verify that the actual mySQL data matches
+	 * test inserting a valid Location and verify that the actual mySQL data matches
 	 **/
-	public function testInsertValidUser() {
+	public function testInsertValidLocation() {
 		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("user");
+		$numRows = $this->getConnection()->getRowCount("location");
 
-		// create a new User and insert to into mySQL
-		$profile = new User(null, $this->VALID_firstName, $this->VALID_lastName, $this->VALID_root, $this->VALID_addressLineOne,
-			$this->VALID_addressLineTwo, $this->VALID_city, $this->VALID_state, $this->VALID_zipCode, $this->VALID_email,
-			$this->VALID_phoneNumber, $this->VALID_hash, $this->VALID_salt);
-		$profile->insert($this->getPDO());
+		// create a new Location and insert to into mySQL
+		$location = new Location(null, $this->VALID_storageCode, $this->VALID_description);
+		$location->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoUser = Profile::getUserByUserId($this->getPDO(), $profile->getUserId());
+		$pdoUser = Location::getLocationByLocationId($this->getPDO(), $location->getLocationId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("user"));
-		$this->assertSame($pdoUser->getLastName(), $this->VALID_lastName);
-		$this->assertSame($pdoUser->getFirstName(), $this->VALID_firstName);
-		$this->assertSame($pdoUser->getRoot(), $this->VALID_root);
-		$this->assertSame($pdoUser->getAttention(), $this->VALID_attention);
-		$this->assertSame($pdoUser->getAddressLineOne(), $this->VALID_addressLineOne);
-		$this->assertSame($pdoUser->getAddressLineTwo(), $this->VALID_addressLineTwo);
-		$this->assertSame($pdoUser->getCity(), $this->VALID_city);
-		$this->assertSame($pdoUser->getState(), $this->VALID_state);
-		$this->assertSame($pdoUser->getZipCode(), $this->VALID_zipCode);
-		$this->assertSame($pdoUser->getEmail(), $this->VALID_email);
-		$this->assertSame($pdoUser->getHash(), $this->VALID_hash);
-		$this->assertSame($pdoUser->getSalt(), $this->VALID_salt);
+		$this->assertSame($pdoUser->getStorageCode(), $this->VALID_storageCode);
+		$this->assertSame($pdoUser->getDescription(), $this->VALID_description);
 	}
 
 	/**
-	 * test inserting a User that already exists
+	 * test inserting a Location that already exists
 	 *
 	 * @expectedException PDOException
 	 **/
-	public function testInsertInvalidUser() {
-		// create a profile with a non null profileId and watch it fail
-		$user = new User(DataDesignTest::INVALID_KEY, $this->VALID_firstName, $this->VALID_lastName, $this->VALID_root,
-			$this->VALID_attention, $this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city,
-			$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_hash,
-			$this->VALID_salt);
+	public function testInsertInvalidLocation() {
+		// create a location with a non null profileId and watch it fail
+		$location = new Location(DataDesignTest::INVALID_KEY, $this->VALID_storageCode, $this->VALID_description);
 
-		$user->insert($this->getPDO());
+		$location->insert($this->getPDO());
 	}
 
 	/**
-	 * test inserting a Profile, editing it, and then updating it
+	 * test inserting a Location, editing it, and then updating it
 	 **/
-	public function testUpdateValidProfile() {
+	public function testUpdateValidLocation() {
 		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("profile");
+		$numRows = $this->getConnection()->getRowCount("location");
 
-		// create a new Profile and insert to into mySQL
-		$user = new User(null, $this->VALID_firstName, $this->VALID_lastName, $this->VALID_root,
-			$this->VALID_attention, $this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city,
-			$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_hash,
-			$this->VALID_salt);
+		// create a new Location and insert to into mySQL
+		$location = new Location(null, $this->VALID_storageCode, $this->VALID_description);
 
-		$user->insert($this->getPDO());
+		$location->insert($this->getPDO());
 
 		// edit the user and update it in mySQL
-		$user->setEmail($this->VALID_email2);
-		$user->update($this->getPDO());
+		$location->setStorageCode($this->VALID_storageCode);
+		$location->update($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoUser = User::getUserByUserId($this->getPDO(), $user->getUserId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("profile"));
-		$this->assertSame($pdoUser->getLastName(), $this->VALID_lastName);
-		$this->assertSame($pdoUser->getFirstName(), $this->VALID_firstName);
-		$this->assertSame($pdoUser->getRoot(), $this->VALID_root);
-		$this->assertSame($pdoUser->getAttention(), $this->VALID_attention);
-		$this->assertSame($pdoUser->getAddressLineOne(), $this->VALID_addressLineOne);
-		$this->assertSame($pdoUser->getAddressLineTwo(), $this->VALID_addressLineTwo);
-		$this->assertSame($pdoUser->getCity(), $this->VALID_city);
-		$this->assertSame($pdoUser->getState(), $this->VALID_state);
-		$this->assertSame($pdoUser->getZipCode(), $this->VALID_zipCode);
-		$this->assertSame($pdoUser->getEmail(), $this->VALID_email2);
-		$this->assertSame($pdoUser->getHash(), $this->VALID_hash);
-		$this->assertSame($pdoUser->getSalt(), $this->VALID_salt);
+		$pdoLocation = Location::getLocationByLocationId($this->getPDO(), $location->getLocationId());
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("location"));
+		$this->assertSame($pdoLocation->getStorageCode(), $this->VALID_storageCode);
+		$this->assertSame($pdoLocation->getDescription(), $this->VALID_description);
+
 	}
 
 	/**
-	 * test updating a User that does not exist
+	 * test updating a Locationthat does not exist
 	 *
 	 * @expectedException PDOException
 	 **/
-	public function testUpdateInvalidProfile() {
-		// create a User and try to update it without actually inserting it
-		$user = new User (null, $this->VALID_firstName, $this->VALID_lastName, $this->VALID_root,
-			$this->VALID_attention, $this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city,
-			$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_hash,
-			$this->VALID_salt);
-		$user->update($this->getPDO());
+	public function testUpdateInvalidLocation() {
+		// create a Location and try to update it without actually inserting it
+		$location = new Location (null, $this->VALID_storageCode, $this->VALID_description);
+		$location->update($this->getPDO());
 	}
 
 	/**
-	 * test creating a User and then deleting it
+	 * test creating a Location and then deleting it
 	 **/
-	public function testDeleteValidUser() {
+	public function testDeleteValidLocation() {
 		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("profile");
+		$numRows = $this->getConnection()->getRowCount("location");
 
-		// create a new User and insert to into mySQL
-		$user = new User(null, $this->VALID_firstName, $this->VALID_lastName, $this->VALID_root,
-			$this->VALID_attention, $this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city,
-			$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_hash,
-			$this->VALID_salt);
-		$user->insert($this->getPDO());
+		// create a new Location and insert to into mySQL
+		$location = new Location(null, $this->VALID_storageCode, $this->VALID_description);
+		$location->insert($this->getPDO());
 
-		// delete the User from mySQL
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("user"));
-		$user->delete($this->getPDO());
+		// delete the Location from mySQL
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("location"));
+		$location->delete($this->getPDO());
 
-		// grab the data from mySQL and enforce the User does not exist
-		$pdoUser = Profile::getUserByUserId($this->getPDO(), $user->getUserId());
-		$this->assertNull($pdoUser);
-		$this->assertSame($numRows, $this->getConnection()->getRowCount("profile"));
+		// grab the data from mySQL and enforce the Location does not exist
+		$pdoLocation = Location::getLocationByLocationId($this->getPDO(), $location->getLocationId());
+		$this->assertNull($pdoLocation);
+		$this->assertSame($numRows, $this->getConnection()->getRowCount("location"));
 	}
 
+
 	/**
-	 * test deleting a User that does not exist
+	 * test deleting a Location that does not exist
 	 *
 	 * @expectedException PDOException
 	 **/
-	public function testDeleteInvalidUser() {
-		// create a User and try to delete it without actually inserting it
-		$user = new User(null, $this->VALID_ATHANDLE, $this->VALID_EMAIL, $this->VALID_PHONE);
-		$user->delete($this->getPDO());
+	public function testDeleteInvalidLocation() {
+		// create a Location and try to delete it without actually inserting it
+		$location = new User(null, $this->VALID_storageCode, $this->VALID_description);
+		$location->delete($this->getPDO());
 	}
 
 	/**
-	 * test inserting a User and regrabbing it from mySQL
+	 * test inserting a Location and regrabbing it from mySQL
 	 **/
-	public function testGetValidUserByUserId() {
+	public function testGetValidLocationrByLocationId() {
 		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("user");
 
-		// create a new user and insert to into mySQL
-		$user = new User(null, $this->VALID_firstName, $this->VALID_lastName, $this->VALID_root,
-			$this->VALID_attention, $this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city,
-			$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_hash,
-			$this->VALID_salt);
-		$user->insert($this->getPDO());
+		// create a new location and insert to into mySQL
+		$location = new Location(null, $this->VALID_storageCode, $this->VALID_description);
+		$location->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoUser = User::getUserByUserId($this->getPDO(), $user->getUserId());
+		$pdoUser = User::getLocationByLocationId($this->getPDO(), $location->getLocationId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("user"));
-		$this->assertSame($pdoUser->getLastName(), $this->VALID_lastName);
-		$this->assertSame($pdoUser->getFirstName(), $this->VALID_firstName);
-		$this->assertSame($pdoUser->getRoot(), $this->VALID_root);
-		$this->assertSame($pdoUser->getAttention(), $this->VALID_attention);
-		$this->assertSame($pdoUser->getAddressLineOne(), $this->VALID_addressLineOne);
-		$this->assertSame($pdoUser->getAddressLineTwo(), $this->VALID_addressLineTwo);
-		$this->assertSame($pdoUser->getCity(), $this->VALID_city);
-		$this->assertSame($pdoUser->getState(), $this->VALID_state);
-		$this->assertSame($pdoUser->getZipCode(), $this->VALID_zipCode);
-		$this->assertSame($pdoUser->getEmail(), $this->VALID_email2);
-		$this->assertSame($pdoUser->getHash(), $this->VALID_hash);
-		$this->assertSame($pdoUser->getSalt(), $this->VALID_salt);
+		$this->assertSame($pdoUser->getStorageCode(), $this->VALID_storageCode);
+		$this->assertSame($pdoUser->getDescription(), $this->VALID_description);
+
 	}
 
 	/**
@@ -267,40 +157,36 @@ class UserTest extends InventoryTextTest {
 	 **/
 	public function testGetInvalidUserByUserId() {
 		// grab a user id that exceeds the maximum allowable profile id
-		$user = User::getUserByUserId($this->getPDO(), DataDesignTest::INVALID_KEY);
-		$this->assertNull($user);
+		$location = Location::getLocationByLocationId($this->getPDO(), DataDesignTest::INVALID_KEY);
+		$this->assertNull($location);
 	}
 
 	/**
-	 * test grabbing a User by email
+	 * test grabbing a location by storageCode
 	 **/
-	public function testGetValidUserByEmail() {
+	public function testGetValidUserByStorageCode() {
 		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("user");
+		$numRows = $this->getConnection()->getRowCount("location");
 
-		// create a new User and insert to into mySQL
-		$user = new User(null, $this->VALID_firstName, $this->VALID_lastName, $this->VALID_root,
-			$this->VALID_attention, $this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city,
-			$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_hash,
-			$this->VALID_salt);
-		$user->insert($this->getPDO());
+		// create a new Location and insert to into mySQL
+		$location = new Location(null, $this->VALID_storageCode, $this->VALID_description);
+		$location->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoUser = User::getUserByEmail($this->getPDO(), $this->VALID_email);
+		$pdoLocation = User::getLocationByStorageCode($this->getPDO(), $this->VALID_storageCode);
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("user"));
-		$this->assertSame($pdoUser->getLastName(), $this->VALID_lastName);
-		$this->assertSame($pdoUser->getFirstName(), $this->VALID_firstName);
-		$this->assertSame($pdoUser->getRoot(), $this->VALID_root);
-		$this->assertSame($pdoUser->getAttention(), $this->VALID_attention);
+		$this->assertSame($pdoLocation->getStorageCode(), $this->VALID_storageCode);
+		$this->assertSame($pdoLocation->getDescription(), $this->VALID_description);
 
 	}
 
 	/**
-	 * test grabbing a User by an email that does not exists
+	 * test grabbing a Location by an storageCode that does not exists
 	 **/
-	public function testGetInvalidUserByEmail() {
-		// grab an email that does not exist
-		$user = User::getUserByEmail($this->getPDO(), "does@not.exist");
-		$this->assertNull($user);
+	public function testGetInvalidLocationByStorageCode() {
+		// grab an storage code that does not exist
+		$location = User::getLocationByStorageCode($this->getPDO(), "does@not.exist");
+		$this->assertNull($location);
 	}
 }
+
