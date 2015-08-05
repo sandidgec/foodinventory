@@ -210,7 +210,8 @@ class ProductPermissionsTest extends InventoryTextTest {
 			/**
 			 * test grabbing a ProductPermissions by accesslevel
 			 **/
-			public function testGetValidProductPermissionsByAccessLevel() {
+			public
+			function testGetValidProductPermissionsByAccessLevel() {
 				// count the number of rows and save it for later
 				$numRows = $this->getConnection()->getRowCount("product");
 				// create a new ProductPermissions and insert to into mySQL
@@ -229,23 +230,28 @@ class ProductPermissionsTest extends InventoryTextTest {
 			/**
 			 * test grabbing a ProductPermissions by a product that does not exists
 			 **/
-			public function testGetInvalidProductPermissionsByProduct() {
+			public
+			function testGetInvalidProductPermissionsByProduct() {
 				// grab an email that does not exist
 				$product = ProductPermissions::getProductPermissionsByProduct($this->getPDO(), "does@not.exist");
 				$this->assertNull($product);
 			}
+
 			/**
 			 * test grabbing a ProductPermissions by a user that does not exists
 			 **/
-			public function testGetInvalidProductPermissionsByUser() {
+			public
+			function testGetInvalidProductPermissionsByUser() {
 				// grab an email that does not exist
 				$product = ProductPermissions::getProductPermissionsByUser($this->getPDO(), "does@not.exist");
 				$this->assertNull($product);
 			}
+
 			/**
 			 * test grabbing a ProductPermissions by a accesslevel that does not exists
 			 **/
-			public function testGetInvalidProductPermissionsByAccessLevel() {
+			public
+			function testGetInvalidProductPermissionsByAccessLevel() {
 				// grab an email that does not exist
 				$product = ProductPermissions::getProductPermissionsByAccessLevel($this->getPDO(), "does@not.exist");
 				$this->assertNull($product);
