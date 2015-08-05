@@ -213,7 +213,7 @@ class Vendor {
 		}
 
 		// create query template
-		$query = "INSERT INTO vendor(vendorId, contactName, vendorEmail, vendorName, vendorPhoneNumber)VALUES(:vendorId, :contactNameId, :vendorEmailId, :vendorNames, :vendorPhoneNumber)";
+		$query = "INSERT INTO vendor(vendorId, contactName, vendorEmail, vendorName, vendorPhoneNumber)VALUES(:vendorId, :contactName, :vendorEmail, :vendorNames, :vendorPhoneNumber)";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
