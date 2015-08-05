@@ -55,13 +55,13 @@ class ProductTest extends InventoryTextTest {
 	 * valid descriptionId to use
 	 * @var string $VALID_description
 	 **/
-	protected $VALID_description = ?????????????;
+	protected $VALID_description = ksafklsjfdsfoiekanfd;
 
 	/**
 	 * invalid description to use
 	 * @var str $INVALID_descriptionId
 	 **/
-	protected $INVALID_descriptionId = ????????????????;
+	protected $INVALID_descriptionId = kksajfsdfisdfosereoejiorjweirjewiorjaeiowfjndsjndnvnd;
 
 	/**
 	 * test inserting a valid Product and verify that the actual mySQL data matches
