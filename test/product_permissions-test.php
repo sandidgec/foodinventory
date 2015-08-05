@@ -254,6 +254,6 @@ class ProductPermissionsTest extends InventoryTextTest {
 			function testGetInvalidProductPermissionsByAccessLevel() {
 				// grab an email that does not exist
 				$product = ProductPermissions::getProductPermissionsByAccessLevel($this->getPDO(), "does@not.exist");
-				$this->assertNull($product)
+				$this->assertNull($product);
 			}
 		}
