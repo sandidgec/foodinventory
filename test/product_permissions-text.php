@@ -41,11 +41,6 @@ class ProductPermissionsTest extends InventoryTextTest {
 	 **/
 	protected $VALID_ACCESSLEVEL = "+12125551212";
 	/**
-	 * valid description to use
-	 * @var string $VALID_DESCRIPTION
-	 **/
-	protected $VALID_DESCRIPTION = "test@phpunit.de";
-	/**
 	 * test inserting a valid ProductPermissions and verify that the actual mySQL data matches
 	 **/
 	public function testInsertValidProductPermissions() {
@@ -53,17 +48,16 @@ class ProductPermissionsTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("product");
 
 		// create a new ProductPermissions and insert to into mySQL
-		$product = new ProductPermissions(null, $this->VALID_ATHANDLE, $this->VALID_PRODUCT, $this->VALID_USER, $this->VALID_ACCESSLEVEL, $this->VALID_DESCRIPTION);
+		$product = new ProductPermissions(null, $this->VALID_ATHANDLE, $this->VALID_PRODUCT, $this->VALID_USER, $this->VALID_ACCESSLEVEL);
 		$product->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoProductPermissions = ProductPermissions::getProductPermissionsByProductPermissionsId($this->getPDO(), $product->getProductPermissionsId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
 		$this->assertSame($pdoProductPermissions->getAtHandle(), $this->VALID_ATHANDLE);
-		$this->assertSame($pdoProductPermissions->getEmail(), $this->VALID_PRODUCT);
-		$this->assertSame($pdoProductPermissions->getPhone(), $this->VALID_USER);
-		$this->assertSame($pdoProductPermissions->getEmail(), $this->VALID_ACCESSLEVEL);
-		$this->assertSame($pdoProductPermissions->getPhone(), $this->VALID_DESCRIPTION);
+		$this->assertSame($pdoProductPermissions->getProduct(), $this->VALID_PRODUCT);
+		$this->assertSame($pdoProductPermissions->getUser(), $this->VALID_USER);
+		$this->assertSame($pdoProductPermissions->getAccessLevel(), $this->VALID_ACCESSLEVEL);
 	}
 
 	/**
@@ -73,7 +67,7 @@ class ProductPermissionsTest extends InventoryTextTest {
 	 **/
 	public function testInsertInvalidProductPermissions() {
 		// create a product with a non null productId and watch it fail
-		$product = new ProductPermissions(DataDesignTest::INVALID_KEY, $this->VALID_ATHANDLE, $this->VALID_PRODUCT, $this->VALID_USER, $this->VALID_ACCESSLEVEL, $this->VALID_DESCRIPTION);
+		$product = new ProductPermissions(DataDesignTest::INVALID_KEY, $this->VALID_ATHANDLE, $this->VALID_PRODUCT, $this->VALID_USER, $this->VALID_ACCESSLEVEL);
 		$product->insert($this->getPDO());
 	}
 
@@ -85,7 +79,7 @@ class ProductPermissionsTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("product");
 
 		// create a new ProductPermissions and insert to into mySQL
-		$product = new ProductPermissions(null, $this->VALID_ATHANDLE, $this->VALID_PRODUCT, $this->VALID_USER, $this->VALID_ACCESSLEVEL, $this->VALID_DESCRIPTION);
+		$product = new ProductPermissions(null, $this->VALID_ATHANDLE, $this->VALID_PRODUCT, $this->VALID_USER, $this->VALID_ACCESSLEVEL);
 		$product->insert($this->getPDO());
 
 		// edit the ProductPermissions and update it in mySQL
@@ -96,10 +90,9 @@ class ProductPermissionsTest extends InventoryTextTest {
 		$pdoProductPermissions = ProductPermissions::getProductPermissionsByProductPermissionsId($this->getPDO(), $ProductPermissions->getProductPermissionsId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
 		$this->assertSame($pdoProductPermissions->getAtHandle(), $this->VALID_ATHANDLE2);
-		$this->assertSame($pdoProductPermissions->getEmail(), $this->VALID_PRODUCT);
-		$this->assertSame($pdoProductPermissions->getPhone(), $this->VALID_USER);
-		$this->assertSame($pdoProductPermissions->getEmail(), $this->VALID_ACCESSLEVEL);
-		$this->assertSame($pdoProductPermissions->getPhone(), $this->VALID_DESCRIPTION);
+		$this->assertSame($pdoProductPermissions->getProduct(), $this->VALID_PRODUCT);
+		$this->assertSame($pdoProductPermissions->getUser(), $this->VALID_USER);
+		$this->assertSame($pdoProductPermissions->getAccessLevel(), $this->VALID_ACCESSLEVEL);
 	}
 
 	/**
@@ -109,7 +102,7 @@ class ProductPermissionsTest extends InventoryTextTest {
 	 **/
 	public function testUpdateInvalidProductPermissions() {
 		// create a ProductPermissions and try to update it without actually inserting it
-		$product = new ProductPermissions(null, $this->VALID_ATHANDLE, $this->VALID_PRODUCT, $this->VALID_USER, $this->VALID_ACCESSLEVEL, $this->VALID_DESCRIPTION);
+		$product = new ProductPermissions(null, $this->VALID_ATHANDLE, $this->VALID_PRODUCT, $this->VALID_USER, $this->VALID_ACCESSLEVEL);
 		$product->update($this->getPDO());
 	}
 
@@ -121,7 +114,7 @@ class ProductPermissionsTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("product");
 
 		// create a new ProductPermissions and insert to into mySQL
-		$product = new ProductPermissions(null, $this->VALID_ATHANDLE, $this->VALID_PRODUCT, $this->VALID_USER, $this->VALID_ACCESSLEVEL, $this->VALID_DESCRIPTION);
+		$product = new ProductPermissions(null, $this->VALID_ATHANDLE, $this->VALID_PRODUCT, $this->VALID_USER, $this->VALID_ACCESSLEVEL);
 		$product->insert($this->getPDO());
 
 		// delete the ProductPermissions from mySQL
@@ -141,7 +134,7 @@ class ProductPermissionsTest extends InventoryTextTest {
 	 **/
 	public function testDeleteInvalidProductPermissions() {
 		// create a ProductPermissions and try to delete it without actually inserting it
-		$product = new ProductPermissions(null, $this->VALID_ATHANDLE, $this->VALID_PRODUCT, $this->VALID_USER, $this->VALID_ACCESSLEVEL, $this->VALID_DESCRIPTION);
+		$product = new ProductPermissions(null, $this->VALID_ATHANDLE, $this->VALID_PRODUCT, $this->VALID_USER, $this->VALID_ACCESSLEVEL);
 		$ProductPermissions->delete($this->getPDO());
 	}
 
@@ -153,17 +146,16 @@ class ProductPermissionsTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("product");
 
 		// create a new ProductPermissions and insert to into mySQL
-		$product = new ProductPermissions(null, $this->VALID_ATHANDLE, $this->VALID_PRODUCT, $this->VALID_USER, $this->VALID_ACCESSLEVEL, $this->VALID_DESCRIPTION);
+		$product = new ProductPermissions(null, $this->VALID_ATHANDLE, $this->VALID_PRODUCT, $this->VALID_USER, $this->VALID_ACCESSLEVEL);
 		$product->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoProductPermissions = ProductPermissions::getProductPermissionsByProductPermissionsId($this->getPDO(), $product->getProductPermissionsId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
 		$this->assertSame($pdoProductPermissions->getAtHandle(), $this->VALID_ATHANDLE);
-		$this->assertSame($pdoProductPermissions->getEmail(), $this->VALID_PRODUCT);
-		$this->assertSame($pdoProductPermissions->getPhone(), $this->VALID_USER);
-		$this->assertSame($pdoProductPermissions->getEmail(), $this->VALID_ACCESSLEVEL);
-		$this->assertSame($pdoProductPermissions->getPhone(), $this->VALID_DESCRIPTION);
+		$this->assertSame($pdoProductPermissions->getProduct(), $this->VALID_PRODUCT);
+		$this->assertSame($pdoProductPermissions->getUser(), $this->VALID_USER);
+		$this->assertSame($pdoProductPermissions->getAccessLevel(), $this->VALID_ACCESSLEVEL);
 	}
 
 	/**
@@ -180,17 +172,16 @@ class ProductPermissionsTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("product");
 
 		// create a new ProductPermissions and insert to into mySQL
-		$product = new ProductPermissions(null, $this->VALID_ATHANDLE, $this->VALID_PRODUCT, $this->VALID_USER, $this->VALID_ACCESSLEVEL, $this->VALID_DESCRIPTION);
+		$product = new ProductPermissions(null, $this->VALID_ATHANDLE, $this->VALID_PRODUCT, $this->VALID_USER, $this->VALID_ACCESSLEVEL);
 		$product->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoProductPermissions = ProductPermissions::getProductPermissionsByAtHandle($this->getPDO(), $this->VALID_ATHANDLE);
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
 		$this->assertSame($pdoProductPermissions->getAtHandle(), $this->VALID_ATHANDLE);
-		$this->assertSame($pdoProductPermissions->getEmail(), $this->VALID_PRODUCT);
-		$this->assertSame($pdoProductPermissions->getPhone(), $this->VALID_USER);
-		$this->assertSame($pdoProductPermissions->getEmail(), $this->VALID_ACCESSLEVEL);
-		$this->assertSame($pdoProductPermissions->getPhone(), $this->VALID_DESCRIPTION);
+		$this->assertSame($pdoProductPermissions->getProduct(), $this->VALID_PRODUCT);
+		$this->assertSame($pdoProductPermissions->getUser(), $this->VALID_USER);
+		$this->assertSame($pdoProductPermissions->getAccessLevel(), $this->VALID_ACCESSLEVEL);
 	}
 
 	/**
@@ -222,56 +213,41 @@ class ProductPermissionsTest extends InventoryTextTest {
 			public function testGetValidProductPermissionsByAccessLevel() {
 				// count the number of rows and save it for later
 				$numRows = $this->getConnection()->getRowCount("product");
+				// create a new ProductPermissions and insert to into mySQL
+				$product = new ProductPermissions(null, $this->VALID_ATHANDLE, $this->VALID_PRODUCT, $this->VALID_USER, $this->VALID_ACCESSLEVEL);
+				$product->insert($this->getPDO());
 
-				/**
-				 * test grabbing a ProductPermissions by description
-				 **/
-				public
-				function testGetValidProductPermissionsByDescription() {
-					// count the number of rows and save it for later
-					$numRows = $this->getConnection()->getRowCount("product");
-
-					// create a new ProductPermissions and insert to into mySQL
-					$product = new ProductPermissions(null, $this->VALID_ATHANDLE, $this->VALID_PRODUCT, $this->VALID_USER, $this->VALID_ACCESSLEVEL, $this->VALID_DESCRIPTION);
-					$product->insert($this->getPDO());
-
-					// grab the data from mySQL and enforce the fields match our expectations
-					$pdoProductPermissions = ProductPermissions::getProductPermissionsByProduct($this->getPDO(), $this->VALID_USER, $this->VALID_ACCESSLEVEL, $this->VALID_DESCRIPTION);
-					$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
-					$this->assertSame($pdoProductPermissions->getAtHandle(), $this->VALID_ATHANDLE);
-					$this->assertSame($pdoProductPermissions->getEmail(), $this->VALID_PRODUCT);
-					$this->assertSame($pdoProductPermissions->getPhone(), $this->VALID_USER);
-					$this->assertSame($pdoProductPermissions->getEmail(), $this->VALID_ACCESSLEVEL);
-					$this->assertSame($pdoProductPermissions->getPhone(), $this->VALID_DESCRIPTION);
-				}
-
-				/**
-				 * test grabbing a ProductPermissions by a product that does not exists
-				 **/
-				public
-				function testGetInvalidProductPermissionsByProduct() {
-					// grab an email that does not exist
-					$product = ProductPermissions::getProductPermissionsByProduct($this->getPDO(), "does@not.exist");
-					$this->assertNull($product);
-				}
-
-				/**
-				 * test grabbing a ProductPermissions by a user that does not exists
-				 **/
-				public
-				function testGetInvalidProductPermissionsByUser() {
-					// grab an email that does not exist
-					$product = ProductPermissions::getProductPermissionsByUser($this->getPDO(), "does@not.exist");
-					$this->assertNull($product);
-				}
-
-				/**
-				 * test grabbing a ProductPermissions by a accesslevel that does not exists
-				 **/
-				public
-				function testGetInvalidProductPermissionsByAccessLevel() {
-					// grab an email that does not exist
-					$product = ProductPermissions::getProductPermissionsByAccessLevel($this->getPDO(), "does@not.exist");
-					$this->assertNull($product);
-				}
+				// grab the data from mySQL and enforce the fields match our expectations
+				$pdoProductPermissions = ProductPermissions::getProductPermissionsByProduct($this->getPDO(), $this->VALID_USER, $this->VALID_ACCESSLEVEL);
+				$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
+				$this->assertSame($pdoProductPermissions->getAtHandle(), $this->VALID_ATHANDLE);
+				$this->assertSame($pdoProductPermissions->getProduct(), $this->VALID_PRODUCT);
+				$this->assertSame($pdoProductPermissions->getUser(), $this->VALID_USER);
+				$this->assertSame($pdoProductPermissions->getAccessLevel(), $this->VALID_ACCESSLEVEL);
 			}
+
+			/**
+			 * test grabbing a ProductPermissions by a product that does not exists
+			 **/
+			public function testGetInvalidProductPermissionsByProduct() {
+				// grab an email that does not exist
+				$product = ProductPermissions::getProductPermissionsByProduct($this->getPDO(), "does@not.exist");
+				$this->assertNull($product);
+			}
+			/**
+			 * test grabbing a ProductPermissions by a user that does not exists
+			 **/
+			public function testGetInvalidProductPermissionsByUser() {
+				// grab an email that does not exist
+				$product = ProductPermissions::getProductPermissionsByUser($this->getPDO(), "does@not.exist");
+				$this->assertNull($product);
+			}
+			/**
+			 * test grabbing a ProductPermissions by a accesslevel that does not exists
+			 **/
+			public function testGetInvalidProductPermissionsByAccessLevel() {
+				// grab an email that does not exist
+				$product = ProductPermissions::getProductPermissionsByAccessLevel($this->getPDO(), "does@not.exist");
+				$this->assertNull($product);
+			}
+		}
