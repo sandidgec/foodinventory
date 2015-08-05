@@ -149,3 +149,5 @@ class ProductPermissionsTest extends InventoryTextTest {
 }
 
 
+
+
