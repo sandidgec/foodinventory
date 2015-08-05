@@ -280,14 +280,14 @@ public function getAlertid (){
 		$statement->execute($parameters);
 	}
 	/**
-	 * gets the Alert by alertId
+	 * gets the AlertLevel by alertId
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
 	 * @param int $alertId alert id to search for
 	 * @return mixed alert found or null if not found
 	 * @throws PDOException when mySQL related errors occur
 	 **/
-	public static function getAlertByAlertId(PDO &$pdo, $alertId) {
+	public static function getAlertLevelByAlertId(PDO &$pdo, $alertId) {
 		// sanitize the alertId before searching
 		$alertId = filter_var($alertId, FILTER_VALIDATE_INT);
 		if($alertId === false) {
@@ -320,16 +320,16 @@ public function getAlertid (){
 		return ($alertLevel);
 	}
 /**
-* gets the Alert by alertCode
+* gets the AlertLevel by alertCode
 *
 * @param PDO $pdo pointer to PDO connection, by reference
 * @param string $alertCode alert code to search for
 * @return SplFixedArray all alertLevels found for this AlertCode
 * @throws PDOException when mySQL related errors occur
 **/
-	public static function getAlertByAlertCode(PDO &$pdo, $alertCode) {
+	public static function getAlertLevelByAlertCode(PDO &$pdo, $alertCode) {
 		// sanitize the alertCode before searching
-		$alertCode=trim($alertCode);
+		$alertCode = trim($alertCode);
 		$alertCode = filter_var($alertCode, FILTER_SANITIZE_STRING);
 		if(empty($$alertCode) === true) {
 			throw(new PDOException("alert code is invalid"));
@@ -339,14 +339,14 @@ public function getAlertid (){
 		$statement = $pdo->prepare($query);
 
 		// bind the alert Code to the place holder in the template
-		$alertCode= "%$alertCode%";
+		$alertCode = "%$alertCode%";
 		$parameters = array("alertCode" => $alertCode);
 		$statement->execute($parameters);
 
 		// build an array of alertCodes
-		$alertLevels= new SplFixedArray($statement->rowCount());
+		$alertLevels = new SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
-		while(($row=$statement->fetch())!==false) {
+		while(($row = $statement->fetch()) !== false) {
 			try {
 				$alertLevel = new AlertLevel($row["alertId"], $row["alertCode"], $row["alertFrequency"], $row["alertLevel"], $row["alertOperator"]);
 				$alertLevels[$alertLevels->key()] = $alertLevel;
@@ -356,5 +356,6 @@ public function getAlertid (){
 				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
-		return($alertLevels);
+		return ($alertLevels);
+	}
 }
