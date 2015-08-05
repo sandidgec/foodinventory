@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Class Location
+ * The class to handle location
+ * @author Charles Sandidge sandidgec@gmail.com
+ */
+
 class Location {
 
 	/**
