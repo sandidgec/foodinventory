@@ -103,13 +103,13 @@ class MovementTest extends InventoryTextTest {
 	 * valid movementDate to use
 	 * @var DateTime $VALID_movementDate
 	 **/
-	protected $VALID_movementDate = "2015-09-26";
+	protected $VALID_movementDate = "2015-09-26 08:45:25";
 
 	/**
 	 * invalid movementDate to use
 	 * @var DateTime $INVALID_movementDate
 	 **/
-	protected $INVALID_movementDate = "2015/26/09";
+	protected $INVALID_movementDate = "2015/26/09 14:25:50";
 
 	/**
 	 * valid movementType to use
