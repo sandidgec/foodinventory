@@ -14,7 +14,7 @@ require_once(dirname(__DIR__) . "/php/classes/product-permissions.php");
  * @see Product Permissions
  * @author Marie Vigil <marie@jtdesignsolutions.com>
  **/
-class Product PermissionsTest extends InventoryTextTest {
+class ProductPermissionsTest extends InventoryTextTest {
 	/**
 	 * valid productId to use
 	 * @var int $VALID_productId
@@ -87,7 +87,7 @@ class Product PermissionsTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("product permissions");
 
 		// create a new Product Permissions and insert it into mySQL
-		$productpermissions = new ProductPermissions(null, $this->VALID_productId, $this->VALID_userId, $this->INVALID_accessLevel);
+		$productPermissions = new ProductPermissions(null, $this->VALID_productId, $this->VALID_userId, $this->INVALID_accessLevel);
 		$productPermissions->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
