@@ -136,7 +136,7 @@ class LocationTest extends InventoryTextTest {
 	/**
 	 * test inserting a Location and regrabbing it from mySQL
 	 **/
-	public function testGetValidLocationrByLocationId() {
+	public function testGetValidLocationByLocationId() {
 		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("location");
 
