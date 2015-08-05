@@ -296,7 +296,7 @@ class Notification {
 		}
 
 		// create query template
-		$query = "INSERT INTO notification(notificationId, alertId, emailStatus, notificationDateTime, notificationHandle, notificationContent)VALUES(:notificationId, :alertId, :emailId, :notificationDateTime, :notificationHandle, :notificationContent)";
+		$query = "INSERT INTO notification(notificationId, alertId, emailStatus, notificationDateTime, notificationHandle, notificationContent)VALUES(:notificationId, :alertId, :emailStatus, :notificationDateTime, :notificationHandle, :notificationContent)";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
