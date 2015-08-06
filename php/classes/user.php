@@ -55,7 +55,7 @@ class User {
 	private $state;
 	/**
 	 * ZipCode
-	 * @var int $zipCode ;
+	 * @var string $zipCode
 	 */
 	private $zipCode;
 	/**
@@ -211,7 +211,7 @@ class User {
 
 	/**
 	 * accessor for Root
-	 * @return string
+	 * @return int
 	 */
 	public function isRoot() {
 		return ($this->root);
@@ -219,16 +219,15 @@ class User {
 
 	/**
 	 * Mutator for Root
-	 * @param $newRoot
+	 * @param int $newRoot
 	 */
 	public function setRoot($newRoot) {
 		//verify Root is no more than 1 char
-		$newRoot = trim($newRoot);
-		$newRoot = filter_var($newRoot, FILTER_SANITIZE_STRING);
+		$newRoot = filter_var($newRoot, FILTER_VALIDATE_BOOLEAN);
 		if(empty($newRoot) === true) {
 			throw new InvalidArgumentException ("root invalid");
 		}
-		if(strlen($newRoot) > 1) {
+		if($newRoot > 1) {
 			throw new RangeException ("Root too long");
 	}
 		$this->root = $newRoot;
@@ -244,7 +243,9 @@ class User {
 
 	/**
 	 * Mutator for Attention
-	 * @param $newAttention
+	 * @param string $newAttention
+	 * @throws InvalidArgumentException for invalid content
+	 * @throws RangeException if longer than 64 characters
 	 */
 	public function setAttention($newAttention) {
 		//verify attention is no more than 64 varchar
@@ -269,7 +270,9 @@ class User {
 
 	/**
 	 * Mutator for Address Line One
-	 * @param $newAddressLineOne
+	 * @param string $newAddressLineOne
+	 * @throws InvalidArgumentException for invalid content
+	 * @throws RangeException if longer than 64 characters
 	 */
 	public function setAddressLineOne($newAddressLineOne) {
 		//verify address is no more than 64 varchar
@@ -293,7 +296,9 @@ class User {
 
 	/**
 	 * Mutator for Address Line Two
-	 * @param $newAddressLineTwo
+	 * @param string $newAddressLineTwo
+	 * @throws InvalidArgumentException for invalid content
+	 * @throws RangeException if longer than 64 characters
 	 */
 	public function setAddressLineTwo($newAddressLineTwo) {
 		//verify address is no more than 64 varchar
@@ -317,7 +322,9 @@ class User {
 
 	/**
 	 * Mutator for City
-	 * @param $newCity allows for no more than 64 string for city
+	 * @param string $newCity
+	 * @throws InvalidArgumentException if content is invalid
+	 * @throws RangeException if city is longer than 64 characters
 	 */
 	public function setCity($newCity) {
 		//verify city is no more than 64 varchar
@@ -341,7 +348,9 @@ class User {
 
 	/**
 	 * Mutator for State
-	 * @param $newState allows only 2 characters ex."NM"
+	 * @param string $newState
+	 * @throws InvalidArgumentException if string is invalid
+	 * @throws RangeException if string is longer than 2 characters
 	 */
 	public function setState($newState) {
 		//verify State is no more than 2 char
@@ -357,7 +366,7 @@ class User {
 
 	/**
 	 * accessor for zipCode
-	 * @return int
+	 * @return string
 	 */
 	public function getZipCode() {
 		return ($this->zipCode);
@@ -366,7 +375,8 @@ class User {
 	/**
 	 * Mutator for zipCode
 	 * @param string $newZipCode
-	 * @throws InvalidArgumentException
+	 * @throws InvalidArgumentException for invalid content
+	 * @throws RangeException if zipCode is larger than 10 characters
 	 */
 	public function setZipCode($newZipCode) {
 		//verify address is no more than 64 varchar
