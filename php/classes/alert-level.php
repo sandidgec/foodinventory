@@ -25,9 +25,9 @@ class AlertLevel {
 	private $alertFrequency;
 	/**
 	 *this is the quantity at which the user will receive an alert (set by user)
-	 * @var string $alertLevel
+	 * @var string $alertPoint
 	 **/
-	private $alertLevel;
+	private $alertPoint;
 	/**
 	 * this sets whether an notification will be sent at more or less than the alert level
 	 * @var string $alertOperator
@@ -40,18 +40,18 @@ class AlertLevel {
 	 * @param int $newAlertId id for alert level or null if unknown alert level
 	 * @param string $newAlertCode string containing data on alert type
 	 * @param string $newAlertFrequency string containing data on how ofter a user will receive an alert
-	 * @param string $newAlertLevel string containing data on the quantity at which a user will receive notification
+	 * @param float $newAlertPoint string containing data on the quantity at which a user will receive notification
 	 * @param string $newAlertOperator string containing data on whether an alert will be sent at more or less that alert level
 	 * @throws InvalidArgumentException if data types are not valid
 	 * @throws RangeException if data values are out of bounds (e.g., strings too long, negative integers)
 	 * @throws Exception if any other Exceptions are thrown
 	 **/
-	public function __construct($newAlertId, $newAlertCode, $newAlertFrequency, $newAlertLevel, $newAlertOperator=null) {
+	public function __construct($newAlertId, $newAlertCode, $newAlertFrequency, $newAlertPoint, $newAlertOperator=null) {
 		try {
 			$this->setAlertId($newAlertId);
 			$this->setAlertCode($newAlertCode);
 			$this->setAlertFrequency($newAlertFrequency);
-			$this->setAlertLevel($newAlertLevel);
+			$this->setAlertPoint($newAlertPoint);
 			$this->setAlertOperator($newAlertOperator);
 		} catch(InvalidArgumentException $invalidArgument) {
 			// rethrow the exception to the caller
@@ -64,21 +64,21 @@ class AlertLevel {
 			throw(new Exception($exception->getMessage(), 0, $exception));
 		}
 	}
-/**
- * accessor method for alert id
- *
- * @return mixed value of alert id
- **/
-public function getAlertid (){
-	return($this->alertId);
-}
-/**
- * mutator method for alert id
- *
- * @param mixed $newAlertId new value of alert id
- * @throw InvalidArgumentException if $alertId is not an integer
- * @throw RangeException if $alertId is not positive
- **/
+	/**
+	 * accessor method for alert id
+	 *
+	 * @return int value of alert id
+	 **/
+	public function getAlertId (){
+		return($this->alertId);
+	}
+	/**
+	 * mutator method for alert id
+	 *
+	 * @param int $newAlertId new value of alert id
+	 * @throw InvalidArgumentException if $alertId is not an integer
+	 * @throw RangeException if $alertId is not positive
+	 **/
 	public function setAlertId($newAlertId){
 		//base case: if the alert id is null, this is a new alert without a mySQL assigned id (yet)
 		if($newAlertId===null){
@@ -86,7 +86,7 @@ public function getAlertid (){
 			return;
 		}
 		//verify the alert id is valid
-		$newAlertId=filter_var($newAlertId, FILTER_VALIDATE_INT);
+		$newAlertId = filter_var($newAlertId, FILTER_VALIDATE_INT);
 		if($newAlertId===false){
 			throw(new InvalidArgumentException("alert id is not a valid integer"));
 		}
@@ -95,27 +95,27 @@ public function getAlertid (){
 			throw(new RangeException("alert id is not positive"));
 		}
 		//convert and store the alert id
-		$this->alertId=intval($newAlertId);
+		$this->alertId = intval($newAlertId);
 	}
-/**accessor method for alert code
- *
- * @return mixed value for alert code
- **/
+	/**accessor method for alert code
+	 *
+	 * @return mixed value for alert code
+ 	**/
 	public function getAlertCode(){
-		return($this->alertId);
+		return($this->alertCode);
 	}
-/**
- * mutator method for alert code
- *
- * @param string $newAlertCode new value of alert code
- * @throws InvalidArgumentException if $newAlertCode is not a string or insecure
- * @throws RangeException if $newAlertCode is < 2
- * @throws RangeException if $newAlertCode is >5
- **/
+	/**
+	 * mutator method for alert code
+	 *
+	 * @param string $newAlertCode new value of alert code
+	 * @throws InvalidArgumentException if $newAlertCode is not a string or insecure
+	 * @throws RangeException if $newAlertCode is < 2
+	 * @throws RangeException if $newAlertCode is >5
+	 **/
 	public function setAlertCode ($newAlertCode){
-		//varify the alert code is secure
-		$newAlertCode=trim($newAlertCode);
-		$newAlertCode=filter_var($newAlertCode, FILTER_SANITIZE_STRING);
+		//verify the alert code is secure
+		$newAlertCode = trim($newAlertCode);
+		$newAlertCode = filter_var($newAlertCode, FILTER_SANITIZE_STRING);
 		if(empty($newAlertCode)=== true){
 			throw(new InvalidArgumentException("alert code is empty or insecure"));
 		}
@@ -127,27 +127,27 @@ public function getAlertid (){
 			throw(new RangeException("alert code is too large"));
 		}
 		//store the alert code
-		$this->alertCode=$newAlertCode;
+		$this->alertCode = $newAlertCode;
 	}
-/**
- * accessor method for alert frequency
- *
- * @return mixed value for alert frequency
- **/
+	/**
+	 * accessor method for alert frequency
+	 *
+	 * @return mixed value for alert frequency
+	 **/
 	public function getAlertFrequency(){
 		return($this->alertFrequency);
 	}
-/**
- * mutator method for alert frequency
- *
- * @param string $newAlertFrequency value of alert frequency
- * @throws InvalidArgumentException if $newAlertFrequency is not a string or insecure
- * @throws RangeException if $newAlertFrequency is > 2 characters
- **/
+	/**
+	 * mutator method for alert frequency
+	 *
+	 * @param string $newAlertFrequency value of alert frequency
+	 * @throws InvalidArgumentException if $newAlertFrequency is not a string or insecure
+	 * @throws RangeException if $newAlertFrequency is > 2 characters
+	 **/
 	public function setAlertFrequency($newAlertFrequency){
 		//verify alert frequency is secure
-		$newAlertFrequency=trim($newAlertFrequency);
-		$newAlertFrequency=filter_var($newAlertFrequency. FILTER_SANITIZE_STRING);
+		$newAlertFrequency = trim($newAlertFrequency);
+		$newAlertFrequency = filter_var($newAlertFrequency, FILTER_SANITIZE_STRING);
 		if(empty($newAlertFrequency)=== true){
 			throw(new InvalidArgumentException("alert frequency is empty or insecure"));
 		}
@@ -156,65 +156,64 @@ public function getAlertid (){
 			throw(new RangeException("alert frequency is too large"));
 		}
 		//store alert frequency
-		$this->alertFrequency=$newAlertFrequency;
+		$this->alertFrequency = $newAlertFrequency;
 	}
-/**
- * accessor method for alert level
- *
- * @return string value for alert level
- **/
-	public function getAlertLevel(){
-		return($this->alertLevel);
+	/**
+	 * accessor method for alert point
+	 *
+	 * @return string value for alert point
+	 **/
+	public function getAlertPoint(){
+		return($this->alertPoint);
 	}
-/**
- * mutator method for alert level
- *
- * @param string $newAlertLevel value of alert level
- * @throws InvalidArgumentException if $newAlertLevel is not a string or insecure
- * @throws RangeException if $newAlertLevel is >2 characters
- **/
-	public function setAlertLevel($newAlertLevel) {
-		//verify alert level is secure
-		$newAlertLevel = trim($newAlertLevel);
-		$newAlertLevel = filter_var($newAlertLevel, FILTER_SANITIZE_STRING);
-		if(empty($newAlertLevel) === true) {
-			throw(new InvalidArgumentException("alert level is empty or insecure"));
+	/**
+	 * mutator method for alert Point
+	 *
+	 * @param float $newAlertPoint value of alert Point
+	 * @throws InvalidArgumentException if $newAlertPoint is not a valid float
+	 * @throws RangeException if $newAlertPoint is not positive
+	 **/
+	public function setAlertPoint($newAlertPoint) {
+		//verify alert point is valid
+		$newAlertPoint = filter_var($newAlertPoint, FILTER_VALIDATE_FLOAT);
+		if($newAlertPoint === false) {
+			throw(new InvalidArgumentException("alert point is not a valid float"));
 		}
-		//verify alert level will fit into database
-		if(strlen($newAlertLevel) > 2) {
-			throw(new RangeException("alert level is too large"));
+		//verify alert point is valid
+		if($newAlertPoint <= 0) {
+			throw(new RangeException("alert point is not positive"));
 		}
-		//store alert level
-		$this->alertLevel = $newAlertLevel;
+		//convert store alert point
+		$this->alertPoint = floatval($newAlertPoint);
 	}
-/**
- * accessor method for alert operator
- *
- * @return string value for alert operator
- **/
+	/**
+	 * accessor method for alert operator
+	 *
+	 * @return string value for alert operator
+	 **/
 	public function getAlertOperator() {
 		return ($this->alertOperator);
 	}
-/**
- * mutator method for alert operator
- *
- * @param string $newAlertOperator value of alert operator
- * @return InvalidArgumentException if $newAlertOperator is not a string or insecure
- * @return RangeException if @newAlertOperator is >10 characters
- **/
+	/**
+	 * mutator method for alert operator
+	 *
+	 * @param string $newAlertOperator value of alert operator
+	 * @return InvalidArgumentException if $newAlertOperator is not a string or insecure
+	 * @return RangeException if $newAlertOperator is >10 characters
+	 **/
 	public function setAlertOperator($newAlertOperator){
-		//verify alert opertator is secure
-		$newAlertOperator=trim($newAlertOperator);
-		$newAlertOperator=filter_var($newAlertOperator, FILTER_SANITIZE_STRING);
+		//verify alert operator is secure
+		$newAlertOperator = trim($newAlertOperator);
+		$newAlertOperator = filter_var($newAlertOperator, FILTER_SANITIZE_STRING);
 		if(empty($newAlertOperator)=== true){
 			throw(new InvalidArgumentException("alert operator is empty or insecure"));
 		}
 		//verify alert operator will fit into database
-		if(strlen($newAlertOperator)>10){
+		if(strlen($newAlertOperator) > 10){
 			throw(new RangeException("alert level is too large"));
 		}
 		//store alert operator
-		$this->alertLevel=$newAlertOperator;
+		$this->alertOperator = $newAlertOperator;
 	}
 /**
 * * inserts this AlertLevel into mySQL
@@ -229,11 +228,11 @@ public function getAlertid (){
 		}
 
 		// create query template
-		$query = "INSERT INTO alertLevel(alertId, alertCode, alertFrequency, alertLevel, alertOperator)VALUES(:alertId, :alertCode, :alertFrequency, :alertLevel, :alertOperator)";
+		$query = "INSERT INTO alertLevel(alertId, alertCode, alertFrequency, alertPoint, alertOperator)VALUES(:alertId, :alertCode, :alertFrequency, :alertPoint, :alertOperator)";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
-		$parameters = array("alertId" => $this->alertId, "alertCode" => $this->alertCode, "alertFrequency" => $this->alertFrequency, "alertLevel" => $this->alertLevel, "alertOperator" => $this->alertOperator);
+		$parameters = array("alertId" => $this->alertId, "alertCode" => $this->alertCode, "alertFrequency" => $this->alertFrequency, "alertPoint" => $this->alertPoint, "alertOperator" => $this->alertOperator);
 		$statement->execute($parameters);
 
 		// update the null alertId with what mySQL just gave us
@@ -246,7 +245,7 @@ public function getAlertid (){
 	 * @throws PDOException when mySQL related errors occur
 	 **/
 	public function delete(PDO &$pdo) {
-		// enforce the alertId is not null (i.e., don't delete an alertlevel that hasn't been inserted)
+		// enforce the alertId is not null (i.e., don't delete an alertLevel that hasn't been inserted)
 		if($this->alertId === null) {
 			throw(new PDOException("unable to delete a alertLevel that does not exist"));
 		}
@@ -272,11 +271,11 @@ public function getAlertid (){
 		}
 
 		// create query template
-		$query	 = "UPDATE AlertLevel SET alertCode = :alertCode, alertFrequency = :alertFrequency, alertLevel = :alertLevel, alertOperator = :alertOperator WHERE alertId = :alertId";
+		$query	 = "UPDATE alertLevel SET alertCode = :alertCode, alertFrequency = :alertFrequency, alertPoint= :alertPoint, alertOperator = :alertOperator WHERE alertId = :alertId";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
-		$parameters = array("alertCode" => $this->alertCode, "alertFrequency" => $this->alertFrequency,"alertLevel" => $this-> alertLevel, "alertOperator" => $this->alertOperator, "alertId" => $this->alertId);
+		$parameters = array("alertCode" => $this->alertCode, "alertFrequency" => $this->alertFrequency,"alertPoint" => $this->alertPoint, "alertOperator" => $this->alertOperator, "alertId" => $this->alertId);
 		$statement->execute($parameters);
 	}
 	/**
@@ -298,20 +297,20 @@ public function getAlertid (){
 		}
 
 		// create query template
-		$query = "SELECT alertId, alertCode, alertFrequency, alertLevel, alertOperator FROM alertLevel WHERE alertId = :alertId";
+		$query = "SELECT alertId, alertCode, alertFrequency, alertPoint, alertOperator FROM alertLevel WHERE alertId = :alertId";
 		$statement = $pdo->prepare($query);
 
 		// bind the alert id to the place holder in the template
 		$parameters = array("alertId" => $alertId);
 		$statement->execute($parameters);
 
-		// grab the notification from mySQL
+		// grab the alertLevel from mySQL
 		try {
 			$alertLevel = null;
 			$statement->setFetchMode(PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false) {
-				$alertLevel = new alertLevel($row["alertId"], $row["alertCode"], $row["alertFrequency"], $row["alertLevel"], $row["alertOperator"]);
+				$alertLevel = new alertLevel($row["alertId"], $row["alertCode"], $row["alertFrequency"], $row["alertPoint"], $row["alertOperator"]);
 			}
 		} catch(Exception $exception) {
 			// if the row couldn't be converted, rethrow it
@@ -319,28 +318,28 @@ public function getAlertid (){
 		}
 		return ($alertLevel);
 	}
-/**
-* gets the AlertLevel by alertCode
-*
-* @param PDO $pdo pointer to PDO connection, by reference
-* @param string $alertCode alert code to search for
-* @return SplFixedArray all alertLevels found for this AlertCode
-* @throws PDOException when mySQL related errors occur
-**/
-	public static function getAlertLevelByAlertCode(PDO &$pdo, $alertCode) {
+	/**
+	* gets the AlertLevel by alertCode
+	*
+	* @param PDO $pdo pointer to PDO connection, by reference
+	* @param string $newAlertCode alert code to search for
+	* @return SplFixedArray all alertLevels found for this AlertCode
+	* @throws PDOException when mySQL related errors occur
+	**/
+	public static function getAlertLevelByAlertCode(PDO &$pdo, $newAlertCode) {
 		// sanitize the alertCode before searching
-		$alertCode = trim($alertCode);
-		$alertCode = filter_var($alertCode, FILTER_SANITIZE_STRING);
-		if(empty($$alertCode) === true) {
+		$newAlertCode = trim($newAlertCode);
+		$newAlertCode = filter_var($newAlertCode, FILTER_SANITIZE_STRING);
+		if(empty($newAlertCode) === true) {
 			throw(new PDOException("alert code is invalid"));
 		}
 		// create query template
-		$query = "SELECT alertId, alertCode, alertFrequency, alertLevel, alertOperator FROM alertLevel WHERE alertCode LIKE :alertCode";
+		$query = "SELECT alertId, alertCode, alertFrequency, alertPoint, alertOperator FROM alertLevel WHERE alertCode LIKE :alertCode";
 		$statement = $pdo->prepare($query);
 
 		// bind the alert Code to the place holder in the template
-		$alertCode = "%$alertCode%";
-		$parameters = array("alertCode" => $alertCode);
+		$newAlertCode = "%$newAlertCode%";
+		$parameters = array("alertCode" => $newAlertCode);
 		$statement->execute($parameters);
 
 		// build an array of alertCodes
@@ -348,10 +347,10 @@ public function getAlertid (){
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$alertLevel = new AlertLevel($row["alertId"], $row["alertCode"], $row["alertFrequency"], $row["alertLevel"], $row["alertOperator"]);
+				$alertLevel = new AlertLevel($row["alertId"], $row["alertCode"], $row["alertFrequency"], $row["alertPoint"], $row["alertOperator"]);
 				$alertLevels[$alertLevels->key()] = $alertLevel;
 				$alertLevels->next();
-			} catch(Exception $exception) {
+			} catch(PDOException $exception) {
 				//if the row couldn't be converted, rethrow it
 				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
