@@ -125,26 +125,27 @@ class Product {
 	}
 
 	/**
-	 * mutator method for vendor id
+	 * mutator method for vendorId
 	 *
-	 * @param int $newVendorId new value of vendor id
-	 * @throws InvalidArgumentException if $newVendorId is not an integer or not positive
-	 * @throws RangeException if $newVendorId is not positive
+	 * @param string $newVendor new value of description
+	 * @throws InvalidArgumentException if $newVendor is not a string or insecure
+	 * @throws RangeException if $newVendor is > 128 characters
 	 **/
-	public function setVendorId($newVendorId) {
-		// verify the vendor id is valid
-		$newVendorId = filter_var($newVendorId, FILTER_VALIDATE_INT);
-		if($newVendorId === false) {
-			throw(new InvalidArgumentException("vendor id is not a valid integer"));
+	public function setVendor($newVendor) {
+		// verify the vendor is secure
+		$newVendor = trim($newVendor);
+		$newVendor = filter_var($newVendor, FILTER_SANITIZE_STRING);
+		if(empty($newVendor) === true) {
+			throw(new InvalidArgumentException("vendor is empty or insecure"));
 		}
 
-		// verify the vendor id is positive
-		if($newVendorId <= 0) {
-			throw(new RangeException("vendor id is not positive"));
+		// verify the vendor will fit in the database
+		if(strlen($newVendor) > 128) {
+			throw(new RangeException("vendor too large"));
 		}
 
-		// convert and store the vendor id
-		$this->vendorId = intval($newVendorId);
+		// store the vendor
+		$this->description = $newVendor;
 	}
 
 	/**
@@ -400,7 +401,7 @@ class Product {
 	 * @return SplFixedArray all product found for this userId
 	 * @throws PDOException when mySQL related errors occur
 	 **/
-	public static function getProductByUserId(PDO &$pdo, $newUserId) {
+	public static function getProductByUserId(PDO &$pdo, $newUserId, $userId) {
 		// sanitize the userId before searching
 		$newUserId = trim($newUserId);
 		$newUserId = filter_var($newUserId, FILTER_SANITIZE_STRING);
@@ -561,7 +562,7 @@ class Product {
 	 * @return SplFixedArray all product found for this title
 	 * @throws PDOException when mySQL related errors occur
 	 **/
-	public static function getProductByTitle(PDO &$pdo, $newTitle) {
+	public static function getProductByTitle(PDO &$pdo, $newTitle, $title) {
 		// sanitize the title before searching
 		$newTitle = trim($newTitle);
 		$newTitle = filter_var($newTitle, FILTER_SANITIZE_STRING);
@@ -582,7 +583,7 @@ class Product {
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$product = new Product($row["productId"], $row["userId"], $row["vendorId"], $row["sku"], $row["leadTime"],, $row["title"] $row["description"]);
+				$product = new Product($row["productId"], $row["userId"], $row["vendorId"], $row["sku"], $row["leadTime"], $row["title"], $row["description"]);
 				$products[$products->key()] = $product;
 				$products->next();
 			} catch(Exception $exception) {
@@ -608,7 +609,7 @@ class Product {
 	 * @return SplFixedArray all product found for this description
 	 * @throws PDOException when mySQL related errors occur
 	 **/
-	public static function getProductByDescription(PDO &$pdo, $newDescription) {
+	public static function getProductByDescription(PDO &$pdo, $newDescription, $description) {
 		// sanitize the description before searching
 		$newDescription = trim($newDescription);
 		$newDescription = filter_var($newDescription, FILTER_SANITIZE_STRING);
@@ -629,7 +630,7 @@ class Product {
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$product = new Product($row["productId"], $row["userId"], $row["vendorId"], $row["sku"], $row["leadTime"],, $row["title"] $row["description"]);
+				$product = new Product($row["productId"], $row["userId"], $row["vendorId"], $row["sku"], $row["leadTime"], $row["title"], $row["description"]);
 				$products[$products->key()] = $product;
 				$products->next();
 			} catch(Exception $exception) {
