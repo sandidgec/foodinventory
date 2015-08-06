@@ -382,7 +382,7 @@ class Product {
 			$statement->setFetchMode(PDO::FETCH_ASSOC);
 			$row   = $statement->fetch();
 			if($row !== false) {
-				$product = new Product($row["productId"], $row["vendorId"], $row["sku"], $row["leadTime"], $row["title"], $row["description"]);
+				$product = new Product($row["productId"], $row["userId"], $row["vendorId"], $row["sku"], $row["leadTime"], $row["title"], $row["description"]);
 			}
 		} catch(Exception $exception) {
 			// if the row couldn't be converted, rethrow it
@@ -400,7 +400,7 @@ class Product {
 	 * @return SplFixedArray all product found for this userId
 	 * @throws PDOException when mySQL related errors occur
 	 **/
-	public static function getProductByDescription(PDO &$pdo, $newUserId) {
+	public static function getProductByUserId(PDO &$pdo, $newUserId) {
 		// sanitize the userId before searching
 		$newUserId = trim($newUserId);
 		$newUserId = filter_var($newUserId, FILTER_SANITIZE_STRING);
@@ -413,7 +413,6 @@ class Product {
 		$statement = $pdo->prepare($query);
 
 		// bind the userId to the place holder in the template
-		$userId = "%userId%";
 		$parameters = array("userId" => $userId);
 		$statement->execute($parameters);
 
@@ -434,29 +433,27 @@ class Product {
 	}
 
 	/**
-	 * gets the product by userId
-	 * userId is a join element from productPermission class
+	 * gets the product by vendorId
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
-	 * @param int $userId content to search for
-	 * @return SplFixedArray all product found for this userId
+	 * @param int $vendorId content to search for
+	 * @return SplFixedArray all product found for this vendorId
 	 * @throws PDOException when mySQL related errors occur
 	 **/
-	public static function getProductByDescription(PDO &$pdo, $newUserId) {
-		// sanitize the userId before searching
-		$newUserId = trim($newUserId);
-		$newUserId = filter_var($newUserId, FILTER_SANITIZE_STRING);
-		if(empty($newUserId) === true) {
-			throw(new PDOException("userId is invalid"));
+	public static function getProductByVendorId(PDO &$pdo, $newVendorId) {
+		// sanitize the vendorId before searching
+		$newVendorId = trim($newVendorId);
+		$newVendorId = filter_var($newVendorId, FILTER_SANITIZE_STRING);
+		if(empty($newVendorId) === true) {
+			throw(new PDOException("vendorId is invalid"));
 		}
 
 		// create query template
 		$query	 = "SELECT productId, userId, vendorId, sku, leadTime, title, description FROM product WHERE userId LIKE :userId";
 		$statement = $pdo->prepare($query);
 
-		// bind the userId to the place holder in the template
-		$userId = "%userId%";
-		$parameters = array("userId" => $userId);
+		// bind the vendorId to the place holder in the template
+		$parameters = array("vendorId" => $vendorId);
 		$statement->execute($parameters);
 
 		// build an array of userIds
@@ -476,9 +473,125 @@ class Product {
 	}
 
 
+	/**
+	 * gets the product by sku
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int $sku content to search for
+	 * @return SplFixedArray all product found for this sku
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getProductBySku(PDO &$pdo, $newSku, $sku) {
+		// sanitize the sku before searching
+		$newSku = trim($newSku);
+		$newSku = filter_var($newSku, FILTER_SANITIZE_STRING);
+		if(empty($newSku) === true) {
+			throw(new PDOException("sku is invalid"));
+		}
 
+		// create query template
+		$query	 = "SELECT productId, userId, vendorId, sku, leadTime, title, description FROM product WHERE userId LIKE :userId";
+		$statement = $pdo->prepare($query);
 
+		// bind the sku to the place holder in the template
+		$parameters = array("sku" => $sku);
+		$statement->execute($parameters);
 
+		// build an array of sku
+		$products = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$product = new Product($row["productId"], $row["userId"], $row["vendorId"], $row["sku"], $row["leadTime"], $row["title"], $row["description"]);
+				$products[$products->key()] = $product;
+				$products->next();
+			} catch(Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($products);
+	}
+
+	/**
+	 * gets the product by leadTime
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int $leadTime content to search for
+	 * @return SplFixedArray all product found for this leadTime
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getProductByLeadTIme(PDO &$pdo, $newLeadTIme, $leadTime) {
+		// sanitize the leadTime before searching
+		$newleadTime = trim($newLeadTIme);
+		$newLeadTIme = filter_var($newLeadTIme, FILTER_SANITIZE_STRING);
+		if(empty($newLeadTIme) === true) {
+			throw(new PDOException("leadTIme is invalid"));
+		}
+
+		// create query template
+		$query	 = "SELECT productId, userId, vendorId, sku, leadTime, title, description FROM product WHERE userId LIKE :userId";
+		$statement = $pdo->prepare($query);
+
+		// bind the sku to the place holder in the template
+		$parameters = array("leadTime" => $leadTime);
+		$statement->execute($parameters);
+
+		// build an array of leadTime
+		$products = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$product = new Product($row["productId"], $row["userId"], $row["vendorId"], $row["sku"], $row["leadTime"], $row["title"], $row["description"]);
+				$products[$products->key()] = $product;
+				$products->next();
+			} catch(Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($products);
+	}
+
+	/**
+	 * gets the product by title
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param string $title product content to search for
+	 * @return SplFixedArray all product found for this title
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getProductByTitle(PDO &$pdo, $newTitle) {
+		// sanitize the title before searching
+		$newTitle = trim($newTitle);
+		$newTitle = filter_var($newTitle, FILTER_SANITIZE_STRING);
+		if(empty($newTitle) === true) {
+			throw(new PDOException("title is invalid"));
+		}
+
+		// create query template
+		$query	 = "SELECT productId, userId, vendorId, sku, leadTime, title, description FROM product WHERE description LIKE :description";
+		$statement = $pdo->prepare($query);
+
+		// bind the product description to the place holder in the template
+		$parameters = array("title" => $title);
+		$statement->execute($parameters);
+
+		// build an array of products
+		$products = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$product = new Product($row["productId"], $row["userId"], $row["vendorId"], $row["sku"], $row["leadTime"],, $row["title"] $row["description"]);
+				$products[$products->key()] = $product;
+				$products->next();
+			} catch(Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($products);
+	}
 
 
 
@@ -504,11 +617,10 @@ class Product {
 		}
 
 		// create query template
-		$query	 = "SELECT productId, vendorId, sku, leadTime, title, description FROM product WHERE description LIKE :description";
+		$query	 = "SELECT productId, userId, vendorId, sku, leadTime, title, description FROM product WHERE description LIKE :description";
 		$statement = $pdo->prepare($query);
 
 		// bind the product description to the place holder in the template
-		$description = "%$description%";
 		$parameters = array("description" => $description);
 		$statement->execute($parameters);
 
@@ -517,7 +629,7 @@ class Product {
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$product = new Product($row["productId"], $row["vendorId"], $row["sku"], $row["leadTime"],, $row["title"] $row["description"]);
+				$product = new Product($row["productId"], $row["userId"], $row["vendorId"], $row["sku"], $row["leadTime"],, $row["title"] $row["description"]);
 				$products[$products->key()] = $product;
 				$products->next();
 			} catch(Exception $exception) {
@@ -527,17 +639,6 @@ class Product {
 		}
 		return($products);
 	}
-
-
-
-
-
-
-
-
-
-
-
 }
 
 ?>
