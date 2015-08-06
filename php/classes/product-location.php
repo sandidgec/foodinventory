@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The productLocation class for InventoryMessage
+ * The productLocation class for Inventory
  *
  * This class will attach a location to each individual product
  * multi-line
@@ -28,7 +28,7 @@ class productLocation {
 	private $unitId;
 
 	/**
-	 * number of products at the location
+	 * number of that products at the location
 	 * @var float $quantity
 	 **/
 	private $quantity;
@@ -179,7 +179,7 @@ class productLocation {
 	 */
 	public function setQuantity($newQuantity) {
 		// verify the quantity is valid
-		$newQuantity = filter_var($newQuantity, FILTER_VALIDATE_FLOAT);
+		$newQuantity = filter_var($newQuantity, FILTER_VALIDATE_FLOAT, FILTER_FLAG_ALLOW_THOUSAND);
 		if($newQuantity === false) {
 			throw(new InvalidArgumentException("quantity is not a valid float"));
 		}
@@ -194,7 +194,7 @@ class productLocation {
 	}
 
 	/**
-	 * inserts this productLocation into mySQL
+	 * inserts this ProductLocation into mySQL
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
 	 * @throws PDOException when mySQL related errors occur
@@ -211,12 +211,58 @@ class productLocation {
 	}
 
 	/**
-	 * deletes this productLocation from mySQL
+	 * updates this ProductLocation in mySQL
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public function update(PDO &$pdo) {
+		// enforce the locationId is not null (i.e., don't update a location that hasn't been inserted)
+		if($this->locationId === null) {
+			throw(new PDOException("unable to update a location that does not exist"));
+		}
+
+		// enforce the productId is not null (i.e., don't update a product that hasn't been inserted)
+		if($this->productId === null) {
+			throw(new PDOException("unable to update a profile that does not exist"));
+		}
+
+		// enforce the unitId is not null (i.e., don't update a unit that hasn't been inserted)
+		if($this->unitId === null) {
+			throw(new PDOException("unable to update a unit that does not exist"));
+		}
+
+		// create query template
+		$query = "UPDATE productLocation SET quantity = :quantity WHERE locationId = :locationId AND productId = :productId AND unitId = :unitId";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holders in the template
+		$parameters = array("locationId" => $this->locationId, "productId" => $this->productId, "unitId" => $this->unitId, "quantity" => $this->quantity);
+		$statement->execute($parameters);
+	}
+
+	/**
+	 * deletes this ProductLocation from mySQL
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
 	 * @throws PDOException when mySQL related errors occur
 	 **/
 	public function delete(PDO &$pdo) {
+		// enforce the locationId is not null (i.e., don't delete a location that hasn't been inserted)
+		if($this->locationId === null) {
+			throw(new PDOException("unable to delete a location that does not exist"));
+		}
+
+		// enforce the productId is not null (i.e., don't delete a product that hasn't been inserted)
+		if($this->productId === null) {
+			throw(new PDOException("unable to delete a profile that does not exist"));
+		}
+
+		// enforce the unitId is not null (i.e., don't delete a unit that hasn't been inserted)
+		if($this->unitId === null) {
+			throw(new PDOException("unable to delete a unit that does not exist"));
+		}
+
 		// create query template
 		$query = "DELETE FROM productLocation WHERE locationId = :locationId AND productId = :productId AND unitId = :unitId";
 		$statement = $pdo->prepare($query);
@@ -227,30 +273,24 @@ class productLocation {
 	}
 
 	/**
-	 * updates this productLocation in mySQL
+	 * gets the ProductLocation by locationId & productId
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int $newLocationId the locationId to search for
+	 * @param int $newProductId the ProductId to search for
+	 * @return mixed ProductLocation(s) found or null if not found
 	 * @throws PDOException when mySQL related errors occur
 	 **/
-	public function update(PDO &$pdo) {
-		// create query template
-		$query = "UPDATE productLocation SET quantity = :quantity WHERE locationId = :locationId AND productId = :productId AND unitId = :unitId";
-		$statement = $pdo->prepare($query);
+	public static function getProductLocationByLocationIdAndProductId(PDO &$pdo, $newLocationId, $newProductId) {
+		// sanitize the locationId before searching
+		$newLocationId = filter_var($newLocationId, FILTER_VALIDATE_INT);
+		if($newLocationId === false) {
+			throw(new PDOException("locationId is not an integer"));
+		}
+		if($newLocationId <= 0) {
+			throw(new PDOException("locationId is not positive"));
+		}
 
-		// bind the member variables to the place holders in the template
-		$parameters = array("locationId" => $this->locationId, "productId" => $this->productId, "unitId" => $this->unitId);
-		$statement->execute($parameters);
-	}
-
-	/**
-	 * gets the productLocation by ????
-	 *
-	 * @param PDO $pdo pointer to PDO connection, by reference
-	 * @param int $newProductLocationId the movementId to search for
-	 * @return mixed Movement found or null if not found
-	 * @throws PDOException when mySQL related errors occur
-	 **/
-	public static function getProductLocationBy(PDO &$pdo, $newProductId) {
 		// sanitize the productId before searching
 		$newProductId = filter_var($newProductId, FILTER_VALIDATE_INT);
 		if($newProductId === false) {
@@ -261,30 +301,115 @@ class productLocation {
 		}
 
 		// create query template
-		$query	 = "SELECT locationId, productId, unitId, FROM productLocation WHERE productId = :productId" ;
+		$query	 = "SELECT locationId, productId, unitId, quantity FROM productLocation WHERE locationId = :locationId AND productId = :productId";
+		$statement = $pdo->prepare($query);
+
+		// bind the locationId and the productId to the place holder in the template
+		$parameters = array("locationId" => $newLocationId, "productId" => $newProductId);
+		$statement->execute($parameters);
+
+		// build an array of productLocations
+		$productLocations = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$productLocation = new ProductLocation($row["locationId"], $row["productId"], $row["unitId"], $row["quantity"]);
+				$productLocations[$productLocations->key()] = $productLocation;
+				$productLocations->next();
+			} catch(Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($productLocations);
+	}
+
+	/**
+	 * gets the ProductLocation by locationId
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int $newLocationId the locationId to search for
+	 * @return mixed ProductLocation(s) found or null if not found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getProductLocationByLocationId(PDO &$pdo, $newLocationId) {
+		// sanitize the locationId before searching
+		$newLocationId = filter_var($newLocationId, FILTER_VALIDATE_INT);
+		if($newLocationId === false) {
+			throw(new PDOException("locationId is not an integer"));
+		}
+		if($newLocationId <= 0) {
+			throw(new PDOException("locationId is not positive"));
+		}
+
+		// create query template
+		$query	 = "SELECT locationId, productId, unitId, quantity FROM productLocation WHERE locationId = :locationId";
+		$statement = $pdo->prepare($query);
+
+		// bind the userId to the place holder in the template
+		$parameters = array("locationId" => $newLocationId);
+		$statement->execute($parameters);
+
+		// build an array of productLocations
+		$productLocations = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$productLocation = new ProductLocation($row["locationId"], $row["productId"], $row["unitId"], $row["quantity"]);
+				$productLocations[$productLocations->key()] = $productLocation;
+				$productLocations->next();
+			} catch(Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($productLocations);
+	}
+
+	/**
+	 * gets the ProductLocation by productId
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int $newProductId the productId to search for
+	 * @return mixed ProductLocation(s) found or null if not found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getProductLocationByProductId(PDO &$pdo, $newProductId) {
+		// sanitize the productId before searching
+		$newProductId = filter_var($newProductId, FILTER_VALIDATE_INT);
+		if($newProductId === false) {
+			throw(new PDOException("productId is not an integer"));
+		}
+		if($newProductId <= 0) {
+			throw(new PDOException("productId is not positive"));
+		}
+
+		// create query template
+		$query	 = "SELECT locationId, productId, unitId, quantity FROM productLocation WHERE productId = :productId";
 		$statement = $pdo->prepare($query);
 
 		// bind the productId to the place holder in the template
 		$parameters = array("productId" => $newProductId);
 		$statement->execute($parameters);
 
-		// grab the productLocation(s) from mySQL
-		try {
-			$productLocation = null;
-			$statement->setFetchMode(PDO::FETCH_ASSOC);
-			$row   = $statement->fetch();
-			if($row !== false) {
-				$productLocation = new ProductLocation($row["locationId"], $row["productId"], $row["unitId"]);
+		// build an array of productLocations
+		$productLocations = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$productLocation = new ProductLocation($row["locationId"], $row["productId"], $row["unitId"], $row["quantity"]);
+				$productLocations[$productLocations->key()] = $productLocation;
+				$productLocations->next();
+			} catch(Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
-		} catch(Exception $exception) {
-			// if the row couldn't be converted, rethrow it
-			throw(new PDOException($exception->getMessage(), 0, $exception));
 		}
-		return($productLocation);
+		return($productLocations);
 	}
 
 	/**
-	 * gets all productLocations
+	 * gets all ProductLocations
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
 	 * @return SplFixedArray all productLocations found
