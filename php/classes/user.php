@@ -25,7 +25,7 @@ class User {
 	private $firstName;
 	/**
 	 * root user level
-	 * @var string $root
+	 * @var bool $root
 	 */
 	private $root;
 	/**
@@ -141,7 +141,8 @@ class User {
 
 	/**
 	 * mutator for the userId
-	 * @param $newUserId
+	 * @param int $newUserId
+	 * @throws InvalidArgumentException for invalid content
 	 */
 
 	public function setUserId($newUserId) {
@@ -179,7 +180,7 @@ class User {
 			throw new InvalidArgumentException("last name invalid");
 		}
 		if(strlen($newLastName) > 32) {
-			throw new RangeException("Last Name content too large");
+			throw (new RangeException("Last Name content too large"));
 		}
 		$this->lastName = $newLastName;
 	}
@@ -204,32 +205,30 @@ class User {
 			throw new InvalidArgumentException("first name invalid");
 		}
 		if(strlen($newFirstName) > 32) {
-			throw new RangeException ("First Name content too large");
+			throw (new RangeException ("First Name content too large"));
 		}
 		$this->firstName = $newFirstName;
 	}
 
 	/**
 	 * accessor for Root
-	 * @return int
+	 * @return bool
 	 */
 	public function isRoot() {
 		return ($this->root);
 	}
 
 	/**
-	 * Mutator for Root
-	 * @param int $newRoot
+	 * Mutator for Root to insure boolean success
+	 * @param bool $newRoot
+	 * @throws InvalidArgumentException if root boolean fails
 	 */
 	public function setRoot($newRoot) {
 		//verify Root is no more than 1 char
-		$newRoot = filter_var($newRoot, FILTER_VALIDATE_BOOLEAN);
-		if(empty($newRoot) === true) {
-			throw new InvalidArgumentException ("root invalid");
+		$newRoot = filter_var($newRoot, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+		if ($newRoot === null) {
+			throw (new InvalidArgumentException ("root invalid"));
 		}
-		if($newRoot > 1) {
-			throw new RangeException ("Root too long");
-	}
 		$this->root = $newRoot;
 	}
 
@@ -255,7 +254,7 @@ class User {
 			throw new InvalidArgumentException ("attention invalid");
 		}
 		if(strlen($newAttention) > 64) {
-			throw new RangeException ("Address Line One too Long");
+			throw (new RangeException ("Address Line One too Long"));
 		}
 		$this->attention = $newAttention;
 	}
@@ -281,7 +280,7 @@ class User {
 			throw new InvalidArgumentException ("address line one invalid");
 		}
 		if(strlen($newAddressLineOne) > 64) {
-			throw new RangeException ("Address Line One too Long");
+			throw (new RangeException ("Address Line One too Long"));
 		}
 		$this->addressLineOne = $newAddressLineOne;
 	}
@@ -307,7 +306,7 @@ class User {
 			throw new InvalidArgumentException ("address line two invalid");
 		}
 		if(strlen($newAddressLineTwo) > 64) {
-			throw new RangeException ("Address Line Two too Long");
+			throw (new RangeException ("Address Line Two too Long"));
 		}
 		$this->addressLineTwo = $newAddressLineTwo;
 	}
@@ -333,7 +332,7 @@ class User {
 			throw new InvalidArgumentException ("city invalid");
 		}
 		if(strlen($newCity) > 64) {
-			throw new RangeException ("City too Long");
+			throw (new RangeException ("City too Long"));
 		}
 		$this->city = $newCity;
 	}
@@ -359,7 +358,7 @@ class User {
 			throw new InvalidArgumentException ("state invalid");
 		}
 		if(strlen($newState) !== 2) {
-			throw new RangeException ("Invalid State Entry");
+			throw (new RangeException ("Invalid State Entry"));
 		}
 		$this->state = $newState;
 	}
@@ -385,7 +384,7 @@ class User {
 			throw new InvalidArgumentException ("zipCode invalid");
 		}
 		if(strlen($newZipCode) > 10) {
-			throw new RangeException ("ZipCode too Long");
+			throw (new RangeException ("ZipCode too Long"));
 		}
 		$this->zipCode = $newZipCode;
 	}
@@ -411,7 +410,7 @@ class User {
 			throw new InvalidArgumentException ("user email invalid");
 		}
 		if(strlen($newEmail) > 64) {
-			throw new RangeException ("Email content too large");
+			throw(new RangeException ("Email content too large"));
 		}
 		$this->email = $newEmail;
 	}
@@ -436,7 +435,7 @@ class User {
 			throw new InvalidArgumentException ("phoneNumber invalid");
 		}
 		if(strlen($newPhoneNumber) > 10) {
-			throw new RangeException ("Phone Number should be formatted 5055558787");
+			throw (new RangeException ("Phone Number should be formatted 5055558787"));
 		}
 		$this->phoneNumber = $newPhoneNumber;
 	}
@@ -463,7 +462,7 @@ class User {
 				throw new InvalidArgumentException ("salt invalid");
 			}
 			if(strlen($newSalt) !== 64) {
-				throw new RangeException ("salt not valid");
+				throw new (RangeException ("salt not valid"));
 			}
 		}
 		$this->salt = $newSalt;
