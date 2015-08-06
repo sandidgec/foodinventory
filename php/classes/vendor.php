@@ -34,7 +34,7 @@ class Vendor {
 	 **/
 	private $vendorPhoneNumber;
 	/**
-	 * constructor for this Notification
+	 * constructor for this Vendor
 	 *
 	 * @param int $newVendorId id of this vendor or null if unknown vendor
 	 * @param int $newContactName name of contact/salesperson for vendor
@@ -45,7 +45,7 @@ class Vendor {
 	 * @throws RangeException if data values are out of bounds (e.g., strings too long, negative integers)
 	 * @throws Exception if some other exception is thrown
 	 **/
-	public function __construct($newVendorId, $newContactName, $newVendorEmail, $newVendorName, $newVendorPhoneNumber = null) {
+	public function __construct($newVendorId, $newContactName, $newVendorEmail, $newVendorName, $newVendorPhoneNumber) {
 		try {
 			$this->setVendorId($newVendorId);
 			$this->setContactName($newContactName);
@@ -112,9 +112,9 @@ class Vendor {
 	 * @throws RangeException if $newContactName is > 64 characters
 	 **/
 	public function setContactName($newContactName){
-		//verify the contact name is secur
-		$newContactName=trim($newContactName);
-		$newContactName=filter_var($newContactName, FILTER_SANITIZE_STRING);
+		//verify the contact name is secure
+		$newContactName = trim($newContactName);
+		$newContactName = filter_var($newContactName, FILTER_SANITIZE_STRING);
 		if(empty($newContactName)===true){
 			throw(new InvalidArgumentException("contact names is empty or insecure"));
 		}
@@ -123,7 +123,7 @@ class Vendor {
 			throw(new RangeException("contact name is too large"));
 		}
 		//store the contact name
-		$this->contactName=$newContactName;
+		$this->contactName = $newContactName;
 	}
 	/**
 	 * accessor method for vendor email
@@ -165,8 +165,8 @@ class Vendor {
 	**/
 	public Function setVendorName($newVendorName){
 		//verify the vendor name is secure
-		$newVendorName=trim($newVendorName);
-		$newVendorName=filter_var($newVendorName, FILTER_SANITIZE_STRING);
+		$newVendorName = trim($newVendorName);
+		$newVendorName = filter_var($newVendorName, FILTER_SANITIZE_STRING);
 		if(empty($newVendorName)===true){
 			throw(new InvalidArgumentException("vendor name is empty or insecure"));
 		}
@@ -179,9 +179,9 @@ class Vendor {
 	}
 	/**
 	* accessor method for vendor phone number
-	 * @return int value for vendor phone mumber
+	 * @return int value for vendor phone number
 	 **/
-	public function getVendorPhoneNummber(){
+	public function getVendorPhoneNumber(){
 		return($this->vendorPhoneNumber);
 	}
 	/**
@@ -192,13 +192,13 @@ class Vendor {
 	 **/
 	public function setVendorPhoneNumber($newVendorPhoneNumber){
 		//verify vendor phone number is valid and digits only
-		if((ctype_digit($newVendorPhoneNumber))===false){
+		if((ctype_digit($newVendorPhoneNumber)) === false){
 			throw(new InvalidArgumentException("vendor phone number is invalid"));
 		}
 		if(strlen($newVendorPhoneNumber)>10){
 			throw(new RangeException("vendor phone number is formatted 5555555555"));
 		}
-		$this->vendorPhoneNumber=$newVendorPhoneNumber;
+		$this->vendorPhoneNumber = $newVendorPhoneNumber;
 	}
 	/**
 	 * * inserts this Vendor into mySQL
@@ -213,7 +213,7 @@ class Vendor {
 		}
 
 		// create query template
-		$query = "INSERT INTO vendor(vendorId, contactName, vendorEmail, vendorName, vendorPhoneNumber)VALUES(:vendorId, :contactName, :vendorEmail, :vendorNames, :vendorPhoneNumber)";
+		$query = "INSERT INTO vendor(vendorId, contactName, vendorEmail, vendorName, vendorPhoneNumber)VALUES(:vendorId, :contactName, :vendorEmail, :vendorName, :vendorPhoneNumber)";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
@@ -261,7 +261,7 @@ class Vendor {
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
-		$parameters = array("contactName" => $this->contactName, "vendorEmail" => $this->vendorEmail,"vendorName" => $this-> vendorName, "vendorPhoneName" => $this-> vendorPhoneNumber, "vendorId" => $this->vendorId);
+		$parameters = array("contactName" => $this->contactName, "vendorEmail" => $this->vendorEmail,"vendorName" => $this-> vendorName, "vendorPhoneNumber" => $this-> vendorPhoneNumber, "vendorId" => $this->vendorId);
 		$statement->execute($parameters);
 	}
 	/**
@@ -269,7 +269,7 @@ class Vendor {
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
 	 * @param int $vendorId vendor id to search for
-	 * @return mixed Tweet found or null if not found
+	 * @return mixed vendor found or null if not found
 	 * @throws PDOException when mySQL related errors occur
 	 **/
 	public static function getVendorByVendorId(PDO &$pdo, $vendorId) {
@@ -283,7 +283,7 @@ class Vendor {
 		}
 
 		// create query template
-		$query	 = "SELECT contactName, vendorEmail, vendorNames, vendorPhoneNumber FROM vendor WHERE vendorId = :vendorId";
+		$query	 = "SELECT vendorId, contactName, vendorEmail, vendorName, vendorPhoneNumber FROM vendor WHERE vendorId = :vendorId";
 		$statement = $pdo->prepare($query);
 
 		// bind the vendor id to the place holder in the template
@@ -315,13 +315,13 @@ class Vendor {
 	public static function getVendorByVendorEmail(PDO &$pdo, $vendorEmail) {
 		// sanitize the description before searching
 		$vendorEmail = trim($vendorEmail);
-		$vendorEmail = filter_var($vendorEmail, FILTER_SANITIZE_STRING);
+		$vendorEmail = filter_var($vendorEmail, FILTER_SANITIZE_EMAIL);
 		if(empty($vendorEmail) === true) {
 			throw(new PDOException("vendor email is invalid"));
 		}
 
 		// create query template
-		$query	 = "SELECT vendorId, contactName, vendorNames, vendorPhoneNumber FROM vendor WHERE vendorEmail = :vendorEmail";
+		$query = "SELECT vendorId, contactName, vendorEmail, vendorName, vendorPhoneNumber FROM vendor WHERE vendorEmail = :vendorEmail";
 		$statement = $pdo->prepare($query);
 
 		// bind the vendor email to the place holder in the template
@@ -359,11 +359,11 @@ class Vendor {
 		}
 
 		// create query template
-		$query	 = "SELECT vendorId, contactName, vendorNames, vendorPhoneNumber FROM vendor WHERE vendorName = :vendorName";
+		$query	 = "SELECT vendorId, contactName, vendorEmail, vendorName, vendorPhoneNumber FROM vendor WHERE vendorName = :vendorName";
 		$statement = $pdo->prepare($query);
 
 		// bind the vendor name to the place holder in the template
-		$parameters = array("vendorNamel" => $vendorName);
+		$parameters = array("vendorName" => $vendorName);
 		$statement->execute($parameters);
 
 		// grab the vendor from mySQL

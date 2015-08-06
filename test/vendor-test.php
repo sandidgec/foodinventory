@@ -79,12 +79,11 @@ class VendorTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("vendor");
 
 		// create a new Vendor and insert to into mySQL
-		$vendor= new Vendor (null, $this->VALID_contactName, $this->VALID_vendorEmail, $this->VALID_vendorName, $this->VALID_vendorPhoneNumber);
+		$vendor = new Vendor (null, $this->VALID_contactName, $this->VALID_vendorEmail, $this->VALID_vendorName, $this->VALID_vendorPhoneNumber);
 		$vendor->insert($this->getPDO());
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoVendor = Vendor::getVendorByVendorId($this->getPDO(), $vendor->getVendorId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("vendor"));
-		$this->assertSame($pdoVendor->getVendorId(), $this->VALID_vendorId);
 		$this->assertSame($pdoVendor->getContactName(), $this->VALID_contactName);
 		$this->assertSame($pdoVendor->getVendorEmail(), $this->VALID_vendorEmail);
 		$this->assertSame($pdoVendor->getVendorName(), $this->VALID_vendorName);
@@ -98,7 +97,7 @@ class VendorTest extends InventoryTextTest {
 	 **/
 	public function testInsertInvalidVendor() {
 		// create a vendor with a non null notificationId and watch it fail
-		$vendor = new Vendor(DataDesignTest::INVALID_KEY,$this->VALID_contactName, $this->VALID_vendorEmail, $this->VALID_vendorName, $this->VALID_vendorPhoneNumber);
+		$vendor = new Vendor(InventoryTextTest::INVALID_KEY,$this->VALID_contactName, $this->VALID_vendorEmail, $this->VALID_vendorName, $this->VALID_vendorPhoneNumber);
 		$vendor->insert($this->getPDO());
 	}
 
@@ -109,18 +108,17 @@ class VendorTest extends InventoryTextTest {
 		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("vendor");
 
-		// create a new Profile and insert to into mySQL
-		$vendor = new Vendor(null, $this->VALID_contactName, $this->VALID_vendorEmail, $this->VALID_vendorName, $this->VALID_vendorPhoneNumber);
+		// create a new vendor and insert to into mySQL
+		$vendor = new vendor(null, $this->VALID_contactName, $this->VALID_vendorEmail, $this->VALID_vendorName, $this->VALID_vendorPhoneNumber);
 		$vendor->insert($this->getPDO());
 
 		// edit the Notification and update it in mySQL
-		$vendor->set($this->VALID_contactName2);
+		$vendor->setContactName($this->VALID_contactName2);
 		$vendor->update($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoVendor = Vendor::getVendorByVendorId($this->getPDO(), $vendor->getVendorId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("vendor"));
-		$this->assertSame($pdoVendor->getVendorId(), $this->VALID_vendorId);
 		$this->assertSame($pdoVendor->getContactName(), $this->VALID_contactName2);
 		$this->assertSame($pdoVendor->getVendorEmail(), $this->VALID_vendorEmail);
 		$this->assertSame($pdoVendor->getVendorName(), $this->VALID_vendorName);
@@ -182,7 +180,6 @@ class VendorTest extends InventoryTextTest {
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoVendor = Vendor::getVendorByVendorId($this->getPDO(), $vendor->getVendorId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("vendor"));
-		$this->assertSame($pdoVendor->getVendorId(), $this->VALID_vendorId);
 		$this->assertSame($pdoVendor->getContactName(), $this->VALID_contactName);
 		$this->assertSame($pdoVendor->getVendorEmail(), $this->VALID_vendorEmail);
 		$this->assertSame($pdoVendor->getVendorName(), $this->VALID_vendorName);
@@ -194,7 +191,7 @@ class VendorTest extends InventoryTextTest {
 	 **/
 	public function testGetInvalidVendorByVendorId() {
 		// grab a vendor id that exceeds the maximum allowable vendor id
-		$vendor = Vendor::getVendorByVendorId($this->getPDO(), DataDesignTest::INVALID_KEY);
+		$vendor = Vendor::getVendorByVendorId($this->getPDO(), InventoryTextTest::INVALID_KEY);
 		$this->assertNull($vendor);
 	}
 
@@ -210,9 +207,8 @@ class VendorTest extends InventoryTextTest {
 		$vendor->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoVendor = Vendor::getVendorByVendorEmail($this->getPDO(), $vendor->getVendorId());
+		$pdoVendor = Vendor::getVendorByVendorEmail($this->getPDO(), $vendor->getVendorEmail());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("vendor"));
-		$this->assertSame($pdoVendor->getVendorId(), $this->VALID_vendorId);
 		$this->assertSame($pdoVendor->getContactName(), $this->VALID_contactName);
 		$this->assertSame($pdoVendor->getVendorEmail(), $this->VALID_vendorEmail);
 		$this->assertSame($pdoVendor->getVendorName(), $this->VALID_vendorName);
@@ -228,7 +224,7 @@ class VendorTest extends InventoryTextTest {
 		$this->assertNull($vendor);
 	}
 	/**
-	 * test grabbing a Vendor by vendor email
+	 * test grabbing a Vendor by vendor name
 	 **/
 	public function testGetValidVendorByVendorName() {
 		// count the number of rows and save it for later
@@ -239,9 +235,8 @@ class VendorTest extends InventoryTextTest {
 		$vendor->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoVendor = Vendor::getVendorByVendorName($this->getPDO(), $vendor->getVendorId());
+		$pdoVendor = Vendor::getVendorByVendorName($this->getPDO(), $vendor->getVendorName());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("vendor"));
-		$this->assertSame($pdoVendor->getVendorId(), $this->VALID_vendorId);
 		$this->assertSame($pdoVendor->getContactName(), $this->VALID_contactName);
 		$this->assertSame($pdoVendor->getVendorEmail(), $this->VALID_vendorEmail);
 		$this->assertSame($pdoVendor->getVendorName(), $this->VALID_vendorName);
