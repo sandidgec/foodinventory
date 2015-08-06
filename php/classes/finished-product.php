@@ -233,6 +233,142 @@ class finishedProduct {
 	}
 
 	/**
+	 * gets the FinishedProduct by finishedProductId & rawMaterialId
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int $newFinishedProductId the finishedProductId to search for
+	 * @param int $newRawMaterialId the rawMaterialId to search for
+	 * @return mixed FinishedProduct(s) found or null if not found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getProductLocationByLocationIdAndProductId(PDO &$pdo, $newFinishedProductId, $newRawMaterialId) {
+		// sanitize the finishedProductId before searching
+		$newFinishedProductId = filter_var($newFinishedProductId, FILTER_VALIDATE_INT);
+		if($newFinishedProductId === false) {
+			throw(new PDOException("finishedProductId is not an integer"));
+		}
+		if($newFinishedProductId <= 0) {
+			throw(new PDOException("finishedProductId is not positive"));
+		}
+
+		// sanitize the rawMaterialId before searching
+		$newRawMaterialId = filter_var($newRawMaterialId, FILTER_VALIDATE_INT);
+		if($newRawMaterialId === false) {
+			throw(new PDOException("rawMaterialId is not an integer"));
+		}
+		if($newRawMaterialId <= 0) {
+			throw(new PDOException("rawMaterialId is not positive"));
+		}
+
+		// create query template
+		$query	 = "SELECT finishedProductId, rawMaterialId, rawQuantity FROM finishedProduct WHERE finishedProductId = :finishedProductId AND rawMaterialId = :rawMaterialId";
+		$statement = $pdo->prepare($query);
+
+		// bind the finishedProductId and the rawMaterialId to the place holder in the template
+		$parameters = array("finishedProductId" => $newFinishedProductId, "rawMaterialId" => $newRawMaterialId);
+		$statement->execute($parameters);
+
+		// build an array of FinishedProducts
+		$finishedProducts = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$finishedProduct = new FinishedProduct($row["finishedProductId"], $row["rawMaterialId"], $row["rawQuantity"]);
+				$finishedProducts[$finishedProducts->key()] = $finishedProduct;
+				$finishedProducts->next();
+			} catch(Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($finishedProducts);
+	}
+
+	/**
+	 * gets the FinishedProduct by finishedProductId
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int $newFinishedProductId the finishedProductId to search for
+	 * @return mixed FinishedProduct(s) found or null if not found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getProductLocationByLocationId(PDO &$pdo, $newFinishedProductId) {
+		// sanitize the finishedProductId before searching
+		$newFinishedProductId = filter_var($newFinishedProductId, FILTER_VALIDATE_INT);
+		if($newFinishedProductId === false) {
+			throw(new PDOException("finishedProductId is not an integer"));
+		}
+		if($newFinishedProductId <= 0) {
+			throw(new PDOException("finishedProductId is not positive"));
+		}
+
+		// create query template
+		$query	 = "SELECT finishedProductId, rawMaterialId, rawQuantity FROM finishedProduct WHERE finishedProductId = :finishedProductId";
+		$statement = $pdo->prepare($query);
+
+		// bind the finishedProductId to the place holder in the template
+		$parameters = array("finishedProductId" => $newFinishedProductId);
+		$statement->execute($parameters);
+
+		// build an array of productLocations
+		$finishedProducts = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$finishedProduct = new FinishedProduct($row["finishedProductId"], $row["rawMaterialId"], $row["rawQuantity"]);
+				$finishedProducts[$finishedProducts->key()] = $finishedProduct;
+				$finishedProducts->next();
+			} catch(Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($finishedProducts);
+	}
+
+	/**
+	 * gets the FinishedProduct by rawMaterialId
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int $newRawMaterialId the rawMaterialId to search for
+	 * @return mixed FinishedProduct(s) found or null if not found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getProductLocationByProductId(PDO &$pdo, $newRawMaterialId) {
+		// sanitize the rawMaterialId before searching
+		$newRawMaterialId = filter_var($newRawMaterialId, FILTER_VALIDATE_INT);
+		if($newRawMaterialId === false) {
+			throw(new PDOException("rawMaterialId is not an integer"));
+		}
+		if($newRawMaterialId <= 0) {
+			throw(new PDOException("rawMaterialId is not positive"));
+		}
+
+		// create query template
+		$query	 = "SELECT finishedProductId, rawMaterialId, rawQuantity FROM finishedProduct WHERE rawMaterialId = :rawMaterialId";
+		$statement = $pdo->prepare($query);
+
+		// bind the rawMaterialId to the place holder in the template
+		$parameters = array("rawMaterialId" => $newRawMaterialId);
+		$statement->execute($parameters);
+
+		// build an array of FinishedProduct(s)
+		$finishedProducts = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$finishedProduct = new FinishedProduct($row["finishedProductId"], $row["rawMaterialId"], $row["rawQuantity"]);
+				$finishedProducts[$finishedProducts->key()] = $finishedProduct;
+				$finishedProducts->next();
+			} catch(Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($finishedProducts);
+	}
+
+	/**
 	 * gets all finishedProducts
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
