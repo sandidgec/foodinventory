@@ -172,7 +172,7 @@ class UserTest extends InventoryTextTest {
 
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoUser = User::getUserByUserId($this->getPDO(), $user->getUserId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("profile"));
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("user"));
 		$this->assertSame($pdoUser->getLastName(), $this->VALID_lastName);
 		$this->assertSame($pdoUser->getFirstName(), $this->VALID_firstName);
 		$this->assertSame($pdoUser->isRoot(), $this->VALID_root);
@@ -266,7 +266,7 @@ class UserTest extends InventoryTextTest {
 		$this->assertSame($pdoUser->getCity(), $this->VALID_city);
 		$this->assertSame($pdoUser->getState(), $this->VALID_state);
 		$this->assertSame($pdoUser->getZipCode(), $this->VALID_zipCode);
-		$this->assertSame($pdoUser->getEmail(), $this->VALID_email2);
+		$this->assertSame($pdoUser->getEmail(), $this->VALID_email);
 		$this->assertSame($pdoUser->getPhoneNumber(), $this->VALID_phoneNumber);
 		$this->assertSame($pdoUser->getSalt(), $this->VALID_salt);
 		$this->assertSame($pdoUser->getHash(), $this->VALID_hash);
@@ -289,7 +289,7 @@ class UserTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("user");
 
 		// create a new User and insert to into mySQL
-		$user = new User(null,  $this->VALID_lastName,$this->VALID_firstName, $this->VALID_root,
+		$user = new User(null, $this->VALID_lastName,$this->VALID_firstName, $this->VALID_root,
 			$this->VALID_attention, $this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city,
 			$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt,
 			$this->VALID_hash);
@@ -307,7 +307,7 @@ class UserTest extends InventoryTextTest {
 		$this->assertSame($pdoUser->getCity(), $this->VALID_city);
 		$this->assertSame($pdoUser->getState(), $this->VALID_state);
 		$this->assertSame($pdoUser->getZipCode(), $this->VALID_zipCode);
-		$this->assertSame($pdoUser->getEmail(), $this->VALID_email2);
+		$this->assertSame($pdoUser->getEmail(), $this->VALID_email);
 		$this->assertSame($pdoUser->getPhoneNumber(), $this->VALID_phoneNumber);
 		$this->assertSame($pdoUser->getSalt(), $this->VALID_salt);
 		$this->assertSame($pdoUser->getHash(), $this->VALID_hash);

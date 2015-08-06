@@ -223,7 +223,7 @@ class User {
 	 */
 	public function setRoot($newRoot) {
 		//verify Root is no more than 1 char
-		$newRoot =trim($newRoot);
+		$newRoot = trim($newRoot);
 		$newRoot = filter_var($newRoot, FILTER_SANITIZE_STRING);
 		if(empty($newRoot) === true) {
 			throw new InvalidArgumentException ("root invalid");
@@ -231,7 +231,6 @@ class User {
 		if(strlen($newRoot) > 1) {
 			throw new RangeException ("Root too long");
 	}
-		var_dump($newRoot);
 		$this->root = $newRoot;
 	}
 
@@ -366,7 +365,8 @@ class User {
 
 	/**
 	 * Mutator for zipCode
-	 * @param $newZipCode allow no more than 10 character string ex. 85878-8587
+	 * @param string $newZipCode
+	 * @throws InvalidArgumentException
 	 */
 	public function setZipCode($newZipCode) {
 		//verify address is no more than 64 varchar
@@ -390,7 +390,9 @@ class User {
 
 	/**
 	 * Mutator for Email
-	 * @param $newEmail  Sanitized email
+	 * @param string $newEmail
+	 * @throws InvalidArgumentException if email does not pass sanitization
+	 * @throws RangeException if email is longer than 64 characters
 	 */
 	public function setEmail($newEmail) {
 		// verify email is valid
@@ -406,7 +408,7 @@ class User {
 
 	/**
 	 * Accessor for Phone Number
-	 * @return int  returns phone number
+	 * @return int  phone number
 	 */
 	public function getPhoneNumber() {
 		return ($this->phoneNumber);
@@ -414,7 +416,9 @@ class User {
 
 	/**
 	 * Mutator for Phone Number
-	 * @param $newPhoneNumber set phone number to exactly 10 digit(int)
+	 * @param int $newPhoneNumber
+	 * @throws InvalidArgumentException if phoneNumber is not ctype digits
+	 * @throws RangeException if int is not 10 digits
 	 */
 	public function setPhoneNumber($newPhoneNumber) {
 		//verify phone number is valid and digits only
@@ -438,7 +442,9 @@ class User {
 
 	/**
 	 * mutator for Salt
-	 * @param $newSalt setting string length to exactly 64
+	 * @param int $newSalt
+	 * @throw InvalidArgumentException if salt is not valid int
+	 * @throw RangeException if salt is not exactly 64 xdigits
 	 */
 	public function setSalt($newSalt) {
 		// verify salt is exactly string of 64
@@ -463,8 +469,10 @@ class User {
 	}
 
 	/**
-	 * Mutator for hash
-	 * @param $newHash setting length of hash to exactly 128
+	 * Mutator for Hash - insure 128
+	 * @param int $newHash
+	 * @throws InvalidArgumentException if newHash is not valid int
+	 * @throws RangeException if newHash is not exactly 128 xdigits
 	 */
 
 	public function setHash($newHash) {
@@ -481,7 +489,7 @@ class User {
 	}
 
 	/**
-	 * Inserts this userId into mySQL
+	 * Inserts this userId into mySQL in intervals
 	 * @param PDO $pdo
 	 */
 	public function insert(PDO &$pdo) {
@@ -491,12 +499,13 @@ class User {
 		}
 		//create query template
 		$query
-			= "INSERT INTO user(lastName, firstName, attention, addressLineOne, addressLineTwo, city, state, zipCode,email, phoneNumber, salt, hash)
-		VALUES (:lastName, :firstName, :attention, :addressLineOne, :addressLineTwo, :city, :state, :zipCode, :email, :phoneNumber, :salt, :hash)";
+			= "INSERT INTO user(lastName, firstName, root, attention, addressLineOne, addressLineTwo, city, state, zipCode, email, phoneNumber, salt, hash)
+		VALUES (:lastName, :firstName, :root, :attention, :addressLineOne, :addressLineTwo, :city, :state, :zipCode, :email, :phoneNumber, :salt, :hash)";
 		$statement = $pdo->prepare($query);
 
 		// bind the variables to the place holders in the template
-		$parameters = array("lastName" => $this->lastName, "firstName" => $this->firstName, "attention" => $this->attention,
+		$parameters = array("lastName" => $this->lastName, "firstName" => $this->firstName, "root" => $this->root,
+			"attention" => $this->attention,
 			"addressLineOne" => $this->addressLineOne, "addressLineTwo" => $this->addressLineTwo, "city" => $this->city,
 			"state" => $this->state, "zipCode" => $this->zipCode, "email" => $this->email, "phoneNumber"=> $this->phoneNumber,
 			"salt" => $this->salt, "hash" => $this->hash);
@@ -507,7 +516,7 @@ class User {
 	}
 
 	/**
-	 * Deletes userId
+	 * Delete PDO to delete userId
 	 * @param PDO $pdo
 	 */
 	public function delete(PDO &$pdo) {
@@ -526,18 +535,19 @@ class User {
 	}
 
 	/**
+	 * Update PDO to update user class
 	 * @param PDO $pdo
 	 */
 	public function update(PDO &$pdo) {
 
 		// create query template
-		$query	 = "UPDATE user SET firstName = :firstName, lastName = :lastName, attention = :attention, addressLineOne = :addressLineOne,
+		$query	 = "UPDATE user SET firstName = :firstName, lastName = :lastName, root = :root, attention = :attention, addressLineOne = :addressLineOne,
  		addressLineTwo = :addressLineTwo, city = :city, state = :state, zipCode = :zipCode, email = :email, phoneNumber = :phoneNumber,
 		hash = :hash, salt = :salt WHERE userId = :userId";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables
-		$parameters = array("firstName" => $this->firstName, "lastName" => $this->lastName, "attention" => $this->attention,
+		$parameters = array("firstName" => $this->firstName, "lastName" => $this->lastName,"root" => $this->root, "attention" => $this->attention,
 			"addressLineOne" => $this->addressLineOne, "addressLineTwo" => $this->addressLineTwo, "city" => $this->city, "state" => $this->state,
 			"zipCode" => $this->zipCode, "email" => $this->email, "phoneNumber" => $this->phoneNumber, "hash" => $this->hash,
 			"salt" => $this->salt, "userId" => $this->userId);
@@ -545,8 +555,9 @@ class User {
 	}
 
 	/**
+	 * Get user by userId integer
 	 * @param PDO $pdo
-	 * @param $userId
+	 * @param $userId int
 	 * @return mixed|User
 	 */
 	public static function getUserByUserId(PDO &$pdo, $userId) {
@@ -574,7 +585,7 @@ class User {
 			$statement->setFetchMode(PDO::FETCH_ASSOC);
 			$row   = $statement->fetch();
 			if($row !== false) {
-				$user = new User ($row["userId"], $row["firstName"], $row["lastName"], $row["root"], $row["attention"],
+				$user = new User ($row["userId"], $row["lastName"], $row["firstName"], $row["root"], $row["attention"],
 					$row["addressLineOne"], $row["addressLineTwo"], $row["city"], $row["state"], $row["zipCode"],
 					$row["email"], $row["phoneNumber"], $row["salt"], $row["hash"]);
 			}
@@ -614,7 +625,7 @@ class User {
 			$statement->setFetchMode(PDO::FETCH_ASSOC);
 			$row   = $statement->fetch();
 			if($row !== false) {
-				$user = new User ($row["userId"], $row["firstName"], $row["lastName"], $row["root"], $row["attention"],
+				$user = new User ($row["userId"], $row["lastName"], $row["firstName"], $row["root"], $row["attention"],
 								$row["addressLineOne"], $row["addressLineTwo"], $row["city"], $row["state"], $row["zipCode"],
 								$row["email"], $row["phoneNumber"], $row["salt"], $row["hash"]);
 			}
