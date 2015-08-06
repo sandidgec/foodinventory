@@ -58,10 +58,16 @@ private $quantity;
 	 * @param $newUnitId
 	 */
 	public function setUnitId($newUnitId) {
+		// base case: if the unitId is null,
+		// this is a new unit Id without a mySQL assigned id (yet)
+		if($newUnitId === null) {
+			$this->unitId = null;
+			return;
+		}
 		//verify the locationId is valid
 		$newUnitId = filter_var($newUnitId, FILTER_VALIDATE_INT);
 		if(empty($newUnitId) === true) {
-			throw (new InvalidArgumentException ("content invalid"));
+			throw (new InvalidArgumentException ("unit id invalid"));
 		}
 		$this->unitId = $newUnitId;
 	}
@@ -82,10 +88,10 @@ private $quantity;
 		//verify the locationId is valid
 		$newUnitCode = filter_var($newUnitCode, FILTER_SANITIZE_STRING);
 		if(empty($newUnitCode) === true) {
-			throw (new InvalidArgumentException ("content invalid"));
+			throw (new InvalidArgumentException ("unit code invalid"));
 		}
 			if(strlen($newUnitCode) !== 2) {
-				throw new RangeException ("Invalid State Entry");
+				throw new RangeException ("Invalid UnitCode Entry");
 			}
 		$this->unitCode = $newUnitCode;
 	}
@@ -103,10 +109,10 @@ private $quantity;
 	 * @param $newQuantity
 	 */
 	public function setQuantity($newQuantity) {
-		//verify the locationId is valid
+		//verify the quantity is valid
 		$newQuantity = filter_var($newQuantity, FILTER_VALIDATE_INT);
 		if(empty($newQuantity) === true) {
-			throw (new InvalidArgumentException ("content invalid"));
+			throw (new InvalidArgumentException ("quantity invalid"));
 		}
 		$this->quantity = $newQuantity;
 	}
@@ -131,7 +137,7 @@ private $quantity;
 
 		$statement->execute($parameters);
 
-		//update null userId with what mySQL just gave us
+		//update null unitId with what mySQL just gave us
 		$this->unitId = intval($pdo->lastInsertId());
 	}
 
@@ -206,7 +212,7 @@ private $quantity;
 			// if the row couldn't be converted, rethrow it
 			throw(new PDOException($exception->getMessage(), 0, $exception));
 		}
-		return($unitId);
+		return($UnitOfMeasure);
 	}
 
 	/**

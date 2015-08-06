@@ -128,10 +128,10 @@ class User {
 
 
 	/**
-	 * accessor method for profile id
+	 * accessor method for userId
 	 *
-	 * @return int value of profile id
-	 **/
+	 * @return int value of userId
+**/
 
 	public function getUserId() {
 		return ($this->userId);
@@ -143,10 +143,16 @@ class User {
 	 */
 
 	public function setUserId($newUserId) {
+		// base case: if the userId is null,
+		// this is a new user without a mySQL assigned id (yet)
+		if($newUserId=== null) {
+			$this->userId = null;
+			return;
+		}
 		//verify the User is valid
 		$newUserId = filter_var($newUserId, FILTER_VALIDATE_INT);
 		if(empty($newUserId) === true) {
-			throw (new InvalidArgumentException ("content invalid"));
+			throw (new InvalidArgumentException ("userId invalid"));
 		}
 		$this->userId = $newUserId;
 	}
@@ -168,7 +174,7 @@ class User {
 		//verify last name is valid
 		$newLastName = filter_var($newLastName, FILTER_SANITIZE_STRING);
 		if(empty($newLastName) === true) {
-			throw new InvalidArgumentException("content invalid");
+			throw new InvalidArgumentException("last name invalid");
 		}
 		if(strlen($newLastName) > 32) {
 			throw new RangeException("Last Name content too large");
@@ -193,7 +199,7 @@ class User {
 		// verify first name is valid
 		$newFirstName = filter_var($newFirstName, FILTER_SANITIZE_STRING);
 		if(empty($newFirstName) === true) {
-			throw new InvalidArgumentException("content invalid");
+			throw new InvalidArgumentException("first name invalid");
 		}
 		if(strlen($newFirstName) > 32) {
 			throw new RangeException ("First Name content too large");
@@ -217,7 +223,7 @@ class User {
 		//verify Root is no more than 1 char
 		$newRoot = filter_var($newRoot, FILTER_SANITIZE_STRING);
 		if(empty($newRoot) === true) {
-			throw new InvalidArgumentException ("content invalid");
+			throw new InvalidArgumentException ("root invalid");
 		}
 		if(strlen($newRoot) > 1) {
 			throw new RangeException ("Root too long");
@@ -241,7 +247,7 @@ class User {
 		//verify attention is no more than 64 varchar
 		$newAttention = filter_var($newAttention, FILTER_SANITIZE_STRING);
 		if(empty($newAttention) === true) {
-			throw new InvalidArgumentException ("content invalid");
+			throw new InvalidArgumentException ("attention invalid");
 		}
 		if(strlen($newAttention) > 64) {
 			throw new RangeException ("Address Line One too Long");
@@ -265,7 +271,7 @@ class User {
 		//verify address is no more than 64 varchar
 		$newAddressLineOne = filter_var($newAddressLineOne, FILTER_SANITIZE_STRING);
 		if(empty($newAddressLineOne) === true) {
-			throw new InvalidArgumentException ("content invalid");
+			throw new InvalidArgumentException ("address line one invalid");
 		}
 		if(strlen($newAddressLineOne) > 64) {
 			throw new RangeException ("Address Line One too Long");
@@ -289,7 +295,7 @@ class User {
 		//verify address is no more than 64 varchar
 		$newAddressLineTwo = filter_var($newAddressLineTwo, FILTER_SANITIZE_STRING);
 		if(empty($newAddressLineTwo) === true) {
-			throw new InvalidArgumentException ("content invalid");
+			throw new InvalidArgumentException ("address line two invalid");
 		}
 		if(strlen($newAddressLineTwo) > 64) {
 			throw new RangeException ("Address Line Two too Long");
@@ -313,7 +319,7 @@ class User {
 		//verify city is no more than 64 varchar
 		$newCity = filter_var($newCity, FILTER_SANITIZE_STRING);
 		if(empty($newCity) === true) {
-			throw new InvalidArgumentException ("content invalid");
+			throw new InvalidArgumentException ("city invalid");
 		}
 		if(strlen($newCity) > 64) {
 			throw new RangeException ("City too Long");
@@ -337,7 +343,7 @@ class User {
 		//verify State is no more than 2 char
 		$newState = filter_var($newState, FILTER_SANITIZE_STRING);
 		if(empty($newState) === true) {
-			throw new InvalidArgumentException ("content invalid");
+			throw new InvalidArgumentException ("state invalid");
 		}
 		if(strlen($newState) !== 2) {
 			throw new RangeException ("Invalid State Entry");
@@ -361,7 +367,7 @@ class User {
 		//verify address is no more than 64 varchar
 		$newZipCode = filter_var($newZipCode, FILTER_SANITIZE_STRING);
 		if(empty($newZipCode) === true) {
-			throw new InvalidArgumentException ("content invalid");
+			throw new InvalidArgumentException ("zipCode invalid");
 		}
 		if(strlen($newZipCode) > 10) {
 			throw new RangeException ("ZipCode too Long");
@@ -385,7 +391,7 @@ class User {
 		// verify email is valid
 		$newEmail = filter_var($newEmail, FILTER_SANITIZE_EMAIL);
 		if(empty($newEmail) === true) {
-			throw new InvalidArgumentException ("content invalid");
+			throw new InvalidArgumentException ("user email invalid");
 		}
 		if(strlen($newEmail) > 64) {
 			throw new RangeException ("Email content too large");
@@ -408,7 +414,7 @@ class User {
 	public function setPhoneNumber($newPhoneNumber) {
 		//verify phone number is valid and digits only
 		if((ctype_digit($newPhoneNumber)) === false) {
-			throw new InvalidArgumentException ("content invalid");
+			throw new InvalidArgumentException ("phoneNumber invalid");
 		}
 		if(strlen($newPhoneNumber) > 10) {
 			throw new RangeException ("Phone Number should be formatted 5055558787");
@@ -433,7 +439,7 @@ class User {
 		// verify Hash is exactly string of 128
 		if((ctype_digit($newHash)) === false) {
 			if(empty($newHash) === true) {
-				throw new InvalidArgumentException ("content invalid");
+				throw new InvalidArgumentException ("hash invalid");
 			}
 			if(strlen($newHash) !== 128) {
 				throw new RangeException ("hash not valid");
@@ -460,7 +466,7 @@ class User {
 		// verify salt is exactly string of 64
 		if((ctype_digit($newSalt)) === false) {
 			if(empty($newSalt) === true) {
-				throw new InvalidArgumentException ("content invalid");
+				throw new InvalidArgumentException ("salt invalid");
 			}
 			if(strlen($newSalt) !== 64) {
 				throw new RangeException ("hash not valid");

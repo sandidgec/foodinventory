@@ -21,7 +21,7 @@ class UnitOfMeasureTest extends InventoryTextTest {
 	 * Valid unitId
 	 * @var int $unitId
 	 */
-	protected $VALID_unitId = "12";
+	protected $VALID_unitId = 12;
 	/**
 	 * valid unitCode
 	 * @var string $unitCode
@@ -31,7 +31,7 @@ class UnitOfMeasureTest extends InventoryTextTest {
 	 * valid description of quantity
 	 * @var int $quantity
 	 **/
-	protected $VALID_quantity = "4";
+	protected $VALID_quantity = 4;
 
 
 

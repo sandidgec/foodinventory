@@ -65,10 +65,16 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 	 * @param $newLocationId
 	 */
 	public function setLocationId($newLocationId) {
+		// base case: if the locationId is null,
+		// this is a new location without a mySQL assigned id (yet)
+		if($newLocationId === null) {
+			$this->locationId = null;
+			return;
+		}
 		//verify the locationId is valid
 		$newLocationId = filter_var($newLocationId, FILTER_VALIDATE_INT);
-		if(empty($newUserId) === true) {
-			throw (new InvalidArgumentException ("content invalid"));
+		if(empty($newLocationId) === true) {
+			throw (new InvalidArgumentException ("Location Id invalid"));
 		}
 		$this->locationId = $newLocationId;
 	}
@@ -88,7 +94,7 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 		//verify the storage code is valid
 		$newStorageCode = filter_var($newStorageCode, FILTER_VALIDATE_INT);
 		if(empty($newStorageCode) === true) {
-			throw (new InvalidArgumentException ("content invalid"));
+			throw (new InvalidArgumentException ("storage code invalid"));
 		}
 		$this->storageCode = $newStorageCode;
 	}
@@ -105,10 +111,10 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 	 * @param $newDescription
 	 */
 	public function setDescription($newDescription) {
-		//verify the User is valid
+		//verify the description is valid
 		$newDescription = filter_var($newDescription, FILTER_SANITIZE_STRING);
 		if(empty($newDescription) === true) {
-			throw (new InvalidArgumentException ("content invalid"));
+			throw (new InvalidArgumentException ("description invalid"));
 		}
 		$this->description = $newDescription;
 	}
@@ -209,7 +215,7 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 			// if the row couldn't be converted, rethrow it
 			throw(new PDOException($exception->getMessage(), 0, $exception));
 		}
-		return($locationId);
+		return($location);
 	}
 
 
