@@ -108,7 +108,7 @@ class ProductTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("product");
 
 		// create a new Product and insert to into mySQL
-		$product = new Product(null, $this->VALID_productId, $this->VALID_vendorId, $this->VALID_leadTime, $this->VALID_description);
+		$product = new Product(null, $this->VALID_productId, $this->VALIDuserId, $this->VALID_vendorId, $this->VALID_leadTime, $this->VALID_description);
 		$product->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
