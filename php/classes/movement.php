@@ -1,6 +1,6 @@
 <?php
 
-require_once("/home/ccollopy/public_html/foodinventory/php/traits/validateDate.php");
+require_once(dirname(__DIR__) . "/traits/validate-date.php");
 
 /**
  * The movement class for Inventory
