@@ -73,7 +73,7 @@ class Notification {
 			// rethrow the exception to the caller
 			throw(new RangeException($range->getMessage(), 0, $range));
 		} catch(Exception $exception) {
-			//rethrow generic mysqli_sql_exception
+			//rethrow generic exception
 			throw(new Exception($exception->getMessage(), 0, $exception));
 		}
 	}
@@ -225,7 +225,7 @@ class Notification {
 	 *
 	 * @return mixed value of notification handle
 	 **/
-	public function getNotificationHangle() {
+	public function getNotificationHandle() {
 		return ($this->notificationHandle);
 	}
 

@@ -4,6 +4,7 @@ require_once("inventorytext.php");
 
 // grab the class under scrutiny
 require_once(dirname(__DIR__) . "/php/classes/notification.php");
+require_once(dirname(__DIR__) . "/php/classes/alert-level.php");
 
 /**
  * Full PHPUnit test for the Notification class
@@ -76,21 +77,19 @@ class NotificationTest extends InventoryTextTest {
 	 **/
 	protected $INVALID_notificationContent = "place holder cause Topher doesn't know";
 
-	/**
-	 * @var
-	 **/
+	protected $alertLevel = null;
 
 	public function setUp() {
 		parent::setUp();
 
 		$alertId = null;
-		$alertCode = "2";
-		$alertFrequency = "1";
+		$alertCode = "33";
+		$alertFrequency = "11";
 		$alertLevel = "100.01";
 		$alertOperator = "1";
 
-		$alertLevel= new AlertLevel($alertId, $alertCode, $alertFrequency, $alertLevel, $alertOperator);
-		$alertLevel->insert($this->getPDO());
+		$this->alertLevel= new AlertLevel($alertId, $alertCode, $alertFrequency, $alertLevel, $alertOperator);
+		$this->alertLevel->insert($this->getPDO());
 
 	}
 	/**
@@ -108,7 +107,7 @@ class NotificationTest extends InventoryTextTest {
 		$pdoNotification = Notification::getNotificationByNotificationId($this->getPDO(), $notification->getNotificationId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("notification"));
 		$this->assertSame($pdoNotification->getNotificattionId(), $this->VALID_notificationId);
-		$this->assertSame($pdoNotification->getAlertId(), $this->VALID_alertId);
+		$this->assertSame($pdoNotification->getAlertId(), $this->alerdtLevel->getAlertId());
 		$this->assertSame($pdoNotification->getEmailStatus(), $this->VALID_emailStatus);
 		$this->assertSame($pdoNotification->getNotificationDateTime(), $this->VALID_notificationDateTime);
 		$this->assertSame($pdoNotification->getNotificationHandle(), $this->VALID_notificationHandle);
@@ -129,7 +128,7 @@ class NotificationTest extends InventoryTextTest {
 	/**
 	 * test inserting a notification, editing it, and then updating it
 	 **/
-	public function testUpdateValidPNotification() {
+	public function testUpdateValidNotification() {
 		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("notification");
 
@@ -238,7 +237,7 @@ class NotificationTest extends InventoryTextTest {
 	/**
 	 * test grabbing a notification by an alert id that does not exists
 	 **/
-	public function testGetInvalidNotificationByEmailId() {
+	public function testGetInvalidNotificationByEmailStatus() {
 		// grab an email id that does not exist
 		$notification = Notification::getNotificationByAlertId($this->getPDO(), "4294967296");
 		$this->assertNull($notification);
