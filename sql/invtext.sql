@@ -62,7 +62,7 @@ CREATE TABLE product(
 	productId INT UNSIGNED AUTO_INCREMENT NOT NULL,
 	vendorId INT UNSIGNED,
 	description VARCHAR(128),
-	leadTime VARCHAR(10),
+	leadTime INT UNSIGNED NOT NULL,
 	sku VARCHAR(64),
 	title VARCHAR(32),
 	INDEX (title),
