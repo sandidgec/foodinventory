@@ -40,7 +40,7 @@ CREATE TABLE unitOfMeasure(
 CREATE TABLE alertLevel(
 	alertId INT UNSIGNED AUTO_INCREMENT NOT NULL,
 	alertCode VARCHAR(2) NOT NULL,
-	alertLevel DECIMAL(9,3) NOT NULL ,
+	alertPoint DECIMAL(9,3) NOT NULL ,
 	alertFrequency VARCHAR(2)NOT NULL,
 	alertOperator CHAR(1) NOT NULL ,
 	PRIMARY KEY (alertId)
@@ -48,12 +48,12 @@ CREATE TABLE alertLevel(
 
 CREATE TABLE vendor(
 	vendorId INT UNSIGNED AUTO_INCREMENT NOT NULL,
-	name VARCHAR(64)NOT NULL ,
 	contactName VARCHAR(64),
-	email VARCHAR(128),
-	phoneNumber CHAR(10),
-	INDEX (name),
-	INDEX (email),
+	vendorEmail VARCHAR(128),
+	vendorName VARCHAR(64)NOT NULL ,
+	vendorPhoneNumber CHAR(10),
+	INDEX (vendorName),
+	INDEX (vendorEmail),
 	INDEX (contactName),
 	PRIMARY KEY (vendorId)
 );
