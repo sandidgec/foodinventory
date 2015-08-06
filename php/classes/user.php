@@ -413,7 +413,7 @@ class User {
 	 */
 	public function setPhoneNumber($newPhoneNumber) {
 		//verify phone number is valid and digits only
-		if((ctype_digit($newPhoneNumber)) === false) {
+		if((ctype_xdigit($newPhoneNumber)) === false) {
 			throw new InvalidArgumentException ("phoneNumber invalid");
 		}
 		if(strlen($newPhoneNumber) > 10) {
@@ -437,7 +437,7 @@ class User {
 
 	public function setHash($newHash) {
 		// verify Hash is exactly string of 128
-		if((ctype_digit($newHash)) === false) {
+		if((ctype_xdigit($newHash)) === false) {
 			if(empty($newHash) === true) {
 				throw new InvalidArgumentException ("hash invalid");
 			}
