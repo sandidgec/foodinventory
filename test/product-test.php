@@ -28,24 +28,6 @@ class ProductTest extends InventoryTextTest {
 	protected $INVALID_productId = 4294967296;
 
 	/**
-	 * validUserId to use
-	 * @var int $VALID_userId
-	 **/
-	protected $VALID_userId = 1;
-
-	/**
-	 * valid vendorId to use
-	 * @var int $VALID_vendorId
-	 **/
-	protected $VALID_vendorId = 1;
-
-	/**
-	 * invalid vendorId to use
-	 * @var int $INVALID_vendorId
-	 **/
-	protected $INVALID_vendorId = 4294967296;
-
-	/**
 	 * valid sku to use
 	 * @var int $VALID_sku
 	 **/
@@ -73,26 +55,50 @@ class ProductTest extends InventoryTextTest {
 	 * valid title to use
 	 * @var string $VALID_title
 	 **/
-	protected $VALID_title = "ksafklsjfdsfoiekanfd";
+	protected $VALID_title = null;
 
 	/**
 	 * invalid title to use
 	 * @var string $INVALID_title
 	 **/
-	protected $INVALID_title = "kksajfsdfisdfosereoejiorjweirjewiorjaeiowfjndsjndnvnd";
+	protected $INVALID_title = null;
 
 
 	/**
 	 * valid description to use
 	 * @var string $VALID_description
 	 **/
-	protected $VALID_description = "ksafklsjfdsfoiekanfd";
+	protected $VALID_description = null;
 
 	/**
 	 * invalid description to use
 	 * @var string $INVALID_description
 	 **/
-	protected $INVALID_description = "kksajfsdfisdfosereoejiorjweirjewiorjaeiowfjndsjndnvnd";
+	protected $INVALID_description = null;
+
+
+	/**
+	 * Vendor id is for foreign key relation
+	 * @var int $vendorId
+	 **/
+	protected $vendor = null;
+
+	/**
+	 * create dependent objects before running each test
+	 **/
+	public final function setUp() {
+		// run the default setUp() method first
+		parent::setUp();
+
+		// create and insert a Vendor id
+		$this->vendor = new VendorId(null, "Joe Cool", "joecool@gmail.com", "Joe Cool", 5055555555);
+		$this->vendor->insert($this->getPDO());
+
+		$this->VALID_description = str_repeat("kids ", 25);
+		$this->INVALID_description = str_repeat("dogs and kids ", 25);
+	}
+
+
 
 	/**
 	 * test inserting a valid Product and verify that the actual mySQL data matches
