@@ -93,26 +93,28 @@ class User {
 	 * @param $newState
 	 * @param $newZipCode
 	 * @param $newEmail
+	 * @param $newPhoneNumber
 	 * @param $newSalt
 	 * @param $newHash
 	 * @throws Exception
 	 */
 	public function __construct($newUserId, $newLastName, $newFirstName, $newRoot, $newAttention, $newAddressLineOne, $newAddressLineTwo,
-								$newCity, $newState, $newZipCode, $newEmail, $newSalt, $newHash) {
+								$newCity, $newState, $newZipCode, $newEmail, $newPhoneNumber, $newSalt, $newHash) {
 		try {
 			$this->setUserId($newUserId);
 			$this->setLastName($newLastName);
 			$this->setFirstName($newFirstName);
 			$this->setRoot($newRoot);
-			$this->setEmail($newEmail);
-			$this->setSalt($newSalt);
-			$this->setHash($newHash);
 			$this->setAttention($newAttention);
 			$this->setAddressLineOne($newAddressLineOne);
 			$this->setAddressLineTwo($newAddressLineTwo);
 			$this->setCity($newCity);
 			$this->setState($newState);
 			$this->setZipCode($newZipCode);
+			$this->setEmail($newEmail);
+			$this->setPhoneNumber($newPhoneNumber);
+			$this->setSalt($newSalt);
+			$this->setHash($newHash);
 		} catch(InvalidArgumentException $invalidArgument) {
 			//rethrow the exception to the caller
 			throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
@@ -313,7 +315,7 @@ class User {
 
 	/**
 	 * Mutator for City
-	 * @param $newCity
+	 * @param $newCity allows for no more than 64 string for city
 	 */
 	public function setCity($newCity) {
 		//verify city is no more than 64 varchar
@@ -324,7 +326,7 @@ class User {
 		if(strlen($newCity) > 64) {
 			throw new RangeException ("City too Long");
 		}
-		$this->attention = $newCity;
+		$this->city = $newCity;
 	}
 
 	/**
@@ -337,7 +339,7 @@ class User {
 
 	/**
 	 * Mutator for State
-	 * @param $newState
+	 * @param $newState allows only 2 characters ex."NM"
 	 */
 	public function setState($newState) {
 		//verify State is no more than 2 char
@@ -348,7 +350,7 @@ class User {
 		if(strlen($newState) !== 2) {
 			throw new RangeException ("Invalid State Entry");
 		}
-		$this->attention = $newState;
+		$this->state = $newState;
 	}
 
 	/**
@@ -361,7 +363,7 @@ class User {
 
 	/**
 	 * Mutator for zipCode
-	 * @param $newZipCode
+	 * @param $newZipCode allow no more than 10 character string ex. 85878-8587
 	 */
 	public function setZipCode($newZipCode) {
 		//verify address is no more than 64 varchar
@@ -385,7 +387,7 @@ class User {
 
 	/**
 	 * Mutator for Email
-	 * @param $newEmail
+	 * @param $newEmail  Sanitized email
 	 */
 	public function setEmail($newEmail) {
 		// verify email is valid
@@ -401,7 +403,7 @@ class User {
 
 	/**
 	 * Accessor for Phone Number
-	 * @return int
+	 * @return int  returns phone number
 	 */
 	public function getPhoneNumber() {
 		return ($this->phoneNumber);
@@ -409,11 +411,11 @@ class User {
 
 	/**
 	 * Mutator for Phone Number
-	 * @param $newPhoneNumber
+	 * @param $newPhoneNumber set phone number to exactly 10 digit(int)
 	 */
 	public function setPhoneNumber($newPhoneNumber) {
 		//verify phone number is valid and digits only
-		if((ctype_xdigit($newPhoneNumber)) === false) {
+		if((ctype_digit($newPhoneNumber)) === false) {
 			throw new InvalidArgumentException ("phoneNumber invalid");
 		}
 		if(strlen($newPhoneNumber) > 10) {
@@ -424,7 +426,7 @@ class User {
 
 	/**
 	 * accessor for Hash
-	 * @return string
+	 * @return string of Hash
 	 */
 	public function getHash() {
 		return ($this->hash);
@@ -432,7 +434,7 @@ class User {
 
 	/**
 	 * Mutator for hash
-	 * @param $newHash
+	 * @param $newHash setting lenght of hash to exactly 128
 	 */
 
 	public function setHash($newHash) {
@@ -450,7 +452,7 @@ class User {
 
 	/**
 	 * accessor for Salt
-	 * @return string
+	 * @return string of Salt
 	 */
 	public
 	function getSalt() {
@@ -460,18 +462,18 @@ class User {
 
 	/**
 	 * mutator for Salt
-	 * @param $newSalt
+	 * @param $newSalt setting string length to exactly 64
 	 */
 	public function setSalt($newSalt) {
 		// verify salt is exactly string of 64
-		if((ctype_digit($newSalt)) === false) {
+		if((ctype_xdigit($newSalt)) === false) {
 			if(empty($newSalt) === true) {
 				throw new InvalidArgumentException ("salt invalid");
 			}
 			if(strlen($newSalt) !== 64) {
-				throw new RangeException ("hash not valid");
+				throw new RangeException ("salt not valid");
 			}
-			$this->hash = $newSalt;
+			$this->salt = $newSalt;
 		}
 	}
 
@@ -485,15 +487,17 @@ class User {
 			throw (new PDOException("existing user"));
 		}
 		//create query template
+//		var_dump($this);
 		$query
-			= "INSERT INTO user(lastName, firstName, attention, addressLineOne, addressLineTwo, city, state, zipCode,email, salt, hash)
-		VALUES (:lastName, :firstName, :attention, :addressLineOne, :addressLineTwo, :city, :state, :zipCode, :email, :salt, :hash)";
+			= "INSERT INTO user(lastName, firstName, attention, addressLineOne, addressLineTwo, city, state, zipCode,email, phoneNumber, salt, hash)
+		VALUES (:lastName, :firstName, :attention, :addressLineOne, :addressLineTwo, :city, :state, :zipCode, :email, :phoneNumber, :salt, :hash)";
 		$statement = $pdo->prepare($query);
 
 		// bind the variables to the place holders in the template
 		$parameters = array("lastName" => $this->lastName, "firstName" => $this->firstName, "attention" => $this->attention,
 			"addressLineOne" => $this->addressLineOne, "addressLineTwo" => $this->addressLineTwo, "city" => $this->city,
-			"state" => $this->state, "zipCode" => $this->zipCode, "email" => $this->email, "salt" => $this->salt, "hash" => $this->hash);
+			"state" => $this->state, "zipCode" => $this->zipCode, "email" => $this->email, "phoneNumber"=> $this->phoneNumber,
+			"salt" => $this->salt, "hash" => $this->hash);
 		$statement->execute($parameters);
 
 		//update null userId with what mySQL just gave us

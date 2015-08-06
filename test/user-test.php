@@ -83,15 +83,15 @@ class UserTest extends InventoryTextTest {
 	 **/
 	protected $VALID_phoneNumber = "5055551212";
 	/**
-	 * valid password hash for userId;
-	 * @var string $passwordHash
-	 **/
-	protected $VALID_hash;
-	/**
 	 * valid password salt for userId;
 	 * @var string $passwordSalt
 	 */
 	protected $VALID_salt;
+	/**
+	 * valid password hash for userId;
+	 * @var string $passwordHash
+	 **/
+	protected $VALID_hash;
 
 
 	public function setUp() {
@@ -109,9 +109,10 @@ class UserTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("user");
 
 		// create a new User and insert to into mySQL
-		$user = new User(null, $this->VALID_firstName, $this->VALID_lastName, $this->VALID_root, $this->VALID_addressLineOne,
+		var_dump($this->VALID_hash);
+		$user = new User(null,$this->VALID_lastName, $this->VALID_firstName, $this->VALID_root, $this->VALID_addressLineOne,
 				$this->VALID_addressLineTwo, $this->VALID_city, $this->VALID_state, $this->VALID_zipCode, $this->VALID_email,
-				$this->VALID_phoneNumber, $this->VALID_hash, $this->VALID_salt);
+				$this->VALID_phoneNumber, $this->VALID_salt, $this->VALID_hash);
 		$user->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
@@ -127,8 +128,9 @@ class UserTest extends InventoryTextTest {
 		$this->assertSame($pdoUser->getState(), $this->VALID_state);
 		$this->assertSame($pdoUser->getZipCode(), $this->VALID_zipCode);
 		$this->assertSame($pdoUser->getEmail(), $this->VALID_email);
-		$this->assertSame($pdoUser->getHash(), $this->VALID_hash);
+		$this->assertSame($pdoUser->getPhoneNumber(), $this->VALID_phoneNumber);
 		$this->assertSame($pdoUser->getSalt(), $this->VALID_salt);
+		$this->assertSame($pdoUser->getHash(), $this->VALID_hash);
 	}
 
 	/**
@@ -138,10 +140,11 @@ class UserTest extends InventoryTextTest {
 	 **/
 	public function testInsertInvalidUser() {
 		// create a profile with a non null profileId and watch it fail
-		$user = new User(InventoryTextTest::INVALID_KEY, $this->VALID_firstName, $this->VALID_lastName, $this->VALID_root,
+		$user = new User(InventoryTextTest::INVALID_KEY,  $this->VALID_lastName, $this->VALID_firstName, $this->VALID_root,
 					$this->VALID_attention, $this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city,
-					$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_hash,
-					$this->VALID_salt);
+					$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt,
+					$this->VALID_hash);
+
 
 		$user->insert($this->getPDO());
 	}
@@ -154,10 +157,10 @@ class UserTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("user");
 
 		// create a new User and insert to into mySQL
-		$user = new User(null, $this->VALID_firstName, $this->VALID_lastName, $this->VALID_root,
+		$user = new User(null,  $this->VALID_lastName, $this->VALID_firstName, $this->VALID_root,
 					$this->VALID_attention, $this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city,
-					$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_hash,
-					$this->VALID_salt);
+					$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt,
+					$this->VALID_hash);
 
 		$user->insert($this->getPDO());
 
@@ -178,8 +181,9 @@ class UserTest extends InventoryTextTest {
 		$this->assertSame($pdoUser->getState(), $this->VALID_state);
 		$this->assertSame($pdoUser->getZipCode(), $this->VALID_zipCode);
 		$this->assertSame($pdoUser->getEmail(), $this->VALID_email2);
-		$this->assertSame($pdoUser->getHash(), $this->VALID_hash);
+		$this->assertSame($pdoUser->getPhoneNumber(), $this->VALID_phoneNumber);
 		$this->assertSame($pdoUser->getSalt(), $this->VALID_salt);
+		$this->assertSame($pdoUser->getHash(), $this->VALID_hash);
 	}
 
 	/**
@@ -189,10 +193,10 @@ class UserTest extends InventoryTextTest {
 	 **/
 	public function testUpdateInvalidUser() {
 		// create a User and try to update it without actually inserting it
-		$user = new User (null, $this->VALID_firstName, $this->VALID_lastName, $this->VALID_root,
+		$user = new User (null,  $this->VALID_lastName, $this->VALID_firstName, $this->VALID_root,
 			$this->VALID_attention, $this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city,
-			$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_hash,
-			$this->VALID_salt);
+			$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt,
+			$this->VALID_hash);
 		$user->update($this->getPDO());
 	}
 
@@ -204,10 +208,10 @@ class UserTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("user");
 
 		// create a new User and insert to into mySQL
-		$user = new User(null, $this->VALID_firstName, $this->VALID_lastName, $this->VALID_root,
+		$user = new User(null,  $this->VALID_lastName, $this->VALID_firstName, $this->VALID_root,
 			$this->VALID_attention, $this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city,
-			$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_hash,
-			$this->VALID_salt);
+			$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt,
+			$this->VALID_hash);
 		$user->insert($this->getPDO());
 
 		// delete the User from mySQL
@@ -227,10 +231,10 @@ class UserTest extends InventoryTextTest {
 	 **/
 	public function testDeleteInvalidUser() {
 		// create a User and try to delete it without actually inserting it
-		$user = new User(null, $this->VALID_firstName, $this->VALID_lastName, $this->VALID_root,
+		$user = new User(null,  $this->VALID_lastName, $this->VALID_firstName, $this->VALID_root,
 			$this->VALID_attention, $this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city,
-			$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_hash,
-			$this->VALID_salt);
+			$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt,
+			$this->VALID_hash);
 		$user->delete($this->getPDO());
 	}
 
@@ -242,10 +246,10 @@ class UserTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("user");
 
 		// create a new user and insert to into mySQL
-		$user = new User(null, $this->VALID_firstName, $this->VALID_lastName, $this->VALID_root,
+		$user = new User(null,  $this->VALID_lastName, $this->VALID_firstName, $this->VALID_root,
 			$this->VALID_attention, $this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city,
-			$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_hash,
-			$this->VALID_salt);
+			$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt,
+			$this->VALID_hash);
 		$user->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
@@ -261,8 +265,9 @@ class UserTest extends InventoryTextTest {
 		$this->assertSame($pdoUser->getState(), $this->VALID_state);
 		$this->assertSame($pdoUser->getZipCode(), $this->VALID_zipCode);
 		$this->assertSame($pdoUser->getEmail(), $this->VALID_email2);
-		$this->assertSame($pdoUser->getHash(), $this->VALID_hash);
+		$this->assertSame($pdoUser->getPhoneNumber(), $this->VALID_phoneNumber);
 		$this->assertSame($pdoUser->getSalt(), $this->VALID_salt);
+		$this->assertSame($pdoUser->getHash(), $this->VALID_hash);
 	}
 
 	/**
@@ -282,10 +287,10 @@ class UserTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("user");
 
 		// create a new User and insert to into mySQL
-		$user = new User(null, $this->VALID_firstName, $this->VALID_lastName, $this->VALID_root,
+		$user = new User(null,  $this->VALID_lastName,$this->VALID_firstName, $this->VALID_root,
 			$this->VALID_attention, $this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city,
-			$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_hash,
-			$this->VALID_salt);
+			$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt,
+			$this->VALID_hash);
 		$user->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
@@ -301,8 +306,9 @@ class UserTest extends InventoryTextTest {
 		$this->assertSame($pdoUser->getState(), $this->VALID_state);
 		$this->assertSame($pdoUser->getZipCode(), $this->VALID_zipCode);
 		$this->assertSame($pdoUser->getEmail(), $this->VALID_email2);
-		$this->assertSame($pdoUser->getHash(), $this->VALID_hash);
+		$this->assertSame($pdoUser->getPhoneNumber(), $this->VALID_phoneNumber);
 		$this->assertSame($pdoUser->getSalt(), $this->VALID_salt);
+		$this->assertSame($pdoUser->getHash(), $this->VALID_hash);
 	}
 
 	/**
