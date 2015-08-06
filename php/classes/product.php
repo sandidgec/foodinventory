@@ -255,7 +255,7 @@ class Product {
 		}
 
 		// create query template
-		$query	 = "INSERT INTO product(productId, vendorId, sku, leadTime, description) VALUES(:productId, :vendorId, :sku, :leadTime, :description)";
+		$query	 = "INSERT INTO product(vendorId, sku, leadTime, description) VALUES(:productId, :vendorId, :sku, :leadTime, :description)";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
