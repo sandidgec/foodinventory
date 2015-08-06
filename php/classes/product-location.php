@@ -200,6 +200,20 @@ class productLocation {
 	 * @throws PDOException when mySQL related errors occur
 	 **/
 	public function insert(PDO &$pdo) {
+		// enforce the locationId is not null (i.e., don't update a location that hasn't been inserted)
+		if($this->locationId === null) {
+			throw(new PDOException("unable to update a location that does not exist"));
+		}
+
+		// enforce the productId is not null (i.e., don't update a product that hasn't been inserted)
+		if($this->productId === null) {
+			throw(new PDOException("unable to update a profile that does not exist"));
+		}
+
+		// enforce the unitId is not null (i.e., don't update a unit that hasn't been inserted)
+		if($this->unitId === null) {
+			throw(new PDOException("unable to update a unit that does not exist"));
+		}
 		// create query template
 		$query = "INSERT INTO productLocation(locationId, productId, unitId, quantity)
  					 VALUES(:locationId, :productId, :unitId, :quantity)";
