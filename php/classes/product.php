@@ -417,7 +417,7 @@ class Product {
 		$parameters = array("userId" => $userId);
 		$statement->execute($parameters);
 
-		// build an array of userIds
+		// build an array of products
 		$products = new SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
@@ -454,10 +454,10 @@ class Product {
 		$statement = $pdo->prepare($query);
 
 		// bind the vendorId to the place holder in the template
-		$parameters = array("vendorId" => $vendorId);
+		$parameters = array("vendorId" => $newVendorId);
 		$statement->execute($parameters);
 
-		// build an array of userIds
+		// build an array of products
 		$products = new SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
@@ -498,7 +498,7 @@ class Product {
 		$parameters = array("sku" => $sku);
 		$statement->execute($parameters);
 
-		// build an array of sku
+		// build an array of products
 		$products = new SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
@@ -534,11 +534,11 @@ class Product {
 		$query	 = "SELECT productId, userId, vendorId, sku, leadTime, title, description FROM product WHERE userId LIKE :userId";
 		$statement = $pdo->prepare($query);
 
-		// bind the sku to the place holder in the template
+		// bind the leadTIme to the place holder in the template
 		$parameters = array("leadTime" => $leadTime);
 		$statement->execute($parameters);
 
-		// build an array of leadTime
+		// build an array of products
 		$products = new SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
@@ -574,7 +574,7 @@ class Product {
 		$query	 = "SELECT productId, userId, vendorId, sku, leadTime, title, description FROM product WHERE description LIKE :description";
 		$statement = $pdo->prepare($query);
 
-		// bind the product description to the place holder in the template
+		// bind the title to the place holder in the template
 		$parameters = array("title" => $title);
 		$statement->execute($parameters);
 
