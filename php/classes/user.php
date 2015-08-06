@@ -223,13 +223,15 @@ class User {
 	 */
 	public function setRoot($newRoot) {
 		//verify Root is no more than 1 char
+		$newRoot =trim($newRoot);
 		$newRoot = filter_var($newRoot, FILTER_SANITIZE_STRING);
 		if(empty($newRoot) === true) {
 			throw new InvalidArgumentException ("root invalid");
 		}
 		if(strlen($newRoot) > 1) {
 			throw new RangeException ("Root too long");
-		}
+	}
+		var_dump($newRoot);
 		$this->root = $newRoot;
 	}
 
@@ -247,6 +249,7 @@ class User {
 	 */
 	public function setAttention($newAttention) {
 		//verify attention is no more than 64 varchar
+		$newAttention =trim($newAttention);
 		$newAttention = filter_var($newAttention, FILTER_SANITIZE_STRING);
 		if(empty($newAttention) === true) {
 			throw new InvalidArgumentException ("attention invalid");
@@ -425,32 +428,6 @@ class User {
 	}
 
 	/**
-	 * accessor for Hash
-	 * @return string of Hash
-	 */
-	public function getHash() {
-		return ($this->hash);
-	}
-
-	/**
-	 * Mutator for hash
-	 * @param $newHash setting lenght of hash to exactly 128
-	 */
-
-	public function setHash($newHash) {
-		// verify Hash is exactly string of 128
-		if((ctype_xdigit($newHash)) === false) {
-			if(empty($newHash) === true) {
-				throw new InvalidArgumentException ("hash invalid");
-			}
-			if(strlen($newHash) !== 128) {
-				throw new RangeException ("hash not valid");
-			}
-			$this->hash = $newHash;
-		}
-	}
-
-	/**
 	 * accessor for Salt
 	 * @return string of Salt
 	 */
@@ -458,7 +435,6 @@ class User {
 	function getSalt() {
 		return ($this->salt);
 	}
-
 
 	/**
 	 * mutator for Salt
@@ -473,8 +449,35 @@ class User {
 			if(strlen($newSalt) !== 64) {
 				throw new RangeException ("salt not valid");
 			}
-			$this->salt = $newSalt;
 		}
+		$this->salt = $newSalt;
+	}
+
+
+	/**
+	 * accessor for Hash
+	 * @return string of Hash
+	 */
+	public function getHash() {
+		return ($this->hash);
+	}
+
+	/**
+	 * Mutator for hash
+	 * @param $newHash setting length of hash to exactly 128
+	 */
+
+	public function setHash($newHash) {
+		// verify Hash is exactly string of 128
+		if((ctype_xdigit($newHash)) === false) {
+			if(empty($newHash) === true) {
+				throw new InvalidArgumentException ("hash invalid");
+			}
+			if(strlen($newHash) !== 128) {
+				throw new RangeException ("hash not valid");
+			}
+		}
+		$this->hash = $newHash;
 	}
 
 	/**
@@ -487,7 +490,6 @@ class User {
 			throw (new PDOException("existing user"));
 		}
 		//create query template
-//		var_dump($this);
 		$query
 			= "INSERT INTO user(lastName, firstName, attention, addressLineOne, addressLineTwo, city, state, zipCode,email, phoneNumber, salt, hash)
 		VALUES (:lastName, :firstName, :attention, :addressLineOne, :addressLineTwo, :city, :state, :zipCode, :email, :phoneNumber, :salt, :hash)";
@@ -568,17 +570,19 @@ class User {
 
 		// grab the user from mySQL
 		try {
-			$userId = null;
+			$user = null;
 			$statement->setFetchMode(PDO::FETCH_ASSOC);
 			$row   = $statement->fetch();
 			if($row !== false) {
-				$userId = new User ($row["userId"]);
+				$user = new User ($row["userId"], $row["firstName"], $row["lastName"], $row["root"], $row["attention"],
+					$row["addressLineOne"], $row["addressLineTwo"], $row["city"], $row["state"], $row["zipCode"],
+					$row["email"], $row["phoneNumber"], $row["salt"], $row["hash"]);
 			}
 		} catch(Exception $exception) {
 			// if the row couldn't be converted, rethrow it
 			throw(new PDOException($exception->getMessage(), 0, $exception));
 		}
-		return($userId);
+		return($user);
 	}
 
 	/**
@@ -592,9 +596,7 @@ class User {
 		$user = filter_var($user, FILTER_SANITIZE_EMAIL);
 		if($user === false) {
 			throw(new PDOException(""));
-		}
-		if($user <= 0) {
-			throw(new PDOException("email is not positive"));
+
 		}
 
 		// create query template
@@ -614,7 +616,7 @@ class User {
 			if($row !== false) {
 				$user = new User ($row["userId"], $row["firstName"], $row["lastName"], $row["root"], $row["attention"],
 								$row["addressLineOne"], $row["addressLineTwo"], $row["city"], $row["state"], $row["zipCode"],
-								$row["email"], $row["salt"], $row["hash"]);
+								$row["email"], $row["phoneNumber"], $row["salt"], $row["hash"]);
 			}
 		} catch(Exception $exception) {
 			// if the row couldn't be converted, rethrow it

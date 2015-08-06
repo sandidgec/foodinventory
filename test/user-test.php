@@ -78,6 +78,11 @@ class UserTest extends InventoryTextTest {
 	 */
 	protected $VALID_email2 = "tophersotheremail@mindurbiz.com";
 	/**
+	 * Invalid Email string
+	 * @var string
+	 */
+	protected $INVALID_email = "akddi@topher";
+	/**
 	 * valid phoneNumber of userId
 	 * @var int $phoneNumber
 	 **/
@@ -109,10 +114,9 @@ class UserTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("user");
 
 		// create a new User and insert to into mySQL
-		var_dump($this->VALID_hash);
-		$user = new User(null,$this->VALID_lastName, $this->VALID_firstName, $this->VALID_root, $this->VALID_addressLineOne,
-				$this->VALID_addressLineTwo, $this->VALID_city, $this->VALID_state, $this->VALID_zipCode, $this->VALID_email,
-				$this->VALID_phoneNumber, $this->VALID_salt, $this->VALID_hash);
+		$user = new User(null,$this->VALID_lastName, $this->VALID_firstName, $this->VALID_root, $this->VALID_attention,
+				$this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city, $this->VALID_state,
+				$this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt, $this->VALID_hash);
 		$user->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
@@ -155,7 +159,6 @@ class UserTest extends InventoryTextTest {
 	public function testUpdateValidUser() {
 		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("user");
-
 		// create a new User and insert to into mySQL
 		$user = new User(null,  $this->VALID_lastName, $this->VALID_firstName, $this->VALID_root,
 					$this->VALID_attention, $this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city,
@@ -163,7 +166,6 @@ class UserTest extends InventoryTextTest {
 					$this->VALID_hash);
 
 		$user->insert($this->getPDO());
-
 		// edit the user and update it in mySQL
 		$user->setEmail($this->VALID_email2);
 		$user->update($this->getPDO());
@@ -187,13 +189,13 @@ class UserTest extends InventoryTextTest {
 	}
 
 	/**
+	 *
 	 * test updating a User that does not exist
 	 *
-	 * @expectedException PDOException
 	 **/
 	public function testUpdateInvalidUser() {
 		// create a User and try to update it without actually inserting it
-		$user = new User (null,  $this->VALID_lastName, $this->VALID_firstName, $this->VALID_root,
+		$user = new User (null, $this->VALID_lastName, $this->VALID_firstName, $this->VALID_root,
 			$this->VALID_attention, $this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city,
 			$this->VALID_state, $this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt,
 			$this->VALID_hash);
@@ -219,9 +221,9 @@ class UserTest extends InventoryTextTest {
 		$user->delete($this->getPDO());
 
 		// grab the data from mySQL and enforce the User does not exist
-		$pdoUser = Profile::getUserByUserId($this->getPDO(), $user->getUserId());
+		$pdoUser = User::getUserByUserId($this->getPDO(), $user->getUserId());
 		$this->assertNull($pdoUser);
-		$this->assertSame($numRows, $this->getConnection()->getRowCount("profile"));
+		$this->assertSame($numRows, $this->getConnection()->getRowCount("user"));
 	}
 
 	/**
@@ -316,7 +318,7 @@ class UserTest extends InventoryTextTest {
 	 **/
 	public function testGetInvalidUserByEmail() {
 		// grab an email that does not exist
-		$user = User::getUserByEmail($this->getPDO(), "does@not.exist");
+		$user = User::getUserByEmail($this->getPDO(), $this->INVALID_email);
 		$this->assertNull($user);
 	}
 }
