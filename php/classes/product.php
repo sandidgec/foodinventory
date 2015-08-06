@@ -21,7 +21,7 @@ class Product {
 	private $vendorId;
 	/**
 	 * sku for this Product
-	 * @var string $sku
+	 * @var int $sku
 	 **/
 	private $sku;
 	/**
@@ -47,7 +47,7 @@ class Product {
 	 *
 	 * @param int $newProductId id of this Product
 	 * @param int $newVendorId id of this Product vendor
-	 * @param string $newSku string containing actual product Sku
+	 * @param int $newSku string containing actual product Sku
 	 * @param int $newLeadTime int containing actual product leadTime
 	 * @param string $newTitle string containing actual product Title
 	 * @param string $newDescription string containing actual product Description
@@ -117,7 +117,6 @@ class Product {
 
 	/**
 	 * accessor method for vendor id
-	 *
 	 * @return int value of vendor id
 	 **/
 	public function getVendorId() {
@@ -125,67 +124,75 @@ class Product {
 	}
 
 	/**
-	 * mutator method for vendorId
+	 * mutator method for vendor id
 	 *
-	 * @param string $newVendor new value of description
-	 * @throws InvalidArgumentException if $newVendor is not a string or insecure
-	 * @throws RangeException if $newVendor is > 128 characters
+	 * @param mixed $newVendorId new value of vendor id
+	 * @throws InvalidArgumentException if $newVendorId is not an integer
+	 * @throws RangeException if $newVendorId is not positive
 	 **/
-	public function setVendor($newVendor) {
-		// verify the vendor is secure
-		$newVendor = trim($newVendor);
-		$newVendor = filter_var($newVendor, FILTER_SANITIZE_STRING);
-		if(empty($newVendor) === true) {
-			throw(new InvalidArgumentException("vendor is empty or insecure"));
+	public function setVendorId($newVendorId) {
+		// base case: if the vendor id is null, this a new vendor without a mySQL assigned id (yet)
+		if($newVendorId === null) {
+			$this->vendorId = null;
+			return;
 		}
 
-		// verify the vendor will fit in the database
-		if(strlen($newVendor) > 128) {
-			throw(new RangeException("vendor too large"));
+		// verify the vendor id is valid
+		$newVendorId = filter_var($newVendorId, FILTER_VALIDATE_INT);
+		if($newVendorId === false) {
+			throw(new InvalidArgumentException("vendor id is not a valid integer"));
 		}
 
-		// store the vendor
-		$this->description = $newVendor;
+		// verify the vendor id is positive
+		if($newVendorId <= 128) {
+			throw(new RangeException("vendor id is not positive"));
+		}
+
+		// convert and store the vendor id
+		$this->vendorId = intval($newVendorId);
 	}
 
 	/**
 	 * accessor method for sku
-	 *
-	 * @return string value of sku
-	 */
+	 * @return int value of sku
+	 **/
 	public function getSku() {
-		return $this->sku;
+		return($this->sku);
 	}
 
 	/**
 	 * mutator method for sku
 	 *
-	 * @param string $newSku
-	 * @throws InvalidArgumentException if $newSku is not a string
-	 * @throws RangeException if $newSku is greater than 128 characters
-	 */
+	 * @param mixed $newSku new value of sku
+	 * @throws InvalidArgumentException if $newSku is not an integer
+	 * @throws RangeException if $newSku is not positive
+	 **/
 	public function setSku($newSku) {
-		// verify the sku is secure
-		$newSku = trim($newSku);
-		$newSku = filter_var($newSku, FILTER_SANITIZE_STRING);
-		if(empty($newSku) === true) {
-			throw(new InvalidArgumentException("sku is empty or insecure"));
+		// base case: if the sku is null, this a new sku without a mySQL assigned id (yet)
+		if($newSku === null) {
+			$this->sku = null;
+			return;
 		}
 
-		// verify the sku will fit in the database
-		if(strlen($newSku) > 64) {
-			throw(new RangeException("sku is too large"));
+		// verify the sku is valid
+		$newSku = filter_var($newSku, FILTER_VALIDATE_INT);
+		if($newSku === false) {
+			throw(new InvalidArgumentException("sku is not a valid integer"));
 		}
 
-		// store the sku
-		$this->sku = $newSku;
+		// verify the sku is positive
+		if($newSku <= 0) {
+			throw(new RangeException("sku is not positive"));
+		}
+
+		// convert and store the sku
+		$this->sku = intval($newSku);
 	}
-
 
 	/**
 	 * accessor method for leadTime
 	 *
-	 * @return string value of leadTime
+	 * @return int value of leadTime
 	 **/
 	public function getLeadTime() {
 		return($this->leadTime);
@@ -194,32 +201,37 @@ class Product {
 	/**
 	 * mutator method for leadTime
 	 *
-	 * @param int $newLeadTime new value of leadTime
-	 * @throws InvalidArgumentException if $newLeadTime is not a int or insecure
-	 * @throws RangeException if $newLeadTime is > 3
+	 * @param mixed $newLeadTime new value of leadTime
+	 * @throws InvalidArgumentException if $newLeadTime is not an integer
+	 * @throws RangeException if $newLeadTime is not positive
 	 **/
 	public function setLeadTime($newLeadTime) {
-		// verify the leadTime is secure
-		$newLeadTime = trim($newLeadTime);
-		$newLeadTime = filter_var($newLeadTime, FILTER_SANITIZE_STRING);
-		if(empty($newLeadTime) === true) {
-			throw(new InvalidArgumentException("leadTime is empty or insecure"));
+		// base case: if the leadTime is null, this a new product without a mySQL assigned id (yet)
+		if($newLeadTime === null) {
+			$this->leadTime = null;
+			return;
 		}
 
-		// verify the leadTime will fit in the database
-		if(strlen($newLeadTime) > 3) {
-			throw(new RangeException("leadTime too large"));
+		// verify the leadTime is valid
+		$newLeadTime = filter_var($newLeadTime, FILTER_VALIDATE_INT);
+		if($newLeadTime === false) {
+			throw(new InvalidArgumentException("leadTime is not a valid integer"));
 		}
 
-		// store the leadTime
-		$this->leadTime = $newLeadTime;
+		// verify the leadTime is positive
+		if($newLeadTime <= 0) {
+			throw(new RangeException("leadTime is not positive"));
+		}
+
+		// convert and store the leadTime
+		$this->leadTime = intval($newLeadTime);
 	}
 
 
 	/**
 	 * accessor method for title
 	 *
-	 * @return string value of titile
+	 * @return string value of title
 	 **/
 	public function getTitle() {
 		return($this->title);
@@ -241,7 +253,7 @@ class Product {
 		}
 
 		// verify the title will fit in the database
-		if(strlen($newTitle) > 100) {
+		if(strlen($newTitle) > 128) {
 			throw(new RangeException("title too large"));
 		}
 
@@ -370,7 +382,7 @@ class Product {
 		}
 
 		// create query template
-		$query	 = "SELECT productId, userId, vendorId, sku, leadTime, title, description FROM product WHERE productId = :productId";
+		$query	 = "SELECT productId, vendorId, sku, leadTime, title, description FROM product WHERE productId = :productId";
 		$statement = $pdo->prepare($query);
 
 		// bind the product id to the place holder in the template
@@ -383,7 +395,7 @@ class Product {
 			$statement->setFetchMode(PDO::FETCH_ASSOC);
 			$row   = $statement->fetch();
 			if($row !== false) {
-				$product = new Product($row["productId"], $row["userId"], $row["vendorId"], $row["sku"], $row["leadTime"], $row["title"], $row["description"]);
+				$product = new Product($row["productId"], $row["vendorId"], $row["sku"], $row["leadTime"], $row["title"], $row["description"]);
 			}
 		} catch(Exception $exception) {
 			// if the row couldn't be converted, rethrow it
@@ -392,46 +404,6 @@ class Product {
 		return($product);
 	}
 
-	/**
-	 * gets the product by userId
-	 * userId is a join element from productPermission class
-	 *
-	 * @param PDO $pdo pointer to PDO connection, by reference
-	 * @param int $userId content to search for
-	 * @return SplFixedArray all product found for this userId
-	 * @throws PDOException when mySQL related errors occur
-	 **/
-	public static function getProductByUserId(PDO &$pdo, $newUserId, $userId) {
-		// sanitize the userId before searching
-		$newUserId = trim($newUserId);
-		$newUserId = filter_var($newUserId, FILTER_SANITIZE_STRING);
-		if(empty($newUserId) === true) {
-			throw(new PDOException("userId is invalid"));
-		}
-
-		// create query template
-		$query	 = "SELECT productId, userId, vendorId, sku, leadTime, title, description FROM product WHERE userId LIKE :userId";
-		$statement = $pdo->prepare($query);
-
-		// bind the userId to the place holder in the template
-		$parameters = array("userId" => $userId);
-		$statement->execute($parameters);
-
-		// build an array of products
-		$products = new SplFixedArray($statement->rowCount());
-		$statement->setFetchMode(PDO::FETCH_ASSOC);
-		while(($row = $statement->fetch()) !== false) {
-			try {
-				$product = new Product($row["productId"], $row["userId"], $row["vendorId"], $row["sku"], $row["leadTime"], $row["title"], $row["description"]);
-				$products[$products->key()] = $product;
-				$products->next();
-			} catch(Exception $exception) {
-				// if the row couldn't be converted, rethrow it
-				throw(new PDOException($exception->getMessage(), 0, $exception));
-			}
-		}
-		return($products);
-	}
 
 	/**
 	 * gets the product by vendorId
@@ -450,7 +422,7 @@ class Product {
 		}
 
 		// create query template
-		$query	 = "SELECT productId, userId, vendorId, sku, leadTime, title, description FROM product WHERE userId LIKE :userId";
+		$query	 = "SELECT productId, vendorId, sku, leadTime, title, description FROM product WHERE vendorId LIKE :vendorId";
 		$statement = $pdo->prepare($query);
 
 		// bind the vendorId to the place holder in the template
@@ -462,7 +434,7 @@ class Product {
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$product = new Product($row["productId"], $row["userId"], $row["vendorId"], $row["sku"], $row["leadTime"], $row["title"], $row["description"]);
+				$product = new Product($row["productId"],$row["vendorId"], $row["sku"], $row["leadTime"], $row["title"], $row["description"]);
 				$products[$products->key()] = $product;
 				$products->next();
 			} catch(Exception $exception) {
@@ -491,7 +463,7 @@ class Product {
 		}
 
 		// create query template
-		$query	 = "SELECT productId, userId, vendorId, sku, leadTime, title, description FROM product WHERE userId LIKE :userId";
+		$query	 = "SELECT productId, vendorId, sku, leadTime, title, description FROM product WHERE sku LIKE :sku";
 		$statement = $pdo->prepare($query);
 
 		// bind the sku to the place holder in the template
@@ -503,7 +475,7 @@ class Product {
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$product = new Product($row["productId"], $row["userId"], $row["vendorId"], $row["sku"], $row["leadTime"], $row["title"], $row["description"]);
+				$product = new Product($row["productId"], $row["vendorId"], $row["sku"], $row["leadTime"], $row["title"], $row["description"]);
 				$products[$products->key()] = $product;
 				$products->next();
 			} catch(Exception $exception) {
@@ -531,10 +503,10 @@ class Product {
 		}
 
 		// create query template
-		$query	 = "SELECT productId, userId, vendorId, sku, leadTime, title, description FROM product WHERE userId LIKE :userId";
+		$query	 = "SELECT productId, vendorId, sku, leadTime, title, description FROM product WHERE leadTime LIKE :leadTime";
 		$statement = $pdo->prepare($query);
 
-		// bind the leadTIme to the place holder in the template
+		// bind the leadTime to the place holder in the template
 		$parameters = array("leadTime" => $leadTime);
 		$statement->execute($parameters);
 
@@ -543,7 +515,7 @@ class Product {
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$product = new Product($row["productId"], $row["userId"], $row["vendorId"], $row["sku"], $row["leadTime"], $row["title"], $row["description"]);
+				$product = new Product($row["productId"], $row["vendorId"], $row["sku"], $row["leadTime"], $row["title"], $row["description"]);
 				$products[$products->key()] = $product;
 				$products->next();
 			} catch(Exception $exception) {
@@ -571,7 +543,7 @@ class Product {
 		}
 
 		// create query template
-		$query	 = "SELECT productId, userId, vendorId, sku, leadTime, title, description FROM product WHERE description LIKE :description";
+		$query	 = "SELECT productId, vendorId, sku, leadTime, title, description FROM product WHERE title LIKE :title";
 		$statement = $pdo->prepare($query);
 
 		// bind the title to the place holder in the template
@@ -583,7 +555,7 @@ class Product {
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$product = new Product($row["productId"], $row["userId"], $row["vendorId"], $row["sku"], $row["leadTime"], $row["title"], $row["description"]);
+				$product = new Product($row["productId"], $row["vendorId"], $row["sku"], $row["leadTime"], $row["title"], $row["description"]);
 				$products[$products->key()] = $product;
 				$products->next();
 			} catch(Exception $exception) {
@@ -593,11 +565,6 @@ class Product {
 		}
 		return($products);
 	}
-
-
-
-
-
 
 
 
@@ -618,7 +585,7 @@ class Product {
 		}
 
 		// create query template
-		$query	 = "SELECT productId, userId, vendorId, sku, leadTime, title, description FROM product WHERE description LIKE :description";
+		$query	 = "SELECT productId, vendorId, sku, leadTime, title, description FROM product WHERE description LIKE :description";
 		$statement = $pdo->prepare($query);
 
 		// bind the product description to the place holder in the template
@@ -630,7 +597,7 @@ class Product {
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$product = new Product($row["productId"], $row["userId"], $row["vendorId"], $row["sku"], $row["leadTime"], $row["title"], $row["description"]);
+				$product = new Product($row["productId"], $row["vendorId"], $row["sku"], $row["leadTime"], $row["title"], $row["description"]);
 				$products[$products->key()] = $product;
 				$products->next();
 			} catch(Exception $exception) {
