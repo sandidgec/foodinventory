@@ -34,12 +34,6 @@ class ProductTest extends InventoryTextTest {
 	protected $VALID_userId = 1;
 
 	/**
-	 * invalid userId to use
-	 * @var int $INVALID_userId
-	 **/
-	protected $INVALID_userId = 429496789;
-
-	/**
 	 * valid vendorId to use
 	 * @var int $VALID_vendorId
 	 **/
@@ -161,27 +155,6 @@ class ProductTest extends InventoryTextTest {
 		$this->assertNull($product);
 	}
 
-	/**
-	 * test grabbing a Product by userId
-	 **/
-	public function testGetValidProductByUserId() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("user");
-
-		// create a new Product and insert to into mySQL
-		$product = new Product(null,
-			$this->VALID_productId, $this->VALID_userId, $this->VALID_vendorId, $this->VALID_sku,
-			$this->VALID_leadTime, $this->VALID_title, $this->VALID_description);
-		$product->insert($this->getPDO());
-
-		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProduct = Product::getMovementByProductId($this->getPDO(), $product->getvendorId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
-		$this->assertSame($pdoProduct->getProductId(),
-			$this->VALID_userId, $this->VALID_vendorId, $this->VALID_sku,
-			$this->VALID_leadTime, $this->VALID_title, $this->VALID_description);
-		$this->assertSame($pdoProduct->getvendorId(), $this->VALID_userId);
-	}
 
 /**
  * test grabbing a Product by vendorId
