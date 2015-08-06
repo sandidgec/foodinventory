@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The finishedProduct class for InventoryMessage
+ * The finishedProduct class for Inventory
  *
  * This class will separate raw materials from finished products
  * multi-line
@@ -102,8 +102,8 @@ class finishedProduct {
 	 * mutator method for rawMaterialId
 	 *
 	 * @param int $newRawMaterialId
-	 * @throws InvalidArgumentException if $newLocationId is not a valid integer
-	 * @throws RangeException if $newLocationId is not positive
+	 * @throws InvalidArgumentException if $newRawMaterial is not a valid integer
+	 * @throws RangeException if $newRawMaterial is not positive
 	 */
 	public function setRawMaterialId($newRawMaterialId) {
 		// verify the rawMaterialId is valid
@@ -134,8 +134,8 @@ class finishedProduct {
 	 * mutator method for rawQuantity
 	 *
 	 * @param float $newRawQuantity
-	 * @throws InvalidArgumentException if $newLocationId is not a valid float
-	 * @throws RangeException if $newLocationId is not positive
+	 * @throws InvalidArgumentException if $newRawQuantity is not a valid float
+	 * @throws RangeException if $newRawQuantity is not positive
 	 */
 	public function setRawQuantity($newRawQuantity) {
 		// verify the rawQuantity is valid
@@ -154,12 +154,22 @@ class finishedProduct {
 	}
 
 	/**
-	 * inserts this finishedProduct into mySQL
+	 * inserts this FinishedProduct into mySQL
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
 	 * @throws PDOException when mySQL related errors occur
 	 **/
 	public function insert(PDO &$pdo) {
+		// enforce the finishedProductId is not null (i.e., don't update a location that hasn't been inserted)
+		if($this->finishedProductId === null) {
+			throw(new PDOException("unable to update a finishedProductId that does not exist"));
+		}
+
+		// enforce the rawMaterialId is not null (i.e., don't update a product that hasn't been inserted)
+		if($this->rawMaterialId === null) {
+			throw(new PDOException("unable to update a rawMaterialId that does not exist"));
+		}
+
 		// create query template
 		$query = "INSERT INTO finishedProduct(finishedProductId, rawMaterialId, rawQuantity)
  					 VALUES(:finishedProductId, :rawMaterialId, :rawQuantity)";
@@ -171,33 +181,53 @@ class finishedProduct {
 	}
 
 	/**
-	 * deletes this finishedProduct from mySQL
-	 *
-	 * @param PDO $pdo pointer to PDO connection, by reference
-	 * @throws PDOException when mySQL related errors occur
-	 **/
-	public function delete(PDO &$pdo) {
-		// create query template
-		$query = "DELETE FROM finishedProduct WHERE finishedProductId = :finishedProductId AND rawMaterialId = :rawMaterialId";
-		$statement = $pdo->prepare($query);
-
-		// bind the member variables to the place holder in the template
-		$parameters = array("finishedProductId" => $this->finishedProductId, "rawMaterialId" => $this->rawMaterialId);
-		$statement->execute($parameters);
-	}
-
-	/**
-	 * updates this finishedProduct in mySQL
+	 * updates this FinishedProduct in mySQL
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
 	 * @throws PDOException when mySQL related errors occur
 	 **/
 	public function update(PDO &$pdo) {
+		// enforce the finishedProductId is not null (i.e., don't update a location that hasn't been inserted)
+		if($this->finishedProductId === null) {
+			throw(new PDOException("unable to update a finishedProductId that does not exist"));
+		}
+
+		// enforce the rawMaterialId is not null (i.e., don't update a product that hasn't been inserted)
+		if($this->rawMaterialId === null) {
+			throw(new PDOException("unable to update a rawMaterialId that does not exist"));
+		}
+
 		// create query template
 		$query = "UPDATE finishedProduct SET rawQuantity = :rawQuantity WHERE finishedProductId = :finishedProductId AND rawMaterialId = :rawMaterialId";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
+		$parameters = array("finishedProductId" => $this->finishedProductId, "rawMaterialId" => $this->rawMaterialId, "rawQuantity" => $this->rawQuantity);
+		$statement->execute($parameters);
+	}
+
+	/**
+	 * deletes this FinishedProduct from mySQL
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public function delete(PDO &$pdo) {
+		// enforce the finishedProductId is not null (i.e., don't update a location that hasn't been inserted)
+		if($this->finishedProductId === null) {
+			throw(new PDOException("unable to update a finishedProductId that does not exist"));
+		}
+
+		// enforce the rawMaterialId is not null (i.e., don't update a product that hasn't been inserted)
+		if($this->rawMaterialId === null) {
+			throw(new PDOException("unable to update a rawMaterialId that does not exist"));
+		}
+
+		// create query template
+		$query = "DELETE FROM finishedProduct WHERE finishedProductId = :finishedProductId AND rawMaterialId = :rawMaterialId";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holder in the template
 		$parameters = array("finishedProductId" => $this->finishedProductId, "rawMaterialId" => $this->rawMaterialId);
 		$statement->execute($parameters);
 	}
