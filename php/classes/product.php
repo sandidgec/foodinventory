@@ -131,12 +131,6 @@ class Product {
 	 * @throws RangeException if $newVendorId is not positive
 	 **/
 	public function setVendorId($newVendorId) {
-		// base case: if the vendor id is null, this a new vendor without a mySQL assigned id (yet)
-		if($newVendorId === null) {
-			$this->vendorId = null;
-			return;
-		}
-
 		// verify the vendor id is valid
 		$newVendorId = filter_var($newVendorId, FILTER_VALIDATE_INT);
 		if($newVendorId === false) {
@@ -144,7 +138,7 @@ class Product {
 		}
 
 		// verify the vendor id is positive
-		if($newVendorId <= 128) {
+		if($newVendorId <= 0) {
 			throw(new RangeException("vendor id is not positive"));
 		}
 
@@ -206,12 +200,6 @@ class Product {
 	 * @throws RangeException if $newLeadTime is not positive
 	 **/
 	public function setLeadTime($newLeadTime) {
-		// base case: if the leadTime is null, this a new product without a mySQL assigned id (yet)
-		if($newLeadTime === null) {
-			$this->leadTime = null;
-			return;
-		}
-
 		// verify the leadTime is valid
 		$newLeadTime = filter_var($newLeadTime, FILTER_VALIDATE_INT);
 		if($newLeadTime === false) {
@@ -219,7 +207,7 @@ class Product {
 		}
 
 		// verify the leadTime is positive
-		if($newLeadTime <= 0) {
+		if($newLeadTime < 0) {
 			throw(new RangeException("leadTime is not positive"));
 		}
 
