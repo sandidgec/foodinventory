@@ -28,6 +28,18 @@ class ProductTest extends InventoryTextTest {
 	protected $INVALID_productId = 4294967296;
 
 	/**
+	 * validUserId to use
+	 * @var int $VALID_userId
+	 **/
+	protected $VALID_userId = 1;
+
+	/**
+	 * invalid userId to use
+	 * @var int $INVALID_userId
+	 **/
+	protected $INVALID_userId = 429496789;
+
+	/**
 	 * valid vendorId to use
 	 * @var int $VALID_vendorId
 	 **/
@@ -40,28 +52,53 @@ class ProductTest extends InventoryTextTest {
 	protected $INVALID_vendorId = 4294967296;
 
 	/**
-	 * valid leadTimeId to use
-	 * @var int $VALID_leadTimeId
+	 * valid sku to use
+	 * @var int $VALID_sku
 	 **/
-	protected $VALID_leadTimeId = 1;
+	protected $VALID_sku = 1;
 
 	/**
-	 * invalid leadTimeId to use
-	 * @var int $INVALID_leadTimeId
+	 * invalid sku to use
+	 * @var int $INVALID_sku
 	 **/
-	protected $INVALID_leadTimeId = 4294967296;
+	protected $INVALID_sku = 4294967296;
 
 	/**
-	 * valid descriptionId to use
+	 * valid leadTime to use
+	 * @var int $VALID_leadTime
+	 **/
+	protected $VALID_leadTime = 1;
+
+	/**
+	 * invalid leadTime to use
+	 * @var int $INVALID_leadTime
+	 **/
+	protected $INVALID_leadTime = 4294967296;
+
+	/**
+	 * valid title to use
+	 * @var string $VALID_title
+	 **/
+	protected $VALID_title = "ksafklsjfdsfoiekanfd";
+
+	/**
+	 * invalid title to use
+	 * @var str $INVALID_title
+	 **/
+	protected $INVALID_title = "kksajfsdfisdfosereoejiorjweirjewiorjaeiowfjndsjndnvnd";
+
+
+	/**
+	 * valid description to use
 	 * @var string $VALID_description
 	 **/
 	protected $VALID_description = "ksafklsjfdsfoiekanfd";
 
 	/**
 	 * invalid description to use
-	 * @var str $INVALID_descriptionId
+	 * @var str $INVALID_description
 	 **/
-	protected $INVALID_descriptionId = "kksajfsdfisdfosereoejiorjweirjewiorjaeiowfjndsjndnvnd";
+	protected $INVALID_description = "kksajfsdfisdfosereoejiorjweirjewiorjaeiowfjndsjndnvnd";
 
 	/**
 	 * test inserting a valid Product and verify that the actual mySQL data matches
