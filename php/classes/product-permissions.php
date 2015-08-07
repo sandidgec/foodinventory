@@ -124,29 +124,31 @@ class productPermissions {
 	/**
 	 * accessor method for accessLevel
 	 *
-	 * @return int value of accessLevel
+	 *
+	 * @return string value of accessLevel
 	 **/
 	public function getAccessLevel() {
 		return ($this->accessLevel);
 	}
 
-
 	/**
 	 * mutator method for accessLevel
 	 *
-	 * @param string $newAccessLevel
-	 */
+	 * @param string $newAccessLevel new value of accessLevel
+	 * @throws InvalidArgumentException if $newAccessLevel is not a string or insecure
+	 * @throws RangeException if $newAccessLevel is > 128 characters
+	 **/
 	public function setAccessLevel($newAccessLevel) {
-		// verify the sku is secure
+		// verify the accessLevel is secure
 		$newAccessLevel = trim($newAccessLevel);
 		$newAccessLevel = filter_var($newAccessLevel, FILTER_SANITIZE_STRING);
 		if(empty($newAccessLevel) === true) {
-			throw(new InvalidArgumentException("sku is empty or insecure"));
+			throw(new InvalidArgumentException("accessLevel is empty or insecure"));
 		}
 
-		// verify the sku will fit in the database
-		if(strlen($newAccessLevel) > 1) {
-			throw(new RangeException("sku is too large"));
+		// verify the accessLevel will fit in the database
+		if(strlen($newAccessLevel) > 128) {
+			throw(new RangeException("description too large"));
 		}
 
 		// store the accessLevel
@@ -208,35 +210,47 @@ class productPermissions {
 		$statement->execute($parameters);
 	}
 
-
 	/**
-	 * gets all productPermissions
+	 * gets the productPermissions by productId
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
-	 * @return SplFixedArray all productPermissions found
+	 * @param int $productId product id to search for
+	 * @return mixed productPermissions found or null if not found
 	 * @throws PDOException when mySQL related errors occur
 	 **/
-	public static function getAllProductPermissions(PDO &$pdo) {
-		// create query template
-		$query = "SELECT userId, productId, accessLevel FROM productPermissions";
-		$statement = $pdo->prepare($query);
-		$statement->execute();
-
-		// build an array of productPermissions
-		$permissions = new SplFixedArray($statement->rowCount());
-		$statement->setFetchMode(PDO::FETCH_ASSOC);
-		while(($row = $statement->fetch()) !== false) {
-			try {
-				$permission = new productPermissions($row["userId"], $row["productId"], $row["accessLevel"]);
-				$permissions[$permissions->key()] = $permission;
-				$permissions->next();
-			} catch(Exception $exception) {
-				// if the row couldn't be converted, rethrow it
-				throw(new PDOException($exception->getMessage(), 0, $exception));
-			}
+	public static function getProductPermissionsByProductId(PDO &$pdo, $newProductId) {
+		// sanitize the userId before searching
+		$newProductId = filter_var($newProductId, FILTER_VALIDATE_INT);
+		if($newProductId === false) {
+			throw(new PDOException("product id is not an integer"));
 		}
-		return ($permissions);
+		if($newProductId <= 0) {
+			throw(new PDOException("product id is not positive"));
+		}
+
+		// create query template
+		$query = "SELECT userId, productId, accessLevel FROM productPermissions WHERE productId = :productId";
+		$statement = $pdo->prepare($query);
+
+		// bind the product id to the place holder in the template
+		$parameters = array("productId" => $newProductId);
+		$statement->execute($parameters);
+
+		// grab the productPermissions from mySQL
+		try {
+			$productPermissions = null;
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$productPermissions = new ProductPermissions($row["userId"], $row["productId"], $row["accessLevel"]);
+			}
+		} catch(Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new PDOException($exception->getMessage(), 0, $exception));
+		}
+		return ($productPermissions);
 	}
+
 
 	/**
 	 * gets the productPermissions by userId
@@ -279,44 +293,62 @@ class productPermissions {
 		return ($productPermissions);
 	}
 
+
+	/*
+	* Every Product Permissions has a unique constraint with 1 user id in the database.
+	* I want to fill data into the "Product Permissions"-object with PDOs
+	* "FETCH_CLASS" method which works for all the "Product Permissions"
+
+
+$statement = $db -> prepare($query);
+$statement -> execute();
+$statement -> setFetchMode(PDO::FETCH_CLASS, 'UserId');
+$userId = $statement -> fetchAll();
+
+		*/
+
+
 	/**
-	 * gets the productPermissions by productId
+	 * gets the product by accessLevel
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
-	 * @param int $productId product id to search for
-	 * @return mixed productPermissions found or null if not found
+	 * @param string $accessLevel product content to search for
+	 * @return SplFixedArray all product found for this accessLevel
 	 * @throws PDOException when mySQL related errors occur
 	 **/
-	public static function getProductPermissionsByProductId(PDO &$pdo, $newProductId) {
-		// sanitize the userId before searching
-		$newProductId = filter_var($newProductId, FILTER_VALIDATE_INT);
-		if($newProductId === false) {
-			throw(new PDOException("product id is not an integer"));
-		}
-		if($newProductId <= 0) {
-			throw(new PDOException("product id is not positive"));
+	public static function getProductByAccessLevel(PDO &$pdo, $newAccessLevel, $accessLevel) {
+		// sanitize the accessLevel before searching
+		$newAccessLevel = trim($newAccessLevel);
+		$newAccessLevel = filter_var($newAccessLevel, FILTER_SANITIZE_STRING);
+		if(empty($newAccessLevel) === true) {
+			throw(new PDOException("accessLevel is invalid"));
 		}
 
 		// create query template
-		$query = "SELECT userId, productId, accessLevel FROM productPermissions WHERE productId = :productId";
+		$query = "SELECT productId, vendorId, sku, leadTime, title, description FROM product WHERE accessLevel LIKE :accessLevel";
 		$statement = $pdo->prepare($query);
 
-		// bind the product id to the place holder in the template
-		$parameters = array("productId" => $newProductId);
+		// bind the accessLevel to the place holder in the template
+		$parameters = array("accessLevel" => $accessLevel);
 		$statement->execute($parameters);
 
-		// grab the productPermissions from mySQL
-		try {
-			$productPermissions = null;
-			$statement->setFetchMode(PDO::FETCH_ASSOC);
-			$row = $statement->fetch();
-			if($row !== false) {
-				$productPermissions = new ProductPermissions($row["userId"], $row["productId"], $row["accessLevel"]);
+		// build an array of products
+		$products = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$productPermissions = null;
+				$statement->setFetchMode(PDO::FETCH_ASSOC);
+				$row = $statement->fetch();
+				if($row !== false) {
+					$productPermissions = new ProductPermissions($row["userId"], $row["productId"], $row["accessLevel"]);
+				}
+			} catch(Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
-		} catch(Exception $exception) {
-			// if the row couldn't be converted, rethrow it
-			throw(new PDOException($exception->getMessage(), 0, $exception));
+			return ($productPermissions);
 		}
-		return ($productPermissions);
 	}
+
 }
