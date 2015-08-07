@@ -43,19 +43,14 @@ class ProductPermissionsTest extends InventoryTextTest {
 	 * valid accessLevel to use
 	 * @var string $VALID_accessLevel
 	 **/
-	protected $VALID_accessLevel = null;
+	protected $VALID_accessLevel = "A";
 
 	/**
 	 * invalid accessLevel to use
 	 * @var string $INVALID_accessLevel
 	 **/
-	protected $INVALID_accessLevel = null;
+	protected $INVALID_accessLevel = "AB";
 
-	/**
-	 * product id is for foreign key relation
-	 * @var int $productId
-	 **/
-	protected $vendor = null;
 
 	/**
 	 * create dependent objects before running each test
@@ -64,12 +59,9 @@ class ProductPermissionsTest extends InventoryTextTest {
 		// run the default setUp() method first
 		parent::setUp();
 
-		// create and insert a product id
-		$this->productId = new VendorId(null, "Joe Cool", "joecool@gmail.com", "Joe Cool", 5055555555);
-		$this->vendor->insert($this->getPDO());
-
-		$this->VALID_description = str_repeat("kids ", 25);
-		$this->INVALID_description = str_repeat("dogs and kids ", 25);
+		// create and insert a user id
+		$this->userId = new userId(null,  "Domino", "Fats", "R", "attention", "i found my thrill on blueberry hill", "When I found you", "The moon stood still", "On Blueberry Hill", "87102", "FatsBlueberryHill@gmail.som", "phoneNumber", "salt", "hash"));
+		$this->userId->insert($this->getPDO());
 	}
 
 
