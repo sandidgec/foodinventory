@@ -462,7 +462,7 @@ class User {
 				throw new InvalidArgumentException ("salt invalid");
 			}
 			if(strlen($newSalt) !== 64) {
-				throw new (RangeException ("salt not valid"));
+				throw (new RangeException ("salt not valid"));
 			}
 		}
 		$this->salt = $newSalt;

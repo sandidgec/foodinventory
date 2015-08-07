@@ -21,12 +21,12 @@ class LocationTest extends InventoryTextTest {
 	 * Valid locationId
 	 * @var int $locationId
 	 */
-	protected $VALID_locationId = "7";
+	protected $VALID_locationId = 7;
 	/**
 	 * valid storageCode
 	 * @var int $storageCode
 	 **/
-	protected $VALID_storageCode = "2";
+	protected $VALID_storageCode = 2;
 	/**
 	 * valid description of locationId
 	 * @var string $description
@@ -59,7 +59,7 @@ class LocationTest extends InventoryTextTest {
 	 * @expectedException PDOException
 	 **/
 	public function testInsertInvalidLocation() {
-		// create a location with a non null profileId and watch it fail
+		// create a location with a non null locationId and watch it fail
 		$location = new Location(InventoryTextTest::INVALID_KEY, $this->VALID_storageCode, $this->VALID_description);
 
 		$location->insert($this->getPDO());
@@ -82,7 +82,7 @@ class LocationTest extends InventoryTextTest {
 		$location->update($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoLocation = Location::getLocationByLocationId($this->getPDO(), $location->getUnitId());
+		$pdoLocation = Location::getLocationByLocationId($this->getPDO(), $location->getLocationId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("location"));
 		$this->assertSame($pdoLocation->getStorageCode(), $this->VALID_storageCode);
 		$this->assertSame($pdoLocation->getDescription(), $this->VALID_description);
@@ -96,7 +96,7 @@ class LocationTest extends InventoryTextTest {
 	 **/
 	public function testUpdateInvalidLocation() {
 		// create a Location and try to update it without actually inserting it
-		$location = new Location (null, $this->VALID_storageCode, $this->VALID_description);
+		$location = new Location(null, $this->VALID_storageCode, $this->VALID_description);
 		$location->update($this->getPDO());
 	}
 
@@ -164,7 +164,7 @@ class LocationTest extends InventoryTextTest {
 	/**
 	 * test grabbing a location by storageCode
 	 **/
-	public function testGetValidUserByStorageCode() {
+	public function testGetValidLocationByStorageCode() {
 		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("location");
 
@@ -174,7 +174,7 @@ class LocationTest extends InventoryTextTest {
 
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoLocation = Location::getLocationByStorageCode($this->getPDO(), $this->VALID_storageCode);
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("Location"));
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("location"));
 		$this->assertSame($pdoLocation->getStorageCode(), $this->VALID_storageCode);
 		$this->assertSame($pdoLocation->getDescription(), $this->VALID_description);
 
@@ -182,11 +182,12 @@ class LocationTest extends InventoryTextTest {
 
 	/**
 	 * test grabbing a Location by an storageCode that does not exists
+	 * @expectedException PDOException
+	 * @expectedExceptionMessage storage code is not valid
 	 **/
 	public function testGetInvalidLocationByStorageCode() {
 		// grab an storage code that does not exist
-		$location = Location::getLocationByStorageCode($this->getPDO(), "does@not.exist");
-		$this->assertNull($location);
+		Location::getLocationByStorageCode($this->getPDO(), "does@not.exist");
 	}
 }
 

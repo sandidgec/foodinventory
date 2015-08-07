@@ -28,10 +28,20 @@ class UnitOfMeasureTest extends InventoryTextTest {
 	 **/
 	protected $VALID_unitCode = "ea";
 	/**
+	 * 2nd valid unitCode
+	 * @var string
+	 */
+	protected $VALID_unitCode2 = "lb";
+	/**
+	 * Invalid Unit Code for testing
+	 * @var string
+	 */
+	protected $INVALID_unitCode = "xy";
+	/**
 	 * valid description of quantity
 	 * @var int $quantity
 	 **/
-	protected $VALID_quantity = 4;
+	protected $VALID_quantity = 4.00;
 
 
 
@@ -40,15 +50,15 @@ class UnitOfMeasureTest extends InventoryTextTest {
 	 **/
 	public function testInsertValidUnitOfMeasure() {
 		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("Unit of Measure");
+		$numRows = $this->getConnection()->getRowCount("unitOfMeasure");
 
 		// create a new Unit Of Measure and insert to into mySQL
-		$unitOfMeasure = new Location(null, $this->VALID_unitCode, $this->VALID_quantity);
+		$unitOfMeasure = new UnitOfMeasure(null, $this->VALID_unitCode, $this->VALID_quantity);
 		$unitOfMeasure->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoUnitOfMeasure = Location::getUnitOfMeasureByUnitId($this->getPDO(), $unitOfMeasure->getUnitOfMeasure());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("unit of measure"));
+		$pdoUnitOfMeasure = UnitOfMeasure::getUnitOfMeasureByUnitId($this->getPDO(), $unitOfMeasure->getUnitId());
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("unitOfMeasure"));
 		$this->assertSame($pdoUnitOfMeasure->getUnitCode(), $this->VALID_unitCode);
 		$this->assertSame($pdoUnitOfMeasure->getQuantity(), $this->VALID_quantity);
 	}
@@ -70,7 +80,7 @@ class UnitOfMeasureTest extends InventoryTextTest {
 	 **/
 	public function testUpdateValidUnitOfMeasure() {
 		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("Unit of Measure");
+		$numRows = $this->getConnection()->getRowCount("unitOfMeasure");
 
 		// create a new Unit of Measure and insert to into mySQL
 		$unitOfMeasure = new UnitOfMeasure(null, $this->VALID_unitCode, $this->VALID_quantity);
@@ -78,13 +88,13 @@ class UnitOfMeasureTest extends InventoryTextTest {
 		$unitOfMeasure->insert($this->getPDO());
 
 		// edit the Unit of Measure and update it in mySQL
-		$unitOfMeasure->setUnitCode($this->VALID_unitCode);
+		$unitOfMeasure->setUnitCode($this->VALID_unitCode2);
 		$unitOfMeasure->update($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoLocation = Location::getUnitOfMeasureByUnitId($this->getPDO(), $unitOfMeasure->getUnitId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("unit of measure"));
-		$this->assertSame($pdoLocation->getUnitCode(), $this->VALID_unitCode);
+		$pdoLocation = UnitOfMeasure::getUnitOfMeasureByUnitId($this->getPDO(), $unitOfMeasure->getUnitId());
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("unitOfMeasure"));
+		$this->assertSame($pdoLocation->getUnitCode(), $this->VALID_unitCode2);
 		$this->assertSame($pdoLocation->getQuantity(), $this->VALID_quantity);
 
 	}
@@ -116,8 +126,8 @@ class UnitOfMeasureTest extends InventoryTextTest {
 		$unitOfMeasure->delete($this->getPDO());
 
 		// grab the data from mySQL and enforce the Location does not exist
-		$pdoLocation = Location::getUnitOfMeasureByUnitId($this->getPDO(),$unitOfMeasure->getUnitOfMeasure());
-		$this->assertNull($pdoLocation);
+		$pdoUnitOfMeasure = UnitOfMeasure::getUnitOfMeasureByUnitId($this->getPDO(),$unitOfMeasure->getUnitId());
+		$this->assertNull($pdoUnitOfMeasure);
 		$this->assertSame($numRows, $this->getConnection()->getRowCount("unitOfMeasure"));
 	}
 
@@ -127,14 +137,14 @@ class UnitOfMeasureTest extends InventoryTextTest {
 	 *
 	 * @expectedException PDOException
 	 **/
-	public function testDeleteInvalidLocation() {
+	public function testDeleteInvalidUnitOfMeasure() {
 		// create a Unit Of Measure and try to delete it without actually inserting it
 		$unitOfMeasure= new UnitOfMeasure(null, $this->VALID_unitCode, $this->VALID_quantity);
 		$unitOfMeasure->delete($this->getPDO());
 	}
 
 	/**
-	 * test inserting a Location and regrabbing it from mySQL
+	 * test inserting a Unit Of Measure and regrabbing it from mySQL
 	 **/
 	public function testGetValidLocationrByLocationId() {
 		// count the number of rows and save it for later
@@ -145,8 +155,8 @@ class UnitOfMeasureTest extends InventoryTextTest {
 		$unitOfMeasure->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoUnitOfMeasure = Location::getUnitOfMeasureByUnitId($this->getPDO(), $unitOfMeasure->getUnitId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("user"));
+		$pdoUnitOfMeasure = UnitOfMeasure::getUnitOfMeasureByUnitId($this->getPDO(), $unitOfMeasure->getUnitId());
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("unitOfMeasure"));
 		$this->assertSame($pdoUnitOfMeasure->getUnitCode(), $this->VALID_unitCode);
 		$this->assertSame($pdoUnitOfMeasure->getQuantity(), $this->VALID_quantity);
 
@@ -157,8 +167,8 @@ class UnitOfMeasureTest extends InventoryTextTest {
 	 **/
 	public function testGetInvalidUnitOfMeasureByUnitId() {
 		// grab a unit of measure id that exceeds the maximum allowable unit id
-		$location = Location::getLocationByLocationId($this->getPDO(), InventoryTextTest::INVALID_KEY);
-		$this->assertNull($location);
+		$unitOfMeasure = UnitOfMeasure::getUnitOfMeasureByUnitId($this->getPDO(), InventoryTextTest::INVALID_KEY);
+		$this->assertNull($unitOfMeasure);
 	}
 
 	/**
@@ -166,18 +176,19 @@ class UnitOfMeasureTest extends InventoryTextTest {
 	 **/
 	public function testGetValidUserByStorageCode() {
 		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("location");
+		$numRows = $this->getConnection()->getRowCount("unitOfMeasure");
 
 		// create a new Location and insert to into mySQL
-		$location = new Location(null, $this->VALID_storageCode, $this->VALID_description);
-		$location->insert($this->getPDO());
+		$unitOfMeasure = new UnitOfMeasure(null, $this->VALID_unitCode, $this->VALID_quantity);
+		$unitOfMeasure->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoUnitOfMeasure = Location::getUnitOfMeasureByUnitCode($this->getPDO(), $this->VALID_unitCode);
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("Unit Of Measure"));
-		$this->assertSame($pdoUnitOfMeasure->getUnitCode(), $this->VALID_unitCode);
-		$this->assertSame($pdoUnitOfMeasure->getQuantity(), $this->VALID_quantity);
-
+		$pdoUnitOfMeasure =UnitOfMeasure::getUnitOfMeasureByUnitCode($this->getPDO(), $this->VALID_unitCode);
+		foreach ($pdoUnitOfMeasure as $uOM) {
+			$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("unitOfMeasure"));
+			$this->assertSame($uOM->getUnitCode(), $this->VALID_unitCode);
+			$this->assertSame($uOM->getQuantity(), $this->VALID_quantity);
+		}
 	}
 
 	/**
@@ -185,7 +196,7 @@ class UnitOfMeasureTest extends InventoryTextTest {
 	 **/
 	public function testGetInvalidUnitOfMeasureByUnitCode() {
 		// grab a unit code that does not exist
-		$unitOfMeasure = UnitOfMeasure::getUnitOfMeasureByUnitCode($this->getPDO(), "does@not.exist");
+		$unitOfMeasure = UnitOfMeasure::getUnitOfMeasureByUnitCode($this->getPDO(),$this->INVALID_unitCode);
 		$this->assertNull($unitOfMeasure);
 	}
 }

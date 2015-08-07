@@ -34,9 +34,9 @@ class UserTest extends InventoryTextTest {
 	protected $VALID_firstName = "charles";
 	/**
 	 * valid root user level
-	 * @var string $root
+	 * @var boolean $root
 	 */
-	protected $VALID_root = "T";
+	protected $VALID_root = TRUE;
 	/**
 	 * valid attention line
 	 * @var string $attention ;

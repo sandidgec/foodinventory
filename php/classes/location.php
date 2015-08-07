@@ -168,14 +168,18 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 	 * @param PDO $pdo
 	 */
 	public function update(PDO &$pdo) {
+		if ($this->locationId === null) {
+			throw (new PDOException("can't update location that hasn't been saved"));
+		}
 
-		// create query template
-		$query	 = "UPDATE location SET storageCode = :storageCode, description = :description WHERE locationId = :locationId";
+			// create query template
+		$query = "UPDATE location SET storageCode = :storageCode, description = :description WHERE locationId = :locationId";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables
 		$parameters = array("storageCode" => $this->storageCode, "description" => $this->description, "locationId" => $this->locationId);
 		$statement->execute($parameters);
+
 	}
 
 
@@ -229,7 +233,7 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 		// sanitize the storageCode before searching
 		$location = filter_var($location, FILTER_VALIDATE_INT);
 		if($location === false) {
-			throw(new PDOException(""));
+			throw(new PDOException("storage code is not valid"));
 		}
 		if($location <= 0) {
 			throw(new PDOException("storage code is not positive"));

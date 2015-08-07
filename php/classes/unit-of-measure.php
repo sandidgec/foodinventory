@@ -13,17 +13,19 @@ private $unitId;
 private $unitCode;
 
 	/**
-	 * @var int $quantity
+	 * @var float $quantity
 	 */
 private $quantity;
 
 
 	/**
-	 * Constructor
-	 * @param $newUnitId
-	 * @param $newUnitCode
-	 * @param $newQuantity
+	 * Constructor for unit of measure class
+	 * @param int $newUnitId
+	 * @param string $newUnitCode
+	 * @param float $newQuantity
 	 * @throws Exception
+	 * @throws RangeException
+	 * @throws InvalidArgumentException
 	 */
 	public function __construct($newUnitId, $newUnitCode, $newQuantity) {
 		try {
@@ -55,7 +57,8 @@ private $quantity;
 
 	/**
 	 * mutator for Unit Id
-	 * @param $newUnitId
+	 * @param int $newUnitId
+	 * @throws InvalidArgumentException for invalid content
 	 */
 	public function setUnitId($newUnitId) {
 		// base case: if the unitId is null,
@@ -82,7 +85,9 @@ private $quantity;
 
 	/**
 	 * mutator for unit code
-	 * @param $newUnitCode
+	 * @param string $newUnitCode
+	 * @throws InvalidArgumentException for invalid content
+	 * @throws RangeException for more than 2 characters
 	 */
 	public function setUnitCode($newUnitCode) {
 		//verify the locationId is valid
@@ -98,7 +103,7 @@ private $quantity;
 
 	/**
 	 * accessor for Quantity
-	 * @return string
+	 * @return float
 	 */
 	public function getQuantity() {
 		return ($this->quantity);
@@ -106,15 +111,21 @@ private $quantity;
 
 	/**
 	 * mutator for Quantity
-	 * @param $newQuantity
+	 * @param float $newQuantity
+	 * @throws InvalidArgumentException for invalid content
+	 * @throws RangeException for negative quantity value
 	 */
 	public function setQuantity($newQuantity) {
 		//verify the quantity is valid
-		$newQuantity = filter_var($newQuantity, FILTER_VALIDATE_INT);
+		$newQuantity = filter_var($newQuantity, FILTER_VALIDATE_FLOAT);
 		if(empty($newQuantity) === true) {
 			throw (new InvalidArgumentException ("quantity invalid"));
 		}
-		$this->quantity = $newQuantity;
+		// verify the quantity is positive
+		if($newQuantity < 0) {
+			throw(new RangeException("quantity is a negative value"));
+		}
+		$this->quantity = floatval($newQuantity);
 	}
 
 	/**
@@ -133,7 +144,7 @@ private $quantity;
 		$statement = $pdo->prepare($query);
 
 		// bind the variables to the place holders in the template
-		$parameters = array("unitId" => $this->unitId, "storageCode" => $this->unitCode, "quantity" => $this->quantity);
+		$parameters = array("unitId" => $this->unitId, "unitCode" => $this->unitCode, "quantity" => $this->quantity);
 
 		$statement->execute($parameters);
 
@@ -143,7 +154,8 @@ private $quantity;
 
 	/**
 	 * Delete PDO
-	 * @param PDO $pdo
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @throws PDOException for mySQL related errors
 	 */
 	public function delete(PDO &$pdo) {
 		// enforce the unitId is not null
@@ -162,16 +174,21 @@ private $quantity;
 
 	/**
 	 * Update PDO
-	 * @param PDO $pdo
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @throws PDOException for mySQL related issues
 	 */
 	public function update(PDO &$pdo) {
+	// enforce the unitId is not null
+		if($this->unitId === null) {
+			throw(new PDOException("unable to delete a unitId that does not exist"));
+		}
 
 		// create query template
-		$query	 = "UPDATE unitOfMeasure SET unitId = :unitId, unitCode = :unitCode, quantity = :quantity WHERE unitId = :UnitId";
+		$query	 = "UPDATE unitOfMeasure SET unitCode = :unitCode, quantity = :quantity WHERE unitId = :unitId";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables
-		$parameters = array("unitId" => $this->unitId, "unitCode" => $this->unitCode, "quantity" => $this->quantity);
+		$parameters = array("unitCode" => $this->unitCode, "quantity" => $this->quantity, "unitId" => $this->unitId);
 		$statement->execute($parameters);
 	}
 
@@ -179,11 +196,14 @@ private $quantity;
 	/**
 	 * Get unitOfMeasure by unitId
 	 * @param PDO $pdo
-	 * @param $unitId
-	 * @return mixed
+	 * @param int $unitId
+	 * @return mixed UnitOfMeasure
+	 * @throws PDOException if unit id is not an integer
+	 * @throws PDOException if unit id is not positive in mySQL
+	 * @throws PDOException if row couldn't be converted in mySQL
 	 */
 	public static function getUnitOfMeasureByUnitId(PDO &$pdo, $unitId) {
-		// sanitize the location id before searching
+		// sanitize the unitId before searching
 		$unitId = filter_var($unitId, FILTER_VALIDATE_INT);
 		if($unitId=== false) {
 			throw(new PDOException("unit id is not an integer"));
@@ -208,7 +228,7 @@ private $quantity;
 			if($row !== false) {
 				$UnitOfMeasure = new UnitOfMeasure ($row["unitId"], $row["unitCode"], $row["quantity"]);
 			}
-		} catch(Exception $exception) {
+		} catch(PDOException $exception) {
 			// if the row couldn't be converted, rethrow it
 			throw(new PDOException($exception->getMessage(), 0, $exception));
 		}
@@ -216,19 +236,20 @@ private $quantity;
 	}
 
 	/**
-	 * get unitOfMeasure by unitCode
 	 * @param PDO $pdo
-	 * @param $unitOfMeasure
+	 * @param $newUnitCode
 	 * @return null|UnitOfMeasure
+	 * @throws InvalidArgumentException if UnitCode not a valid string
+	 * @throws RangeException if UnitCode is not exactly 2 characters
 	 */
-	public static function getUnitOfMeasureByUnitCode(PDO &$pdo, $unitOfMeasure) {
+	public static function getUnitOfMeasureByUnitCode(PDO &$pdo, $newUnitCode) {
 		// sanitize the storageCode before searching
-		$unitOfMeasure = filter_var($unitOfMeasure, FILTER_VALIDATE_INT);
-		if($unitOfMeasure === false) {
-			throw(new PDOException(""));
+		$newUnitCode = filter_var($newUnitCode, FILTER_SANITIZE_STRING);
+		if($newUnitCode === false) {
+			throw(new InvalidArgumentException("invalid unitCode "));
 		}
-		if($unitOfMeasure <= 0) {
-			throw(new PDOException("unit code is not positive"));
+		if(strlen($newUnitCode) !== 2) {
+			throw(new RangeException("unit code is not valid length"));
 		}
 
 		// create query template
@@ -236,7 +257,7 @@ private $quantity;
 		$statement = $pdo->prepare($query);
 
 		// bind the unit code  to the place holder in the template
-		$parameters = array("unitCode" => $unitOfMeasure);
+		$parameters = array("unitCode" => $newUnitCode);
 		$statement->execute($parameters);
 
 		// grab the unit of measure from mySQL
