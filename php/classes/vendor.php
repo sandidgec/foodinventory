@@ -175,7 +175,7 @@ class Vendor {
 			throw(new RangeException("vendor name is too large"));
 		}
 		//store vendor name
-		$this->vendorName=$newVendorName;
+		$this->vendorName = $newVendorName;
 	}
 	/**
 	* accessor method for vendor phone number
@@ -359,26 +359,27 @@ class Vendor {
 		}
 
 		// create query template
-		$query	 = "SELECT vendorId, contactName, vendorEmail, vendorName, vendorPhoneNumber FROM vendor WHERE vendorName = :vendorName";
+		$query = "SELECT vendorId, contactName, vendorEmail, vendorName, vendorPhoneNumber FROM vendor WHERE vendorName LIKE :vendorName";
 		$statement = $pdo->prepare($query);
 
 		// bind the vendor name to the place holder in the template
+		$vendorName = "%$vendorName%";
 		$parameters = array("vendorName" => $vendorName);
 		$statement->execute($parameters);
 
-		// grab the vendor from mySQL
-		try {
-			$vendor = null;
-			$statement->setFetchMode(PDO::FETCH_ASSOC);
-			$row   = $statement->fetch();
-			if($row !== false) {
+		//build an array of vendors
+		$vendors = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
 				$vendor = new Vendor($row["vendorId"], $row["contactName"], $row["vendorEmail"], $row["vendorName"], $row["vendorPhoneNumber"]);
+				$vendors[$vendors->key()] = $vendor;
+				$vendors->next();
+			} catch(Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
-		} catch(Exception $exception) {
-			// if the row couldn't be converted, rethrow it
-			throw(new PDOException($exception->getMessage(), 0, $exception));
 		}
-		return($vendor);
+		return ($vendors);
 	}
-
 }
