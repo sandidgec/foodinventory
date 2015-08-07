@@ -89,7 +89,9 @@ class ProductPermissionsTest extends InventoryTextTest {
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoProductPermissions = ProductPermissions::getProductPermissionsByUserId($this->getPDO(), $productPermissions->getUserId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product permissions"));
-		$this->assertSame($pdoProductPermissions->getproductId(), $this->VALID_productId);
+		$this->assertSame($pdoProductPermissions->getProductId(), $this->VALID_productId);
+		$this->assertSame($pdoProductPermissions->getUserId(), $this->VALID_userId);
+		$this->assertSame($pdoProductPermissions->getAccessLevel(), $this->VALID_accessLevel);
 	}
 
 	/**
@@ -119,6 +121,7 @@ class ProductPermissionsTest extends InventoryTextTest {
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product permissions"));
 		$this->assertSame($pdoProductPermissions->getProductId(), $this->VALID_productId);
 		$this->assertSame($pdoProductPermissions->getUserId(), $this->VALID_userId);
+		$this->assertSame($pdoProductPermissions->getAccessLevel(), $this->VALID_accessLevel);
 	}
 
 	/**
@@ -144,7 +147,9 @@ class ProductPermissionsTest extends InventoryTextTest {
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoProductPermissions = ProductPermissions::getProductPermissionsByProductId($this->getPDO(), $productPermissions->getProductId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product permissions"));
-		$this->assertSame($pdoProductPermissions->getProductId(), $this->VALID_userId, $this->VALID_accessLevel);
+		$this->assertSame($pdoProductPermissions->getProductId(), $this->VALID_productId);
+		$this->assertSame($pdoProductPermissions->getUserId(), $this->VALID_userId);
+		$this->assertSame($pdoProductPermissions->getAccessLevel(), $this->VALID_accessLevel);
 	}
 
 	/**
@@ -170,7 +175,9 @@ class ProductPermissionsTest extends InventoryTextTest {
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoProductPermissions = ProductPermissions::getProductPermissionsByUserId($this->getPDO(), $productPermissions->getUserId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product permissions"));
-		$this->assertSame($pdoProductPermissions->getUserId(), $this->VALID_productId, $this->VALID_accessLevel);
+		$this->assertSame($pdoProductPermissions->getProductId(), $this->VALID_productId);
+		$this->assertSame($pdoProductPermissions->getUserId(), $this->VALID_userId);
+		$this->assertSame($pdoProductPermissions->getAccessLevel(), $this->VALID_accessLevel);
 	}
 
 	/**
@@ -187,7 +194,9 @@ class ProductPermissionsTest extends InventoryTextTest {
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoProductPermissions = ProductPermissions::getProductPermissionsByAccessLevel($this->getPDO(), $productPermissions->getAccessLevel());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product permissions"));
-		$this->assertSame($pdoProductPermissions->getAccessLevel(), $this->VALID_productId, $this->VALID_userId);
+		$this->assertSame($pdoProductPermissions->getProductId(), $this->VALID_productId);
+		$this->assertSame($pdoProductPermissions->getUserId(), $this->VALID_userId);
+		$this->assertSame($pdoProductPermissions->getAccessLevel(), $this->VALID_accessLevel);
 	}
 
 }
