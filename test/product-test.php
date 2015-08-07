@@ -140,7 +140,7 @@ class ProductTest extends InventoryTextTest {
 	public function testInsertInvalidProduct() {
 		// create a product with a non null Product and watch it fail
 		$product = new Product(InventoryTextTest::INVALID_KEY,
-			$this->VALID_productId, $this->vendor->getVendorId(), $this->VALID_sku,
+			$this->vendor->getVendorId(), $this->VALID_sku,
 			$this->VALID_leadTime, $this->VALID_title, $this->VALID_description);
 		$product->insert($this->getPDO());
 	}
