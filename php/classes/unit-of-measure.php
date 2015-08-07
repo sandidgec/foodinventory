@@ -3,16 +3,19 @@
 class UnitOfMeasure {
 
 	/**
+	 * primary key for unitOfMeasure
 	 * @var int $unitId
 	 */
 private $unitId;
 
 	/**
+	 * the identity of quantity of a unit - i.e. ea (for each)
 	 * @var string $unitCode
 	 */
 private $unitCode;
 
 	/**
+	 * the quantity of a unit
 	 * @var float $quantity
 	 */
 private $quantity;
