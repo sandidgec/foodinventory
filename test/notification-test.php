@@ -35,7 +35,7 @@ class NotificationTest extends InventoryTextTest {
 	 * valid email status to use
 	 * @var int $VALID_emailStatus
 	 **/
-	protected $VALID_emailStatus = "1";
+	protected $VALID_emailStatus = true;
 	/**
 	 * invalid email status to use
 	 * @var int $VALID_emailStatus
@@ -45,7 +45,7 @@ class NotificationTest extends InventoryTextTest {
 	 * valid notification date and time to use
 	 * @var dateTime $VALID_notificationDateTime
 	 **/
-	protected $VALID_notificationDateTime = "1985-06-28 04:26:03";
+	protected $VALID_notificationDateTime = null;
 	/**
 	 * invalid notification date time to use
 	 * @var dateTime $INVALID_notificationDateTime
@@ -77,6 +77,10 @@ class NotificationTest extends InventoryTextTest {
 	 **/
 	protected $INVALID_notificationContent = "place holder cause Topher doesn't know";
 
+	/**
+	 * seting up for Foreign key alert id
+	 * @var AlertLevel $alertLevel
+	 **/
 	protected $alertLevel = null;
 
 	public function setUp() {
@@ -88,8 +92,10 @@ class NotificationTest extends InventoryTextTest {
 		$alertLevel = "100.01";
 		$alertOperator = "1";
 
-		$this->alertLevel= new AlertLevel($alertId, $alertCode, $alertFrequency, $alertLevel, $alertOperator);
+		$this->alertLevel = new AlertLevel($alertId, $alertCode, $alertFrequency, $alertLevel, $alertOperator);
 		$this->alertLevel->insert($this->getPDO());
+
+		$this->VALID_notificationDateTime = DateTime::createFromFormat("Y-m-d H:i:s", "1985-06-28 04:26:03");
 
 	}
 	/**
@@ -100,16 +106,15 @@ class NotificationTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("notification");
 
 		// create a new Notification and insert to into mySQL
-		$notification = new Notification (null, $this->VALID_alertId, $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
+		$notification = new Notification (null, $this->alertLevel->getAlertId(), $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
 		$notification->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoNotification = Notification::getNotificationByNotificationId($this->getPDO(), $notification->getNotificationId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("notification"));
-		$this->assertSame($pdoNotification->getNotificattionId(), $this->VALID_notificationId);
-		$this->assertSame($pdoNotification->getAlertId(), $this->alerdtLevel->getAlertId());
+		$this->assertSame($pdoNotification->getAlertId(), $this->alertLevel->getAlertId());
 		$this->assertSame($pdoNotification->getEmailStatus(), $this->VALID_emailStatus);
-		$this->assertSame($pdoNotification->getNotificationDateTime(), $this->VALID_notificationDateTime);
+		$this->assertEquals($pdoNotification->getNotificationDateTime(), $this->VALID_notificationDateTime);
 		$this->assertSame($pdoNotification->getNotificationHandle(), $this->VALID_notificationHandle);
 		$this->assertSame($pdoNotification->getNotificationContent(), $this->VALID_notificationContent);
 	}
@@ -126,32 +131,6 @@ class NotificationTest extends InventoryTextTest {
 	}
 
 	/**
-	 * test inserting a notification, editing it, and then updating it
-	 **/
-	public function testUpdateValidNotification() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("notification");
-
-		// create a new notification and insert to into mySQL
-		$notification = new Notification(null, $this->VALID_alertId, $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
-		$notification->insert($this->getPDO());
-
-		// edit the Notification and update it in mySQL
-		$notification->set($this->VALID_notificationHandle2);
-		$notification->update($this->getPDO());
-
-		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoNotification = Notification::getNotificationByNotificationId($this->getPDO(), $notification->getnotificationId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("notification"));
-		$this->assertSame($pdoNotification->getNotificattionId(), $this->VALID_notificationId);
-		$this->assertSame($pdoNotification->getAlertId(), $this->VALID_alertId);
-		$this->assertSame($pdoNotification->getEmailStatus(), $this->VALID_emailStatus);
-		$this->assertSame($pdoNotification->getNotificationDateTime(), $this->VALID_notificationDateTime);
-		$this->assertSame($pdoNotification->getNotificationHandle(), $this->VALID_notificationHandle2);
-		$this->assertSame($pdoNotification->getNotificationContent(), $this->VALID_notificationContent);
-	}
-
-	/**
 	 * test inserting a Notification and regrabbing it from mySQL
 	 **/
 	public function testGetValidNotificationByNotificationId() {
@@ -159,17 +138,16 @@ class NotificationTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("notification");
 
 		// create a new Notification and insert to into mySQL
-		$notification = new Notification(null, $this->VALID_alertId, $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
+		$notification = new Notification(null, $this->alertLevel->getAlertId(), $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
 		$notification->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoNotification = Notification::getNotificationByNotificationId($this->getPDO(), $notification->getNotificationId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("notification"));
-		$this->assertSame($pdoNotification->getNotificattionId(), $this->VALID_notificationId);
-		$this->assertSame($pdoNotification->getAlertId(), $this->VALID_alertId);
+		$this->assertSame($pdoNotification->getAlertId(), $this->alertLevel->getAlertId());
 		$this->assertSame($pdoNotification->getEmailStatus(), $this->VALID_emailStatus);
-		$this->assertSame($pdoNotification->getNotificationDateTime(), $this->VALID_notificationDateTime);
-		$this->assertSame($pdoNotification->getNotificationHandle(), $this->VALID_notificationHandle2);
+		$this->assertEquals($pdoNotification->getNotificationDateTime(), $this->VALID_notificationDateTime);
+		$this->assertSame($pdoNotification->getNotificationHandle(), $this->VALID_notificationHandle);
 		$this->assertSame($pdoNotification->getNotificationContent(), $this->VALID_notificationContent);
 	}
 
@@ -190,18 +168,19 @@ class NotificationTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("notification");
 
 		// create a new notification and insert to into mySQL
-		$notification = new Notification(null, $this->VALID_alertId, $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
+		$notification = new Notification(null, $this->alertLevel->getAlertId(), $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
 		$notification->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoNotification = Notification::getNotificationByAlertId($this->getPDO(), $this->VALID_alertId);
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("notification"));
-		$this->assertSame($pdoNotification->getNotificattionId(), $this->VALID_notificationId);
-		$this->assertSame($pdoNotification->getAlertId(), $this->VALID_alertId);
-		$this->assertSame($pdoNotification->getEmailStatus(), $this->VALID_emailStatus);
-		$this->assertSame($pdoNotification->getNotificationDateTime(), $this->VALID_notificationDateTime);
-		$this->assertSame($pdoNotification->getNotificationHandle(), $this->VALID_notificationHandle2);
-		$this->assertSame($pdoNotification->getNotificationContent(), $this->VALID_notificationContent);
+		$pdoNotification = Notification::getNotificationByAlertId($this->getPDO(), $this->alertLevel->getAlertId());
+		foreach($pdoNotification as $note) {
+			$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("notification"));
+			$this->assertSame($note->getAlertId(), $this->alertLevel->getAlertId());
+			$this->assertSame($note->getEmailStatus(), $this->VALID_emailStatus);
+			$this->assertEquals($note->getNotificationDateTime(), $this->VALID_notificationDateTime);
+			$this->assertSame($note->getNotificationHandle(), $this->VALID_notificationHandle2);
+			$this->assertSame($note->getNotificationContent(), $this->VALID_notificationContent);
+		}
 	}
 
 	/**
@@ -220,18 +199,17 @@ class NotificationTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("notification");
 
 		// create a new notification and insert to into mySQL
-		$notification = new Notification(null, $this->VALID_alertId, $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
+		$notification = new Notification(null, $this->alertLevel->getAlertId(), $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
 		$notification->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoNotification = Notification::getNotificationByEmailStatus($this->getPDO(), $this->VALID_emailStatus);
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("notification"));
-		$this->assertSame($pdoNotification->getNotificattionId(), $this->VALID_notificationId);
-		$this->assertSame($pdoNotification->getAlertId(), $this->VALID_alertId);
-		$this->assertSame($pdoNotification->getEmailStatus(), $this->VALID_emailStatus);
-		$this->assertSame($pdoNotification->getNotificationDateTime(), $this->VALID_notificationDateTime);
-		$this->assertSame($pdoNotification->getNotificationHandle(), $this->VALID_notificationHandle2);
-		$this->assertSame($pdoNotification->getNotificationContent(), $this->VALID_notificationContent);
+			$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("notification"));
+			$this->assertSame($pdoNotification->getAlertId(), $this->alertLevel->getAlertId());
+			$this->assertSame($pdoNotification->getEmailStatus(), $this->VALID_emailStatus);
+			$this->assertEquals($pdoNotification->getNotificationDateTime(), $this->VALID_notificationDateTime);
+			$this->assertSame($pdoNotification->getNotificationHandle(), $this->VALID_notificationHandle);
+			$this->assertSame($pdoNotification->getNotificationContent(), $this->VALID_notificationContent);
 	}
 
 	/**
@@ -240,6 +218,6 @@ class NotificationTest extends InventoryTextTest {
 	public function testGetInvalidNotificationByEmailStatus() {
 		// grab an email id that does not exist
 		$notification = Notification::getNotificationByAlertId($this->getPDO(), "4294967296");
-		$this->assertNull($notification);
+			$this->assertNull($notification);
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 
-require_once("/home/jhuber8/public_html/foodinventory/php/traits/validateDate.php");
+require_once(dirname(__DIR__) . "/traits/validate-date.php");
 
 /**
  * this is the notification class for the inventoryText capstone project
@@ -23,7 +23,7 @@ class Notification {
 	private $alertId;
 	/**
 	 * this is the confirmation status for each email sent
-	 * @var int $emailStatus
+	 * @var boolean $emailStatus
 	 **/
 	private $emailStatus;
 	/**
@@ -49,7 +49,7 @@ class Notification {
 	 *
 	 * @param int $newNotificationId id of this Notification or null if unknown notification
 	 * @param int $newAlertId id for alert level sent with this notification
-	 * @param int $newEmailStatus confirmation status for sent emails
+	 * @param boolean $newEmailStatus confirmation status for sent emails
 	 * @param dateTime $newNotificationDateTime date and time of when each notification was sent or null if set to current date and time
 	 * @param string $newNotificationHandle string containing data from twilio for notification
 	 * @param string $newNotificationContent string containing conent of notification
@@ -131,12 +131,6 @@ class Notification {
 	 * @throws RangeException if $newAlertId is not positive
 	 **/
 	public function setAlertId($newAlertId) {
-		// base case: if the alert id is null, this a new alert without a mySQL assigned id (yet)
-		if($newAlertId === null) {
-			$this->alertId = null;
-			return;
-		}
-
 		// verify the alert id is valid
 		$newAlertId = filter_var($newAlertId, FILTER_VALIDATE_INT);
 		if($newAlertId === false) {
@@ -152,7 +146,7 @@ class Notification {
 	/**
 	 * accessor method for email status
 	 *
-	 * @return mixed value of email status
+	 * @return boolean value of email status
 	 **/
 	public function getEmailStatus() {
 		return ($this->emailStatus);
@@ -161,28 +155,18 @@ class Notification {
 	/**
 	 * mutator method for email status
 	 *
-	 * @param int $newEmailStatus new value of email status
+	 * @param boolean $newEmailStatus new value of email status
 	 * @throws InvalidArgumentException if $newEmailStatus is not an integer
 	 * @throws RangeException if $newEmailStatus is not positive
 	 **/
 	public function setEmailStatus($newEmailStatus) {
-		// base case: if the email status is null, this a new alert without a mySQL assigned id (yet)
-		if($newEmailStatus === null) {
-			$this->emailStatus = null;
-			return;
-		}
-
 		// verify the email status is valid
-		$newEmailStatus = filter_var($newEmailStatus, FILTER_VALIDATE_INT);
+		$newEmailStatus = filter_var($newEmailStatus, FILTER_VALIDATE_BOOLEAN);
 		if($newEmailStatus === false) {
-			throw(new InvalidArgumentException("email status is not a valid integer"));
-		}
-		// verify the alert id is positive
-		if($newEmailStatus <= 0) {
-			throw(new RangeException("email is not positive"));
+			throw(new InvalidArgumentException("email status is not a valid boolean"));
 		}
 		// convert and store the alert id
-		$this->emailStatus = intval($newEmailStatus);
+		$this->emailStatus = $newEmailStatus;
 	}
 
 
@@ -265,7 +249,7 @@ class Notification {
 	 *
 	 * @param string $newNotificationContent new value of notification content
 	 * @throws InvalidArgumentException if $newNotificationContent is not a string or insecure
-	 * @throws RangeException if $newNotificationContent is > 160 characters
+	 * @throws RangeException if $newNotificationContent is > 10000 characters
 	 **/
 	public function setNotificationContent($newNotificationContent) {
 		// verify the notification content is secure
@@ -276,7 +260,7 @@ class Notification {
 		}
 
 		// verify the notification content will fit in the database
-		if(strlen($newNotificationContent) > 160) {
+		if(strlen($newNotificationContent) > 10000) {
 			throw(new RangeException("notification content too large"));
 		}
 		// store the notification content
@@ -393,22 +377,19 @@ class Notification {
 	 * gets the Notification by emailStatus
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
-	 * @param int $emailStatus email status to search for
+	 * @param boolean $emailStatus email status to search for
 	 * @return mixed notification found or null if not found
 	 * @throws PDOException when mySQL related errors occur
 	 **/
 	public static function getNotificationByEmailStatus(PDO &$pdo, $emailStatus) {
 		// sanitize the emailStatus before searching
-		$emailStatus = filter_var($emailStatus, FILTER_VALIDATE_INT);
+		$emailStatus = filter_var($emailStatus, FILTER_VALIDATE_BOOLEAN);
 		if($emailStatus === false) {
-			throw(new PDOException("email status is not an integer"));
-		}
-		if($emailStatus <= 0) {
-			throw(new PDOException("email status is not positive"));
+			throw(new PDOException("email status is not a boolean"));
 		}
 
 		// create query template
-		$query = "SELECT notificationId, alertId, emailStatus, notificationDateTime, notificationHandle, notificationContent FROM notification WHERE notificationId = :notificationId";
+		$query = "SELECT notificationId, alertId, emailStatus, notificationDateTime, notificationHandle, notificationContent FROM notification WHERE emailStatus = :emailStatus";
 		$statement = $pdo->prepare($query);
 
 		// bind the email id to the place holder in the template
