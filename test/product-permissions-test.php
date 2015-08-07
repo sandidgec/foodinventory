@@ -70,7 +70,7 @@ class ProductPermissionsTest extends InventoryTextTest {
 		parent::setUp();
 
 		// create and insert a user id
-		$this->userId = new userId(null,  "Domino", "Fats", "R", "attention", "i found my thrill on blueberry hill", "When I found you", "The moon stood still", "On Blueberry Hill", "87102", "Fats@BlueberryHill@gmail.som", "5055555555", 262144, "password1234");
+		$this->userId = new userId(null,  "Domino", "Fats", "R", "attention", "I found my thrill on blueberry hill", "When I found you", "The moon stood still", "On Blueberry Hill", "87102", "Fats@BlueberryHill@gmail.som", "5055555555", 262144, "password1234");
 		$this->userId->insert($this->getPDO());
 	}
 
