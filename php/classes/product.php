@@ -62,7 +62,7 @@ class Product {
 			$this->setVendorId($newVendorId);
 			$this->setSku($newSku);
 			$this->setLeadTime($newLeadTime);
-			$this->setLeadTime($newTitle);
+			$this->setTitle($newTitle);
 			$this->setDescription($newDescription);
 		} catch(InvalidArgumentException $invalidArgument) {
 			// rethrow the exception to the caller
@@ -203,7 +203,7 @@ class Product {
 		// verify the leadTime is valid
 		$newLeadTime = filter_var($newLeadTime, FILTER_VALIDATE_INT);
 		if($newLeadTime === false) {
-			throw(new InvalidArgumentException("leadTime is not a valid integer"));
+			throw(new InvalidArgumentException("leadTime is not a valid integer: " . $newLeadTime));
 		}
 
 		// verify the leadTime is positive
@@ -297,11 +297,11 @@ class Product {
 		}
 
 		// create query template
-		$query	 = "INSERT INTO product(vendorId, sku, leadTime, title, description) VALUES(:productId, :vendorId, :sku, :leadTime, :title, :description)";
+		$query	 = "INSERT INTO product(vendorId, sku, leadTime, title, description) VALUES(:vendorId, :sku, :leadTime, :title, :description)";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
-		$parameters = array("productId" => $this->productId, "vendorId" => $this->vendorId, "sku" => $this->sku, "leadTime" => $this->leadTime, "title" => $this->title, "description" => $this->description);
+		$parameters = array("vendorId" => $this->vendorId, "sku" => $this->sku, "leadTime" => $this->leadTime, "title" => $this->title, "description" => $this->description);
 		$statement->execute($parameters);
 
 		// update the null ProductId with what mySQL just gave us
@@ -442,11 +442,11 @@ class Product {
 	 * @return SplFixedArray all product found for this sku
 	 * @throws PDOException when mySQL related errors occur
 	 **/
-	public static function getProductBySku(PDO &$pdo, $newSku, $sku) {
+	public static function getProductBySku(PDO &$pdo, $sku) {
 		// sanitize the sku before searching
-		$newSku = trim($newSku);
-		$newSku = filter_var($newSku, FILTER_SANITIZE_STRING);
-		if(empty($newSku) === true) {
+		$sku = trim($sku);
+		$sku = filter_var($sku, FILTER_SANITIZE_STRING);
+		if(empty($sku) === true) {
 			throw(new PDOException("sku is invalid"));
 		}
 
@@ -482,11 +482,11 @@ class Product {
 	 * @return SplFixedArray all product found for this leadTime
 	 * @throws PDOException when mySQL related errors occur
 	 **/
-	public static function getProductByLeadTIme(PDO &$pdo, $newLeadTIme, $leadTime) {
+	public static function getProductByLeadTIme(PDO &$pdo, $leadTime) {
 		// sanitize the leadTime before searching
-		$newleadTime = trim($newLeadTIme);
-		$newLeadTIme = filter_var($newLeadTIme, FILTER_SANITIZE_STRING);
-		if(empty($newLeadTIme) === true) {
+		$leadTime = trim($leadTime);
+		$leadTime = filter_var($leadTime, FILTER_SANITIZE_STRING);
+		if(empty($leadTime) === true) {
 			throw(new PDOException("leadTIme is invalid"));
 		}
 
@@ -522,11 +522,11 @@ class Product {
 	 * @return SplFixedArray all product found for this title
 	 * @throws PDOException when mySQL related errors occur
 	 **/
-	public static function getProductByTitle(PDO &$pdo, $newTitle, $title) {
+	public static function getProductByTitle(PDO &$pdo, $title) {
 		// sanitize the title before searching
-		$newTitle = trim($newTitle);
-		$newTitle = filter_var($newTitle, FILTER_SANITIZE_STRING);
-		if(empty($newTitle) === true) {
+		$title = trim($title);
+		$title = filter_var($title, FILTER_SANITIZE_STRING);
+		if(empty($title) === true) {
 			throw(new PDOException("title is invalid"));
 		}
 
@@ -564,11 +564,11 @@ class Product {
 	 * @return SplFixedArray all product found for this description
 	 * @throws PDOException when mySQL related errors occur
 	 **/
-	public static function getProductByDescription(PDO &$pdo, $newDescription, $description) {
+	public static function getProductByDescription(PDO &$pdo, $description) {
 		// sanitize the description before searching
-		$newDescription = trim($newDescription);
-		$newDescription = filter_var($newDescription, FILTER_SANITIZE_STRING);
-		if(empty($newDescription) === true) {
+		$description = trim($description);
+		$description = filter_var($description, FILTER_SANITIZE_STRING);
+		if(empty($description) === true) {
 			throw(new PDOException("description is invalid"));
 		}
 

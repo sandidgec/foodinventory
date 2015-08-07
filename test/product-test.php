@@ -75,7 +75,7 @@ class ProductTest extends InventoryTextTest {
 	 * valid title to use
 	 * @var string $VALID_title
 	 **/
-	protected $VALID_title = null;
+	protected $VALID_title = 'test';
 
 	/**
 	 * invalid title to use
@@ -88,7 +88,7 @@ class ProductTest extends InventoryTextTest {
 	 * valid description to use
 	 * @var string $VALID_description
 	 **/
-	protected $VALID_description = null;
+	protected $VALID_description = 'kids';
 
 	/**
 	 * invalid description to use
@@ -107,9 +107,6 @@ class ProductTest extends InventoryTextTest {
 		// create and insert a Vendor id
 		$this->vendor = new Vendor(null, "Joe Cool", "joecool@gmail.com", "Joe Cool", 5055555555);
 		$this->vendor->insert($this->getPDO());
-
-		$this->VALID_description = str_repeat("kids ", 25);
-		$this->INVALID_description = str_repeat("dogs and kids ", 25);
 	}
 
 
@@ -127,9 +124,12 @@ class ProductTest extends InventoryTextTest {
 		$product->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProduct = Product::getProductByvendorId($this->getPDO(), $product->getvendorId());
+		$pdoProducts = Product::getProductByVendorId($this->getPDO(), $product->getvendorId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
-		$this->assertSame($pdoProduct->getVendorId(), $this->vendor->getVendorId());
+		foreach($pdoProducts as $pdoProduct) {
+			$this->assertSame($pdoProduct->getVendorId(), $this->vendor->getVendorId());
+		}
+
 	}
 
 	/**
@@ -160,7 +160,7 @@ class ProductTest extends InventoryTextTest {
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoProduct = Product::getProductByProductId($this->getPDO(), $product->getProductId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
-		$this->assertSame($pdoProduct->getSku(), $this->sku->getSku());
+		$this->assertSame($pdoProduct->getSku(), $product->getSku());
 	}
 
 	/**
@@ -178,7 +178,7 @@ class ProductTest extends InventoryTextTest {
  **/
 public function testGetValidProductByVendorId() {
 	// count the number of rows and save it for later
-	$numRows = $this->getConnection()->getRowCount("vendor");
+	$numRows = $this->getConnection()->getRowCount("product");
 
 	// create a new Product and insert to into mySQL
 	$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_sku,
@@ -186,21 +186,23 @@ public function testGetValidProductByVendorId() {
 	$product->insert($this->getPDO());
 
 	// grab the data from mySQL and enforce the fields match our expectations
-	$pdoProduct = Product::getMovementByProductId($this->getPDO(), $product->getvendorId());
+	$pdoProducts = Product::getProductByVendorId($this->getPDO(), $product->getvendorId());
 	$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
-	$this->assertSame($pdoProduct->getVendorId(), $this->vendor->getVendorId());
-	$this->assertSame($pdoProduct->getSku(), $this->VALID_sku);
-	$this->assertSame($pdoProduct->getLeadTime(), $this->VALID_leadTime);
-	$this->assertSame($pdoProduct->getTitle(), $this->VALID_Title);
-	$this->assertSame($pdoProduct->getDescription(), $this->VALID_description);
-}
+	foreach($pdoProducts as $pdoProduct) {
+		$this->assertSame($pdoProduct->getVendorId(), $this->vendor->getVendorId());
+		$this->assertSame($pdoProduct->getSku(), $this->VALID_sku);
+		$this->assertSame($pdoProduct->getLeadTime(), $this->VALID_leadTime);
+		$this->assertSame($pdoProduct->getTitle(), $this->VALID_title);
+		$this->assertSame($pdoProduct->getDescription(), $this->VALID_description);
+		}
+	}
 
 	/**
 	 * test grabbing a Product by sku
 	 **/
 	public function testGetValidProductBySku() {
 		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("sku");
+		$numRows = $this->getConnection()->getRowCount("product");
 
 		// create a new Product and insert to into mySQL
 		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_sku,
@@ -208,13 +210,15 @@ public function testGetValidProductByVendorId() {
 		$product->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProduct = Product::getMovementByProductId($this->getPDO(), $product->getvendorId());
+		$pdoProducts = Product::getProductBySku($this->getPDO(), $product->getSku());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
-		$this->assertSame($pdoProduct->getVendorId(), $this->vendor->getVendorId());
-		$this->assertSame($pdoProduct->getSku(), $this->VALID_sku);
-		$this->assertSame($pdoProduct->getLeadTime(), $this->VALID_leadTime);
-		$this->assertSame($pdoProduct->getTitle(), $this->VALID_Title);
-		$this->assertSame($pdoProduct->getDescription(), $this->VALID_description);
+		foreach($pdoProducts as $pdoProduct) {
+			$this->assertSame($pdoProduct->getVendorId(), $this->vendor->getVendorId());
+			$this->assertSame($pdoProduct->getSku(), $this->VALID_sku);
+			$this->assertSame($pdoProduct->getLeadTime(), $this->VALID_leadTime);
+			$this->assertSame($pdoProduct->getTitle(), $this->VALID_title);
+			$this->assertSame($pdoProduct->getDescription(), $this->VALID_description);
+		}
 	}
 
 
@@ -223,7 +227,7 @@ public function testGetValidProductByVendorId() {
 	 **/
 	public function testGetValidProductByLeadTIme() {
 		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("leadTime");
+		$numRows = $this->getConnection()->getRowCount("product");
 
 		// create a new Product and insert to into mySQL
 		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_sku,
@@ -231,13 +235,15 @@ public function testGetValidProductByVendorId() {
 		$product->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProduct = Product::getMovementByProductId($this->getPDO(), $product->getvendorId());
+		$pdoProducts = Product::getProductByLeadTime($this->getPDO(), $product->getLeadTime());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
-		$this->assertSame($pdoProduct->getVendorId(), $this->vendor->getVendorId());
-		$this->assertSame($pdoProduct->getSku(), $this->VALID_sku);
-		$this->assertSame($pdoProduct->getLeadTime(), $this->VALID_leadTime);
-		$this->assertSame($pdoProduct->getTitle(), $this->VALID_Title);
-		$this->assertSame($pdoProduct->getDescription(), $this->VALID_description);
+		foreach($pdoProducts as $pdoProduct) {
+			$this->assertSame($pdoProduct->getVendorId(), $this->vendor->getVendorId());
+			$this->assertSame($pdoProduct->getSku(), $this->VALID_sku);
+			$this->assertSame($pdoProduct->getLeadTime(), $this->VALID_leadTime);
+			$this->assertSame($pdoProduct->getTitle(), $this->VALID_title);
+			$this->assertSame($pdoProduct->getDescription(), $this->VALID_description);
+		}
 	}
 
 	/**
@@ -245,7 +251,7 @@ public function testGetValidProductByVendorId() {
 	 **/
 	public function testGetValidProductByTitle() {
 		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("title");
+		$numRows = $this->getConnection()->getRowCount("product");
 
 		// create a new Product and insert to into mySQL
 		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_sku,
@@ -253,13 +259,15 @@ public function testGetValidProductByVendorId() {
 		$product->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProduct = Product::getMovementByProductId($this->getPDO(), $product->getvendorId());
+		$pdoProducts = Product::getProductByTitle($this->getPDO(), $product->getTitle());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
-		$this->assertSame($pdoProduct->getVendorId(), $this->vendor->getVendorId());
-		$this->assertSame($pdoProduct->getSku(), $this->VALID_sku);
-		$this->assertSame($pdoProduct->getLeadTime(), $this->VALID_leadTime);
-		$this->assertSame($pdoProduct->getTitle(), $this->VALID_Title);
-		$this->assertSame($pdoProduct->getDescription(), $this->VALID_description);
+		foreach($pdoProducts as $pdoProduct) {
+			$this->assertSame($pdoProduct->getVendorId(), $this->vendor->getVendorId());
+			$this->assertSame($pdoProduct->getSku(), $this->VALID_sku);
+			$this->assertSame($pdoProduct->getLeadTime(), $this->VALID_leadTime);
+			$this->assertSame($pdoProduct->getTitle(), $this->VALID_title);
+			$this->assertSame($pdoProduct->getDescription(), $this->VALID_description);
+		}
 	}
 
 
@@ -268,7 +276,7 @@ public function testGetValidProductByVendorId() {
 	 **/
 	public function testGetValidProductByDescription() {
 		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("description");
+		$numRows = $this->getConnection()->getRowCount("product");
 
 		// create a new Product and insert to into mySQL
 		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_sku,
@@ -276,13 +284,15 @@ public function testGetValidProductByVendorId() {
 		$product->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProduct = Product::getMovementByProductId($this->getPDO(), $product->getvendorId());
+		$pdoProducts = Product::getProductByDescription($this->getPDO(), $product->getDescription());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
-		$this->assertSame($pdoProduct->getVendorId(), $this->vendor->getVendorId());
-		$this->assertSame($pdoProduct->getSku(), $this->VALID_sku);
-		$this->assertSame($pdoProduct->getLeadTime(), $this->VALID_leadTime);
-		$this->assertSame($pdoProduct->getTitle(), $this->VALID_Title);
-		$this->assertSame($pdoProduct->getDescription(), $this->VALID_description);
+		foreach($pdoProducts as $pdoProduct) {
+			$this->assertSame($pdoProduct->getVendorId(), $this->vendor->getVendorId());
+			$this->assertSame($pdoProduct->getSku(), $this->VALID_sku);
+			$this->assertSame($pdoProduct->getLeadTime(), $this->VALID_leadTime);
+			$this->assertSame($pdoProduct->getTitle(), $this->VALID_title);
+			$this->assertSame($pdoProduct->getDescription(), $this->VALID_description);
+		}
 	}
 
 }
