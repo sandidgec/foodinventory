@@ -236,12 +236,13 @@ class VendorTest extends InventoryTextTest {
 
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoVendor = Vendor::getVendorByVendorName($this->getPDO(), $vendor->getVendorName());
-		foreach($pdoVendor as $ven)
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("vendor"));
-		$this->assertSame($ven->getContactName(), $this->VALID_contactName);
-		$this->assertSame($ven->getVendorEmail(), $this->VALID_vendorEmail);
-		$this->assertSame($ven->getVendorName(), $this->VALID_vendorName);
-		$this->assertSame($ven->getVendorPhoneNumber(), $this->VALID_vendorPhoneNumber);
+		foreach($pdoVendor as $ven) {
+			$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("vendor"));
+			$this->assertSame($ven->getContactName(), $this->VALID_contactName);
+			$this->assertSame($ven->getVendorEmail(), $this->VALID_vendorEmail);
+			$this->assertSame($ven->getVendorName(), $this->VALID_vendorName);
+			$this->assertSame($ven->getVendorPhoneNumber(), $this->VALID_vendorPhoneNumber);
+		}
 	}
 
 	/**
