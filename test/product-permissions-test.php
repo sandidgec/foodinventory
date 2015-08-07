@@ -1,4 +1,14 @@
 <?php
+/**
+ * product_permissions unit test for foodinventory
+ *
+ * This product permissions unit test is a single class within the overall foodinventory application
+ *
+ * @author Marie Vigil <marie@jtdesignsolutions>
+ *
+ **/
+
+
 // grab the project test parameters
 require_once("inventorytext.php");
 
