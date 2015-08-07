@@ -23,7 +23,7 @@ class ProductPermissionsTest extends InventoryTextTest {
 
 	/**
 	 * invalid productId to use
-	 * @var int $INVALID_userId
+	 * @var int $INVALID_productId
 	 **/
 	protected $INVALID_productId = 4294967296;
 
@@ -41,15 +41,41 @@ class ProductPermissionsTest extends InventoryTextTest {
 
 	/**
 	 * valid accessLevel to use
-	 * @var int $VALID_accessLevel
+	 * @var string $VALID_accessLevel
 	 **/
-	protected $VALID_accessLevel = 1;
+	protected $VALID_accessLevel = null;
 
 	/**
 	 * invalid accessLevel to use
-	 * @var int $INVALID_accessLevel
+	 * @var string $INVALID_accessLevel
 	 **/
-	protected $INVALID_accessLevel = 4294967296;
+	protected $INVALID_accessLevel = null;
+
+	/**
+	 * product id is for foreign key relation
+	 * @var int $productId
+	 **/
+	protected $vendor = null;
+
+	/**
+	 * create dependent objects before running each test
+	 **/
+	public final function setUp() {
+		// run the default setUp() method first
+		parent::setUp();
+
+		// create and insert a product id
+		$this->productId = new VendorId(null, "Joe Cool", "joecool@gmail.com", "Joe Cool", 5055555555);
+		$this->vendor->insert($this->getPDO());
+
+		$this->VALID_description = str_repeat("kids ", 25);
+		$this->INVALID_description = str_repeat("dogs and kids ", 25);
+	}
+
+
+
+
+
 
 	/**
 	 * test inserting a valid Product Permissions and verify that the actual mySQL data matches
@@ -58,8 +84,8 @@ class ProductPermissionsTest extends InventoryTextTest {
 		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("product permissions");
 
-		// create a new Product Permissions and insert to into mySQL
-		$productPermissions = new productPermissions(null, $this->VALID_productId, $this->VALID_userId);
+		// create a new Product Permissions and insert into mySQL
+		$productPermissions = new productPermissions(null, $this->VALID_productId, $this->VALID_userId, $this->VALID_accessLevel);
 		$productPermissions->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
@@ -82,7 +108,7 @@ class ProductPermissionsTest extends InventoryTextTest {
 	/**
 	 * test inserting a Product Permissions and regrabbing it from mySQL
 	 **/
-	public function testGetValidProductPermissionsByProductPermissionsId() {
+	public function testGetValidProductPermissionsByProductPermissions() {
 		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("product permissions");
 
@@ -91,7 +117,7 @@ class ProductPermissionsTest extends InventoryTextTest {
 		$productPermissions->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProductPermissions = ProductPermissions::getProductPermissionsByProductPermissionsId($this->getPDO(), $productPermissions->getProductPermissionsId());
+		$pdoProductPermissions = ProductPermissions::getProductPermissionsByProductPermissions($this->getPDO(), $productPermissions->getProductPermissions());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product permissions"));
 		$this->assertSame($pdoProductPermissions->getProductId(), $this->VALID_productId);
 		$this->assertSame($pdoProductPermissions->getUserId(), $this->VALID_userId);
@@ -100,9 +126,9 @@ class ProductPermissionsTest extends InventoryTextTest {
 	/**
 	 * test grabbing a Product Permissions that does not exist
 	 **/
-	public function testGetInvalidProductPermissionsByProductPermissionsId() {
-		// grab a Product Permissions id that exceeds the maximum allowable Product Permissions id
-		$productPermissions = ProductPermissions::getProductPermissionsByProductPermissionsId($this->getPDO(), InventoryTextTest::INVALID_KEY);
+	public function testGetInvalidProductPermissionsByProductPermissions() {
+		// grab a Product Permissions that exceeds the maximum allowable Product Permissions
+		$productPermissions = ProductPermissions::getProductPermissionsByProductPermissions($this->getPDO(), InventoryTextTest::INVALID_KEY);
 		$this->assertNull($productPermissions);
 	}
 
@@ -114,20 +140,20 @@ class ProductPermissionsTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("product permissions");
 
 		// create a new Product Permissions and insert to into mySQL
-		$productPermissions = new ProductPermissions(null, $this->VALID_productId, $this->VALID_userId, $this->INVALID_accessLevel);
+		$productPermissions = new ProductPermissions(null, $this->VALID_productId, $this->VALID_userId, $this->VALID_accessLevel);
 		$productPermissions->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProductPermissions = ProductPermissions::getProductPermissionsByProductId($this->getPDO(), $productPermissions->getUserId());
+		$pdoProductPermissions = ProductPermissions::getProductPermissionsByProductId($this->getPDO(), $productPermissions->getProductId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product permissions"));
-		$this->assertSame($pdoProductPermissions->getProductId(), $this->VALID_userId, $this->INVALID_accessLevel);
+		$this->assertSame($pdoProductPermissions->getProductId(), $this->VALID_userId, $this->VALID_accessLevel);
 	}
 
 	/**
 	 * test grabbing a Product Permissions by productId that does not exist
 	 **/
 	public function testGetInvalidProductPermissionsByProductId() {
-		// grab an productId that does not exist
+		// grab a productId that does not exist
 		$productPermissions = ProductPermissions::getProductPermissionsByProductId($this->getPDO(), InventoryTextTest::INVALID_KEY);
 		$this->assertNull($productPermissions);
 	}
@@ -139,14 +165,31 @@ class ProductPermissionsTest extends InventoryTextTest {
 		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("productPermissions");
 
-		// create a new Product Permissions and insert to into mySQL
-		$productPermissions = new ProductPermissions(null, $this->VALID_productId, $this->VALID_userId);
+		// create a new Product Permissions and insert into mySQL
+		$productPermissions = new ProductPermissions(null, $this->VALID_productId, $this->VALID_userId, $this->VALID_accessLevel);
 		$productPermissions->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProductPermissions = ProductPermissions::getMovementByProductId($this->getPDO(), $productPermissions->getUserId());
+		$pdoProductPermissions = ProductPermissions::getProductPermissionsByUserId($this->getPDO(), $productPermissions->getUserId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product permissions"));
-		$this->assertSame($pdoProductPermissions->getProductId(), $this->VALID_userId);
-		$this->assertSame($pdoProductPermissions->getUserId(), $this->VALID_userId);
+		$this->assertSame($pdoProductPermissions->getUserId(), $this->VALID_productId, $this->VALID_accessLevel);
 	}
+
+	/**
+	 * test grabbing a Product Permissions by accessLevel
+	 **/
+	public function testGetValidProductPermissionsByAccessLevel() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("productPermissions");
+
+		// create a new Product Permissions and insert into mySQL
+		$productPermissions = new ProductPermissions(null, $this->VALID_productId, $this->VALID_userId, $this->VALID_accessLevel);
+		$productPermissions->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoProductPermissions = ProductPermissions::getProductPermissionsByAccessLevel($this->getPDO(), $productPermissions->getAccessLevel());
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product permissions"));
+		$this->assertSame($pdoProductPermissions->getAccessLevel(), $this->VALID_productId, $this->VALID_userId);
+	}
+
 }
