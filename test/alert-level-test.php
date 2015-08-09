@@ -76,7 +76,6 @@ class AlertLevelTest extends InventoryTextTest {
 		// create a new Alert level and insert to into mySQL
 		$alertLevel = new AlertLevel (null, $this->VALID_alertCode, $this->VALID_alertFrequency, $this->VALID_alertPoint, $this->VALID_alertOperator);
 		$alertLevel->insert($this->getPDO());
-		var_dump($alertLevel);
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoAlertLevel = AlertLevel::getAlertLevelByAlertId($this->getPDO(), $alertLevel->getAlertId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("alertLevel"));
