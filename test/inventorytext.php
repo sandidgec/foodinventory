@@ -51,7 +51,6 @@ abstract class InventoryTextTest extends PHPUnit_Extensions_Database_TestCase {
 		$dataset->addTable("productLocation");
 		$dataset->addTable("movement");
 		$dataset->addTable("notification");
-		$dataset->addTable("productPermissions");
 		return($dataset);
 	}
 

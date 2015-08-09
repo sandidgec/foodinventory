@@ -11,8 +11,6 @@
 			<file>product-location-test.php</file>
 			<file>movement-test.php</file>
 			<file>notification-test.php</file>
-			<file>product-permissions-test.php</file>
 		</testsuite>
 	</testsuites>
 </phpunit>
-
