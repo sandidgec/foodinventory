@@ -77,7 +77,7 @@ class FinishedProductTest extends InventoryTextTest {
 		$vendorId = $vendor->getVendorId();
 		$description = "A glorius bead to use";
 		$leadTime = 10;
-		$sku = "TGT354";
+		$sku = "354";
 		$title = "Bead-Green-Blue-Circular";
 
 		$this->rawMaterial = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
@@ -103,15 +103,6 @@ class FinishedProductTest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing a FinishedProduct that does not exist
-	 **/
-	public function testGetInvalidFinishedProductByFinishedProductIdAndRawMaterialId() {
-		// grab a finishedProductId that exceeds the maximum allowable finishedProductId
-		$finishedProduct = new FinishedProduct(InventoryTextTest::INVALID_KEY, $this->rawMaterial->getProductId(), $this->VALID_rawQuantity);
-		$this->assertNull($finishedProduct);
-	}
-
-	/**
 	 * test inserting a FinishedProduct, editing it, and then updating it
 	 **/
 	public function testUpdateValidFinishedProduct() {
@@ -134,8 +125,6 @@ class FinishedProductTest extends InventoryTextTest {
 
 	/**
 	 * test updating a FinishedProduct that does not exist
-	 *
-	 * @expectedException PDOException
 	 **/
 	public function testUpdateInvalidFinishedProduct() {
 		// create a FinishedProduct and try to update it without actually inserting it
@@ -158,7 +147,7 @@ class FinishedProductTest extends InventoryTextTest {
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("finishedProduct"));
 		$finishedProduct->delete($this->getPDO());
 
-		// grab the data from mySQL and enforce the ProductLocation does not exist
+		// grab the data from mySQL and enforce the FinishedProduct does not exist
 		$pdoFinishedProduct = FinishedProduct::getFinishedProductByFinishedProductIdAndRawMaterialId($this->getPDO(), $this->finishedProduct->getProductId(), $this->rawMaterial->getProductId());
 		$this->assertNull($pdoFinishedProduct);
 		$this->assertSame($numRows, $this->getConnection()->getRowCount("finishedProduct"));
@@ -166,8 +155,6 @@ class FinishedProductTest extends InventoryTextTest {
 
 	/**
 	 * test deleting a FinishedProduct that does not exist
-	 *
-	 * @expectedException PDOException
 	 **/
 	public function testDeleteInvalidFinishedProduct() {
 		// create a FinishedProduct and try to delete it without actually inserting it
@@ -190,7 +177,7 @@ class FinishedProductTest extends InventoryTextTest {
 		$pdoFinishedProduct = FinishedProduct::getFinishedProductByFinishedProductId($this->getPDO(), $this->finishedProduct->getProductId());
 		foreach($pdoFinishedProduct as $pdoFP) {
 			$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("finishedProduct"));
-			$this->assertSame($pdoFP->getRawMaterialId, $this->rawMaterial->getProductId());
+			$this->assertSame($pdoFP->getRawMaterialId(), $this->rawMaterial->getProductId());
 			$this->assertSame($pdoFP->getRawQuantity(), $this->VALID_rawQuantity);
 		}
 	}
@@ -201,7 +188,9 @@ class FinishedProductTest extends InventoryTextTest {
 	public function testGetInvalidFinishedProductByFinishedProductId() {
 		// grab an finishedProductId that does not exist
 		$finishedProduct = FinishedProduct::getFinishedProductByFinishedProductId($this->getPDO(), $this->finishedProduct->getProductId());
-		$this->assertNull($finishedProduct);
+		foreach($finishedProduct as $fP) {
+			$this->assertNull($fP);
+		}
 	}
 
 	/**
@@ -219,7 +208,7 @@ class FinishedProductTest extends InventoryTextTest {
 		$pdoFinishedProduct = FinishedProduct::getFinishedProductByRawMaterialId($this->getPDO(), $this->rawMaterial->getProductId());
 		foreach($pdoFinishedProduct as $pdoFP) {
 			$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("finishedProduct"));
-			$this->assertSame($pdoFP->getFinishedProductId, $this->finishedProduct->getProductId());
+			$this->assertSame($pdoFP->getFinishedProductId(), $this->finishedProduct->getProductId());
 			$this->assertSame($pdoFP->getRawQuantity(), $this->VALID_rawQuantity);
 		}
 	}
@@ -230,6 +219,8 @@ class FinishedProductTest extends InventoryTextTest {
 	public function testGetInvalidFinishedProductByRawMaterialId() {
 		// grab an rawMaterialId that does not exist
 		$finishedProduct = FinishedProduct::getFinishedProductByRawMaterialId($this->getPDO(), $this->rawMaterial->getProductId());
-		$this->assertNull($finishedProduct);
+		foreach($finishedProduct as $fP) {
+			$this->assertNull($fP);
+		}
 	}
 }

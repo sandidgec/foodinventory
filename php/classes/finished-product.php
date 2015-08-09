@@ -183,12 +183,12 @@ class finishedProduct {
 	 * @throws PDOException when mySQL related errors occur
 	 **/
 	public function update(PDO &$pdo) {
-		// enforce the finishedProductId is not null (i.e., don't update a location that hasn't been inserted)
+		// enforce the finishedProductId is not null (i.e., don't update a FinishedProduct that hasn't been inserted)
 		if($this->finishedProductId === null) {
 			throw(new PDOException("unable to update a finishedProductId that does not exist"));
 		}
 
-		// enforce the rawMaterialId is not null (i.e., don't update a product that hasn't been inserted)
+		// enforce the rawMaterialId is not null (i.e., don't update a FinishedProduct that hasn't been inserted)
 		if($this->rawMaterialId === null) {
 			throw(new PDOException("unable to update a rawMaterialId that does not exist"));
 		}
@@ -198,7 +198,7 @@ class finishedProduct {
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
-		$parameters = array("finishedProductId" => $this->finishedProductId, "rawMaterialId" => $this->rawMaterialId, "rawQuantity" => $this->rawQuantity);
+		$parameters = array("rawQuantity" => $this->rawQuantity, "finishedProductId" => $this->finishedProductId, "rawMaterialId" => $this->rawMaterialId);
 		$statement->execute($parameters);
 	}
 
@@ -209,14 +209,14 @@ class finishedProduct {
 	 * @throws PDOException when mySQL related errors occur
 	 **/
 	public function delete(PDO &$pdo) {
-		// enforce the finishedProductId is not null (i.e., don't update a location that hasn't been inserted)
+		// enforce the finishedProductId is not null (i.e., don't delete a FinishedProduct that hasn't been inserted)
 		if($this->finishedProductId === null) {
-			throw(new PDOException("unable to update a finishedProductId that does not exist"));
+			throw(new PDOException("unable to delete a finishedProductId that does not exist"));
 		}
 
-		// enforce the rawMaterialId is not null (i.e., don't update a product that hasn't been inserted)
+		// enforce the rawMaterialId is not null (i.e., don't delete a FinishedProduct that hasn't been inserted)
 		if($this->rawMaterialId === null) {
-			throw(new PDOException("unable to update a rawMaterialId that does not exist"));
+			throw(new PDOException("unable to delete a rawMaterialId that does not exist"));
 		}
 
 		// create query template
