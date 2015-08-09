@@ -7,7 +7,6 @@ require_once(dirname(__DIR__) . "/php/classes/finished-product.php");
 require_once(dirname(__DIR__) . "/php/classes/product.php");
 require_once(dirname(__DIR__) . "/php/classes/vendor.php");
 
-
 /**
  * Full PHPUnit test for the FinishedProduct class
  *
@@ -20,53 +19,36 @@ require_once(dirname(__DIR__) . "/php/classes/vendor.php");
  **/
 class FinishedProductTest extends InventoryTextTest {
 	/**
-	 * valid locationId to use
-	 * @var int $VALID_locationId
-	 **/
-	protected $VALID_locationId = 1;
-
-	/**
-	 * invalid locationId to use
-	 * @var int $INVALID_locationId
-	 **/
-	protected $INVALID_locationId = 4294967296;
-
-	/**
-	 * valid productId to use
-	 * @var int $VALID_productId
-	 **/
-	protected $VALID_productId = 1;
-
-	/**
-	 * invalid productId to use
-	 * @var int $INVALID_productId
-	 **/
-	protected $INVALID_productId = 4294967296;
-
-	/**
-	 * valid quantity to use
+	 * valid rawQuantity to use
 	 * @var float $VALID_quantity
 	 **/
-	protected $VALID_quantity = 400.25;
+	protected $VALID_rawQuantity = 400.25;
 
 	/**
-	 * valid second quantity to use
-	 * @var float $VALID_quantity2
+	 * valid second rawQuantity to use
+	 * @var float $VALID_rawQuantity2
 	 **/
-	protected $VALID_quantity2 = 225.50;
+	protected $VALID_rawQuantity2 = 225.50;
 
 	/**
-	 * invalid quantity to use
-	 * @var float $INVALID_quantity
+	 * invalid rawQuantity to use
+	 * @var float $INVALID_rawQuantity
 	 **/
-	protected $INVALID_quantity = 42949.67296;
+	protected $INVALID_rawQuantity = 42949.67296;
 
 	/**
-	 * creating a null Product object
-	 * for global scope
-	 * @var Product $product
+	 * creating a null Product
+	 * object for global scope
+	 * @var Product $finishedProduct
 	 **/
-	protected $product = null;
+	protected $finishedProduct = null;
+
+	/**
+	 * creating a null Product
+	 * object for global scope
+	 * @var Product $rawMaterial
+	 **/
+	protected $rawMaterial = null;
 
 
 	public function setUp() {
@@ -83,190 +65,171 @@ class FinishedProductTest extends InventoryTextTest {
 
 		$productId = null;
 		$vendorId = $vendor->getVendorId();
+		$description = "A glorius bracelet for any occasion to use";
+		$leadTime = 15;
+		$sku = "457847";
+		$title = "Bracelet-Green-Blue";
+
+		$this->finishedProduct = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
+		$this->finishedProduct->insert($this->getPDO());
+
+		$productId = null;
+		$vendorId = $vendor->getVendorId();
 		$description = "A glorius bead to use";
-		$leadTime = "10 days";
-		$sku = "thtfr354";
+		$leadTime = 10;
+		$sku = "TGT354";
 		$title = "Bead-Green-Blue-Circular";
 
-		$this->product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
-		$this->product->insert($this->getPDO());
+		$this->rawMaterial = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
+		$this->rawMaterial->insert($this->getPDO());
 	}
 
 
 	/**
-	 * test inserting a valid ProductLocation and verify that the actual mySQL data matches
+	 * test inserting a valid FinishedProduct and verify that the actual mySQL data matches
 	 **/
-	public function testInsertValidProductLocation() {
+	public function testInsertValidFinishedProduct() {
 		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("productLocation");
+		$numRows = $this->getConnection()->getRowCount("finishedProduct");
 
-		// create a new ProductLocation and insert to into mySQL
-		$productLocation = new ProductLocation($this->location->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->VALID_quantity);
-		$productLocation->insert($this->getPDO());
+		// create a new FinishedProduct and insert to into mySQL
+		$finishedProduct = new FinishedProduct($this->finishedProduct->getProductId(), $this->rawMaterial->getProductId(), $this->VALID_rawQuantity);
+		$finishedProduct->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProductLocation = ProductLocation::getProductLocationByLocationIdAndProductId($this->getPDO(), $this->location->getLocationId(), $this->product->getProductId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("productLocation"));
-		$this->assertSame($pdoProductLocation->getUnitId, $this->unitOfMeasure->getUnitId());
-		$this->assertSame($pdoProductLocation->getQuantity(), $this->VALID_quantity);
+		$pdoFinishedProduct = FinishedProduct::getFinishedProductByFinishedProductIdAndRawMaterialId($this->getPDO(), $this->finishedProduct->getProductId(), $this->rawMaterial->getProductId());
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("finishedProduct"));
+		$this->assertSame($pdoFinishedProduct->getRawQuantity(), $this->VALID_rawQuantity);
 	}
 
 	/**
-	 * test inserting a ProductLocation that already exists
+	 * test grabbing a FinishedProduct that does not exist
+	 **/
+	public function testGetInvalidFinishedProductByFinishedProductIdAndRawMaterialId() {
+		// grab a finishedProductId that exceeds the maximum allowable finishedProductId
+		$finishedProduct = new FinishedProduct(InventoryTextTest::INVALID_KEY, $this->rawMaterial->getProductId(), $this->VALID_rawQuantity);
+		$this->assertNull($finishedProduct);
+	}
+
+	/**
+	 * test inserting a FinishedProduct, editing it, and then updating it
+	 **/
+	public function testUpdateValidFinishedProduct() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("finishedProduct");
+
+		// create a new FinishedProduct and insert to into mySQL
+		$finishedProduct = new FinishedProduct($this->finishedProduct->getProductId(), $this->rawMaterial->getProductId(), $this->VALID_rawQuantity);
+		$finishedProduct->insert($this->getPDO());
+
+		// edit the FinishedProduct and update it in mySQL
+		$finishedProduct->setRawQuantity($this->VALID_rawQuantity2);
+		$finishedProduct->update($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoFinishedProduct = FinishedProduct::getFinishedProductByFinishedProductIdAndRawMaterialId($this->getPDO(), $this->finishedProduct->getProductId(), $this->rawMaterial->getProductId());
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("finishedProduct"));
+		$this->assertSame($pdoFinishedProduct->getRawQuantity(), $this->VALID_rawQuantity2);
+	}
+
+	/**
+	 * test updating a FinishedProduct that does not exist
 	 *
 	 * @expectedException PDOException
 	 **/
-	public function testInsertInvalidProfile() {
-		// create a productLocation with a non null locationId and watch it fail
-		$productLocation = new ProductLocation(InventoryTextTest::INVALID_KEY, $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->VALID_quantity);
-		$productLocation->insert($this->getPDO());
+	public function testUpdateInvalidFinishedProduct() {
+		// create a FinishedProduct and try to update it without actually inserting it
+		$finishedProduct = new FinishedProduct($this->finishedProduct->getProductId(), $this->rawMaterial->getProductId(), $this->VALID_rawQuantity);
+		$finishedProduct->update($this->getPDO());
 	}
 
 	/**
-	 * test inserting a ProductLocation, editing it, and then updating it
+	 * test creating a FinishedProduct and then deleting it
 	 **/
-	public function testUpdateValidProductLocation() {
+	public function testDeleteValidFinishedProduct() {
 		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("productLocation");
+		$numRows = $this->getConnection()->getRowCount("finishedProduct");
 
-		// create a new ProductLocation and insert to into mySQL
-		$productLocation = new ProductLocation($this->location->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->VALID_quantity);
-		$productLocation->insert($this->getPDO());
+		// create a new FinishedProduct and insert to into mySQL
+		$finishedProduct = new FinishedProduct($this->finishedProduct->getProductId(), $this->rawMaterial->getProductId(), $this->VALID_rawQuantity);
+		$finishedProduct->insert($this->getPDO());
 
-		// edit the ProductLocation and update it in mySQL
-		$productLocation->setQuantity($this->VALID_quantity2);
-		$productLocation->update($this->getPDO());
-
-		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProductLocation = ProductLocation::getProductLocationByLocationIdAndProductId($this->getPDO(), $this->location->getLocationId(), $this->product->getProductId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("productLocation"));
-		$this->assertSame($pdoProductLocation->getUnitId, $this->unitOfMeasure->getUnitId());
-		$this->assertSame($pdoProductLocation->getQuantity(), $this->VALID_quantity);
-	}
-
-	/**
-	 * test updating a ProductLocation that does not exist
-	 *
-	 * @expectedException PDOException
-	 **/
-	public function testUpdateInvalidProductLocation() {
-		// create a ProductLocation and try to update it without actually inserting it
-		$productLocation = new ProductLocation($this->location->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->VALID_quantity);
-		$productLocation->update($this->getPDO());
-	}
-
-	/**
-	 * test creating a ProductLocation and then deleting it
-	 **/
-	public function testDeleteValidProductLocation() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("productLocation");
-
-		// create a new ProductLocation and insert to into mySQL
-		$productLocation = new ProductLocation($this->location->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->VALID_quantity);
-		$productLocation->insert($this->getPDO());
-
-		// delete the ProductLocation from mySQL
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("productLocation"));
-		$productLocation->delete($this->getPDO());
+		// delete the FinishedProduct from mySQL
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("finishedProduct"));
+		$finishedProduct->delete($this->getPDO());
 
 		// grab the data from mySQL and enforce the ProductLocation does not exist
-		$pdoProductLocation = ProductLocation::getProductLocationByLocationIdAndProductId($this->getPDO(), $this->location->getLocationId(), $this->product->getProductId());
-		$this->assertNull($pdoProductLocation);
-		$this->assertSame($numRows, $this->getConnection()->getRowCount("productLocation"));
+		$pdoFinishedProduct = FinishedProduct::getFinishedProductByFinishedProductIdAndRawMaterialId($this->getPDO(), $this->finishedProduct->getProductId(), $this->rawMaterial->getProductId());
+		$this->assertNull($pdoFinishedProduct);
+		$this->assertSame($numRows, $this->getConnection()->getRowCount("finishedProduct"));
 	}
 
 	/**
-	 * test deleting a ProductLocation that does not exist
+	 * test deleting a FinishedProduct that does not exist
 	 *
 	 * @expectedException PDOException
 	 **/
-	public function testDeleteInvalidProfile() {
-		// create a ProductLocation and try to delete it without actually inserting it
-		$productLocation = new ProductLocation($this->location->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->VALID_quantity);
-		$productLocation->delete($this->getPDO());
+	public function testDeleteInvalidFinishedProduct() {
+		// create a FinishedProduct and try to delete it without actually inserting it
+		$finishedProduct = new FinishedProduct($this->finishedProduct->getProductId(), $this->rawMaterial->getProductId(), $this->VALID_rawQuantity);
+		$finishedProduct->delete($this->getPDO());
 	}
 
 	/**
-	 * test inserting a ProductLocation and regrabbing it from mySQL
+	 * test grabbing a FinishedProduct by finishedProductId
 	 **/
-	public function testGetValidProductLocationByLocationIdAndProfileId() {
+	public function testGetValidFinishedProductByFinishedProductId() {
 		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("productLocation");
+		$numRows = $this->getConnection()->getRowCount("finishedProduct");
 
-		// create a new ProductLocation and insert to into mySQL
-		$productLocation = new ProductLocation($this->location->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->VALID_quantity);
-		$productLocation->insert($this->getPDO());
+		// create a new FinishedProduct and insert to into mySQL
+		$finishedProduct = new FinishedProduct($this->finishedProduct->getProductId(), $this->rawMaterial->getProductId(), $this->VALID_rawQuantity);
+		$finishedProduct->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProductLocation = ProductLocation::getProductLocationByLocationIdAndProductId($this->getPDO(), $this->location->getLocationId(), $this->product->getProductId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("productLocation"));
-		$this->assertSame($pdoProductLocation->getUnitId, $this->unitOfMeasure->getUnitId());
-		$this->assertSame($pdoProductLocation->getQuantity(), $this->VALID_quantity);
+		$pdoFinishedProduct = FinishedProduct::getFinishedProductByFinishedProductId($this->getPDO(), $this->finishedProduct->getProductId());
+		foreach($pdoFinishedProduct as $pdoFP) {
+			$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("finishedProduct"));
+			$this->assertSame($pdoFP->getRawMaterialId, $this->rawMaterial->getProductId());
+			$this->assertSame($pdoFP->getRawQuantity(), $this->VALID_rawQuantity);
+		}
 	}
 
 	/**
-	 * test grabbing a ProductLocation that does not exist
+	 * test grabbing a FinishedProduct by finishedProductId that does not exist
 	 **/
-	public function testGetInvalidProductLocationByLocationIdAndProfileId() {
-		// grab a location id that exceeds the maximum allowable location id
-		$productLocation = ProductLocation::getProductLocationByLocationIdAndProductId($this->getPDO(), InventoryTextTest::INVALID_KEY, $this->product->getProductId());
-		$this->assertNull($productLocation);
+	public function testGetInvalidFinishedProductByFinishedProductId() {
+		// grab an finishedProductId that does not exist
+		$finishedProduct = FinishedProduct::getFinishedProductByFinishedProductId($this->getPDO(), $this->finishedProduct->getProductId());
+		$this->assertNull($finishedProduct);
 	}
 
 	/**
-	 * test grabbing a ProductLocation by locationId
+	 * test grabbing a FinishedProduct by rawMaterialId
 	 **/
-	public function testGetValidProductLocationByLocationId() {
+	public function testGetValidFinishedProductByRawMaterialId() {
 		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("productLocation");
+		$numRows = $this->getConnection()->getRowCount("finishedProduct");
 
-		// create a new ProductLocation and insert to into mySQL
-		$productLocation = new ProductLocation($this->location->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->VALID_quantity);
-		$productLocation->insert($this->getPDO());
+		// create a new FinishedProduct and insert to into mySQL
+		$finishedProduct = new FinishedProduct($this->finishedProduct->getProductId(), $this->rawMaterial->getProductId(), $this->VALID_rawQuantity);
+		$finishedProduct->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProductLocation = ProductLocation::getProductLocationByLocationId($this->getPDO(), $this->location->getLocationId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("productLocation"));
-		$this->assertSame($pdoProductLocation->getProductId, $this->product->getProductId());
-		$this->assertSame($pdoProductLocation->getUnitId, $this->unitOfMeasure->getUnitId());
-		$this->assertSame($pdoProductLocation->getQuantity(), $this->VALID_quantity);
+		$pdoFinishedProduct = FinishedProduct::getFinishedProductByRawMaterialId($this->getPDO(), $this->rawMaterial->getProductId());
+		foreach($pdoFinishedProduct as $pdoFP) {
+			$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("finishedProduct"));
+			$this->assertSame($pdoFP->getFinishedProductId, $this->finishedProduct->getProductId());
+			$this->assertSame($pdoFP->getRawQuantity(), $this->VALID_rawQuantity);
+		}
 	}
 
 	/**
-	 * test grabbing a ProductLocation by locationId that does not exist
+	 * test grabbing a FinishedProduct by rawMaterialId that does not exist
 	 **/
-	public function testGetInvalidProductLocationByLocationId() {
-		// grab an locationId that does not exist
-		$productLocation = ProductLocation::getProductLocationByLocationId($this->getPDO(), InventoryTextTest::INVALID_KEY);
-		$this->assertNull($productLocation);
-	}
-
-	/**
-	 * test grabbing a ProductLocation by productId
-	 **/
-	public function testGetValidProductLocationByProductId() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("productLocation");
-
-		// create a new ProductLocation and insert to into mySQL
-		$productLocation = new ProductLocation($this->location->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->VALID_quantity);
-		$productLocation->insert($this->getPDO());
-
-		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProductLocation = ProductLocation::getProductLocationByLocationId($this->getPDO(), $this->product->getProductId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("productLocation"));
-		$this->assertSame($pdoProductLocation->getLocationId, $this->location->getLocationId());
-		$this->assertSame($pdoProductLocation->getUnitId, $this->unitOfMeasure->getUnitId());
-		$this->assertSame($pdoProductLocation->getQuantity(), $this->VALID_quantity);
-	}
-
-	/**
-	 * test grabbing a ProductLocation by productId that does not exist
-	 **/
-	public function testGetInvalidProductLocationByProductId() {
-		// grab an productId that does not exist
-		$productLocation = ProductLocation::getProductLocationByProductId($this->getPDO(), InventoryTextTest::INVALID_KEY);
-		$this->assertNull($productLocation);
+	public function testGetInvalidFinishedProductByRawMaterialId() {
+		// grab an rawMaterialId that does not exist
+		$finishedProduct = FinishedProduct::getFinishedProductByRawMaterialId($this->getPDO(), $this->rawMaterial->getProductId());
+		$this->assertNull($finishedProduct);
 	}
 }

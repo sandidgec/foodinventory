@@ -53,10 +53,6 @@ class finishedProduct {
 		}
 	}
 
-	public function __toString() {
-		return "<tr><td>" . $this->getFinishedProductId() . "</td><td>" . $this->getRawMaterialId() . "</td><td>" . $this->getRawQuantity() . "</td></tr>";
-	}
-
 	/**
 	 * accessor method for finishedProductId
 	 *
@@ -238,10 +234,10 @@ class finishedProduct {
 	 * @param PDO $pdo pointer to PDO connection, by reference
 	 * @param int $newFinishedProductId the finishedProductId to search for
 	 * @param int $newRawMaterialId the rawMaterialId to search for
-	 * @return mixed FinishedProduct(s) found or null if not found
+	 * @return mixed FinishedProduct found or null if not found
 	 * @throws PDOException when mySQL related errors occur
 	 **/
-	public static function getProductLocationByLocationIdAndProductId(PDO &$pdo, $newFinishedProductId, $newRawMaterialId) {
+	public static function getFinishedProductByFinishedProductIdAndRawMaterialId(PDO &$pdo, $newFinishedProductId, $newRawMaterialId) {
 		// sanitize the finishedProductId before searching
 		$newFinishedProductId = filter_var($newFinishedProductId, FILTER_VALIDATE_INT);
 		if($newFinishedProductId === false) {
@@ -268,20 +264,19 @@ class finishedProduct {
 		$parameters = array("finishedProductId" => $newFinishedProductId, "rawMaterialId" => $newRawMaterialId);
 		$statement->execute($parameters);
 
-		// build an array of FinishedProducts
-		$finishedProducts = new SplFixedArray($statement->rowCount());
-		$statement->setFetchMode(PDO::FETCH_ASSOC);
-		while(($row = $statement->fetch()) !== false) {
-			try {
+		// grab the FinishedProduct from mySQL
+		try {
+			$finishedProduct = null;
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$row   = $statement->fetch();
+			if($row !== false) {
 				$finishedProduct = new FinishedProduct($row["finishedProductId"], $row["rawMaterialId"], $row["rawQuantity"]);
-				$finishedProducts[$finishedProducts->key()] = $finishedProduct;
-				$finishedProducts->next();
-			} catch(Exception $exception) {
-				// if the row couldn't be converted, rethrow it
-				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
+		} catch(PDOException $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new PDOException($exception->getMessage(), 0, $exception));
 		}
-		return($finishedProducts);
+		return($finishedProduct);
 	}
 
 	/**
@@ -292,7 +287,7 @@ class finishedProduct {
 	 * @return mixed FinishedProduct(s) found or null if not found
 	 * @throws PDOException when mySQL related errors occur
 	 **/
-	public static function getProductLocationByLocationId(PDO &$pdo, $newFinishedProductId) {
+	public static function getFinishedProductByFinishedProductId(PDO &$pdo, $newFinishedProductId) {
 		// sanitize the finishedProductId before searching
 		$newFinishedProductId = filter_var($newFinishedProductId, FILTER_VALIDATE_INT);
 		if($newFinishedProductId === false) {
@@ -310,7 +305,7 @@ class finishedProduct {
 		$parameters = array("finishedProductId" => $newFinishedProductId);
 		$statement->execute($parameters);
 
-		// build an array of productLocations
+		// build an array of FinishedProduct(s)
 		$finishedProducts = new SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
@@ -318,7 +313,7 @@ class finishedProduct {
 				$finishedProduct = new FinishedProduct($row["finishedProductId"], $row["rawMaterialId"], $row["rawQuantity"]);
 				$finishedProducts[$finishedProducts->key()] = $finishedProduct;
 				$finishedProducts->next();
-			} catch(Exception $exception) {
+			} catch(PDOException $exception) {
 				// if the row couldn't be converted, rethrow it
 				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
@@ -334,7 +329,7 @@ class finishedProduct {
 	 * @return mixed FinishedProduct(s) found or null if not found
 	 * @throws PDOException when mySQL related errors occur
 	 **/
-	public static function getProductLocationByProductId(PDO &$pdo, $newRawMaterialId) {
+	public static function getFinishedProductByRawMaterialId(PDO &$pdo, $newRawMaterialId) {
 		// sanitize the rawMaterialId before searching
 		$newRawMaterialId = filter_var($newRawMaterialId, FILTER_VALIDATE_INT);
 		if($newRawMaterialId === false) {
@@ -360,7 +355,7 @@ class finishedProduct {
 				$finishedProduct = new FinishedProduct($row["finishedProductId"], $row["rawMaterialId"], $row["rawQuantity"]);
 				$finishedProducts[$finishedProducts->key()] = $finishedProduct;
 				$finishedProducts->next();
-			} catch(Exception $exception) {
+			} catch(PDOException $exception) {
 				// if the row couldn't be converted, rethrow it
 				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
@@ -369,7 +364,7 @@ class finishedProduct {
 	}
 
 	/**
-	 * gets all finishedProducts
+	 * gets all FinishedProduct(s)
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
 	 * @return SplFixedArray all productLocations found
@@ -381,7 +376,7 @@ class finishedProduct {
 		$statement = $pdo->prepare($query);
 		$statement->execute();
 
-		// build an array of productLocations
+		// build an array of FinishedProduct(s)
 		$finishedProducts = new SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
@@ -389,7 +384,7 @@ class finishedProduct {
 				$finishedProduct = new FinishedProduct($row["finishedProductId"], $row["rawMaterialId"], $row["rawQuantity"]);
 				$finishedProducts[$finishedProducts->key()] = $finishedProduct;
 				$finishedProducts->next();
-			} catch(Exception $exception) {
+			} catch(PDOException $exception) {
 				// if the row couldn't be converted, rethrow it
 				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
