@@ -4,8 +4,8 @@ require_once("inventorytext.php");
 
 // grab the class under scrutiny
 require_once(dirname(__DIR__) . "/php/classes/product-location.php");
-require_once(dirname(__DIR__) . "/php/classes/product.php");
 require_once(dirname(__DIR__) . "/php/classes/vendor.php");
+require_once(dirname(__DIR__) . "/php/classes/product.php");
 require_once(dirname(__DIR__) . "/php/classes/location.php");
 require_once(dirname(__DIR__) . "/php/classes/unit-of-measure.php");
 
@@ -21,42 +21,6 @@ require_once(dirname(__DIR__) . "/php/classes/unit-of-measure.php");
  * @author Christopher Collopy <ccollopy@cnm.edu>
  **/
 class ProductLocationTest extends InventoryTextTest {
-	/**
-	 * valid locationId to use
-	 * @var int $VALID_locationId
-	 **/
-	protected $VALID_locationId = 1;
-
-	/**
-	 * invalid locationId to use
-	 * @var int $INVALID_locationId
-	 **/
-	protected $INVALID_locationId = 4294967296;
-
-	/**
-	 * valid productId to use
-	 * @var int $VALID_productId
-	 **/
-	protected $VALID_productId = 1;
-
-	/**
-	 * invalid productId to use
-	 * @var int $INVALID_productId
-	 **/
-	protected $INVALID_productId = 4294967296;
-
-	/**
-	 * valid unitId to use
-	 * @var int $VALID_unitId
-	 **/
-	protected $VALID_unitId = 1;
-
-	/**
-	 * invalid unitId to use
-	 * @var int $INVALID_unitId
-	 **/
-	protected $INVALID_unitId = 4294967296;
-
 	/**
 	 * valid quantity to use
 	 * @var float $VALID_quantity
@@ -76,22 +40,22 @@ class ProductLocationTest extends InventoryTextTest {
 	protected $INVALID_quantity = 42949.67296;
 
 	/**
-	 * creating a null Product object
-	 * for global scope
+	 * creating a null Product
+	 * object for global scope
 	 * @var Product $product
 	 **/
 	protected $product = null;
 
 	/**
-	 * creating a null fromLocation object
-	 * for global scope
+	 * creating a null Location
+	 * object for global scope
 	 * @var Location $location
 	 **/
 	protected $location = null;
 
 	/**
-	 * creating a null UnitOfMeasure object
-	 * for global scope
+	 * creating a null UnitOfMeasure
+	 * object for global scope
 	 * @var UnitOfMeasure $unitOfMeasure
 	 **/
 	protected $unitOfMeasure = null;
@@ -101,19 +65,19 @@ class ProductLocationTest extends InventoryTextTest {
 		parent::setUp();
 
 		$vendorId = null;
-		$name = "TruFork";
 		$contactName = "Trevor Rigler";
-		$email = "trier@cnm.edu";
-		$phoneNumber = "5053594687";
+		$vendorEmail = "trier@cnm.edu";
+		$vendorName = "TruFork";
+		$vendorPhoneNumber = "5053594687";
 
-		$vendor = new Vendor($vendorId, $name, $contactName, $email, $phoneNumber);
+		$vendor = new Vendor($vendorId, $contactName, $vendorEmail, $vendorName, $vendorPhoneNumber);
 		$vendor->insert($this->getPDO());
 
 		$productId = null;
 		$vendorId = $vendor->getVendorId();
 		$description = "A glorius bead to use";
-		$leadTime = "10 days";
-		$sku = "thtfr354";
+		$leadTime = 10;
+		$sku = "TGT354";
 		$title = "Bead-Green-Blue-Circular";
 
 		$this->product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
@@ -123,12 +87,12 @@ class ProductLocationTest extends InventoryTextTest {
 		$description = "Back Stock";
 		$storageCode = "BS";
 
-		$this->location = new Location($locationId, $vendorId, $description, $storageCode);
+		$this->location = new Location($locationId, $description, $storageCode);
 		$this->location->insert($this->getPDO());
 
 		$unitId = null;
 		$unitCode = "pk";
-		$quantity = "10.50";
+		$quantity = 10.50;
 
 		$this->unitOfMeasure = new UnitOfMeasure($unitId, $unitCode, $quantity);
 		$this->unitOfMeasure->insert($this->getPDO());
@@ -182,8 +146,8 @@ class ProductLocationTest extends InventoryTextTest {
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoProductLocation = ProductLocation::getProductLocationByLocationIdAndProductId($this->getPDO(), $this->location->getLocationId(), $this->product->getProductId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("productLocation"));
-		$this->assertSame($pdoProductLocation->getUnitId, $this->unitOfMeasure->getUnitId());
-		$this->assertSame($pdoProductLocation->getQuantity(), $this->VALID_quantity);
+		$this->assertSame($pdoProductLocation->getUnitId(), $this->unitOfMeasure->getUnitId());
+		$this->assertSame($pdoProductLocation->getQuantity(), $this->VALID_quantity2);
 	}
 
 	/**
@@ -230,33 +194,6 @@ class ProductLocationTest extends InventoryTextTest {
 	}
 
 	/**
-	 * test inserting a ProductLocation and regrabbing it from mySQL
-	 **/
-	public function testGetValidProductLocationByLocationIdAndProfileId() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("productLocation");
-
-		// create a new ProductLocation and insert to into mySQL
-		$productLocation = new ProductLocation($this->location->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->VALID_quantity);
-		$productLocation->insert($this->getPDO());
-
-		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProductLocation = ProductLocation::getProductLocationByLocationIdAndProductId($this->getPDO(), $this->location->getLocationId(), $this->product->getProductId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("productLocation"));
-		$this->assertSame($pdoProductLocation->getUnitId, $this->unitOfMeasure->getUnitId());
-		$this->assertSame($pdoProductLocation->getQuantity(), $this->VALID_quantity);
-	}
-
-	/**
-	 * test grabbing a ProductLocation that does not exist
-	 **/
-	public function testGetInvalidProductLocationByLocationIdAndProfileId() {
-		// grab a location id that exceeds the maximum allowable location id
-		$productLocation = ProductLocation::getProductLocationByLocationIdAndProductId($this->getPDO(), InventoryTextTest::INVALID_KEY, $this->product->getProductId());
-		$this->assertNull($productLocation);
-	}
-
-	/**
 	 * test grabbing a ProductLocation by locationId
 	 **/
 	public function testGetValidProductLocationByLocationId() {
@@ -269,10 +206,12 @@ class ProductLocationTest extends InventoryTextTest {
 
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoProductLocation = ProductLocation::getProductLocationByLocationId($this->getPDO(), $this->location->getLocationId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("productLocation"));
-		$this->assertSame($pdoProductLocation->getProductId, $this->product->getProductId());
-		$this->assertSame($pdoProductLocation->getUnitId, $this->unitOfMeasure->getUnitId());
-		$this->assertSame($pdoProductLocation->getQuantity(), $this->VALID_quantity);
+		foreach($pdoProductLocation as $pdoPL) {
+			$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("productLocation"));
+			$this->assertSame($pdoPL->getProductId(), $this->product->getProductId());
+			$this->assertSame($pdoPL->getUnitId(), $this->unitOfMeasure->getUnitId());
+			$this->assertSame($pdoPL->getQuantity(), $this->VALID_quantity);
+		}
 	}
 
 	/**
@@ -280,8 +219,10 @@ class ProductLocationTest extends InventoryTextTest {
 	 **/
 	public function testGetInvalidProductLocationByLocationId() {
 		// grab an locationId that does not exist
-		$productLocation = ProductLocation::getProductLocationByLocationId($this->getPDO(), InventoryTextTest::INVALID_KEY);
-		$this->assertNull($productLocation);
+		$pdoProductLocation = ProductLocation::getProductLocationByLocationId($this->getPDO(), InventoryTextTest::INVALID_KEY);
+		foreach($pdoProductLocation as $pdoPL) {
+			$this->assertNull($pdoPL);
+		}
 	}
 
 	/**
@@ -297,10 +238,12 @@ class ProductLocationTest extends InventoryTextTest {
 
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoProductLocation = ProductLocation::getProductLocationByLocationId($this->getPDO(), $this->product->getProductId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("productLocation"));
-		$this->assertSame($pdoProductLocation->getLocationId, $this->location->getLocationId());
-		$this->assertSame($pdoProductLocation->getUnitId, $this->unitOfMeasure->getUnitId());
-		$this->assertSame($pdoProductLocation->getQuantity(), $this->VALID_quantity);
+		foreach($pdoProductLocation as $pdoPL) {
+			$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("productLocation"));
+			$this->assertSame($pdoPL->getLocationId(), $this->location->getLocationId());
+			$this->assertSame($pdoPL->getUnitId(), $this->unitOfMeasure->getUnitId());
+			$this->assertSame($pdoPL->getQuantity(), $this->VALID_quantity);
+		}
 	}
 
 	/**
@@ -308,7 +251,9 @@ class ProductLocationTest extends InventoryTextTest {
 	 **/
 	public function testGetInvalidProductLocationByProductId() {
 		// grab an productId that does not exist
-		$productLocation = ProductLocation::getProductLocationByProductId($this->getPDO(), InventoryTextTest::INVALID_KEY);
-		$this->assertNull($productLocation);
+		$pdoProductLocation = ProductLocation::getProductLocationByProductId($this->getPDO(), InventoryTextTest::INVALID_KEY);
+		foreach($pdoProductLocation as $pdoPL) {
+			$this->assertNull($pdoPL);
+		}
 	}
 }
