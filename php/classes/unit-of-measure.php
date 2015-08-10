@@ -1,6 +1,7 @@
 <?php
 
-/**Class for Unit of Measure
+/**
+ * aClass for Unit of Measure
  *
  * This class describes how an item is measured, in what quantity and form (i.e. 5 lbs. or ea. for each)
  * The class to handle unit of measure
@@ -22,10 +23,10 @@
 	 **/
 	private $unitCode;
 
-		/**
-		 * the quantity of a unit
-		 * @var float for $quantity
-		 **/
+	/**
+	 * the quantity of a unit
+	 * @var float for $quantity
+	 **/
 	private $quantity;
 
 

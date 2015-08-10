@@ -1,6 +1,7 @@
 <?php
 
 /**
+ *
  * Class User for sites base of users
  *
  * The class to handle users
