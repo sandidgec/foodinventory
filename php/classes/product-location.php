@@ -8,7 +8,7 @@
  *
  * @author Christopher Collopy <ccollopy@cnm.edu>
  **/
-class productLocation {
+class ProductLocation {
 	/**
 	 * id for the location; this is a foreign key
 	 * @var int $locationId

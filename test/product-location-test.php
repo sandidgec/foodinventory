@@ -123,7 +123,7 @@ class ProductLocationTest extends InventoryTextTest {
 	 * @expectedException PDOException
 	 **/
 	public function testInsertInvalidProfile() {
-		// create a productLocation with a non null locationId and watch it fail
+		// create a ProductLocation with a non null locationId and watch it fail
 		$productLocation = new ProductLocation(InventoryTextTest::INVALID_KEY, $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->VALID_quantity);
 		$productLocation->insert($this->getPDO());
 	}
