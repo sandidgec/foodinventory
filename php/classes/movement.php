@@ -85,10 +85,10 @@ class Movement {
 	 * @param int $newProductId id for the product being moved
 	 * @param int $newUnitId id for the units of product being moved
 	 * @param int $newUserId id for the user that creates the movement
-	 * @param float $newCost cost of the product being moved
+	 * @param float $newCost the cost of the product being moved
 	 * @param DateTime $newMovementDate the date and time of the movement
 	 * @param string $newMovementType the type of the movement
-	 * @param float $newPrice price of the product being moved
+	 * @param float $newPrice the price of the product being moved
 	 * @throws InvalidArgumentException if data types are not valid
 	 * @throws RangeException if data values are out of bounds (e.g., strings too long, negative integers)
 	 * @throws Exception if some other exception is thrown
@@ -381,7 +381,7 @@ class Movement {
 		} catch(RangeException $range) {
 			throw(new RangeException($range->getMessage(), 0, $range));
 		}
-		$this->movementDate = $newMovementDate->format("Y-m-d H:i:s");
+		$this->movementDate = $newMovementDate;
 	}
 
 	/**
@@ -465,13 +465,14 @@ class Movement {
 		}
 
 		// create query template
+		$formattedDate = $this->movementDate->format("Y-m-d H:i:s");
 		$query = "INSERT INTO movement(fromLocationId, toLocationId, productId, unitId, userId, cost, movementDate, movementType, price)
  					 VALUES(:fromLocationId, :toLocationId, :productId, :unitId, :userId, :cost, :movementDate, :movementType, :price)";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
 		$parameters = array("fromLocationId" => $this->fromLocationId, "toLocationId" => $this->toLocationId, "productId" => $this->productId, "unitId" => $this->unitId,
-								  "userId" => $this->userId, "cost" => $this->cost, "movementDate" => $this->movementDate, "movementType" => $this->movementType, "price" => $this->price);
+								  "userId" => $this->userId, "cost" => $this->cost, "movementDate" => $formattedDate, "movementType" => $this->movementType, "price" => $this->price);
 		$statement->execute($parameters);
 
 		// update the null movementId with what mySQL just gave us

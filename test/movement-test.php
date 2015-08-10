@@ -37,7 +37,7 @@ class MovementTest extends InventoryTextTest {
 	 * valid movementDate to use
 	 * @var DateTime $VALID_movementDate
 	 **/
-	protected $VALID_movementDate = "2015-09-26 08:45:25";
+	protected $VALID_movementDate = null;
 
 	/**
 	 * invalid movementDate to use
@@ -107,6 +107,8 @@ class MovementTest extends InventoryTextTest {
 
 	public function setUp() {
 		parent::setUp();
+
+		$this->VALID_movementDate = DateTime::createFromFormat("Y-m-d H:i:s", "2015-09-26 08:45:25");
 
 		$userId = null;
 		$firstName = "Jim";
@@ -187,7 +189,7 @@ class MovementTest extends InventoryTextTest {
 		$this->assertSame($pdoMovement->getUnitId(), $this->unitOfMeasure->getUnitId());
 		$this->assertSame($pdoMovement->getUserId(), $this->user->getUserId());
 		$this->assertSame($pdoMovement->getCost(), $this->VALID_cost);
-		$this->assertSame($pdoMovement->getMovementDate(), $this->VALID_movementDate);
+		$this->assertEquals($pdoMovement->getMovementDate(), $this->VALID_movementDate);
 		$this->assertSame($pdoMovement->getMovementType(), $this->VALID_movementType);
 		$this->assertSame($pdoMovement->getPrice(), $this->VALID_price);
 	}
@@ -213,6 +215,31 @@ class MovementTest extends InventoryTextTest {
 	}
 
 	/**
+	 * test inserting and grabbing a Movement with a null movementDate
+	 **/
+	public function testInsertValidMovementWithNullMovementDate() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("movement");
+
+		// create a new Movement and insert to into mySQL
+		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, null, $this->VALID_movementType, $this->VALID_price);
+		$movement->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoMovement = Movement::getMovementByMovementId($this->getPDO(), $movement->getMovementId());
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("movement"));
+		$this->assertSame($pdoMovement->getFromLocationId(), $this->fromLocation->getLocationId());
+		$this->assertSame($pdoMovement->getToLocationId(), $this->toLocation->getLocationId());
+		$this->assertSame($pdoMovement->getProductId(), $this->product->getProductId());
+		$this->assertSame($pdoMovement->getUnitId(), $this->unitOfMeasure->getUnitId());
+		$this->assertSame($pdoMovement->getUserId(), $this->user->getUserId());
+		$this->assertSame($pdoMovement->getCost(), $this->VALID_cost);
+		$this->assertInstanceOf('DateTime', $pdoMovement->getMovementDate());
+		$this->assertSame($pdoMovement->getMovementType(), $this->VALID_movementType);
+		$this->assertSame($pdoMovement->getPrice(), $this->VALID_price);
+	}
+
+	/**
 	 * test grabbing a Movement by fromLocationId
 	 **/
 	public function testGetValidMovementByFromLocationId() {
@@ -233,7 +260,7 @@ class MovementTest extends InventoryTextTest {
 			$this->assertSame($pdoM->getUnitId(), $this->unitOfMeasure->getUnitId());
 			$this->assertSame($pdoM->getUserId(), $this->user->getUserId());
 			$this->assertSame($pdoM->getCost(), $this->VALID_cost);
-			$this->assertSame($pdoM->getMovementDate(), $this->VALID_movementDate);
+			$this->assertEquals($pdoM->getMovementDate(), $this->VALID_movementDate);
 			$this->assertSame($pdoM->getMovementType(), $this->VALID_movementType);
 			$this->assertSame($pdoM->getPrice(), $this->VALID_price);
 		}
@@ -271,7 +298,7 @@ class MovementTest extends InventoryTextTest {
 			$this->assertSame($pdoM->getUnitId(), $this->unitOfMeasure->getUnitId());
 			$this->assertSame($pdoM->getUserId(), $this->user->getUserId());
 			$this->assertSame($pdoM->getCost(), $this->VALID_cost);
-			$this->assertSame($pdoM->getMovementDate(), $this->VALID_movementDate);
+			$this->assertEquals($pdoM->getMovementDate(), $this->VALID_movementDate);
 			$this->assertSame($pdoM->getMovementType(), $this->VALID_movementType);
 			$this->assertSame($pdoM->getPrice(), $this->VALID_price);
 		}
@@ -309,7 +336,7 @@ class MovementTest extends InventoryTextTest {
 			$this->assertSame($pdoM->getUnitId(), $this->unitOfMeasure->getUnitId());
 			$this->assertSame($pdoM->getUserId(), $this->user->getUserId());
 			$this->assertSame($pdoM->getCost(), $this->VALID_cost);
-			$this->assertSame($pdoM->getMovementDate(), $this->VALID_movementDate);
+			$this->assertEquals($pdoM->getMovementDate(), $this->VALID_movementDate);
 			$this->assertSame($pdoM->getMovementType(), $this->VALID_movementType);
 			$this->assertSame($pdoM->getPrice(), $this->VALID_price);
 		}
@@ -347,7 +374,7 @@ class MovementTest extends InventoryTextTest {
 			$this->assertSame($pdoM->getUnitId(), $this->unitOfMeasure->getUnitId());
 			$this->assertSame($pdoM->getUserId(), $this->user->getUserId());
 			$this->assertSame($pdoM->getCost(), $this->VALID_cost);
-			$this->assertSame($pdoM->getMovementDate(), $this->VALID_movementDate);
+			$this->assertEquals($pdoM->getMovementDate(), $this->VALID_movementDate);
 			$this->assertSame($pdoM->getMovementType(), $this->VALID_movementType);
 			$this->assertSame($pdoM->getPrice(), $this->VALID_price);
 		}
@@ -384,7 +411,7 @@ class MovementTest extends InventoryTextTest {
 			$this->assertSame($pdoM->getUnitId(), $this->unitOfMeasure->getUnitId());
 			$this->assertSame($pdoM->getUserId(), $this->user->getUserId());
 			$this->assertSame($pdoM->getCost(), $this->VALID_cost);
-			$this->assertSame($pdoM->getMovementDate(), $this->VALID_movementDate);
+			$this->assertEquals($pdoM->getMovementDate(), $this->VALID_movementDate);
 			$this->assertSame($pdoM->getMovementType(), $this->VALID_movementType);
 			$this->assertSame($pdoM->getPrice(), $this->VALID_price);
 		}
