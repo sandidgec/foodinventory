@@ -5,7 +5,7 @@
 			<file>unitofmeasure-test.php</file>
 			<file>alert-level-test.php</file>
 			<file>vendor-test.php</file>
-			<file>product-test.php</file>
+			<!--<file>product-test.php</file>-->
 			<file>location-test.php</file>
 			<file>finished-product-test.php</file>
 			<file>product-location-test.php</file>

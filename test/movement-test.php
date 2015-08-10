@@ -2,96 +2,25 @@
 // grab the project test parameters
 require_once("inventorytext.php");
 
-// grab the class under scrutiny
+// grab the class(s) under scrutiny
 require_once(dirname(__DIR__) . "/php/classes/movement.php");
 require_once(dirname(__DIR__) . "/php/classes/user.php");
-require_once(dirname(__DIR__) . "/php/classes/product.php");
 require_once(dirname(__DIR__) . "/php/classes/vendor.php");
+require_once(dirname(__DIR__) . "/php/classes/product.php");
 require_once(dirname(__DIR__) . "/php/classes/location.php");
 require_once(dirname(__DIR__) . "/php/classes/unit-of-measure.php");
 
 /**
  * Full PHPUnit test for the Movement class
  *
- * This is a complete PHPUnit test of the Movement class. It is complete because *ALL* mySQL/PDO enabled methods
+ * This is a complete PHPUnit test of the Movement class.
+ * It is complete because *ALL* mySQL/PDO enabled methods
  * are tested for both invalid and valid inputs.
  *
  * @see Movement
  * @author Christopher Collopy <ccollopy@cnm.edu>
  **/
 class MovementTest extends InventoryTextTest {
-	/**
-	 * valid movementId to use
-	 * @var int $VALID_movementId
-	 **/
-	protected $VALID_movementId = 1;
-
-	/**
-	 * invalid movementId to use
-	 * @var int $INVALID_movementId
-	 **/
-	protected $INVALID_movementId = 4294967296;
-
-	/**
-	 * valid fromLocationId to use
-	 * @var int $VALID_fromLocationId
-	 **/
-	protected $VALID_fromLocationId = 1;
-
-	/**
-	 * invalid fromLocationId to use
-	 * @var int $INVALID_fromLocationId
-	 **/
-	protected $INVALID_fromLocationId = 4294967296;
-
-	/**
-	 * valid toLocationId to use
-	 * @var int $VALID_toLocationId
-	 **/
-	protected $VALID_toLocationId = 1;
-
-	/**
-	 * invalid toLocationId to use
-	 * @var int $INVALID_toLocationId
-	 **/
-	protected $INVALID_toLocationId = 4294967296;
-
-	/**
-	 * valid productId to use
-	 * @var int $VALID_productId
-	 **/
-	protected $VALID_productId = 1;
-
-	/**
-	 * invalid productId to use
-	 * @var int $INVALID_productId
-	 **/
-	protected $INVALID_productId = 4294967296;
-
-	/**
-	 * valid unitId to use
-	 * @var int $VALID_unitId
-	 **/
-	protected $VALID_unitId = 1;
-
-	/**
-	 * invalid unitId to use
-	 * @var int $INVALID_unitId
-	 **/
-	protected $INVALID_unitId = 4294967296;
-
-	/**
-	 * valid userId to use
-	 * @var int $VALID_userId
-	 **/
-	protected $VALID_userId = 1;
-
-	/**
-	 * invalid userId to use
-	 * @var int $INVALID_userId
-	 **/
-	protected $INVALID_userId = 4294967296;
-
 	/**
 	 * valid cost to use
 	 * @var float $VALID_cost
@@ -140,41 +69,40 @@ class MovementTest extends InventoryTextTest {
 	 **/
 	protected $INVALID_price = 4.75689;
 
-
 	/**
-	 * creating a null User object
-	 * for global scope
-	 * @var User $user
-	 **/
-	protected $user = null;
-
-	/**
-	 * creating a null Product object
-	 * for global scope
-	 * @var Product $product
-	 **/
-	protected $product = null;
-
-	/**
-	 * creating a null fromLocation object
-	 * for global scope
+	 * creating a null fromLocation
+	 * object for global scope
 	 * @var Location $fromLocation
 	 **/
 	protected $fromLocation = null;
 
 	/**
-	 * creating a null toLocation object
-	 * for global scope
+	 * creating a null toLocation
+	 * object for global scope
 	 * @var Location $toLocation
 	 **/
 	protected $toLocation = null;
 
 	/**
-	 * creating a null UnitOfMeasure object
-	 * for global scope
+	 * creating a null Product
+	 * object for global scope
+	 * @var Product $product
+	 **/
+	protected $product = null;
+
+	/**
+	 * creating a null UnitOfMeasure
+	 * object for global scope
 	 * @var UnitOfMeasure $unitOfMeasure
 	 **/
 	protected $unitOfMeasure = null;
+
+	/**
+	 * creating a null User
+	 * object for global scope
+	 * @var User $user
+	 **/
+	protected $user = null;
 
 
 	public function setUp() {
@@ -183,34 +111,35 @@ class MovementTest extends InventoryTextTest {
 		$userId = null;
 		$firstName = "Jim";
 		$lastName = "Jim";
-		$root = "F";
+		$root = 1;
+		$attention = "Urgent: ";
 		$addressLineOne = "123 House St.";
-		$addressLineTwo = "";
+		$addressLineTwo = "P.O Box. 9965";
 		$city = "Tattoine";
 		$state = "AK";
 		$zipCode = "52467";
-		$email = "jjim@naboomail.nb";
+		$email = "jim@naboomail.nb";
 		$phoneNumber = "5052253231";
 		$salt = bin2hex(openssl_random_pseudo_bytes(32));
 		$hash = hash_pbkdf2("sha512","password1234", $salt,262144, 128);
 
-		$user = new User($userId, $firstName, $lastName, $root, $addressLineOne, $addressLineTwo, $city, $state, $zipCode, $email, $phoneNumber, $hash, $salt);
-		$user->insert($this->getPDO());
+		$this->user = new User($userId, $lastName, $firstName, $root, $attention, $addressLineOne, $addressLineTwo, $city, $state, $zipCode, $email, $phoneNumber, $salt, $hash);
+		$this->user->insert($this->getPDO());
 
 		$vendorId = null;
-		$name = "TruFork";
 		$contactName = "Trevor Rigler";
-		$email = "trier@cnm.edu";
-		$phoneNumber = "5053594687";
+		$vendorEmail = "trier@cnm.edu";
+		$vendorName = "TruFork";
+		$vendorPhoneNumber = "5053594687";
 
-		$vendor = new Vendor($vendorId, $name, $contactName, $email, $phoneNumber);
+		$vendor = new Vendor($vendorId, $contactName, $vendorEmail, $vendorName, $vendorPhoneNumber);
 		$vendor->insert($this->getPDO());
 
 		$productId = null;
 		$vendorId = $vendor->getVendorId();
 		$description = "A glorius bead to use";
-		$leadTime = "10 days";
-		$sku = "thtfr354";
+		$leadTime = 10;
+		$sku = "TGT354";
 		$title = "Bead-Green-Blue-Circular";
 
 		$this->product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
@@ -218,21 +147,21 @@ class MovementTest extends InventoryTextTest {
 
 		$locationId = null;
 		$description = "Back Stock";
-		$storageCode = "BS";
+		$storageCode = 13;
 
-		$this->fromLocation = new Location($locationId, $vendorId, $description, $storageCode);
+		$this->fromLocation = new Location($locationId, $storageCode, $description);
 		$this->fromLocation->insert($this->getPDO());
 
 		$locationId = null;
 		$description = "Front Stock";
-		$storageCode = "FS";
+		$storageCode = 12;
 
-		$this->toLocation = new Location($locationId, $vendorId, $description, $storageCode);
+		$this->toLocation = new Location($locationId, $storageCode, $description);
 		$this->toLocation->insert($this->getPDO());
 
 		$unitId = null;
 		$unitCode = "pk";
-		$quantity = "10.50";
+		$quantity = 10.50;
 
 		$this->unitOfMeasure = new UnitOfMeasure($unitId, $unitCode, $quantity);
 		$this->unitOfMeasure->insert($this->getPDO());
@@ -270,40 +199,15 @@ class MovementTest extends InventoryTextTest {
 	 **/
 	public function testInsertInvalidMovement() {
 		// create a movement with a non null movementId and watch it fail
-		$movement = new Movement(InventoryTextTest::INVALID_KEY, $this->INVALID_fromLocationId, $this->INVALID_toLocationId, $this->INVALID_productId, $this->INVALID_unitId, $this->INVALID_userId, $this->INVALID_cost, $this->INVALID_movementDate, $this->INVALID_movementType, $this->INVALID_price);
+		$movement = new Movement(InventoryTextTest::INVALID_KEY, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
 		$movement->insert($this->getPDO());
-	}
-
-	/**
-	 * test inserting a Movement and regrabbing it from mySQL		?????????????????????????????????????
-	 **/
-	public function testGetValidMovementByMovementId() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("movement");
-
-		// create a new Movement and insert it into mySQL
-		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
-		$movement->insert($this->getPDO());
-
-		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoMovement = Movement::getMovementByMovementId($this->getPDO(), $movement->getMovementId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("movement"));
-		$this->assertSame($pdoMovement->getFromLocationId(), $this->fromLocation->getLocationId());
-		$this->assertSame($pdoMovement->getToLocationId(), $this->toLocation->getLocationId());
-		$this->assertSame($pdoMovement->getProductId(), $this->product->getProductId());
-		$this->assertSame($pdoMovement->getUnitId(), $this->unitOfMeasure->getUnitId());
-		$this->assertSame($pdoMovement->getUserId(), $this->user->getUserId());
-		$this->assertSame($pdoMovement->getCost(), $this->VALID_cost);
-		$this->assertSame($pdoMovement->getMovementDate(), $this->VALID_movementDate);
-		$this->assertSame($pdoMovement->getMovementType(), $this->VALID_movementType);
-		$this->assertSame($pdoMovement->getPrice(), $this->VALID_price);
 	}
 
 	/**
 	 * test grabbing a Movement that does not exist
 	 **/
 	public function testGetInvalidMovementByMovementId() {
-		// grab a profile id that exceeds the maximum allowable profile id
+		// grab a movementId that exceeds the maximum allowable movementId
 		$movement = Movement::getMovementByMovementId($this->getPDO(), InventoryTextTest::INVALID_KEY);
 		$this->assertNull($movement);
 	}
@@ -321,16 +225,18 @@ class MovementTest extends InventoryTextTest {
 
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoMovement = Movement::getMovementByFromLocationId($this->getPDO(), $movement->getFromLocationId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("movement"));
-		$this->assertSame($pdoMovement->getFromLocationId(), $this->fromLocation->getLocationId());
-		$this->assertSame($pdoMovement->getToLocationId(), $this->toLocation->getLocationId());
-		$this->assertSame($pdoMovement->getProductId(), $this->product->getProductId());
-		$this->assertSame($pdoMovement->getUnitId(), $this->unitOfMeasure->getUnitId());
-		$this->assertSame($pdoMovement->getUserId(), $this->user->getUserId());
-		$this->assertSame($pdoMovement->getCost(), $this->VALID_cost);
-		$this->assertSame($pdoMovement->getMovementDate(), $this->VALID_movementDate);
-		$this->assertSame($pdoMovement->getMovementType(), $this->VALID_movementType);
-		$this->assertSame($pdoMovement->getPrice(), $this->VALID_price);
+		foreach($pdoMovement as $pdoM) {
+			$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("movement"));
+			$this->assertSame($pdoM->getFromLocationId(), $this->fromLocation->getLocationId());
+			$this->assertSame($pdoM->getToLocationId(), $this->toLocation->getLocationId());
+			$this->assertSame($pdoM->getProductId(), $this->product->getProductId());
+			$this->assertSame($pdoM->getUnitId(), $this->unitOfMeasure->getUnitId());
+			$this->assertSame($pdoM->getUserId(), $this->user->getUserId());
+			$this->assertSame($pdoM->getCost(), $this->VALID_cost);
+			$this->assertSame($pdoM->getMovementDate(), $this->VALID_movementDate);
+			$this->assertSame($pdoM->getMovementType(), $this->VALID_movementType);
+			$this->assertSame($pdoM->getPrice(), $this->VALID_price);
+		}
 	}
 
 	/**
@@ -338,8 +244,10 @@ class MovementTest extends InventoryTextTest {
 	 **/
 	public function testGetInvalidMovementByFromLocationId() {
 		// grab an fromLocationId that does not exist
-		$movement = Movement::getMovementByFromLocationId($this->getPDO(), InventoryTextTest::INVALID_KEY);
-		$this->assertNull($movement);
+		$pdoMovement = Movement::getMovementByFromLocationId($this->getPDO(), InventoryTextTest::INVALID_KEY);
+		foreach($pdoMovement as $pdoM) {
+			$this->assertNull($pdoM);
+		}
 	}
 
 	/**
@@ -355,16 +263,18 @@ class MovementTest extends InventoryTextTest {
 
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoMovement = Movement::getMovementByToLocationId($this->getPDO(), $movement->getToLocationId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("movement"));
-		$this->assertSame($pdoMovement->getFromLocationId(), $this->fromLocation->getLocationId());
-		$this->assertSame($pdoMovement->getToLocationId(), $this->toLocation->getLocationId());
-		$this->assertSame($pdoMovement->getProductId(), $this->product->getProductId());
-		$this->assertSame($pdoMovement->getUnitId(), $this->unitOfMeasure->getUnitId());
-		$this->assertSame($pdoMovement->getUserId(), $this->user->getUserId());
-		$this->assertSame($pdoMovement->getCost(), $this->VALID_cost);
-		$this->assertSame($pdoMovement->getMovementDate(), $this->VALID_movementDate);
-		$this->assertSame($pdoMovement->getMovementType(), $this->VALID_movementType);
-		$this->assertSame($pdoMovement->getPrice(), $this->VALID_price);
+		foreach($pdoMovement as $pdoM) {
+			$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("movement"));
+			$this->assertSame($pdoM->getFromLocationId(), $this->fromLocation->getLocationId());
+			$this->assertSame($pdoM->getToLocationId(), $this->toLocation->getLocationId());
+			$this->assertSame($pdoM->getProductId(), $this->product->getProductId());
+			$this->assertSame($pdoM->getUnitId(), $this->unitOfMeasure->getUnitId());
+			$this->assertSame($pdoM->getUserId(), $this->user->getUserId());
+			$this->assertSame($pdoM->getCost(), $this->VALID_cost);
+			$this->assertSame($pdoM->getMovementDate(), $this->VALID_movementDate);
+			$this->assertSame($pdoM->getMovementType(), $this->VALID_movementType);
+			$this->assertSame($pdoM->getPrice(), $this->VALID_price);
+		}
 	}
 
 	/**
@@ -372,7 +282,123 @@ class MovementTest extends InventoryTextTest {
 	 **/
 	public function testGetInvalidMovementByToLocationId() {
 		// grab an toLocationId that does not exist
-		$movement = Movement::getMovementByFromLocationId($this->getPDO(), InventoryTextTest::INVALID_KEY);
-		$this->assertNull($movement);
+		$pdoMovement = Movement::getMovementByToLocationId($this->getPDO(), InventoryTextTest::INVALID_KEY);
+		foreach($pdoMovement as $pdoM) {
+			$this->assertNull($pdoM);
+		}
 	}
+
+	/**
+	 * test grabbing a Movement by fromLocationId & toLocationId
+	 **/
+	public function testGetValidMovementByFromLocationIdAndToLocationId() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("movement");
+
+		// create a new Movement and insert to into mySQL
+		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
+		$movement->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoMovement = Movement::getMovementByFromLocationIdAndToLocationId($this->getPDO(), $movement->getFromLocationId(), $movement->getToLocationId());
+		foreach($pdoMovement as $pdoM) {
+			$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("movement"));
+			$this->assertSame($pdoM->getFromLocationId(), $this->fromLocation->getLocationId());
+			$this->assertSame($pdoM->getToLocationId(), $this->toLocation->getLocationId());
+			$this->assertSame($pdoM->getProductId(), $this->product->getProductId());
+			$this->assertSame($pdoM->getUnitId(), $this->unitOfMeasure->getUnitId());
+			$this->assertSame($pdoM->getUserId(), $this->user->getUserId());
+			$this->assertSame($pdoM->getCost(), $this->VALID_cost);
+			$this->assertSame($pdoM->getMovementDate(), $this->VALID_movementDate);
+			$this->assertSame($pdoM->getMovementType(), $this->VALID_movementType);
+			$this->assertSame($pdoM->getPrice(), $this->VALID_price);
+		}
+	}
+
+	/**
+	 * test grabbing a Movement by fromLocationId & toLocationId that does not exist
+	 **/
+	public function testGetInvalidMovementByFromLocationIdAndToLocationId() {
+		// grab an fromLocationId & toLocationId that does not exist
+		$pdoMovement = Movement::getMovementByToLocationId($this->getPDO(), InventoryTextTest::INVALID_KEY, InventoryTextTest::INVALID_KEY);
+		foreach($pdoMovement as $pdoM) {
+			$this->assertNull($pdoM);
+		}
+	}
+
+	/**
+	 * test grabbing a Movement by productId
+	 **/
+	public function testGetValidMovementByProductId() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("movement");
+
+		// create a new Movement and insert to into mySQL
+		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
+		$movement->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoMovement = Movement::getMovementByProductId($this->getPDO(), $movement->getProductId());
+		foreach($pdoMovement as $pdoM) {
+			$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("movement"));
+			$this->assertSame($pdoM->getFromLocationId(), $this->fromLocation->getLocationId());
+			$this->assertSame($pdoM->getToLocationId(), $this->toLocation->getLocationId());
+			$this->assertSame($pdoM->getProductId(), $this->product->getProductId());
+			$this->assertSame($pdoM->getUnitId(), $this->unitOfMeasure->getUnitId());
+			$this->assertSame($pdoM->getUserId(), $this->user->getUserId());
+			$this->assertSame($pdoM->getCost(), $this->VALID_cost);
+			$this->assertSame($pdoM->getMovementDate(), $this->VALID_movementDate);
+			$this->assertSame($pdoM->getMovementType(), $this->VALID_movementType);
+			$this->assertSame($pdoM->getPrice(), $this->VALID_price);
+		}
+	}
+
+	/**
+	 * test grabbing a Movement by productId that does not exist
+	 **/
+	public function testGetInvalidMovementByProductId() {
+		// grab an productId that does not exist
+		$pdoMovement = Movement::getMovementByProductId($this->getPDO(), InventoryTextTest::INVALID_KEY);
+		foreach($pdoMovement as $pdoM) {
+			$this->assertNull($pdoM);
+		}
+	}
+
+	/**
+	 * test grabbing a Movement by userId
+	 **/
+	public function testGetValidMovementByUserId() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("movement");
+
+		// create a new Movement and insert to into mySQL
+		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
+		$movement->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoMovement = Movement::getMovementByUserId($this->getPDO(), $movement->getUserId());
+		foreach($pdoMovement as $pdoM) {
+			$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("movement"));
+			$this->assertSame($pdoM->getFromLocationId(), $this->fromLocation->getLocationId());
+			$this->assertSame($pdoM->getToLocationId(), $this->toLocation->getLocationId());
+			$this->assertSame($pdoM->getUnitId(), $this->unitOfMeasure->getUnitId());
+			$this->assertSame($pdoM->getUserId(), $this->user->getUserId());
+			$this->assertSame($pdoM->getCost(), $this->VALID_cost);
+			$this->assertSame($pdoM->getMovementDate(), $this->VALID_movementDate);
+			$this->assertSame($pdoM->getMovementType(), $this->VALID_movementType);
+			$this->assertSame($pdoM->getPrice(), $this->VALID_price);
+		}
+	}
+
+	/**
+	 * test grabbing a Movement by userId that does not exist
+	 **/
+	public function testGetInvalidMovementByUserId() {
+		// grab an userId that does not exist
+		$pdoMovement = Movement::getMovementByUserId($this->getPDO(), InventoryTextTest::INVALID_KEY);
+		foreach($pdoMovement as $pdoM) {
+			$this->assertNull($pdoM);
+		}
+	}
+
 }

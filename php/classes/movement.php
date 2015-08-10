@@ -77,6 +77,8 @@ class Movement {
 	use validateDate;
 
 	/**
+	 * constructor for this Movement
+	 *
 	 * @param int $newMovementId id for this Movement
 	 * @param int $newFromLocationId id for the product's current location
 	 * @param int $newToLocationId id for the product's new location
@@ -115,14 +117,6 @@ class Movement {
 			// rethrow the generic exception to the caller
 			throw(new Exception($exception->getMessage(), 0, $exception));
 		}
-	}
-
-	public function __toString() {
-		$formattedDate = $this->movementDate->format("Y-m-d H:i:s");
-
-		return "<tr><td>" . $this->getMovementId() . "</td><td>" . $this->getFromLocationId() . "</td><td>" . $this->getToLocationId() .
-				 "</td><td>" . $this->getProductId() . "</td><td>" . $this->getUnitId() . "</td><td>" . $this->getUserId() .
-				 "</td><td>" . $this->getCost() . "</td><td>" . $formattedDate . "</td><td>" . $this->getMovementType() . "</td><td>" . $this->getPrice() . "</td></tr>";
 	}
 
 	/**
@@ -387,7 +381,7 @@ class Movement {
 		} catch(RangeException $range) {
 			throw(new RangeException($range->getMessage(), 0, $range));
 		}
-		$this->movementDate = $newMovementDate;
+		$this->movementDate = $newMovementDate->format("Y-m-d H:i:s");
 	}
 
 	/**
@@ -476,9 +470,8 @@ class Movement {
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
-		$formattedDate = $this->movementDate->format("Y-m-d H:i:s");
 		$parameters = array("fromLocationId" => $this->fromLocationId, "toLocationId" => $this->toLocationId, "productId" => $this->productId, "unitId" => $this->unitId,
-								  "userId" => $this->userId, "cost" => $this->cost, "movementDate" => $formattedDate, "movementType" => $this->movementType, "price" => $this->price);
+								  "userId" => $this->userId, "cost" => $this->cost, "movementDate" => $this->movementDate, "movementType" => $this->movementType, "price" => $this->price);
 		$statement->execute($parameters);
 
 		// update the null movementId with what mySQL just gave us
