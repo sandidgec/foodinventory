@@ -1,5 +1,13 @@
 <?php
 
+/**Class for Unit of Measure
+ *
+ * This class describes how an item is measured, in what quantity and form (i.e. 5 lbs. or ea. for each)
+ * The class to handle unit of measure
+ *
+* @author Charles Sandidge sandidgec@gmail.com
+**/
+
 class UnitOfMeasure {
 
 	/**
@@ -24,10 +32,9 @@ private $quantity;
 	/**
 	 * Constructor for unit of measure class
 	 *
-	 *
-	 * @param int $newUnitId
-	 * @param string $newUnitCode
-	 * @param float $newQuantity
+	 * @param int for the unit Id $newUnitId
+	 * @param string of the unit code of a unit of measure $newUnitCode
+	 * @param float for the value quantity i.e. 4.5lbs $newQuantity
 	 * @throws Exception
 	 * @throws RangeException
 	 * @throws InvalidArgumentException
