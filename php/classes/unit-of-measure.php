@@ -8,25 +8,25 @@
 * @author Charles Sandidge sandidgec@gmail.com
 **/
 
-class UnitOfMeasure {
+	class UnitOfMeasure {
 
 	/**
 	 * primary key for unitOfMeasure
 	 * @var int for $unitId
 	 **/
-private $unitId;
+	private $unitId;
 
 	/**
 	 * the identity of quantity of a unit - i.e. ea (for each)
 	 * @var string for $unitCode
 	 **/
-private $unitCode;
+	private $unitCode;
 
-	/**
-	 * the quantity of a unit
-	 * @var float for $quantity
-	 **/
-private $quantity;
+		/**
+		 * the quantity of a unit
+		 * @var float for $quantity
+		 **/
+	private $quantity;
 
 
 	/**
@@ -35,9 +35,9 @@ private $quantity;
 	 * @param int for the unit Id $newUnitId
 	 * @param string of the unit code of a unit of measure $newUnitCode
 	 * @param float for the value quantity i.e. 4.5lbs $newQuantity
-	 * @throws Exception
-	 * @throws RangeException
-	 * @throws InvalidArgumentException
+	 * @throws Exception if other exception is thrown
+	 * @throws RangeException if unit of measure is not within range of positive integer
+	 * @throws InvalidArgumentException if data types are invalid
 	 **/
 	public function __construct($newUnitId, $newUnitCode, $newQuantity) {
 		try {
