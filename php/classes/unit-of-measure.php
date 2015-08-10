@@ -4,20 +4,20 @@ class UnitOfMeasure {
 
 	/**
 	 * primary key for unitOfMeasure
-	 * @var int $unitId
-	 */
+	 * @var int for $unitId
+	 **/
 private $unitId;
 
 	/**
 	 * the identity of quantity of a unit - i.e. ea (for each)
-	 * @var string $unitCode
-	 */
+	 * @var string for $unitCode
+	 **/
 private $unitCode;
 
 	/**
 	 * the quantity of a unit
-	 * @var float $quantity
-	 */
+	 * @var float for $quantity
+	 **/
 private $quantity;
 
 
@@ -29,7 +29,7 @@ private $quantity;
 	 * @throws Exception
 	 * @throws RangeException
 	 * @throws InvalidArgumentException
-	 */
+	 **/
 	public function __construct($newUnitId, $newUnitCode, $newQuantity) {
 		try {
 			$this->setUnitId($newUnitId);
@@ -53,7 +53,7 @@ private $quantity;
 	/**
 	 * accessor for unit id
 	 * @return int
-	 */
+	 **/
 	public function getUnitId() {
 		return ($this->unitId);
 	}
@@ -62,7 +62,7 @@ private $quantity;
 	 * mutator for Unit Id
 	 * @param int $newUnitId
 	 * @throws InvalidArgumentException for invalid content
-	 */
+	 **/
 	public function setUnitId($newUnitId) {
 		// base case: if the unitId is null,
 		// this is a new unit Id without a mySQL assigned id (yet)
@@ -81,7 +81,7 @@ private $quantity;
 	/**
 	 * accessor for unit code
 	 * @return string
-	 */
+	 **/
 	public function getUnitCode() {
 		return ($this->unitCode);
 	}
@@ -91,7 +91,7 @@ private $quantity;
 	 * @param string $newUnitCode
 	 * @throws InvalidArgumentException for invalid content
 	 * @throws RangeException for more than 2 characters
-	 */
+	 **/
 	public function setUnitCode($newUnitCode) {
 		//verify the locationId is valid
 		$newUnitCode = filter_var($newUnitCode, FILTER_SANITIZE_STRING);
@@ -107,17 +107,17 @@ private $quantity;
 	/**
 	 * accessor for Quantity
 	 * @return float
-	 */
+	 **/
 	public function getQuantity() {
 		return ($this->quantity);
 	}
 
 	/**
 	 * mutator for Quantity
-	 * @param float $newQuantity
+	 * @param float value for $newQuantity
 	 * @throws InvalidArgumentException for invalid content
 	 * @throws RangeException for negative quantity value
-	 */
+	 **/
 	public function setQuantity($newQuantity) {
 		//verify the quantity is valid
 		$newQuantity = filter_var($newQuantity, FILTER_VALIDATE_FLOAT);
@@ -133,8 +133,8 @@ private $quantity;
 
 	/**
 	 * insert PDO
-	 * @param PDO $pdo
-	 */
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 **/
 	public function insert(PDO &$pdo) {
 		// make sure unit id doesn't already exist
 		if($this->unitId !== null) {
@@ -159,7 +159,7 @@ private $quantity;
 	 * Delete PDO
 	 * @param PDO $pdo pointer to PDO connection, by reference
 	 * @throws PDOException for mySQL related errors
-	 */
+	 **/
 	public function delete(PDO &$pdo) {
 		// enforce the unitId is not null
 		if($this->unitId === null) {
@@ -179,7 +179,7 @@ private $quantity;
 	 * Update PDO
 	 * @param PDO $pdo pointer to PDO connection, by reference
 	 * @throws PDOException for mySQL related issues
-	 */
+	 **/
 	public function update(PDO &$pdo) {
 	// enforce the unitId is not null
 		if($this->unitId === null) {
@@ -204,7 +204,7 @@ private $quantity;
 	 * @throws PDOException if unit id is not an integer
 	 * @throws PDOException if unit id is not positive in mySQL
 	 * @throws PDOException if row couldn't be converted in mySQL
-	 */
+	 **/
 	public static function getUnitOfMeasureByUnitId(PDO &$pdo, $unitId) {
 		// sanitize the unitId before searching
 		$unitId = filter_var($unitId, FILTER_VALIDATE_INT);
@@ -239,12 +239,12 @@ private $quantity;
 	}
 
 	/**
-	 * @param PDO $pdo
-	 * @param $newUnitCode
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param string $newUnitCode
 	 * @return null|UnitOfMeasure
 	 * @throws InvalidArgumentException if UnitCode not a valid string
 	 * @throws RangeException if UnitCode is not exactly 2 characters
-	 */
+	 **/
 	public static function getUnitOfMeasureByUnitCode(PDO &$pdo, $newUnitCode) {
 		// sanitize the storageCode before searching
 		$newUnitCode = filter_var($newUnitCode, FILTER_SANITIZE_STRING);
