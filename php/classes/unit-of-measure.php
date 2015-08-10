@@ -1,7 +1,7 @@
 <?php
 
 /**
- * aClass for Unit of Measure
+ * Class for Unit of Measure
  *
  * This class describes how an item is measured, in what quantity and form (i.e. 5 lbs. or ea. for each)
  * The class to handle unit of measure
