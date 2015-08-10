@@ -49,7 +49,6 @@ class Product {
 	 * @param int $newLeadTime leadTime for this Product
 	 * @param string $newSku sku for this Product
 	 * @param string $newTitle textual title of this Product
-
 	 * @throws InvalidArgumentException if data types are not valid
 	 * @throws RangeException if data values are out of bounds (e.g., strings too long, negative integers)
 	 * @throws Exception if some other exception is thrown
@@ -590,6 +589,3 @@ class Product {
 		return($products);
 	}
 }
-
-
-?>
