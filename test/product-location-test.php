@@ -85,9 +85,9 @@ class ProductLocationTest extends InventoryTextTest {
 
 		$locationId = null;
 		$description = "Back Stock";
-		$storageCode = "BS";
+		$storageCode = 7;
 
-		$this->location = new Location($locationId, $description, $storageCode);
+		$this->location = new Location($locationId, $storageCode, $description);
 		$this->location->insert($this->getPDO());
 
 		$unitId = null;
@@ -113,7 +113,7 @@ class ProductLocationTest extends InventoryTextTest {
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoProductLocation = ProductLocation::getProductLocationByLocationIdAndProductId($this->getPDO(), $this->location->getLocationId(), $this->product->getProductId());
 		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("productLocation"));
-		$this->assertSame($pdoProductLocation->getUnitId, $this->unitOfMeasure->getUnitId());
+		$this->assertSame($pdoProductLocation->getUnitId(), $this->unitOfMeasure->getUnitId());
 		$this->assertSame($pdoProductLocation->getQuantity(), $this->VALID_quantity);
 	}
 
@@ -152,8 +152,6 @@ class ProductLocationTest extends InventoryTextTest {
 
 	/**
 	 * test updating a ProductLocation that does not exist
-	 *
-	 * @expectedException PDOException
 	 **/
 	public function testUpdateInvalidProductLocation() {
 		// create a ProductLocation and try to update it without actually inserting it
@@ -184,8 +182,6 @@ class ProductLocationTest extends InventoryTextTest {
 
 	/**
 	 * test deleting a ProductLocation that does not exist
-	 *
-	 * @expectedException PDOException
 	 **/
 	public function testDeleteInvalidProfile() {
 		// create a ProductLocation and try to delete it without actually inserting it
