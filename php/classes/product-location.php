@@ -368,7 +368,7 @@ class productLocation {
 				$productLocation = new ProductLocation($row["locationId"], $row["productId"], $row["unitId"], $row["quantity"]);
 				$productLocations[$productLocations->key()] = $productLocation;
 				$productLocations->next();
-			} catch(Exception $exception) {
+			} catch(PDOException $exception) {
 				// if the row couldn't be converted, rethrow it
 				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
@@ -410,7 +410,7 @@ class productLocation {
 				$productLocation = new ProductLocation($row["locationId"], $row["productId"], $row["unitId"], $row["quantity"]);
 				$productLocations[$productLocations->key()] = $productLocation;
 				$productLocations->next();
-			} catch(Exception $exception) {
+			} catch(PDOException $exception) {
 				// if the row couldn't be converted, rethrow it
 				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
@@ -439,7 +439,7 @@ class productLocation {
 				$productLocation = new ProductLocation($row["locationId"], $row["productId"], $row["unitId"], $row["quantity"]);
 				$productLocations[$productLocations->key()] = $productLocation;
 				$productLocations->next();
-			} catch(Exception $exception) {
+			} catch(PDOException $exception) {
 				// if the row couldn't be converted, rethrow it
 				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}

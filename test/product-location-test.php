@@ -151,15 +151,6 @@ class ProductLocationTest extends InventoryTextTest {
 	}
 
 	/**
-	 * test updating a ProductLocation that does not exist
-	 **/
-	public function testUpdateInvalidProductLocation() {
-		// create a ProductLocation and try to update it without actually inserting it
-		$productLocation = new ProductLocation($this->location->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->VALID_quantity);
-		$productLocation->update($this->getPDO());
-	}
-
-	/**
 	 * test creating a ProductLocation and then deleting it
 	 **/
 	public function testDeleteValidProductLocation() {
@@ -178,15 +169,6 @@ class ProductLocationTest extends InventoryTextTest {
 		$pdoProductLocation = ProductLocation::getProductLocationByLocationIdAndProductId($this->getPDO(), $this->location->getLocationId(), $this->product->getProductId());
 		$this->assertNull($pdoProductLocation);
 		$this->assertSame($numRows, $this->getConnection()->getRowCount("productLocation"));
-	}
-
-	/**
-	 * test deleting a ProductLocation that does not exist
-	 **/
-	public function testDeleteInvalidProfile() {
-		// create a ProductLocation and try to delete it without actually inserting it
-		$productLocation = new ProductLocation($this->location->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->VALID_quantity);
-		$productLocation->delete($this->getPDO());
 	}
 
 	/**
@@ -233,7 +215,7 @@ class ProductLocationTest extends InventoryTextTest {
 		$productLocation->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProductLocation = ProductLocation::getProductLocationByLocationId($this->getPDO(), $this->product->getProductId());
+		$pdoProductLocation = ProductLocation::getProductLocationByProductId($this->getPDO(), $this->product->getProductId());
 		foreach($pdoProductLocation as $pdoPL) {
 			$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("productLocation"));
 			$this->assertSame($pdoPL->getLocationId(), $this->location->getLocationId());
