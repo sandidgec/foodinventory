@@ -99,7 +99,7 @@ class User {
 	 * @param int of users' phone number $newPhoneNumber
 	 * @param string hex value of half of password $newSalt
 	 * @param string hex value of half of password $newHash
-	 * @throws Exception
+	 * @throws Exception for thrown exceptions
 	 **/
 	public function __construct($newUserId, $newLastName, $newFirstName, $newRoot, $newAttention, $newAddressLineOne, $newAddressLineTwo,
 								$newCity, $newState, $newZipCode, $newEmail, $newPhoneNumber, $newSalt, $newHash) {

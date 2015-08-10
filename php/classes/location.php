@@ -37,8 +37,8 @@ class Location {
 	 * @param int of the unique location Id $newLocationId
 	 * @param string of the locations unique storage code $newStorageCode
 	 * @param string of the locations description $newDescription
-	 * @throws Exception
-	 * @throws RangeException
+	 * @throws Exception for other exceptions
+	 * @throws RangeException if data values are out of range
 	 **/
 public function __construct($newLocationId, $newStorageCode, $newDescription) {
 	try {
