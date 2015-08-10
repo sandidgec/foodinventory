@@ -4,28 +4,27 @@
  * Class Location
  * The class to handle location
  * @author Charles Sandidge sandidgec@gmail.com
- */
+ **/
 
 class Location {
 
 	/**
 	 * primary key for location
 	 * @var int $locationId
-	 */
+	 **/
 	private $locationId;
 
 	/**
 	 * storageCode
 	 * short description of location for storage (i.e. BR (backroom))
 	 * @var string $storageCode
-	 *
-	 */
+	 **/
 	private $storageCode;
 
 	/**
 	 * description
 	 * @var string $description
-	 */
+	 **/
 	private $description;
 
 
@@ -36,7 +35,7 @@ class Location {
 	 * @param string $newDescription
 	 * @throws Exception
 	 * @throws RangeException
-	 */
+	 **/
 public function __construct($newLocationId, $newStorageCode, $newDescription) {
 	try {
 		$this->setLocationId($newLocationId);
@@ -59,8 +58,8 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 
 	/**
 	 * accessor for location id
-	 * @return int
-	 */
+	 * @return int for location id
+	 **/
 	public function getLocationId() {
 		return ($this->locationId);
 }
@@ -69,7 +68,7 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 	 * Mutator for LocationId
 	 * @param int $newLocationId
 	 * @throws InvalidArgumentException for invalid locationId
-	 */
+	 **/
 	public function setLocationId($newLocationId) {
 		// base case: if the locationId is null,
 		// this is a new location without a mySQL assigned id (yet)
@@ -86,8 +85,8 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 	}
 	/**
 	 * accessor for storage code
-	 * @return string
-	 */
+	 * @return string for storage code
+	 **/
 	public function getStorageCode() {
 		return ($this->storageCode);
 	}
@@ -96,7 +95,7 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 	 * mutator for Storage Code
 	 * @param string $newStorageCode
 	 * @throws InvalidArgumentException for invalid storage code
-	 */
+	 **/
 	public function setStorageCode($newStorageCode) {
 		//verify the storage code is valid
 		$newStorageCode = trim($newStorageCode);
@@ -109,7 +108,7 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 	/**
 	 * accessor for Description
 	 * @return string for description
-	 */
+	 **/
 	public function getDescription() {
 		return ($this->description);
 	}
@@ -118,7 +117,7 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 	 * mutator for description
 	 * @param string $newDescription
 	 * @throws InvalidArgumentException for invalid string
-	 */
+	 **/
 	public function setDescription($newDescription) {
 		//verify the description is valid
 		$newDescription = filter_var($newDescription, FILTER_SANITIZE_STRING);
@@ -132,7 +131,7 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 	 * insert PDO
 	 * @param PDO $pdo pointer to PDO connection , by reference
 	 * @throws PDOException for mySQL related issues
-	 */
+	 **/
 	public function insert(PDO &$pdo) {
 		// make sure location id doesn't already exist
 		if($this->locationId !== null) {
@@ -158,7 +157,7 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 	 * delete pdo
 	 * @param PDO $pdo pointer to PDO connection, by reference
 	 * @throws PDOException for mySQL related issues
-	 */
+	 **/
 	public function delete(PDO &$pdo) {
 		// enforce the locationId is not null
 		if($this->locationId === null) {
@@ -178,7 +177,7 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 	 * update PDO
 	 * @param PDO $pdo pointer to PDO connection, by reference
 	 * @throws PDOException for mySQL related issues
-	 */
+	 **/
 	public function update(PDO &$pdo) {
 		if ($this->locationId === null) {
 			throw (new PDOException("can't update location that hasn't been saved"));
@@ -200,7 +199,7 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 	 * @param PDO $pdo
 	 * @param int $locationId
 	 * @return mixed $location
-	 */
+	 **/
 	public static function getLocationByLocationId(PDO &$pdo, $locationId) {
 		// sanitize the location id before searching
 		$locationId = filter_var($locationId, FILTER_VALIDATE_INT);
@@ -237,10 +236,10 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 
 	/**
 	 * get Location by Storage Code
-	 * @param PDO $pdo
+	 * @param PDO $pdo connection to PDO, by reference
 	 * @param mixed $location
 	 * @return Location|null
-	 */
+	 **/
 	public static function getLocationByStorageCode(PDO &$pdo, $location) {
 		// sanitize the storageCode before searching
 		$location = filter_var($location, FILTER_VALIDATE_INT);
