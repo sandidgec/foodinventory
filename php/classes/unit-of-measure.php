@@ -53,16 +53,18 @@ private $quantity;
 
 
 	/**
-	 * accessor for unit id
-	 * @return int
+	 * accessor method for unit id
+	 *
+	 * @return int of unit id , unit of measures primary key
 	 **/
 	public function getUnitId() {
 		return ($this->unitId);
 	}
 
 	/**
-	 * mutator for Unit Id
-	 * @param int $newUnitId
+	 * mutator method for Unit Id
+	 *
+	 * @param int value to represent unique unit Id $newUnitId
 	 * @throws InvalidArgumentException for invalid content
 	 **/
 	public function setUnitId($newUnitId) {
@@ -81,16 +83,18 @@ private $quantity;
 	}
 
 	/**
-	 * accessor for unit code
-	 * @return string
+	 * accessor method for unit code
+	 *
+	 * @return string of unit code
 	 **/
 	public function getUnitCode() {
 		return ($this->unitCode);
 	}
 
 	/**
-	 * mutator for unit code
-	 * @param string $newUnitCode
+	 * mutator method for unit code
+	 *
+	 * @param string for unit of measure unit code $newUnitCode
 	 * @throws InvalidArgumentException for invalid content
 	 * @throws RangeException for more than 2 characters
 	 **/
@@ -107,16 +111,18 @@ private $quantity;
 	}
 
 	/**
-	 * accessor for Quantity
-	 * @return float
+	 * accessor method for Quantity
+	 *
+	 * @return float a decimal to represent quantity
 	 **/
 	public function getQuantity() {
 		return ($this->quantity);
 	}
 
 	/**
-	 * mutator for Quantity
-	 * @param float value for $newQuantity
+	 * mutator method for Quantity
+	 *
+	 * @param float value for quantity value $newQuantity
 	 * @throws InvalidArgumentException for invalid content
 	 * @throws RangeException for negative quantity value
 	 **/
@@ -134,6 +140,8 @@ private $quantity;
 	}
 
 	/**
+	 * Inserts unit of measure into mySQL
+	 *
 	 * insert PDO
 	 * @param PDO $pdo pointer to PDO connection, by reference
 	 **/
@@ -158,6 +166,8 @@ private $quantity;
 	}
 
 	/**
+	 * Deletes unit of measure from mySQL
+	 *
 	 * Delete PDO
 	 * @param PDO $pdo pointer to PDO connection, by reference
 	 * @throws PDOException for mySQL related errors
@@ -178,6 +188,8 @@ private $quantity;
 	}
 
 	/**
+	 * Updates unit of measure in mySQL
+	 *
 	 * Update PDO
 	 * @param PDO $pdo pointer to PDO connection, by reference
 	 * @throws PDOException for mySQL related issues
@@ -200,9 +212,10 @@ private $quantity;
 
 	/**
 	 * Get unitOfMeasure by unitId
-	 * @param PDO $pdo
-	 * @param int $unitId
-	 * @return mixed UnitOfMeasure
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int value of unique unit Id $unitId
+	 * @return mixed for info in UnitOfMeasure
 	 * @throws PDOException if unit id is not an integer
 	 * @throws PDOException if unit id is not positive in mySQL
 	 * @throws PDOException if row couldn't be converted in mySQL
@@ -242,7 +255,7 @@ private $quantity;
 
 	/**
 	 * @param PDO $pdo pointer to PDO connection, by reference
-	 * @param string $newUnitCode
+	 * @param string of unit code $newUnitCode
 	 * @return null|UnitOfMeasure
 	 * @throws InvalidArgumentException if UnitCode not a valid string
 	 * @throws RangeException if UnitCode is not exactly 2 characters
