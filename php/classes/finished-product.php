@@ -8,7 +8,7 @@
  *
  * @author Christopher Collopy <ccollopy@cnm.edu>
  **/
-class finishedProduct {
+class FinishedProduct {
 	/**
 	 * id for the finished product; this is a foreign key
 	 * @var int $finishedProductId
