@@ -108,10 +108,11 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 		$newStorageCode = trim($newStorageCode);
 		$newStorageCode = filter_var($newStorageCode, FILTER_SANITIZE_STRING);
 		if(empty($newStorageCode) === true) {
-			throw (new InvalidArgumentException ("storage code invalid"));
+			throw (new InvalidArgumentException ("storage code is an invalid string"));
 		}
 		$this->storageCode = $newStorageCode;
 	}
+
 	/**
 	 * accessor method for Description
 	 *
@@ -252,17 +253,14 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 	 * get Location by Storage Code
 	 *
 	 * @param PDO $pdo connection to PDO, by reference
-	 * @param mixed info for location $location
+	 * @param string info for storage code $storageCode
 	 * @return mixed info for the Location | null
 	 **/
-	public static function getLocationByStorageCode(PDO &$pdo, $location) {
+	public static function getLocationByStorageCode(PDO &$pdo, $storageCode) {
 		// sanitize the storageCode before searching
-		$location = filter_var($location, FILTER_VALIDATE_INT);
-		if($location === false) {
+		$storageCode = filter_var($storageCode, FILTER_SANITIZE_STRING);
+		if($storageCode === false) {
 			throw(new PDOException("storage code is not valid"));
-		}
-		if($location <= 0) {
-			throw(new PDOException("storage code is not positive"));
 		}
 
 		// create query template
@@ -270,7 +268,7 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 		$statement = $pdo->prepare($query);
 
 		// bind the location id to the place holder in the template
-		$parameters = array("storageCode" => $location);
+		$parameters = array("storageCode" => $storageCode);
 		$statement->execute($parameters);
 
 		// grab the location from mySQL
