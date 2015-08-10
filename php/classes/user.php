@@ -4,7 +4,7 @@
  * Class User
  * The class to handle users
  * @author Charles Sandidge sandidgec@gmail.com
- */
+ **/
 
 class User {
 
@@ -26,12 +26,12 @@ class User {
 	/**
 	 * root user level
 	 * @var bool $root
-	 */
+	 **/
 	private $root;
 	/**
 	 * attention line
 	 * @var string $attention ;
-	 */
+	 **/
 	private $attention;
 	/**
 	 * address line 1
@@ -41,7 +41,7 @@ class User {
 	/**
 	 * address line 2
 	 * @var string $addressLineTwo ;
-	 */
+	 **/
 	private $addressLineTwo;
 	/**
 	 * City
@@ -51,12 +51,12 @@ class User {
 	/**
 	 * state
 	 * @var string $state
-	 */
+	 **/
 	private $state;
 	/**
 	 * ZipCode
 	 * @var string $zipCode
-	 */
+	 **/
 	private $zipCode;
 	/**
 	 * email of userId
@@ -76,28 +76,28 @@ class User {
 	/**
 	 * password salt for userId;
 	 * @var string $passwordSalt
-	 */
+	 **/
 	private $salt;
 
 
 	/**
 	 * Constructor
-	 * @param $newUserId
-	 * @param $newLastName
-	 * @param $newFirstName
-	 * @param $newRoot
-	 * @param $newAttention
-	 * @param $newAddressLineOne
-	 * @param $newAddressLineTwo
-	 * @param $newCity
-	 * @param $newState
-	 * @param $newZipCode
-	 * @param $newEmail
-	 * @param $newPhoneNumber
-	 * @param $newSalt
-	 * @param $newHash
+	 * @param int $newUserId
+	 * @param string $newLastName
+	 * @param string $newFirstName
+	 * @param bool $newRoot
+	 * @param string $newAttention
+	 * @param string $newAddressLineOne
+	 * @param string $newAddressLineTwo
+	 * @param string $newCity
+	 * @param string $newState
+	 * @param string $newZipCode
+	 * @param string $newEmail
+	 * @param int $newPhoneNumber
+	 * @param string $newSalt
+	 * @param string $newHash
 	 * @throws Exception
-	 */
+	 **/
 	public function __construct($newUserId, $newLastName, $newFirstName, $newRoot, $newAttention, $newAddressLineOne, $newAddressLineTwo,
 								$newCity, $newState, $newZipCode, $newEmail, $newPhoneNumber, $newSalt, $newHash) {
 		try {
@@ -117,24 +117,21 @@ class User {
 			$this->setHash($newHash);
 		} catch(InvalidArgumentException $invalidArgument) {
 			//rethrow the exception to the caller
-			throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
-		} catch
-		(RangeException $range)  {
+				throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
+		} catch(RangeException $range)  {
 			// rethrow the exception to the caller
-			throw (new RangeException($range->getMessage(),0, $range));
+				throw (new RangeException($range->getMessage(),0, $range));
 		} catch(Exception $exception) {
 			// rethrow generic exception
-			throw(new Exception($exception->getMessage(), 0, $exception));
+				throw(new Exception($exception->getMessage(), 0, $exception));
 		}
 	}
 
 
 	/**
 	 * accessor method for userId
-	 *
-	 * @return int value of userId
-**/
-
+	 * @return int value of unique userId
+	**/
 	public function getUserId() {
 		return ($this->userId);
 	}
@@ -143,8 +140,7 @@ class User {
 	 * mutator for the userId
 	 * @param int $newUserId
 	 * @throws InvalidArgumentException for invalid content
-	 */
-
+	 **/
 	public function setUserId($newUserId) {
 		// base case: if the userId is null,
 		// this is a new user without a mySQL assigned id (yet)
@@ -162,9 +158,8 @@ class User {
 
 	/**
 	 * accessor method for Last Name
-	 *
-	 */
-
+	 * @return string for last name
+	 **/
 	public function getLastName() {
 		return ($this->lastName);
 	}
@@ -172,7 +167,7 @@ class User {
 	/**
 	 * Mutator for last name sanitation
 	 * @param $newLastName
-	 */
+	 **/
 	public function setLastName($newLastName) {
 		//verify last name is valid
 		$newLastName = filter_var($newLastName, FILTER_SANITIZE_STRING);
@@ -187,16 +182,15 @@ class User {
 
 	/**
 	 * accessor method for First Name
-	 * @return string
-	 */
-
+	 * @return string for first name
+	 **/
 	public function getFirstName() {
 		return ($this->firstName);
 	}
 
 	/**
 	 * Mutator method for First Name
-	 * @param $newFirstName
+	 * @param string $newFirstName
 	 */
 	public function setFirstName($newFirstName) {
 		// verify first name is valid
@@ -212,8 +206,8 @@ class User {
 
 	/**
 	 * accessor for Root
-	 * @return bool
-	 */
+	 * @return bool for root, true or false
+	 **/
 	public function isRoot() {
 		return ($this->root);
 	}
@@ -222,7 +216,7 @@ class User {
 	 * Mutator for Root to insure boolean success
 	 * @param bool $newRoot
 	 * @throws InvalidArgumentException if root boolean fails
-	 */
+	 **/
 	public function setRoot($newRoot) {
 		//verify Root is no more than 1 char
 		$newRoot = filter_var($newRoot, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
@@ -234,8 +228,8 @@ class User {
 
 	/**
 	 * accessor for attention
-	 * @return string
-	 */
+	 * @return string for attention line
+	 **/
 	public function getAttention() {
 		return ($this->attention);
 	}
@@ -245,7 +239,7 @@ class User {
 	 * @param string $newAttention
 	 * @throws InvalidArgumentException for invalid content
 	 * @throws RangeException if longer than 64 characters
-	 */
+	 **/
 	public function setAttention($newAttention) {
 		//verify attention is no more than 64 varchar
 		$newAttention =trim($newAttention);
@@ -261,8 +255,8 @@ class User {
 
 	/**
 	 * accessor for address line one
-	 * @return string
-	 */
+	 * @return string for address line one
+	 **/
 	public function getAddressLineOne() {
 		return ($this->addressLineOne);
 	}
@@ -272,7 +266,7 @@ class User {
 	 * @param string $newAddressLineOne
 	 * @throws InvalidArgumentException for invalid content
 	 * @throws RangeException if longer than 64 characters
-	 */
+	 **/
 	public function setAddressLineOne($newAddressLineOne) {
 		//verify address is no more than 64 varchar
 		$newAddressLineOne = filter_var($newAddressLineOne, FILTER_SANITIZE_STRING);
@@ -287,8 +281,8 @@ class User {
 
 	/**
 	 * accessor for address line two
-	 * @return string
-	 */
+	 * @return string for address line two
+	 **/
 	public function getAddressLineTwo() {
 		return ($this->addressLineTwo);
 	}
@@ -298,7 +292,7 @@ class User {
 	 * @param string $newAddressLineTwo
 	 * @throws InvalidArgumentException for invalid content
 	 * @throws RangeException if longer than 64 characters
-	 */
+	 **/
 	public function setAddressLineTwo($newAddressLineTwo) {
 		//verify address is no more than 64 varchar
 		$newAddressLineTwo = filter_var($newAddressLineTwo, FILTER_SANITIZE_STRING);
@@ -313,8 +307,8 @@ class User {
 
 	/**
 	 * accessor for City
-	 * @return string
-	 */
+	 * @return string for city
+	 **/
 	public function getCity() {
 		return ($this->city);
 	}
@@ -324,7 +318,7 @@ class User {
 	 * @param string $newCity
 	 * @throws InvalidArgumentException if content is invalid
 	 * @throws RangeException if city is longer than 64 characters
-	 */
+	 **/
 	public function setCity($newCity) {
 		//verify city is no more than 64 varchar
 		$newCity = filter_var($newCity, FILTER_SANITIZE_STRING);
@@ -339,8 +333,8 @@ class User {
 
 	/**
 	 * accessor for State
-	 * @return string
-	 */
+	 * @return string for state
+	 **/
 	public function getState() {
 		return ($this->state);
 	}
@@ -350,7 +344,7 @@ class User {
 	 * @param string $newState
 	 * @throws InvalidArgumentException if string is invalid
 	 * @throws RangeException if string is longer than 2 characters
-	 */
+	 **/
 	public function setState($newState) {
 		//verify State is no more than 2 char
 		$newState = filter_var($newState, FILTER_SANITIZE_STRING);
@@ -365,8 +359,8 @@ class User {
 
 	/**
 	 * accessor for zipCode
-	 * @return string
-	 */
+	 * @return string for zipcode
+	 **/
 	public function getZipCode() {
 		return ($this->zipCode);
 	}
@@ -376,7 +370,7 @@ class User {
 	 * @param string $newZipCode
 	 * @throws InvalidArgumentException for invalid content
 	 * @throws RangeException if zipCode is larger than 10 characters
-	 */
+	 **/
 	public function setZipCode($newZipCode) {
 		//verify address is no more than 64 varchar
 		$newZipCode = filter_var($newZipCode, FILTER_SANITIZE_STRING);
@@ -392,7 +386,7 @@ class User {
 	/**
 	 * accessor for email
 	 * @return string
-	 */
+	 **/
 	public function getEmail() {
 		return ($this->email);
 	}
@@ -402,7 +396,7 @@ class User {
 	 * @param string $newEmail
 	 * @throws InvalidArgumentException if email does not pass sanitization
 	 * @throws RangeException if email is longer than 64 characters
-	 */
+	 **/
 	public function setEmail($newEmail) {
 		// verify email is valid
 		$newEmail = filter_var($newEmail, FILTER_SANITIZE_EMAIL);
@@ -417,8 +411,8 @@ class User {
 
 	/**
 	 * Accessor for Phone Number
-	 * @return int  phone number
-	 */
+	 * @return int for phone number
+	 **/
 	public function getPhoneNumber() {
 		return ($this->phoneNumber);
 	}
@@ -428,7 +422,7 @@ class User {
 	 * @param int $newPhoneNumber
 	 * @throws InvalidArgumentException if phoneNumber is not ctype digits
 	 * @throws RangeException if int is not 10 digits
-	 */
+	 **/
 	public function setPhoneNumber($newPhoneNumber) {
 		//verify phone number is valid and digits only
 		if((ctype_digit($newPhoneNumber)) === false) {
@@ -443,7 +437,7 @@ class User {
 	/**
 	 * accessor for Salt
 	 * @return string of Salt
-	 */
+	 **/
 	public
 	function getSalt() {
 		return ($this->salt);
@@ -454,7 +448,7 @@ class User {
 	 * @param int $newSalt
 	 * @throw InvalidArgumentException if salt is not valid int
 	 * @throw RangeException if salt is not exactly 64 xdigits
-	 */
+	 **/
 	public function setSalt($newSalt) {
 		// verify salt is exactly string of 64
 		if((ctype_xdigit($newSalt)) === false) {
@@ -472,7 +466,7 @@ class User {
 	/**
 	 * accessor for Hash
 	 * @return string of Hash
-	 */
+	 **/
 	public function getHash() {
 		return ($this->hash);
 	}
@@ -482,7 +476,7 @@ class User {
 	 * @param int $newHash
 	 * @throws InvalidArgumentException if newHash is not valid int
 	 * @throws RangeException if newHash is not exactly 128 xdigits
-	 */
+	 **/
 
 	public function setHash($newHash) {
 		// verify Hash is exactly string of 128
@@ -500,7 +494,7 @@ class User {
 	/**
 	 * Inserts this userId into mySQL in intervals
 	 * @param PDO $pdo
-	 */
+	 **/
 	public function insert(PDO &$pdo) {
 		// make sure user doesn't already exist
 		if($this->userId !== null) {
@@ -527,7 +521,7 @@ class User {
 	/**
 	 * Delete PDO to delete userId
 	 * @param PDO $pdo
-	 */
+	 **/
 	public function delete(PDO &$pdo) {
 		// enforce the user is not null
 		if($this->userId === null) {
@@ -545,8 +539,8 @@ class User {
 
 	/**
 	 * Update PDO to update user class
-	 * @param PDO $pdo
-	 */
+	 * @param PDO $pdo for all attributes in user class
+	 **/
 	public function update(PDO &$pdo) {
 
 		// create query template
@@ -568,7 +562,7 @@ class User {
 	 * @param PDO $pdo
 	 * @param $userId int
 	 * @return mixed|User
-	 */
+	 **/
 	public static function getUserByUserId(PDO &$pdo, $userId) {
 		// sanitize the userId before searching
 		$userId = filter_var($userId, FILTER_VALIDATE_INT);
@@ -610,7 +604,7 @@ class User {
 	 * @param PDO $pdo
 	 * @param $user
 	 * @return null|User
-	 */
+	 **/
 	public static function getUserByEmail(PDO &$pdo, $user) {
 		// sanitize the email before searching
 		$user = filter_var($user, FILTER_SANITIZE_EMAIL);
