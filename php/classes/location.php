@@ -29,7 +29,8 @@ class Location {
 
 
 	/**
-	 * Constructor
+	 * Constructor for location class
+	 *
 	 * @param int $newLocationId
 	 * @param string $newStorageCode
 	 * @param string $newDescription
@@ -238,7 +239,7 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 	 * get Location by Storage Code
 	 * @param PDO $pdo connection to PDO, by reference
 	 * @param mixed $location
-	 * @return Location|null
+	 * @return mixed Location | null
 	 **/
 	public static function getLocationByStorageCode(PDO &$pdo, $location) {
 		// sanitize the storageCode before searching
@@ -272,7 +273,5 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 		}
 		return($location);
 	}
-
-
 }
 

@@ -81,7 +81,8 @@ class User {
 
 
 	/**
-	 * Constructor
+	 * Constructor for User class
+	 *
 	 * @param int $newUserId
 	 * @param string $newLastName
 	 * @param string $newFirstName
