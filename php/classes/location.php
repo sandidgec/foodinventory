@@ -15,14 +15,15 @@ class Location {
 	private $locationId;
 
 	/**
-	 * stroage
-	 * @var int $storageCode
+	 * storageCode
+	 * short description of location for storage (i.e. BR (backroom))
+	 * @var string $storageCode
 	 *
 	 */
 	private $storageCode;
 
 	/**
-	 * desc
+	 * description
 	 * @var string $description
 	 */
 	private $description;
@@ -30,9 +31,9 @@ class Location {
 
 	/**
 	 * Constructor
-	 * @param $newLocationId
-	 * @param $newStorageCode
-	 * @param $newDescription
+	 * @param int $newLocationId
+	 * @param string $newStorageCode
+	 * @param string $newDescription
 	 * @throws Exception
 	 * @throws RangeException
 	 */
@@ -85,7 +86,7 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 	}
 	/**
 	 * accessor for storage code
-	 * @return int
+	 * @return string
 	 */
 	public function getStorageCode() {
 		return ($this->storageCode);
@@ -93,12 +94,13 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 
 	/**
 	 * mutator for Storage Code
-	 * @param int $newStorageCode
+	 * @param string $newStorageCode
 	 * @throws InvalidArgumentException for invalid storage code
 	 */
 	public function setStorageCode($newStorageCode) {
 		//verify the storage code is valid
-		$newStorageCode = filter_var($newStorageCode, FILTER_VALIDATE_INT);
+		$newStorageCode = trim($newStorageCode);
+		$newStorageCode = filter_var($newStorageCode, FILTER_SANITIZE_STRING);
 		if(empty($newStorageCode) === true) {
 			throw (new InvalidArgumentException ("storage code invalid"));
 		}

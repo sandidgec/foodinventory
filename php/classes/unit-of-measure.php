@@ -80,7 +80,7 @@ private $quantity;
 
 	/**
 	 * accessor for unit code
-	 * @return int
+	 * @return string
 	 */
 	public function getUnitCode() {
 		return ($this->unitCode);
