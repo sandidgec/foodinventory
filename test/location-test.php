@@ -182,8 +182,6 @@ class LocationTest extends InventoryTextTest {
 
 	/**
 	 * test grabbing a Location by an storageCode that does not exists
-	 * @expectedException PDOException
-	 * @expectedExceptionMessage storage code is not valid
 	 **/
 	public function testGetInvalidLocationByStorageCode() {
 		// grab an storage code that does not exist
