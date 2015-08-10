@@ -1,8 +1,10 @@
 <?php
 
 /**
- * Class User
+ * Class User for sites base of users
+ *
  * The class to handle users
+ *
  * @author Charles Sandidge sandidgec@gmail.com
  **/
 
@@ -83,20 +85,20 @@ class User {
 	/**
 	 * Constructor for User class
 	 *
-	 * @param int $newUserId
-	 * @param string $newLastName
-	 * @param string $newFirstName
-	 * @param bool $newRoot
-	 * @param string $newAttention
-	 * @param string $newAddressLineOne
-	 * @param string $newAddressLineTwo
-	 * @param string $newCity
-	 * @param string $newState
-	 * @param string $newZipCode
-	 * @param string $newEmail
-	 * @param int $newPhoneNumber
-	 * @param string $newSalt
-	 * @param string $newHash
+	 * @param int of unique user id for new user $newUserId
+	 * @param string of last name for new user $newLastName
+	 * @param string of first name for new user $newFirstName
+	 * @param bool user is a root user or not (t or f) $newRoot
+	 * @param string of attention line of address $newAttention
+	 * @param string of address line one $newAddressLineOne
+	 * @param string of address line two $newAddressLineTwo
+	 * @param string of city info $newCity
+	 * @param string 2 characters for state $newState
+	 * @param string of zipcode $newZipCode
+	 * @param string of users' email $newEmail
+	 * @param int of users' phone number $newPhoneNumber
+	 * @param string hex value of half of password $newSalt
+	 * @param string hex value of half of password $newHash
 	 * @throws Exception
 	 **/
 	public function __construct($newUserId, $newLastName, $newFirstName, $newRoot, $newAttention, $newAddressLineOne, $newAddressLineTwo,
@@ -131,6 +133,7 @@ class User {
 
 	/**
 	 * accessor method for userId
+	 *
 	 * @return int value of unique userId
 	**/
 	public function getUserId() {
@@ -138,8 +141,9 @@ class User {
 	}
 
 	/**
-	 * mutator for the userId
-	 * @param int $newUserId
+	 * mutator method for the userId
+	 *
+	 * @param int unique value to represent a user $newUserId
 	 * @throws InvalidArgumentException for invalid content
 	 **/
 	public function setUserId($newUserId) {
@@ -159,6 +163,7 @@ class User {
 
 	/**
 	 * accessor method for Last Name
+	 *
 	 * @return string for last name
 	 **/
 	public function getLastName() {
@@ -166,8 +171,9 @@ class User {
 	}
 
 	/**
-	 * Mutator for last name sanitation
-	 * @param $newLastName
+	 * Mutator method for last name sanitation
+	 *
+	 * @param string for user last name $newLastName
 	 **/
 	public function setLastName($newLastName) {
 		//verify last name is valid
@@ -183,6 +189,7 @@ class User {
 
 	/**
 	 * accessor method for First Name
+	 *
 	 * @return string for first name
 	 **/
 	public function getFirstName() {
@@ -191,7 +198,8 @@ class User {
 
 	/**
 	 * Mutator method for First Name
-	 * @param string $newFirstName
+	 *
+	 * @param string for user first name $newFirstName
 	 */
 	public function setFirstName($newFirstName) {
 		// verify first name is valid
@@ -206,7 +214,8 @@ class User {
 	}
 
 	/**
-	 * accessor for Root
+	 * accessor method for Root
+	 *
 	 * @return bool for root, true or false
 	 **/
 	public function isRoot() {
@@ -214,8 +223,9 @@ class User {
 	}
 
 	/**
-	 * Mutator for Root to insure boolean success
-	 * @param bool $newRoot
+	 * Mutator method for Root to insure boolean success
+	 *
+	 * @param bool true or false for user being root or not $newRoot
 	 * @throws InvalidArgumentException if root boolean fails
 	 **/
 	public function setRoot($newRoot) {
@@ -228,7 +238,8 @@ class User {
 	}
 
 	/**
-	 * accessor for attention
+	 * accessor method for attention
+	 *
 	 * @return string for attention line
 	 **/
 	public function getAttention() {
@@ -236,8 +247,9 @@ class User {
 	}
 
 	/**
-	 * Mutator for Attention
-	 * @param string $newAttention
+	 * Mutator method for Attention
+	 *
+	 * @param string for attention $newAttention
 	 * @throws InvalidArgumentException for invalid content
 	 * @throws RangeException if longer than 64 characters
 	 **/
@@ -255,7 +267,8 @@ class User {
 	}
 
 	/**
-	 * accessor for address line one
+	 * accessor method for address line one
+	 *
 	 * @return string for address line one
 	 **/
 	public function getAddressLineOne() {
@@ -263,8 +276,9 @@ class User {
 	}
 
 	/**
-	 * Mutator for Address Line One
-	 * @param string $newAddressLineOne
+	 * Mutator method for Address Line One
+	 *
+	 * @param string of user address line one $newAddressLineOne
 	 * @throws InvalidArgumentException for invalid content
 	 * @throws RangeException if longer than 64 characters
 	 **/
@@ -281,7 +295,8 @@ class User {
 	}
 
 	/**
-	 * accessor for address line two
+	 * accessor method for address line two
+	 *
 	 * @return string for address line two
 	 **/
 	public function getAddressLineTwo() {
@@ -289,8 +304,9 @@ class User {
 	}
 
 	/**
-	 * Mutator for Address Line Two
-	 * @param string $newAddressLineTwo
+	 * Mutator method for Address Line Two
+	 *
+	 * @param string of user address line two $newAddressLineTwo
 	 * @throws InvalidArgumentException for invalid content
 	 * @throws RangeException if longer than 64 characters
 	 **/
@@ -307,16 +323,18 @@ class User {
 	}
 
 	/**
-	 * accessor for City
-	 * @return string for city
+	 * accessor method for City
+	 *
+	 * @return string for users' city
 	 **/
 	public function getCity() {
 		return ($this->city);
 	}
 
 	/**
-	 * Mutator for City
-	 * @param string $newCity
+	 * Mutator method for City
+	 *
+	 * @param string of users' city $newCity
 	 * @throws InvalidArgumentException if content is invalid
 	 * @throws RangeException if city is longer than 64 characters
 	 **/
@@ -333,16 +351,18 @@ class User {
 	}
 
 	/**
-	 * accessor for State
-	 * @return string for state
+	 * accessor method for State
+	 *
+	 * @return string for users' state
 	 **/
 	public function getState() {
 		return ($this->state);
 	}
 
 	/**
-	 * Mutator for State
-	 * @param string $newState
+	 * Mutator method for State
+	 *
+	 * @param string for users' state $newState
 	 * @throws InvalidArgumentException if string is invalid
 	 * @throws RangeException if string is longer than 2 characters
 	 **/
@@ -359,7 +379,8 @@ class User {
 	}
 
 	/**
-	 * accessor for zipCode
+	 * accessor method for zipCode
+	 *
 	 * @return string for zipcode
 	 **/
 	public function getZipCode() {
@@ -367,8 +388,9 @@ class User {
 	}
 
 	/**
-	 * Mutator for zipCode
-	 * @param string $newZipCode
+	 * Mutator method for zipCode
+	 *
+	 * @param string for users' zipcode $newZipCode
 	 * @throws InvalidArgumentException for invalid content
 	 * @throws RangeException if zipCode is larger than 10 characters
 	 **/
@@ -385,16 +407,18 @@ class User {
 	}
 
 	/**
-	 * accessor for email
-	 * @return string
+	 * accessor method for email
+	 *
+	 * @return string of email for user
 	 **/
 	public function getEmail() {
 		return ($this->email);
 	}
 
 	/**
-	 * Mutator for Email
-	 * @param string $newEmail
+	 * Mutator method for Email
+	 *
+	 * @param string of users' email $newEmail
 	 * @throws InvalidArgumentException if email does not pass sanitization
 	 * @throws RangeException if email is longer than 64 characters
 	 **/
@@ -411,7 +435,8 @@ class User {
 	}
 
 	/**
-	 * Accessor for Phone Number
+	 * Accessor method for Phone Number
+	 *
 	 * @return int for phone number
 	 **/
 	public function getPhoneNumber() {
@@ -419,8 +444,9 @@ class User {
 	}
 
 	/**
-	 * Mutator for Phone Number
-	 * @param int $newPhoneNumber
+	 * Mutator method for Phone Number
+	 *
+	 * @param int of user phone number $newPhoneNumber
 	 * @throws InvalidArgumentException if phoneNumber is not ctype digits
 	 * @throws RangeException if int is not 10 digits
 	 **/
@@ -436,8 +462,9 @@ class User {
 	}
 
 	/**
-	 * accessor for Salt
-	 * @return string of Salt
+	 * accessor method for Salt
+	 *
+	 * @return string of Salt for user password
 	 **/
 	public
 	function getSalt() {
@@ -445,8 +472,9 @@ class User {
 	}
 
 	/**
-	 * mutator for Salt
-	 * @param int $newSalt
+	 * mutator method for Salt
+	 *
+	 * @param string of users password salt $newSalt
 	 * @throw InvalidArgumentException if salt is not valid int
 	 * @throw RangeException if salt is not exactly 64 xdigits
 	 **/
@@ -465,16 +493,17 @@ class User {
 
 
 	/**
-	 * accessor for Hash
-	 * @return string of Hash
+	 * accessor method for Hash
+	 * @return string of users password Hash
 	 **/
 	public function getHash() {
 		return ($this->hash);
 	}
 
 	/**
-	 * Mutator for Hash - insure 128
-	 * @param int $newHash
+	 * Mutator for Hash -insure it is 128 length string
+	 *
+	 * @param string of users $newHash
 	 * @throws InvalidArgumentException if newHash is not valid int
 	 * @throws RangeException if newHash is not exactly 128 xdigits
 	 **/
@@ -493,8 +522,10 @@ class User {
 	}
 
 	/**
+	 * Inserts User into mySQL
+	 *
 	 * Inserts this userId into mySQL in intervals
-	 * @param PDO $pdo
+	 * @param PDO $pdo connection to
 	 **/
 	public function insert(PDO &$pdo) {
 		// make sure user doesn't already exist
@@ -520,6 +551,8 @@ class User {
 	}
 
 	/**
+	 * Deletes User from mySQL
+	 *
 	 * Delete PDO to delete userId
 	 * @param PDO $pdo
 	 **/
@@ -539,8 +572,10 @@ class User {
 	}
 
 	/**
+	 * updates User in mySQL
+	 *
 	 * Update PDO to update user class
-	 * @param PDO $pdo for all attributes in user class
+	 * @param PDO $pdo pointer to PDO connection, by reference
 	 **/
 	public function update(PDO &$pdo) {
 
@@ -560,8 +595,9 @@ class User {
 
 	/**
 	 * Get user by userId integer
-	 * @param PDO $pdo
-	 * @param $userId int
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int for unique userId $userId
 	 * @return mixed|User
 	 **/
 	public static function getUserByUserId(PDO &$pdo, $userId) {
@@ -602,8 +638,9 @@ class User {
 
 	/**
 	 * get user by email
-	 * @param PDO $pdo
-	 * @param $user
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param mixed info for $user
 	 * @return null|User
 	 **/
 	public static function getUserByEmail(PDO &$pdo, $user) {

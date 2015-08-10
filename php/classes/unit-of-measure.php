@@ -24,6 +24,7 @@ private $quantity;
 	/**
 	 * Constructor for unit of measure class
 	 *
+	 *
 	 * @param int $newUnitId
 	 * @param string $newUnitCode
 	 * @param float $newQuantity
