@@ -1,10 +1,11 @@
 <?php
 
 /**
- * The finishedProduct class for Inventory
+ * The FinishedProduct class for Inventory
  *
  * This class will separate raw materials from finished products
- * multi-line
+ * It will essentially be used to deduct raw materials from
+ * inventory once a finished product has been made
  *
  * @author Christopher Collopy <ccollopy@cnm.edu>
  **/
@@ -22,7 +23,7 @@ class FinishedProduct {
 	private $rawMaterialId;
 
 	/**
-	 * number of the raw material used in finished product
+	 * number of the raw material used in the finished product
 	 * @var float $rawQuantity
 	 **/
 	private $rawQuantity;
@@ -30,11 +31,11 @@ class FinishedProduct {
 	/**
 	 * @param int $newFinishedProductId id for the finished product
 	 * @param int $newRawMaterialId id for the raw material
-	 * @param float $newRawQuantity number of the raw material used in finished product
+	 * @param float $newRawQuantity number of the raw material used in the finished product
 	 * @throws InvalidArgumentException if data types are not valid
 	 * @throws RangeException if data values are out of bounds (e.g., strings too long, negative integers)
 	 * @throws Exception if some other exception is thrown
-	 */
+	 **/
 
 	public function __construct($newFinishedProductId, $newRawMaterialId, $newRawQuantity) {
 		try {
@@ -57,7 +58,7 @@ class FinishedProduct {
 	 * accessor method for finishedProductId
 	 *
 	 * @return int value of finishedProductId
-	 */
+	 **/
 	public function getFinishedProductId() {
 		return $this->finishedProductId;
 	}
@@ -65,10 +66,10 @@ class FinishedProduct {
 	/**
 	 * mutator method for finishedProductId
 	 *
-	 * @param int $newFinishedProductId
-	 * @throws InvalidArgumentException if $newProductId is not a valid integer
-	 * @throws RangeException if $newProductId is not positive
-	 */
+	 * @param int $newFinishedProductId new value of finishedProductId
+	 * @throws InvalidArgumentException if $newFinishedProductId is not a valid integer
+	 * @throws RangeException if $newFinishedProductId is not positive
+	 **/
 	public function setFinishedProductId($newFinishedProductId) {
 		// verify the finishedProductId is valid
 		$newFinishedProductId = filter_var($newFinishedProductId, FILTER_VALIDATE_INT);
@@ -89,7 +90,7 @@ class FinishedProduct {
 	 * accessor method for rawMaterialId
 	 *
 	 * @return int value of rawMaterialId
-	 */
+	 **/
 	public function getRawMaterialId() {
 		return $this->rawMaterialId;
 	}
@@ -97,10 +98,10 @@ class FinishedProduct {
 	/**
 	 * mutator method for rawMaterialId
 	 *
-	 * @param int $newRawMaterialId
-	 * @throws InvalidArgumentException if $newRawMaterial is not a valid integer
-	 * @throws RangeException if $newRawMaterial is not positive
-	 */
+	 * @param int $newRawMaterialId new value of rawMaterialId
+	 * @throws InvalidArgumentException if $newRawMaterialId is not a valid integer
+	 * @throws RangeException if $newRawMaterialId is not positive
+	 **/
 	public function setRawMaterialId($newRawMaterialId) {
 		// verify the rawMaterialId is valid
 		$newRawMaterialId = filter_var($newRawMaterialId, FILTER_VALIDATE_INT);
@@ -121,7 +122,7 @@ class FinishedProduct {
 	 * accessor method for rawQuantity
 	 *
 	 * @return float value of rawQuantity
-	 */
+	 **/
 	public function getRawQuantity() {
 		return $this->rawQuantity;
 	}
@@ -129,10 +130,10 @@ class FinishedProduct {
 	/**
 	 * mutator method for rawQuantity
 	 *
-	 * @param float $newRawQuantity
+	 * @param float $newRawQuantity new value of rawQuantity
 	 * @throws InvalidArgumentException if $newRawQuantity is not a valid float
 	 * @throws RangeException if $newRawQuantity is not positive
-	 */
+	 **/
 	public function setRawQuantity($newRawQuantity) {
 		// verify the rawQuantity is valid
 		$newRawQuantity = filter_var($newRawQuantity, FILTER_VALIDATE_FLOAT);
@@ -156,12 +157,12 @@ class FinishedProduct {
 	 * @throws PDOException when mySQL related errors occur
 	 **/
 	public function insert(PDO &$pdo) {
-		// enforce the finishedProductId is not null (i.e., don't update a location that hasn't been inserted)
+		// enforce the finishedProductId is not null (i.e., don't update a FinishedProduct that hasn't been inserted)
 		if($this->finishedProductId === null) {
 			throw(new PDOException("unable to update a finishedProductId that does not exist"));
 		}
 
-		// enforce the rawMaterialId is not null (i.e., don't update a product that hasn't been inserted)
+		// enforce the rawMaterialId is not null (i.e., don't update a FinishedProduct that hasn't been inserted)
 		if($this->rawMaterialId === null) {
 			throw(new PDOException("unable to update a rawMaterialId that does not exist"));
 		}
@@ -367,7 +368,7 @@ class FinishedProduct {
 	 * gets all FinishedProduct(s)
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
-	 * @return SplFixedArray all productLocations found
+	 * @return SplFixedArray all FinishedProducts found
 	 * @throws PDOException when mySQL related errors occur
 	 **/
 	public static function getAllFinishedProducts(PDO &$pdo) {
