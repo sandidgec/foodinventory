@@ -24,9 +24,9 @@ class LocationTest extends InventoryTextTest {
 	protected $VALID_locationId = 7;
 	/**
 	 * valid storageCode
-	 * @var int $storageCode
+	 * @var string $storageCode
 	 **/
-	protected $VALID_storageCode = 2;
+	protected $VALID_storageCode = "br";
 	/**
 	 * valid description of locationId
 	 * @var string $description
