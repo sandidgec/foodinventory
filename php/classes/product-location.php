@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The productLocation class for Inventory
+ * The ProductLocation class for Inventory
  *
  * This class will attach a location to each individual product
  * multi-line
@@ -34,6 +34,8 @@ class productLocation {
 	private $quantity;
 
 	/**
+	 * constructor for ProductLocation
+	 *
 	 * @param int $newLocationId id for the location
 	 * @param int $newProductId id for the product at the location
 	 * @param int $newUnitId id for the units of the product at the location
@@ -41,7 +43,7 @@ class productLocation {
 	 * @throws InvalidArgumentException if data types are not valid
 	 * @throws RangeException if data values are out of bounds (e.g., strings too long, negative integers)
 	 * @throws Exception if some other exception is thrown
-	 */
+	 **/
 
 	public function __construct($newLocationId, $newProductId, $newUnitId, $newQuantity) {
 		try {
@@ -65,7 +67,7 @@ class productLocation {
 	 * accessor method for locationId
 	 *
 	 * @return int value of locationId
-	 */
+	 **/
 	public function getLocationId() {
 		return $this->locationId;
 	}
@@ -73,7 +75,7 @@ class productLocation {
 	/**
 	 * mutator method for locationId
 	 *
-	 * @param int $newLocationId
+	 * @param int $newLocationId new value of locationId
 	 * @throws InvalidArgumentException if $newLocationId is not a valid integer
 	 * @throws RangeException if $newLocationId is not positive
 	 */
@@ -105,7 +107,7 @@ class productLocation {
 	/**
 	 * mutator method for productId
 	 *
-	 * @param int $newProductId
+	 * @param int $newProductId  new value of productId
 	 * @throws InvalidArgumentException if $newProductId is not a valid integer
 	 * @throws RangeException if $newProductId is not positive
 	 */
@@ -137,7 +139,7 @@ class productLocation {
 	/**
 	 * mutator method for unitId
 	 *
-	 * @param int $newUnitId
+	 * @param int $newUnitId new value of unitId
 	 * @throws InvalidArgumentException if $newUnitId is not a valid integer
 	 * @throws RangeException if $newUnitId is not positive
 	 */
@@ -169,7 +171,7 @@ class productLocation {
 	/**
 	 * mutator method for quantity
 	 *
-	 * @param float $newQuantity
+	 * @param float $newQuantity new value of quantity
 	 * @throws InvalidArgumentException if $newQuantity is not a valid float
 	 * @throws RangeException if $newQuantity is not positive
 	 */
@@ -196,17 +198,17 @@ class productLocation {
 	 * @throws PDOException when mySQL related errors occur
 	 **/
 	public function insert(PDO &$pdo) {
-		// enforce the locationId is not null (i.e., don't update a ProductLocation that hasn't been inserted)
+		// enforce the locationId is not null (i.e., don't insert a ProductLocation that hasn't been inserted)
 		if($this->locationId === null) {
 			throw(new PDOException("unable to update a locationId that does not exist"));
 		}
 
-		// enforce the productId is not null (i.e., don't update a ProductLocation that hasn't been inserted)
+		// enforce the productId is not null (i.e., don't insert a ProductLocation that hasn't been inserted)
 		if($this->productId === null) {
 			throw(new PDOException("unable to update a productId that does not exist"));
 		}
 
-		// enforce the unitId is not null (i.e., don't ProductLocation a unit that hasn't been inserted)
+		// enforce the unitId is not null (i.e., don't insert a ProductLocation that hasn't been inserted)
 		if($this->unitId === null) {
 			throw(new PDOException("unable to update a unitId that does not exist"));
 		}
@@ -238,7 +240,7 @@ class productLocation {
 			throw(new PDOException("unable to update a productId that does not exist"));
 		}
 
-		// enforce the unitId is not null (i.e., don't ProductLocation a unit that hasn't been inserted)
+		// enforce the unitId is not null (i.e., don't update a ProductLocation that hasn't been inserted)
 		if($this->unitId === null) {
 			throw(new PDOException("unable to update a unitId that does not exist"));
 		}
@@ -259,17 +261,17 @@ class productLocation {
 	 * @throws PDOException when mySQL related errors occur
 	 **/
 	public function delete(PDO &$pdo) {
-		// enforce the locationId is not null (i.e., don't update a ProductLocation that hasn't been inserted)
+		// enforce the locationId is not null (i.e., don't delete a ProductLocation that hasn't been inserted)
 		if($this->locationId === null) {
 			throw(new PDOException("unable to update a locationId that does not exist"));
 		}
 
-		// enforce the productId is not null (i.e., don't update a ProductLocation that hasn't been inserted)
+		// enforce the productId is not null (i.e., don't delete a ProductLocation that hasn't been inserted)
 		if($this->productId === null) {
 			throw(new PDOException("unable to update a productId that does not exist"));
 		}
 
-		// enforce the unitId is not null (i.e., don't ProductLocation a unit that hasn't been inserted)
+		// enforce the unitId is not null (i.e., don't delete a ProductLocation that hasn't been inserted)
 		if($this->unitId === null) {
 			throw(new PDOException("unable to update a unitId that does not exist"));
 		}
