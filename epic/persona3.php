@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>Nick, Manager at Napoli's Coffee House</title>
-		<link rel="stylesheet" type="text/css" href="../css/styles.css" />
-		<link rel="stylesheet" type="text/css" href="../css/personas.css" />
+		<link rel="stylesheet" type="text/css" href="../lib/css/styles.css" />
+		<link rel="stylesheet" type="text/css" href="../lib/css/personas.css" />
 	</head>
 	<body>
 		<div class="container">

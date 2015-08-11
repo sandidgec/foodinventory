@@ -3,7 +3,7 @@
 	<head lang="en">
 		<meta charset="UTF-8" />
 		<title>Inventory Text</title>
-		<link rel="stylesheet" type="text/css" href="css/styles.css" />
+		<link rel="stylesheet" type="text/css" href="lib/css/styles.css" />
 	</head>
 	<body>
 		<div class="container">
@@ -23,7 +23,7 @@
 				<div class="section">
 					<h2>Welcome to our site!</h2>
 					<p>
-						<img src="./images/phoneExample.png" alt="phone image">
+						<img src="lib/images/phoneExample.png" alt="phone image">
 					</p>
 				</div>
 				<div class="section">

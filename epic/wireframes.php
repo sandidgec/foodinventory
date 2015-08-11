@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>Wireframe</title>
-		<link rel="stylesheet" type="text/css" href="../css/styles.css" />
-		<link rel="stylesheet" type="text/css" href="../css/personas.css" />
+		<link rel="stylesheet" type="text/css" href="../lib/css/styles.css" />
+		<link rel="stylesheet" type="text/css" href="../lib/css/personas.css" />
 	</head>
 	<body>
 		<div class="container">
@@ -24,8 +24,8 @@
 				</nav>
 			</header>
 		</div>
-		<img src="../images/wireframe-inventory1.jpg" alt="wireframe">
-		<img src="../images/wireframe-inventory2.jpg" alt="wireframe 2">
+		<img src="../lib/images/wireframe-inventory1.jpg" alt="wireframe">
+		<img src="../lib/images/wireframe-inventory2.jpg" alt="wireframe 2">
 	</body>
 </html>
 
