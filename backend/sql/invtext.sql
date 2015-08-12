@@ -72,6 +72,15 @@ CREATE TABLE product(
 	FOREIGN KEY (vendorId) REFERENCES vendor(vendorId)
 );
 
+CREATE TABLE productAlert (
+	productId INT UNSIGNED,
+	alertId INT UNSIGNED,
+	alertEnabled TINYTEXT,
+	INDEX (alertEnabled),
+	FOREIGN KEY (productId) REFERENCES product (productId),
+	FOREIGN KEY (alertId) REFERENCES alertLevel (alertId)
+);
+
 CREATE TABLE location(
 	locationId INT UNSIGNED AUTO_INCREMENT NOT NULL,
 	description VARCHAR(128)NOT NULL,
@@ -127,7 +136,7 @@ CREATE TABLE notification(
 	notificationId INT UNSIGNED AUTO_INCREMENT NOT NULL,
 	alertId INT UNSIGNED NOT NULL,
 	emailStatus TINYINT UNSIGNED NOT NULL,
-	notificationContent VARCHAR(2800),
+	notificationContent VARCHAR(10000),
 	notificationDateTime DATETIME NOT NULL,
 	notificationHandle VARCHAR(10),
 	INDEX (alertId),
