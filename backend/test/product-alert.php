@@ -151,6 +151,38 @@ class ProductAlertTest extends InventoryTextTest {
 	}
 
 	/**
+	 * test grabbing a ProductAlert by alertId and productId
+	 **/
+	public function testGetValidProductLocationByAlertIdAndProductId() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("productAlert");
+
+		// create a new ProductAlert and insert to into mySQL
+		$productAlert = new ProductAlert($this->alertLevel->getAlertId(), $this->product->getProductId(), $this->VALID_alertEnabled);
+		$productAlert->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoProductAlert = ProductAlert::getProductAlertByAlertIdAndProductId($this->getPDO(), $this->alertLevel->getAlertId(), $this->product->getProductId());
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("productAlert"));
+		$this->assertSame($pdoProductAlert->getAlertId(), $this->alertLevel->getAlertId());
+		$this->assertSame($pdoProductAlert->getProductId(), $this->product->getProductId());
+		$this->assertSame($pdoProductAlert->getAlertEnabled(), $this->VALID_alertEnabled);
+	}
+
+	/**
+	 * test grabbing a ProductAlert by alertId and productId that does not exist
+	 *
+	 * @expectedException PDOException
+	 **/
+	public function testGetInvalidProductLocationByAlertIdAndProductId() {
+		// grab an alertId that does not exist
+		$pdoProductAlert = ProductAlert::getProductAlertByAlertIdAndProductId($this->getPDO(), InventoryTextTest::INVALID_KEY, $this->product->getProductId());
+		foreach($pdoProductAlert as $pdoPA) {
+			$this->assertNull($pdoPA);
+		}
+	}
+
+	/**
 	 * test grabbing a ProductAlert by alertId
 	 **/
 	public function testGetValidProductLocationByAlertId() {
@@ -173,6 +205,8 @@ class ProductAlertTest extends InventoryTextTest {
 
 	/**
 	 * test grabbing a ProductAlert by alertId that does not exist
+	 *
+	 * @expectedException PDOException
 	 **/
 	public function testGetInvalidProductLocationByAlertId() {
 		// grab an alertId that does not exist
@@ -205,10 +239,46 @@ class ProductAlertTest extends InventoryTextTest {
 
 	/**
 	 * test grabbing a ProductAlert by productId that does not exist
+	 *
+	 * @expectedException PDOException
 	 **/
 	public function testGetInvalidProductAlertByProductId() {
 		// grab an productId that does not exist
 		$pdoProductAlert = ProductAlert::getProductAlertByProductId($this->getPDO(), InventoryTextTest::INVALID_KEY);
+		foreach($pdoProductAlert as $pdoPA) {
+			$this->assertNull($pdoPA);
+		}
+	}
+
+	/**
+	 * test grabbing a ProductAlert by alertEnabled
+	 **/
+	public function testGetValidProductAlertByAlertEnabled() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("productAlert");
+
+		// create a new ProductAlert and insert to into mySQL
+		$productAlert = new ProductAlert($this->alertLevel->getAlertId(), $this->product->getProductId(), $this->VALID_alertEnabled);
+		$productAlert->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoProductAlert = ProductAlert::getProductAlertByAlertEnabled($this->getPDO(), $productAlert->getAlertEnabled());
+		foreach($pdoProductAlert as $pdoPA) {
+			$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("productAlert"));
+			$this->assertSame($pdoPA->getAlertId(), $this->alertLevel->getAlertId());
+			$this->assertSame($pdoPA->getProductId(), $this->product->getProductId());
+			$this->assertSame($pdoPA->getAlertEnabled(), $this->VALID_alertEnabled);
+		}
+	}
+
+	/**
+	 * test grabbing a ProductAlert by alertEnabled that does not exist
+	 *
+	 * @expectedException PDOException
+	 **/
+	public function testGetInvalidProductAlertByAlertEnabled() {
+		// grab an alertEnabled that does not exist
+		$pdoProductAlert = ProductAlert::getProductAlertByAlertEnabled($this->getPDO(), $this->INVALID_alertEnabled);
 		foreach($pdoProductAlert as $pdoPA) {
 			$this->assertNull($pdoPA);
 		}
