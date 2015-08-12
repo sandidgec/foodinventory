@@ -79,9 +79,9 @@ class ProductAlertTest extends InventoryTextTest {
 		$alertCode = "WM";
 		$alertFrequency = "D2";
 		$alertOperator = "L";
-		$alertPoint = 100.54;
+		$alertPoint = 100.514;
 
-		$this->alertLevel = new AlertLevel($alertId, $alertCode, $alertFrequency, $alertOperator, $alertPoint);
+		$this->alertLevel = new AlertLevel($alertId, $alertCode, $alertFrequency, $alertPoint, $alertOperator);
 		$this->alertLevel->insert($this->getPDO());
 	}
 

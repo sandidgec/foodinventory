@@ -146,14 +146,6 @@ class ProductAlert {
 	 * @throws PDOException for mySQL related issues
 	 **/
 	public function insert(PDO &$pdo) {
-		//make sure the alert Id doesn't already exist
-		if($this->alertId !== null) {
-			throw (new PDOException("Existing AlertId"));
-		}
-		//make sure the product alert doesn't already exist
-		if($this->productId !== null) {
-			throw (new PDOException("Existing ProductId"));
-		}
 	//create query template
 		$query
 			= "INSERT INTO productAlert (alertId, productId, alertEnabled)
@@ -178,17 +170,9 @@ class ProductAlert {
 	 * @throws PDOException for mySQL related issues
 	 **/
 	public function update (PDO &$pdo) {
-		// enforce the alertId is not null
-		if($this->alertId === null) {
-			throw(new PDOException ("unable to update an alert Id that does not exist"));
-		}
-		// enforce the productId is not null
-		if($this->productId === null) {
-		throw(new PDOException ("unable to update a product id that does not exist"));
-	}
 
 	// create query template
-	$query = "UPDATE productAlert SET  alertId = :alertId, alertEnabled = :alertEnabled WHERE productId = :productId";
+	$query = "UPDATE productAlert SET alertEnabled = :alertEnabled WHERE alertId = :alertId AND productId = :productId";
 		$statement = $pdo->prepare($query);
 
 		//bind the member variables
