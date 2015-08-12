@@ -14,8 +14,8 @@
 				</h1>
 				<nav>
 					<ul>
-						<li><a class="active" href="#">Home</a></li>
-						<li><a href="./epic/documentation.php">Epic</a></li>
+						<li><a href="#" class="active">Home</a></li>
+						<li><a href="epic/documentation.php">Epic</a></li>
 					</ul>
 				</nav>
 			</header>

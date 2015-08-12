@@ -2,15 +2,15 @@
 <html>
 	<head lang="en">
 		<meta charset="UTF-8" />
-		<title>"Inventory Text" Epic</title>
+		<title>"Craft Clerk" Epic</title>
 		<link rel="stylesheet" type="text/css" href="../lib/css/styles.css" />
 	</head>
 	<body>
 		<div class="container">
 			<header>
 				<h1>
-					<strong>Epic: </strong>
-					"Inventory Text"
+					Epic:
+					<strong>Craft Clerk</strong>
 				</h1>
 				<nav>
 					<ul>
@@ -18,7 +18,7 @@
 						<li><a href="persona1.php">Persona 1</a></li>
 						<li><a href="persona2.php">Persona 2</a></li>
 						<li><a href="persona3.php">Persona 3</a></li>
-						<li><a href="./sitemap.php">Site Map</a></li>
+						<li><a href="sitemap.php">Site Map</a></li>
 						<li><a href="wireframes.php">Wireframes</a></li>
 					</ul>
 				</nav>
