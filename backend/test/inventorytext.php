@@ -46,6 +46,7 @@ abstract class InventoryTextTest extends PHPUnit_Extensions_Database_TestCase {
 		$dataset->addTable("alertLevel");
 		$dataset->addTable("vendor");
 		$dataset->addTable("product");
+		$dataset->addTable("productAlert");
 		$dataset->addTable("location");
 		$dataset->addTable("finishedProduct");
 		$dataset->addTable("productLocation");
