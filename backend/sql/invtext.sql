@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS movement;
 DROP TABLE IF EXISTS productLocation;
 DROP TABLE IF EXISTS finishedProduct;
 DROP TABLE IF EXISTS location;
+DROP TABLE IF EXISTS productAlert;
 DROP TABLE IF EXISTS product;
 DROP TABLE IF EXISTS vendor;
 DROP TABLE IF EXISTS alertLevel;
@@ -75,8 +76,9 @@ CREATE TABLE product(
 CREATE TABLE productAlert (
 	productId INT UNSIGNED,
 	alertId INT UNSIGNED,
-	alertEnabled TINYTEXT,
+	alertEnabled TINYINT UNSIGNED NOT NULL,
 	INDEX (alertEnabled),
+	PRIMARY KEY (productId, alertId),
 	FOREIGN KEY (productId) REFERENCES product (productId),
 	FOREIGN KEY (alertId) REFERENCES alertLevel (alertId)
 );
