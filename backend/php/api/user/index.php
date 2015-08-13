@@ -25,9 +25,7 @@ try {
 
 	// sanitize the Email
 	$email = filter_input(INPUT_GET, "email", FILTER_VALIDATE_EMAIL);
-	if(($method === "DELETE" || $method === "PUT") && (empty($email) === true)) {
-		throw(new InvalidArgumentException("email cannot be empty", 405));
-	}
+
 
 	// grab the mySQL connection
 	$pdo = connectToEncryptedMySql("/etc/apache2/capstone/invtext.ini");

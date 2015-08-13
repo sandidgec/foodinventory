@@ -9,7 +9,7 @@
  * @author Charles Sandidge sandidgec@gmail.com
  **/
 
-class User {
+class User implements JsonSerializable {
 
 	/**
 	 * id for this user; this is the primary key
@@ -521,6 +521,12 @@ class User {
 		}
 		$this->hash = $newHash;
 	}
+
+		public function JsonSerialize() {
+				$fields = get_object_vars($this);
+				return($fields);
+				}
+
 
 	/**
 	 * Inserts User into mySQL
