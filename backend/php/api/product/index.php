@@ -2,9 +2,8 @@
 require_once(dirname(__DIR__) . "/backend/php/api/product/index.php");
 //require_once(dirname(__DIR__) . "/backend/php/api/product/xsrf.php");
 //require_once((dirname(__DIR__) . "/backend/php/api/product/.htaccess.php");
-
-
 //require_once("/etc/apache2/data-design/encrypted-config.php");
+
 // start the session and create a XSRF token
 if(session_status() !== PHP_SESSION_ACTIVE) {
 	session_start();
@@ -76,3 +75,12 @@ try {
 
 header("Content-type: application/json");
 echo json_encode($reply);
+
+
+
+/*
+JsonSerializable {
+/* Methods */
+/* abstract public mixed jsonSerialize ( void )
+}
+*/
