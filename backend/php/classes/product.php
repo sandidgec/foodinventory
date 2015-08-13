@@ -277,6 +277,18 @@ class Product {
 
 
 	/**
+	 * determines which variables to include in json_encode()
+	 *
+	 * @see http://php.net/manual/en/class.jsonserializable.php JsonSerializable interface
+	 * @return array all object variables, including private variables
+	 **/
+	public function JsonSerialize() {
+		$fields = get_object_vars($this);
+		return($fields);
+	}
+
+
+	/**
 	 * inserts this Product into mySQL
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
