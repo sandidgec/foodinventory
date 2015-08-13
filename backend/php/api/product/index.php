@@ -27,24 +27,24 @@ try {
 	// grab the mySQL connection
 	$pdo = connectToEncryptedMySql("/foodinventory/backend/sql/invtext.sql");
 
-	// handle all RESTful calls to Tweet
-	// get some or all Tweets
+	// handle all RESTful calls toProduct
+	// get some or all Products
 	if($method === "GET") {
 		// set an XSRF cookie on GET requests
 		setXsrfCookie("/");
-		if(empty($id) === false) {
-			$reply->data = Tweet::getTweetByTweetId($pdo, $id);
+		if(empty($productid) === false) {
+			$reply->data = Product::getProductByProductId($pdo, $id);
 		} else {
-			$reply->data = Tweet::getAllTweets($pdo)->toArray();
+			$reply->data = Product::getAllProdcuts($pdo)->toArray();
 		}
-		// put to an existing Tweet
+		// put to an existing Product
 	} else if($method === "PUT") {
 		// convert PUTed JSON to an object
 		verifyXsrf();
 		$requestContent = file_get_contents("php://input");
 		$requestObject = json_decode($requestContent);
 
-		$tweet = new Tweet($id, $requestObject->profileId, $requestObject->tweetContent, $requestObject->tweetDate);
+		$product = new TweetProduct($productid, $requestObject->pagination,  $requestObject->title, $requestObject->vendor, $requestObject->discription);
 		$tweet->update($pdo);
 		$reply->data = "Tweet updated OK";
 	}
