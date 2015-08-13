@@ -47,6 +47,18 @@ try {
 		throw(new InvalidArgumentException("userId cannot be empty or negative", 405));
 	}
 
+	// sanitize the movementDate
+	$movementDate = filter_input(INPUT_GET, "movementDate", FILTER_VALIDATE_INT);
+	if(($method === "DELETE" || $method === "PUT") && (empty($movementDate) === true || $movementDate < 0)) {
+		throw(new InvalidArgumentException("movementDate cannot be empty or negative", 405));
+	}
+
+	// sanitize the movementType
+	$movementType = filter_input(INPUT_GET, "movementType", FILTER_SANITIZE_STRING);
+	if(($method === "DELETE" || $method === "PUT") && (empty($movementType) === true)) {
+		throw(new InvalidArgumentException("movementType cannot be empty", 405));
+	}
+
 	// grab the mySQL connection
 	$pdo = connectToEncryptedMySql("/etc/apache2/capstone/invtext.ini");
 
@@ -65,6 +77,10 @@ try {
 			$reply->data = Movement::getMovementByProductId($pdo, $productId);
 		} else if(empty($userId) === false) {
 			$reply->data = Movement::getMovementByUserId($pdo, $userId);
+		} else if(empty($movementDate) === false) {
+			$reply->data = Movement::getMovementByMovementDate($pdo, $movementDate);
+		} else if(empty($movementType) === false) {
+			$reply->data = Movement::getMovementByMovementType($pdo, $movementType);
 		} else {
 			$reply->data = Movement::getAllMovements($pdo)->toArray();
 		}
