@@ -1,7 +1,7 @@
 <?php
 require_once(dirname(__DIR__) . "/backend/php/api/product/index.php");
-//require_once(dirname(__DIR__) . "/backend/php/api/product/xsrf.php");
-//require_once((dirname(__DIR__) . "/backend/php/api/product/.htaccess.php");
+require_once(dirname(__DIR__) . "/backend/php/lib/xsrf.php");
+require_once((dirname(__DIR__) . "/backend/php/api/product/.htaccess.php");
 //require_once("/etc/apache2/data-design/encrypted-config.php");
 
 // start the session and create a XSRF token
@@ -18,14 +18,32 @@ try {
 	// determine which HTTP method was used
 	$method = array_key_exists("HTTP_X_HTTP_METHOD", $_SERVER) ? $_SERVER["HTTP_X_HTTP_METHOD"] : $_SERVER["REQUEST_METHOD"];
 
-	// sanitize the product id
-	$productId = filter_input(INPUT_GET, "product id", FILTER_VALIDATE_INT);
+	// sanitize the productId
+	$productId = filter_input(INPUT_GET, "productId", FILTER_VALIDATE_INT);
 	if(($method === "DELETE" || $method === "PUT") && (empty($productId) === true || $productId < 0)) {
 		throw(new InvalidArgumentException("id cannot be empty or negative", 405));
 	}
 
+	// sanitize the vendorId
+	$vendorId = filter_input(INPUT_GET, "vendorId", FILTER_VALIDATE_INT);
+	if(($method === "DELETE" || $method === "PUT") && (empty($vendorId) === true || $vendorId < 0)) {
+		throw(new InvalidArgumentException("id cannot be empty or negative", 405));
+	}
+
+	// sanitize the description
+	$description = filter_input(INPUT_GET, "descriptionId", FILTER_VALIDATE_INT);
+	if(($method === "DELETE" || $method === "PUT") && (empty($description) === true || $description < 0)) {
+		throw(new InvalidArgumentException("id cannot be empty or negative", 405));
+	}
+
+	// sanitize the title
+	$title = filter_input(INPUT_GET, "title", FILTER_VALIDATE_INT);
+	if(($method === "DELETE" || $method === "PUT") && (empty($title) === true || $title < 0)) {
+		throw(new InvalidArgumentException("id cannot be empty or negative", 405));
+	}
+
 	// grab the mySQL connection
-	$pdo = connectToEncryptedMySql("/foodinventory/backend/sql/invtext.sql");
+	$pdo = connectToEncryptedMySql("/etc/apache2/capstone/invtext.ini");
 
 	// handle all RESTful calls to Product
 	// get some or all Products
@@ -34,9 +52,12 @@ try {
 		setXsrfCookie("/");
 		if(empty($productId) === false) {
 			$reply->data = Product::getProductByProductId($pdo, $productId);
-		} else {
-			$reply->data = Product::getAllProducts($pdo)->toArray();
+		} else if(empty($vendorId) === false) {
+			$reply->data = Product::getProductByVendorId($pdo, $vendorId);
 		}
+	} else if(empty($description) === false) {
+		$reply->data = Product::getProductByVendorId($pdo, $vendorId);
+	}
 		// put to an existing Product
 	} else if($method === "PUT") {
 		// convert PUTed JSON to an object
