@@ -266,7 +266,17 @@ class Notification {
 		// store the notification content
 		$this->notificationContent = $newNotificationContent;
 	}
-
+	/**
+	 * determines which variables to include in json_encode()
+	 *
+	 * @see http://php.net/manual/en/class.jsonserializable.php JsonSerializable interface
+	 * @return array all object variables, including private variables
+	 **/
+	public function JsonSerialize() {
+		$fields = get_object_vars($this);
+		$fields["notificationDateTime"] = $this->notificationDateTime->getTimestamp() * 1000;
+		return($fields);
+	}
 	/**
 	 * * inserts this Notification into mySQL
 	 *
@@ -394,6 +404,41 @@ class Notification {
 
 		// bind the email id to the place holder in the template
 		$parameters = array("emailStatus" => $emailStatus);
+		$statement->execute($parameters);
+
+		// grab the notification from mySQL
+		try {
+			$notification = null;
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$notification = new Notification($row["notificationId"], $row["alertId"], $row["emailStatus"], $row["notificationDateTime"], $row["notificationHandle"], $row["notificationContent"]);
+			}
+		} catch(Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new PDOException($exception->getMessage(), 0, $exception));
+		}
+		return ($notification);
+	}
+	/**
+	 * gets the Notification by notification Date Time
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param DateTime $notificationDateTime date of notification sent
+	 * @return mixed notification found or null if not found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getNotificationByNotificationDateTime(PDO &$pdo, $notificationDateTime) {
+		// sanitize the notificationDateTime before searching
+		if($notificationDateTime === false) {
+			throw(new PDOException("notification date is invalid"));
+		}
+		// create query template
+		$query = "SELECT notificationId, alertId, emailStatus, notificationDateTime, notificationHandle, notificationContent FROM notification WHERE notificationDateTime = :notificationDateTime";
+		$statement = $pdo->prepare($query);
+
+		// bind the email id to the place holder in the template
+		$parameters = array("notificationDateTime" => $notificationDateTime);
 		$statement->execute($parameters);
 
 		// grab the notification from mySQL
