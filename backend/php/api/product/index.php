@@ -1,8 +1,6 @@
 <?php
-require_once(dirname(__DIR__) . "/backend/php/api/product/index.php");
-require_once(dirname(__DIR__) . "/backend/php/lib/xsrf.php");
-require_once((dirname(__DIR__) . "/backend/php/api/product/.htaccess.php");
-//require_once("/etc/apache2/data-design/encrypted-config.php");
+require_once(dirname(__DIR__) . "//etc/apache2/capstone/lib/xsrf.php");
+require_once(dirname(__DIR__) . "/etc/apache2/capstone/.htaccess.php");
 
 // start the session and create a XSRF token
 if(session_status() !== PHP_SESSION_ACTIVE) {
