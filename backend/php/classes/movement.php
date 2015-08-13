@@ -752,6 +752,90 @@ class Movement implements JsonSerializable{
 	}
 
 	/**
+	 * gets the Movement by movementDate
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param DateTime $newMovementDate the movementDate to search for
+	 * @return mixed Movement(s) found or null if not found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getMovementByMovementDate(PDO &$pdo, $newMovementDate) {
+		// sanitize the movementDate before searching
+		try {
+			$newMovementDate = validateDate::validateDate($newMovementDate);
+		} catch(InvalidArgumentException $invalidArgument) {
+			throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
+		} catch(RangeException $range) {
+			throw(new RangeException($range->getMessage(), 0, $range));
+		}
+
+		// create query template
+		$query	 = "SELECT movementId, fromLocationId, toLocationId, productId, unitId, userId, cost, movementDate, movementType, price FROM movement WHERE movementDate = :movementDate" ;
+		$statement = $pdo->prepare($query);
+
+		// bind the movementDate to the place holder in the template
+		$parameters = array("movementDate" => $newMovementDate);
+		$statement->execute($parameters);
+
+		// build an array of movements
+		$movements = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$movement = new Movement($row["movementId"], $row["fromLocationId"], $row["toLocationId"], $row["productId"], $row["unitId"], $row["userId"], $row["cost"], $row["movementDate"], $row["movementType"], $row["price"]);
+				$movements[$movements->key()] = $movement;
+				$movements->next();
+			} catch(Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($movements);
+	}
+
+	/**
+	 * gets the Movement by movementType
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param DateTime $newMovementType the movementType to search for
+	 * @return mixed Movement(s) found or null if not found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getMovementByMovementType(PDO &$pdo, $newMovementType) {
+		// sanitize the movementType before searching
+		try {
+			$newMovementType = validateDate::validateDate($newMovementType);
+		} catch(InvalidArgumentException $invalidArgument) {
+			throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
+		} catch(RangeException $range) {
+			throw(new RangeException($range->getMessage(), 0, $range));
+		}
+
+		// create query template
+		$query	 = "SELECT movementId, fromLocationId, toLocationId, productId, unitId, userId, cost, movementDate, movementType, price FROM movement WHERE movementType = :movementType" ;
+		$statement = $pdo->prepare($query);
+
+		// bind the movementType to the place holder in the template
+		$parameters = array("movementType" => $newMovementType);
+		$statement->execute($parameters);
+
+		// build an array of movements
+		$movements = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$movement = new Movement($row["movementId"], $row["fromLocationId"], $row["toLocationId"], $row["productId"], $row["unitId"], $row["userId"], $row["cost"], $row["movementDate"], $row["movementType"], $row["price"]);
+				$movements[$movements->key()] = $movement;
+				$movements->next();
+			} catch(Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($movements);
+	}
+
+	/**
 	 * gets all movements
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
