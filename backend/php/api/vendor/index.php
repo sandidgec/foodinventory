@@ -18,53 +18,25 @@ try {
 	$method = array_key_exists("HTTP_X_HTTP_METHOD", $_SERVER) ? $_SERVER["HTTP_X_HTTP_METHOD"] : $_SERVER["REQUEST_METHOD"];
 
 	// sanitize the vendorId
-	$movementId = filter_input(INPUT_GET, "movementId", FILTER_VALIDATE_INT);
-	if(($method === "DELETE" || $method === "PUT") && (empty($movementId) === true || $movementId < 0)) {
-		throw(new InvalidArgumentException("movementId cannot be empty or negative", 405));
+	$vendorId = filter_input(INPUT_GET, "vendorId", FILTER_VALIDATE_INT);
+	if(($method === "DELETE" || $method === "PUT") && (empty($vendorId) === true || $vendorId < 0)) {
+		throw(new InvalidArgumentException("vendortId cannot be empty or negative", 405));
 	}
-
-	// sanitize the fromLocationId
-	$fromLocationId = filter_input(INPUT_GET, "fromLocationId", FILTER_VALIDATE_INT);
-	if(($method === "DELETE" || $method === "PUT") && (empty($fromLocationId) === true || $fromLocationId < 0)) {
-		throw(new InvalidArgumentException("fromLocationId cannot be empty or negative", 405));
-	}
-
-	// sanitize the toLocationId
-	$toLocationId = filter_input(INPUT_GET, "toLocationId", FILTER_VALIDATE_INT);
-	if(($method === "DELETE" || $method === "PUT") && (empty($toLocationId) === true || $toLocationId < 0)) {
-		throw(new InvalidArgumentException("toLocationId cannot be empty or negative", 405));
-	}
-
-	// sanitize the productId
-	$productId = filter_input(INPUT_GET, "productId", FILTER_VALIDATE_INT);
-	if(($method === "DELETE" || $method === "PUT") && (empty($productId) === true || $productId < 0)) {
-		throw(new InvalidArgumentException("productId cannot be empty or negative", 405));
-	}
-
-	// sanitize the userId
-	$userId = filter_input(INPUT_GET, "userId", FILTER_VALIDATE_INT);
-	if(($method === "DELETE" || $method === "PUT") && (empty($userId) === true || $userId < 0)) {
-		throw(new InvalidArgumentException("userId cannot be empty or negative", 405));
-	}
+	//sanitize the vendor name
+	$vendorName = filter_input(INPUT_GET, "vendorName", FILTER_SANITIZE_STRING);
 
 	// grab the mySQL connection
 	$pdo = connectToEncryptedMySql("/etc/apache2/capstone/invtext.ini");
 
-	// handle all RESTful calls to Movement
-	// get some or all Movements
+	// handle all RESTful calls to Vendor
+	// get some or all Vendors
 	if($method === "GET") {
 		// set an XSRF cookie on GET requests
 		setXsrfCookie("/");
-		if(empty($movementId) === false) {
-			$reply->data = Movement::getMovementByMovementId($pdo, $movementId);
-		} else if(empty($fromLocationId) === false) {
-			$reply->data = Movement::getMovementByFromLocationId($pdo, $fromLocationId);
-		} else if(empty($toLocationId) === false) {
-			$reply->data = Movement::getMovementByToLocationId($pdo, $toLocationId);
-		} else if(empty($productId) === false) {
-			$reply->data = Movement::getMovementByProductId($pdo, $productId);
-		} else if(empty($userId) === false) {
-			$reply->data = Movement::getMovementByUserId($pdo, $userId);
+		if(empty($vendorId) === false) {
+			$reply->data = Vendor::getVendorByVendorId($pdo, $VendorId);
+		} else if(empty($vendorName) === false) {
+			$reply->data = Vendor::getVendorByVendorName($pdo, $vendorName);
 		} else {
 			$reply->data = Movement::getAllMovements($pdo)->toArray();
 		}
@@ -75,11 +47,10 @@ try {
 		$requestContent = file_get_contents("php://input");
 		$requestObject = json_decode($requestContent);
 
-		$movement = new Movement(null, $requestObject->fromLocationId, $requestObject->toLocationId,
-			$requestObject->productId, $requestObject->unitId, $requestObject->userId, $requestObject->cost,
-			$requestObject->movementDate, $requestObject->movementType, $requestObject->price);
-		$movement->insert($pdo);
-		$reply->data = "Movement created OK";
+		$vendor = new Vendor(null, $requestObject->contactName, $requestObject->vendorEmail,
+			$requestObject->vendorName, $requestObject->vendorPhoneNumber);
+		$vendor->insert($pdo);
+		$reply->data = "Vendor created OK";
 	}
 
 	// create an exception to pass back to the RESTful caller
