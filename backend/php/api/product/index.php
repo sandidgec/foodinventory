@@ -99,10 +99,3 @@ header("Content-type: application/json");
 echo json_encode($reply);
 
 
-
-/*
-JsonSerializable {
-/* Methods */
-/* abstract public mixed jsonSerialize ( void )
-}
-*/
