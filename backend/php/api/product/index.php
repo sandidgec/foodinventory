@@ -54,10 +54,13 @@ try {
 			$reply->data = Product::getProductByProductId($pdo, $productId);
 		} else if(empty($vendorId) === false) {
 			$reply->data = Product::getProductByVendorId($pdo, $vendorId);
+		} else if(empty($description) === false) {
+			$reply->data = Product::getDescriptionByDescription($pdo, $description);
+		} else if(empty($sku) === false) {
+			$reply->data = Product::getSkuBySku($pdo, $sku);
+		} else if(empty($title) === false) {
+	$reply->data = Product::getTitleByTitle($pdo, $title);
 		}
-	} else if(empty($description) === false) {
-		$reply->data = Product::getProductByVendorId($pdo, $vendorId);
-	}
 		// put to an existing Product
 	} else if($method === "PUT") {
 		// convert PUTed JSON to an object
