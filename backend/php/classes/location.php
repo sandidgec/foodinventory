@@ -9,7 +9,7 @@
  * @author Charles Sandidge sandidgec@gmail.com
  **/
 
-class Location {
+class Location implements JsonSerializable {
 
 	/**
 	 * primary key for location
@@ -135,6 +135,11 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 			throw (new InvalidArgumentException ("description invalid"));
 		}
 		$this->description = $newDescription;
+	}
+
+	public function JsonSerialize() {
+		$fields = get_object_vars($this);
+		return($fields);
 	}
 
 	/**
