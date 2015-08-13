@@ -1,4 +1,5 @@
 <?php
+require_once(dirname(dirname(__DIR__)) . "/lib/xsrf.php");
 require_once("/etc/apache2/data-design/encrypted-config.php");
 
 // start the session and create a XSRF token
@@ -86,7 +87,6 @@ try {
 		$reply->message = $exception->getMessage();
 		unset($reply->data);
 	}
-
 
 header("Content-type: application/json");
 echo json_encode($reply);
