@@ -68,7 +68,7 @@ try {
 		$requestContent = file_get_contents("php://input");
 		$requestObject = json_decode($requestContent);
 
-		$product = new Products($requestObject->pagination,  $requestObject->title, $requestObject->vendor, $requestObject->discription);
+		$product = new Products( $requestObject->productId, $requestObject->vendorId,$requestObject->description, $requestObject->sku, $requestObject->title);
 		$product->update($pdo);
 		$reply->data = "Product updated OK";
 	}
