@@ -10,7 +10,7 @@ require_once(dirname(__DIR__) . "/traits/validate-date.php");
  *
  * @author Christopher Collopy <ccollopy@cnm.edu>
  **/
-class Movement {
+class Movement implements JsonSerializable{
 	/**
 	 * id for this Movement; this is the primary key
 	 * @var int $movementId
@@ -450,6 +450,18 @@ class Movement {
 
 		// convert and store the price
 		$this->price = floatval($newPrice);
+	}
+
+	/**
+	 * determines which variables to include in json_encode()
+	 *
+	 * @see http://php.net/manual/en/class.jsonserializable.php JsonSerializable interface
+	 * @return array all object variables, including private variables
+	 **/
+	public function JsonSerialize() {
+		$fields = get_object_vars($this);
+		$fields["movementDate"] = $this->movementDate->getTimestamp() * 1000;
+		return($fields);
 	}
 
 	/**
