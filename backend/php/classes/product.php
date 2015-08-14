@@ -7,6 +7,8 @@
  * @author Marie Vigil <marie@jtdesignsolutions>
  **/
 
+require_once(dirname(dirname(__DIR__)) . "/classes/autoload.php");
+
 class Product {
 	/**
 	 * id for this Product; this is the primary key
