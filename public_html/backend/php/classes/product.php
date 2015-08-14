@@ -7,7 +7,6 @@
  * @author Marie Vigil <marie@jtdesignsolutions>
  **/
 
-require_once("/classes/autoload.php");
 
 class Product {
 	/**
