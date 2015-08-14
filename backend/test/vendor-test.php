@@ -131,7 +131,7 @@ class VendorTest extends InventoryTextTest {
 	 * @expectedException PDOException
 	 **/
 	public function testUpdateInvalidVendor(){
-		//create a Vendor and try to update it wiehtout actually inserting it
+		//create a Vendor and try to update it without actually inserting it
 		$vendor = new Vendor(null, $this->VALID_contactName, $this->VALID_vendorEmail, $this->VALID_vendorName, $this->VALID_vendorPhoneNumber);
 		$vendor -> update($this->getPDO());
 	}

@@ -430,8 +430,12 @@ class Notification {
 	 **/
 	public static function getNotificationByNotificationDateTime(PDO &$pdo, $notificationDateTime) {
 		// sanitize the notificationDateTime before searching
-		if($notificationDateTime === false) {
-			throw(new PDOException("notification date is invalid"));
+		try {
+			$notificationDateTime = validateDate::validateDate($notificationDateTime);
+		} catch(InvalidArgumentException $invalidArgument) {
+			throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
+		} catch(RangeException $range) {
+			throw(new RangeException($range->getMessage(), 0, $range));
 		}
 		// create query template
 		$query = "SELECT notificationId, alertId, emailStatus, notificationDateTime, notificationHandle, notificationContent FROM notification WHERE notificationDateTime = :notificationDateTime";
