@@ -38,6 +38,9 @@ try {
 	// sanitize the movementType
 	$movementType = filter_input(INPUT_GET, "movementType", FILTER_SANITIZE_STRING);
 
+	// sanitize the page
+	$page = filter_input(INPUT_GET, "page", FILTER_VALIDATE_INT);
+
 	// grab the mySQL connection
 	$pdo = connectToEncryptedMySql("/etc/apache2/capstone-mysql/invtext.ini");
 
@@ -60,8 +63,10 @@ try {
 			$reply->data = Movement::getMovementByMovementDate($pdo, $movementDate);
 		} else if(empty($movementType) === false) {
 			$reply->data = Movement::getMovementByMovementType($pdo, $movementType);
+		} else if(empty($page) === false) {
+			$reply->data = Movement::getAllMovements($pdo, $page)->toArray();
 		} else {
-			$reply->data = Movement::getAllMovements($pdo)->toArray();
+			throw(new InvalidArgumentException("no parameters given", 405));
 		}
 	// post to a new Movement
 	} else if($method === "POST") {
