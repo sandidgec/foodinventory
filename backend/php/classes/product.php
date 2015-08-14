@@ -7,7 +7,7 @@
  * @author Marie Vigil <marie@jtdesignsolutions>
  **/
 
-require_once(dirname(dirname(__DIR__)) . "/classes/autoload.php");
+require_once("/classes/autoload.php");
 
 class Product {
 	/**
