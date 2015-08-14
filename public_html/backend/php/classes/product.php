@@ -602,4 +602,46 @@ class Product {
 		}
 		return($products);
 	}
-}
+
+	/**
+	 * gets the Product by pagination
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int $newPagination the pagination to search for
+	 * @return SplFixedArray all products found for this pagination
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getProductByPagination(PDO &$pdo, $newPagination) {
+		// sanitize the pagination before searching
+		$newPagination = filter_var($newPagination, FILTER_VALIDATE_INT);
+		if($newPagination === false) {
+			throw(new PDOException("pagination is not an integer"));
+		}
+		if($newPagination <= 0) {
+			throw(new PDOException("pagination is not positive"));
+		}
+
+		// create query template
+		$query	 = "SELECT productId, vendorId, description, leadTime, sku, title FROM product WHERE pagination = :pagination";
+		$statement = $pdo->prepare($query);
+
+		// bind the pagination to the place holder in the template
+		$parameters = array("pagination" => $newPagination);
+		$statement->execute($parameters);
+
+		// build an array of Product(s)
+		$products = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$product = new Product($row["productId"], $row["vendorId"], $row["description"], $row["leadTime"], $row["sku"], $row["title"]);
+				$products[$products->key()] = $product;
+				$products->next();
+			} catch(Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($products);
+	}
+	}
