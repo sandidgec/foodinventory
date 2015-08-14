@@ -15,7 +15,7 @@
 				<nav>
 					<ul>
 						<li><a href="../index.php">Home</a></li>
-						<li><a href="./documentation.php">Epic</a></li>
+						<li><a href="documentation.php">Epic</a></li>
 					</ul>
 				</nav>
 			</header>
