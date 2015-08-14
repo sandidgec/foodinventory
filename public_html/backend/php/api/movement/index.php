@@ -60,7 +60,7 @@ try {
 	}
 
 	// grab the mySQL connection
-	$pdo = connectToEncryptedMySql("/etc/apache2/capstone/invtext.ini");
+	$pdo = connectToEncryptedMySql("/etc/apache2/capstone-mysql/invtext.ini");
 
 	// handle all RESTful calls to Movement
 	// get some or all Movements
