@@ -2,7 +2,7 @@
 /**
  * product api unit test for foodinventory
  *
- * This product unit test is a single class within the overall foodinventory application
+ * This product api unit test is a single class within the overall foodinventory application
  *
  * @author Marie Vigil <marie@jtdesignsolutions>
  *
@@ -12,8 +12,9 @@
 require_once("inventorytext.php");
 
 // grab the class(s) under scrutiny
-require_once(dirname(__DIR__) . "/php/classes/product.php");
-require_once(dirname(__DIR__) . "/php/classes/vendor.php");
+require_once(dirname(dirname(__DIR__)) . "/classes/autoload.php");
+require_once(dirname(dirname(__DIR__)) . "/lib/xsrf.php");
+require_once("/etc/apache2/data-design/encrypted-config.php");
 
 /**
  * Full PHPUnit test for the Product class
