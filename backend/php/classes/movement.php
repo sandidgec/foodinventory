@@ -461,9 +461,8 @@ class Movement implements JsonSerializable{
 	public function JsonSerialize() {
 		$fields = get_object_vars($this);
 		$fields["movementDate"] = $this->movementDate->getTimestamp() * 1000;
-		return($fields);
+		return ($fields);
 	}
-
 	/**
 	 * inserts this Movement into mySQL
 	 *

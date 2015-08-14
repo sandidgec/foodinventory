@@ -149,17 +149,12 @@ class ProductAlert {
 	//create query template
 		$query
 			= "INSERT INTO productAlert (alertId, productId, alertEnabled)
-			VALUES (:productId, :alertId, :alertEnabled)";
+			VALUES ( :alertId, :productId, :alertEnabled)";
 		$statement = $pdo->prepare($query);
 
 		// bind the variables to the place holders in the template
 		$parameters = array("alertId" => $this->alertId, "productId" => $this->productId,  "alertEnabled" => $this->alertEnabled);
-
 		$statement->execute($parameters);
-
-		//update null productId with what mySQL just gave us
-		$this->productId = intval($pdo->lastInsertId());
-
 	}
 
 	/**
