@@ -20,26 +20,39 @@ try {
 	// sanitize the productId
 	$productId = filter_input(INPUT_GET, "productId", FILTER_VALIDATE_INT);
 	if(($method === "DELETE" || $method === "PUT") && (empty($productId) === true || $productId < 0)) {
-		throw(new InvalidArgumentException("id cannot be empty or negative", 405));
+		throw(new InvalidArgumentException("productId cannot be empty or negative", 405));
 	}
 
 	// sanitize the vendorId
 	$vendorId = filter_input(INPUT_GET, "vendorId", FILTER_VALIDATE_INT);
 	if(($method === "DELETE" || $method === "PUT") && (empty($vendorId) === true || $vendorId < 0)) {
-		throw(new InvalidArgumentException("id cannot be empty or negative", 405));
+		throw(new InvalidArgumentException("vendorId cannot be empty or negative", 405));
 	}
 
 	// sanitize the description
-	$description = filter_input(INPUT_GET, "descriptionId", FILTER_VALIDATE_INT);
+	$description = filter_input(INPUT_GET, "description", FILTER_VALIDATE_INT);
 	if(($method === "DELETE" || $method === "PUT") && (empty($description) === true || $description < 0)) {
-		throw(new InvalidArgumentException("id cannot be empty or negative", 405));
+		throw(new InvalidArgumentException("description cannot be empty or negative", 405));
+	}
+
+	// sanitize the sku
+	$sku = filter_input(INPUT_GET, "sku", FILTER_VALIDATE_INT);
+	if(($method === "DELETE" || $method === "PUT") && (empty($sku) === true || $sku < 0)) {
+		throw(new InvalidArgumentException("sku cannot be empty or negative", 405));
 	}
 
 	// sanitize the title
 	$title = filter_input(INPUT_GET, "title", FILTER_VALIDATE_INT);
 	if(($method === "DELETE" || $method === "PUT") && (empty($title) === true || $title < 0)) {
-		throw(new InvalidArgumentException("id cannot be empty or negative", 405));
+		throw(new InvalidArgumentException("title cannot be empty or negative", 405));
 	}
+
+	// sanitize the pagination
+	$pagination = filter_input(INPUT_GET, "pagination", FILTER_VALIDATE_INT);
+	if(($method === "DELETE" || $method === "PUT") && (empty($productId) === true || $pagination < 0)) {
+		throw(new InvalidArgumentException("pagination cannot be empty or negative", 405));
+	}
+
 
 	// grab the mySQL connection
 	$pdo = connectToEncryptedMySql("/etc/apache2/capstone/invtext.ini");
@@ -59,7 +72,9 @@ try {
 			$reply->data = Product::getSkuBySku($pdo, $sku);
 		} else if(empty($title) === false) {
 	$reply->data = Product::getTitleByTitle($pdo, $title);
-		}
+		} else if(empty($pagination) === false) {
+		$reply->data = Product::getPaginationByPagination($pdo, $pagination);
+	}
 		// put to an existing Product
 	} else if($method === "PUT") {
 		// convert PUTed JSON to an object
@@ -67,7 +82,7 @@ try {
 		$requestContent = file_get_contents("php://input");
 		$requestObject = json_decode($requestContent);
 
-		$product = new Products($requestObject->productId, $requestObject->vendorId,$requestObject->description, $requestObject->sku, $requestObject->title);
+		$product = new Products($requestObject->productId, $requestObject->vendorId,$requestObject->description, $requestObject->sku, $requestObject->title, $requestObject->pagination);
 		$product->update($pdo);
 		$reply->data = "Product updated OK";
 	}
@@ -78,7 +93,7 @@ try {
 	$requestContent = file_get_contents("php://input");
 	$requestObject = json_decode($requestContent);
 
-	$product = new Products(null, $requestObject->vendorId,$requestObject->description, $requestObject->sku, $requestObject->title);
+	$product = new Products(null, $requestObject->productId, $requestObject->vendorId,$requestObject->description, $requestObject->sku, $requestObject->title, $requestObject->pagination);
 	$product->insert($pdo);
 	$reply->data = "Product created OK";
 	}
