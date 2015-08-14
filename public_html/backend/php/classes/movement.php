@@ -843,15 +843,17 @@ class Movement implements JsonSerializable{
 	 * @throws PDOException when mySQL related errors occur
 	 **/
 	public static function getAllMovements(PDO &$pdo, $page) {
-		// set page number to start at zero
-		$x = $page - 1;
 		// number of results per page
-		$k = 25;
+		$page = filter_var($page, FILTER_VALIDATE_INT);
+		$pageSize = 25;
+		$start = $page * $pageSize;
 
 		// create query template
 		$query = "SELECT movementId, fromLocationId, toLocationId, productId, unitId, userId, cost, movementDate,
-					 movementType, price FROM movement ORDER BY movementDate LIMIT $x*$k, $k";
+					 movementType, price FROM movement ORDER BY movementDate LIMIT :start, :pageSize";
 		$statement = $pdo->prepare($query);
+		$statement->bindParam(":start", $start, PDO::PARAM_INT);
+		$statement->bindParam(":pageSize", $pageSize, PDO::PARAM_INT);
 		$statement->execute();
 
 		// build an array of movements
