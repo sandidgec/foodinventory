@@ -19,45 +19,24 @@ try {
 
 	// sanitize the movementId
 	$movementId = filter_input(INPUT_GET, "movementId", FILTER_VALIDATE_INT);
-	if(($method === "DELETE" || $method === "PUT") && (empty($movementId) === true || $movementId < 0)) {
-		throw(new InvalidArgumentException("movementId cannot be empty or negative", 405));
-	}
 
 	// sanitize the fromLocationId
 	$fromLocationId = filter_input(INPUT_GET, "fromLocationId", FILTER_VALIDATE_INT);
-	if(($method === "DELETE" || $method === "PUT") && (empty($fromLocationId) === true || $fromLocationId < 0)) {
-		throw(new InvalidArgumentException("fromLocationId cannot be empty or negative", 405));
-	}
 
 	// sanitize the toLocationId
 	$toLocationId = filter_input(INPUT_GET, "toLocationId", FILTER_VALIDATE_INT);
-	if(($method === "DELETE" || $method === "PUT") && (empty($toLocationId) === true || $toLocationId < 0)) {
-		throw(new InvalidArgumentException("toLocationId cannot be empty or negative", 405));
-	}
 
 	// sanitize the productId
 	$productId = filter_input(INPUT_GET, "productId", FILTER_VALIDATE_INT);
-	if(($method === "DELETE" || $method === "PUT") && (empty($productId) === true || $productId < 0)) {
-		throw(new InvalidArgumentException("productId cannot be empty or negative", 405));
-	}
 
 	// sanitize the userId
 	$userId = filter_input(INPUT_GET, "userId", FILTER_VALIDATE_INT);
-	if(($method === "DELETE" || $method === "PUT") && (empty($userId) === true || $userId < 0)) {
-		throw(new InvalidArgumentException("userId cannot be empty or negative", 405));
-	}
 
 	// sanitize the movementDate
 	$movementDate = filter_input(INPUT_GET, "movementDate", FILTER_VALIDATE_INT);
-	if(($method === "DELETE" || $method === "PUT") && (empty($movementDate) === true || $movementDate < 0)) {
-		throw(new InvalidArgumentException("movementDate cannot be empty or negative", 405));
-	}
 
 	// sanitize the movementType
 	$movementType = filter_input(INPUT_GET, "movementType", FILTER_SANITIZE_STRING);
-	if(($method === "DELETE" || $method === "PUT") && (empty($movementType) === true)) {
-		throw(new InvalidArgumentException("movementType cannot be empty", 405));
-	}
 
 	// grab the mySQL connection
 	$pdo = connectToEncryptedMySql("/etc/apache2/capstone-mysql/invtext.ini");
