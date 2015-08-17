@@ -84,13 +84,12 @@ try {
 		$movement->insert($pdo);
 		$reply->data = "Movement created OK";
 	}
-
 	// create an exception to pass back to the RESTful caller
-	} catch(Exception $exception) {
-		$reply->status = $exception->getCode();
-		$reply->message = $exception->getMessage();
-		unset($reply->data);
-	}
+} catch(Exception $exception) {
+	$reply->status = $exception->getCode();
+	$reply->message = $exception->getMessage();
+	unset($reply->data);
+}
 
 header("Content-type: application/json");
 echo json_encode($reply);
