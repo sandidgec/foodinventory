@@ -179,29 +179,26 @@ class MovementAPITest extends InventoryTextTest {
 	 **/
 	public function testGetValidMovementByMovementId() {
 		// create a new Movement
-		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
+		$newMovement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?movementId=' . $movement->getMovementId());
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?movementId=' . $newMovement->getMovementId());
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
+		$movement = json_decode($body);
+		$this->assertSame(200, $movement->status);
 	}
 
 	/**
 	 * test grabbing a Movement by invalid movementId
 	 **/
 	public function testGetInvalidMovementByMovementId() {
-		// create a new Movement
-		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
-
 		// grab the data from guzzle and enforce the status' match our expectations
 		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?movementId=' . InventoryTextTest::INVALID_KEY);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
+		$movement = json_decode($body);
+		$this->assertSame(200, $movement->status);
 	}
 
 	/**
@@ -209,29 +206,26 @@ class MovementAPITest extends InventoryTextTest {
 	 **/
 	public function testGetValidMovementByFromLocationId() {
 		// create a new Movement
-		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
+		$newMovement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?fromLocationId=' . $movement->getFromLocationId());
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?movementId=' . $newMovement->getFromLocationId());
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
+		$movement = json_decode($body);
+		$this->assertSame(200, $movement->status);
 	}
 
 	/**
 	 * test grabbing a Movement by invalid fromLocationId
 	 **/
 	public function testGetInvalidMovementByFromLocationId() {
-		// create a new Movement
-		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
-
 		// grab the data from guzzle and enforce the status' match our expectations
 		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?fromLocationId=' . InventoryTextTest::INVALID_KEY);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
+		$movement = json_decode($body);
+		$this->assertSame(200, $movement->status);
 	}
 
 	/**
@@ -239,14 +233,14 @@ class MovementAPITest extends InventoryTextTest {
 	 **/
 	public function testDeleteValidMovement() {
 		// create a new Movement
-		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
+		$newMovement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?movementId=' . $movement->getMovementId());
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?movementId=' . $newMovement->getMovementId());
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
+		$movement = json_decode($body);
+		$this->assertSame(200, $movement->status);
 
 		// delete Movement from mySQL
 		$movement->delete($this->getPDO());
