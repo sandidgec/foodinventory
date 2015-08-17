@@ -796,18 +796,24 @@ class Movement implements JsonSerializable{
 	 * gets the Movement by movementType
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
-	 * @param DateTime $newMovementType the movementType to search for
+	 * @param string $newMovementType the movementType to search for
 	 * @return mixed Movement(s) found or null if not found
 	 * @throws PDOException when mySQL related errors occur
 	 **/
 	public static function getMovementByMovementType(PDO &$pdo, $newMovementType) {
 		// sanitize the movementType before searching
-		try {
-			$newMovementType = validateDate::validateDate($newMovementType);
-		} catch(InvalidArgumentException $invalidArgument) {
-			throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
-		} catch(RangeException $range) {
-			throw(new RangeException($range->getMessage(), 0, $range));
+		$newMovementType = trim($newMovementType);
+		$newMovementType = filter_var($newMovementType, FILTER_SANITIZE_STRING);
+		if(empty($newMovementType) === true) {
+			throw(new InvalidArgumentException("movementType is empty or insecure"));
+		}
+
+		// verify the movementType will fit in the database
+		if(strlen($newMovementType) > 2) {
+			throw(new RangeException("movementType is too large"));
+		}
+		if(strlen($newMovementType) < 2) {
+			throw(new RangeException("movementType is too small"));
 		}
 
 		// create query template
