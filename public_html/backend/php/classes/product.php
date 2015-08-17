@@ -81,7 +81,7 @@ class Product {
 	 * @return int value of product id
 	 **/
 	public function getProductId() {
-		return($this->productId);
+		return ($this->productId);
 	}
 
 	/**
@@ -119,7 +119,7 @@ class Product {
 	 * @return int value of vendor id
 	 **/
 	public function getVendorId() {
-		return($this->vendorId);
+		return ($this->vendorId);
 	}
 
 	/**
@@ -151,7 +151,7 @@ class Product {
 	 * @return string value of description
 	 **/
 	public function getDescription() {
-		return($this->description);
+		return ($this->description);
 	}
 
 	/**
@@ -184,7 +184,7 @@ class Product {
 	 * @return int value of leadTime
 	 **/
 	public function getLeadTime() {
-		return($this->leadTime);
+		return ($this->leadTime);
 	}
 
 	/**
@@ -216,7 +216,7 @@ class Product {
 	 * @return string value of sku
 	 **/
 	public function getSku() {
-		return($this->sku);
+		return ($this->sku);
 	}
 
 	/**
@@ -249,7 +249,7 @@ class Product {
 	 * @return string value of title
 	 **/
 	public function getTitle() {
-		return($this->title);
+		return ($this->title);
 	}
 
 	/**
@@ -285,7 +285,7 @@ class Product {
 	 **/
 	public function JsonSerialize() {
 		$fields = get_object_vars($this);
-		return($fields);
+		return ($fields);
 	}
 
 
@@ -302,7 +302,7 @@ class Product {
 		}
 
 		// create query template
-		$query	 = "INSERT INTO product(vendorId, description, leadTime, sku, title) VALUES(:vendorId, :description, :leadTime, :sku, :title)";
+		$query = "INSERT INTO product(vendorId, description, leadTime, sku, title) VALUES(:vendorId, :description, :leadTime, :sku, :title)";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
@@ -326,7 +326,7 @@ class Product {
 		}
 
 		// create query template
-		$query	 = "UPDATE product SET vendorId = :vendorId, description = :description, leadTime = :leadTime , sku = :sku, title = :title WHERE productId = :productId";
+		$query = "UPDATE product SET vendorId = :vendorId, description = :description, leadTime = :leadTime , sku = :sku, title = :title WHERE productId = :productId";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
@@ -348,7 +348,7 @@ class Product {
 		}
 
 		// create query template
-		$query	 = "DELETE FROM product WHERE productId = :productId";
+		$query = "DELETE FROM product WHERE productId = :productId";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holder in the template
@@ -375,7 +375,7 @@ class Product {
 		}
 
 		// create query template
-		$query	 = "SELECT productId, vendorId, description, leadTime, sku, title FROM product WHERE productId = :productId";
+		$query = "SELECT productId, vendorId, description, leadTime, sku, title FROM product WHERE productId = :productId";
 		$statement = $pdo->prepare($query);
 
 		// bind the product id to the place holder in the template
@@ -386,7 +386,7 @@ class Product {
 		try {
 			$product = null;
 			$statement->setFetchMode(PDO::FETCH_ASSOC);
-			$row   = $statement->fetch();
+			$row = $statement->fetch();
 			if($row !== false) {
 				$product = new Product($row["productId"], $row["vendorId"], $row["description"], $row["leadTime"], $row["sku"], $row["title"]);
 			}
@@ -394,7 +394,7 @@ class Product {
 			// if the row couldn't be converted, rethrow it
 			throw(new PDOException($exception->getMessage(), 0, $exception));
 		}
-		return($product);
+		return ($product);
 	}
 
 
@@ -417,7 +417,7 @@ class Product {
 		}
 
 		// create query template
-		$query	 = "SELECT productId, vendorId, description, leadTime, sku, title FROM product WHERE vendorId = :vendorId";
+		$query = "SELECT productId, vendorId, description, leadTime, sku, title FROM product WHERE vendorId = :vendorId";
 		$statement = $pdo->prepare($query);
 
 		// bind the vendorId to the place holder in the template
@@ -437,7 +437,7 @@ class Product {
 				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
-		return($products);
+		return ($products);
 	}
 
 	/**
@@ -457,7 +457,7 @@ class Product {
 		}
 
 		// create query template
-		$query	 = "SELECT productId, vendorId, description, leadTime, sku, title FROM product WHERE description LIKE :description";
+		$query = "SELECT productId, vendorId, description, leadTime, sku, title FROM product WHERE description LIKE :description";
 		$statement = $pdo->prepare($query);
 
 		// bind the product description to the place holder in the template
@@ -477,7 +477,7 @@ class Product {
 				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
-		return($products);
+		return ($products);
 	}
 
 	/**
@@ -499,7 +499,7 @@ class Product {
 		}
 
 		// create query template
-		$query	 = "SELECT productId, vendorId, description, leadTime, sku, title FROM product WHERE leadTime = :leadTime";
+		$query = "SELECT productId, vendorId, description, leadTime, sku, title FROM product WHERE leadTime = :leadTime";
 		$statement = $pdo->prepare($query);
 
 		// bind the leadTime to the place holder in the template
@@ -519,7 +519,7 @@ class Product {
 				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
-		return($products);
+		return ($products);
 	}
 
 	/**
@@ -539,7 +539,7 @@ class Product {
 		}
 
 		// create query template
-		$query	 = "SELECT productId, vendorId, description, leadTime, sku, title FROM product WHERE sku LIKE :sku";
+		$query = "SELECT productId, vendorId, description, leadTime, sku, title FROM product WHERE sku LIKE :sku";
 		$statement = $pdo->prepare($query);
 
 		// bind the sku to the place holder in the template
@@ -559,7 +559,7 @@ class Product {
 				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
-		return($products);
+		return ($products);
 	}
 
 	/**
@@ -579,7 +579,7 @@ class Product {
 		}
 
 		// create query template
-		$query	 = "SELECT productId, vendorId, description, leadTime, sku, title FROM product WHERE title LIKE :title";
+		$query = "SELECT productId, vendorId, description, leadTime, sku, title FROM product WHERE title LIKE :title";
 		$statement = $pdo->prepare($query);
 
 		// bind the title to the place holder in the template
@@ -599,45 +599,46 @@ class Product {
 				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
-		return($products);
+		return ($products);
 	}
 
 	/**
 	 * gets the Product by pagination
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
-	 *  @param int $page the page of results the viewer is on
+	 * @param int $page the page of results the viewer is on
 	 * @return SplFixedArray all products found for this pagination
 	 * @throws PDOException when mySQL related errors occur
 	 **/
 
-	public static function getAllMovements(PDO &$pdo, $page) {
+	public static function getAllProducts(PDO &$pdo, $page) {
 		// number of results per page
 		$page = filter_var($page, FILTER_VALIDATE_INT);
 		$pageSize = 25;
 		$start = $page * $pageSize;
 
 		// create query template
-		$query = "SELECT movementId, fromLocationId, toLocationId, productId, unitId, userId, cost, movementDate,
-					 movementType, price FROM movement ORDER BY movementDate LIMIT :start, :pageSize";
+		$query = "SELECT productId, vendorId, description, leadTime, sku, title FROM product ORDER BY productId
+			LIMIT :start, :pageSize";
 		$statement = $pdo->prepare($query);
 		$statement->bindParam(":start", $start, PDO::PARAM_INT);
 		$statement->bindParam(":pageSize", $pageSize, PDO::PARAM_INT);
 		$statement->execute();
 
-		// build an array of movements
-		$movements = new SplFixedArray($statement->rowCount());
+		// build an array of products
+		$products = new SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$movement = new Movement($row["movementId"], $row["fromLocationId"], $row["toLocationId"], $row["productId"], $row["unitId"], $row["userId"], $row["cost"], $row["movementDate"], $row["movementType"], $row["price"]);
-				$movements[$movements->key()] = $movement;
-				$movements->next();
+				$product = new Product($row["productId"], $row["vendorId"], $row["description"], $row["leadTime"], $row["sku"],
+					$row["title"]);
+				$products[$products->key()] = $product;
+				$products->next();
 			} catch(Exception $exception) {
 				// if the row couldn't be converted, rethrow it
 				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
-		return($movements);
+		return ($products);
 	}
-
+}
