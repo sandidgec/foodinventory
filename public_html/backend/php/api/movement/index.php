@@ -75,9 +75,12 @@ try {
 		$requestContent = file_get_contents("php://input");
 		$requestObject = json_decode($requestContent);
 
+		$movementDate = new DateTime();
+		$movementDate->setTimestamp($requestObject->movementDate / 1000);
+
 		$movement = new Movement(null, $requestObject->fromLocationId, $requestObject->toLocationId,
 			 $requestObject->productId, $requestObject->unitId, $requestObject->userId, $requestObject->cost,
-			$requestObject->movementDate, $requestObject->movementType, $requestObject->price);
+			$movementDate, $requestObject->movementType, $requestObject->price);
 		$movement->insert($pdo);
 		$reply->data = "Movement created OK";
 	}
