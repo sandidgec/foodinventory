@@ -28,7 +28,7 @@ try {
 		throw(new InvalidArgumentException("emailStatus cannot be empty or negative", 405));
 	}
 	//sanitize the date
-	$date = filter_input(INPUT_GET, "date", FILTER_VALIDATE_INT);
+	$notificationDate = filter_input(INPUT_GET, "date", FILTER_VALIDATE_INT);
 	if(($method === "DELETE" || $method === "PUT") && (empty($date) === true || $date < 0)) {
 		throw(new InvalidArgumentException("date cannot be empty or negative", 405));
 	}
@@ -51,7 +51,7 @@ try {
 		} else if(empty($emailStatus) === false) {
 			$reply->data = Notification::getNotificationByEmailStatus($pdo, $emailStatus);
 		} else if(empty($date) === false) {
-			$reply->data = Notification::getNotificationByNotificationDateTime($pdo, $date);
+			$reply->data = Notification::getNotificationByNotificationDateTime($pdo, $notificationDate);
 		} else if(empty($alertId) === false) {
 			$reply->data = Notification::getNotificationByAlertId($pdo, $alertId);
 		} else {
@@ -64,7 +64,7 @@ try {
 		$requestContent = file_get_contents("php://input");
 		$requestObject = json_decode($requestContent);
 
-		$notification = new Notification(null, $requestObject->alertId, $requestObject->emailStatus, $requestObject->notificationDateTime,
+		$notification = new Notification(null, $requestObject->alertId, $requestObject->emailStatus, $requestObject->notificationDate,
 			$requestObject->notificationHandle, $requestObject->notificationContent);
 		$notification->insert($pdo);
 		$reply->data = "Notification created OK";
