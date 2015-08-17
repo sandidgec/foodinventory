@@ -69,6 +69,8 @@ try {
 		$user->insert($pdo);
 		$reply->data = "User created OK";
 	}
+
+
 	// create an exception to pass back to the RESTful caller
 } 	catch(Exception $exception) {
 		$reply->status = $exception->getCode();
