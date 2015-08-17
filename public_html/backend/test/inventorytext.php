@@ -32,6 +32,46 @@ abstract class InventoryTextTest extends PHPUnit_Extensions_Database_TestCase {
 	protected $connection = null;
 
 	/**
+	 * XSRF token for REST API tests
+	 * @var string $xsrfToken
+	 **/
+	protected $xsrfToken = null;
+
+	/**
+	 * programmatic web platform
+	 * @var Guzzle $guzzle
+	 **/
+	protected $guzzle = null;
+
+	/**
+	 * accessor method for the XSRF token; this is greedily initialized when possible
+	 *
+	 * @return null|string current value of the XSRF token
+	 **/
+	public final function getXsrfToken() {
+		if($this->xsrfToken === null && $this->guzzle !== null) {
+			$this->setXsrfToken();
+		}
+		return($this->xsrfToken);
+	}
+
+	/**
+	 * mutator method for the XSRF token
+	 * it is initialized by rummaging through Guzzle's Cookie Jar
+	 **/
+	public final function setXsrfToken() {
+		if($this->guzzle !== null) {
+			$cookieJar = $this->guzzle->getConfig("cookies");
+			foreach($cookieJar as $cookie) {
+				if($cookie->getName() === "XSRF-TOKEN") {
+					$this->xsrfToken = $cookie->getValue();
+					break;
+				}
+			}
+		}
+	}
+
+	/**
 	 * assembles the table from the schema and provides it to PHPUnit
 	 *
 	 * @return PHPUnit_Extensions_Database_DataSet_QueryDataSet assembled schema for PHPUnit
