@@ -606,42 +606,38 @@ class Product {
 	 * gets the Product by pagination
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
-	 * @param int $newPagination the pagination to search for
+	 *  @param int $page the page of results the viewer is on
 	 * @return SplFixedArray all products found for this pagination
 	 * @throws PDOException when mySQL related errors occur
 	 **/
-	public static function getProductByPagination(PDO &$pdo, $newPagination) {
-		// sanitize the pagination before searching
-		$newPagination = filter_var($newPagination, FILTER_VALIDATE_INT);
-		if($newPagination === false) {
-			throw(new PDOException("pagination is not an integer"));
-		}
-		if($newPagination <= 0) {
-			throw(new PDOException("pagination is not positive"));
-		}
+
+	public static function getAllMovements(PDO &$pdo, $page) {
+		// number of results per page
+		$page = filter_var($page, FILTER_VALIDATE_INT);
+		$pageSize = 25;
+		$start = $page * $pageSize;
 
 		// create query template
-		$query	 = "SELECT productId, vendorId, description, leadTime, sku, title FROM product WHERE pagination = :pagination";
+		$query = "SELECT movementId, fromLocationId, toLocationId, productId, unitId, userId, cost, movementDate,
+					 movementType, price FROM movement ORDER BY movementDate LIMIT :start, :pageSize";
 		$statement = $pdo->prepare($query);
+		$statement->bindParam(":start", $start, PDO::PARAM_INT);
+		$statement->bindParam(":pageSize", $pageSize, PDO::PARAM_INT);
+		$statement->execute();
 
-		// bind the pagination to the place holder in the template
-		$parameters = array("pagination" => $newPagination);
-		$statement->execute($parameters);
-
-		// build an array of Product(s)
-		$products = new SplFixedArray($statement->rowCount());
+		// build an array of movements
+		$movements = new SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$product = new Product($row["productId"], $row["vendorId"], $row["description"], $row["leadTime"], $row["sku"], $row["title"]);
-				$products[$products->key()] = $product;
-				$products->next();
+				$movement = new Movement($row["movementId"], $row["fromLocationId"], $row["toLocationId"], $row["productId"], $row["unitId"], $row["userId"], $row["cost"], $row["movementDate"], $row["movementType"], $row["price"]);
+				$movements[$movements->key()] = $movement;
+				$movements->next();
 			} catch(Exception $exception) {
 				// if the row couldn't be converted, rethrow it
 				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
-		return($products);
-	}
+		return($movements);
 	}
 
