@@ -80,6 +80,12 @@ class ProductTest extends InventoryTextTest {
 	protected $VALID_title = "test";
 
 	/**
+	 * programatic web platform
+	 * @var Guzzle $guzzle
+	 **/
+	protected $guzzle = null;
+
+	/**
 	 * invalid title to use
 	 * @var string $INVALID_title
 	 **/
@@ -103,7 +109,7 @@ class ProductTest extends InventoryTextTest {
 
 
 		$this->guzzle = new \GuzzleHttp\Client(['cookies' => true]);
-		$this->VALID_movementDate = DateTime::createFromFormat("Y-m-d H:i:s", "2015-09-26 08:45:25");
+		$this->VALID_sku = Sku::createFromFormat("4294967296");
 
 		$userId = null;
 		$firstName = "Jim";
@@ -146,26 +152,27 @@ class ProductTest extends InventoryTextTest {
 		$description = "Back Stock";
 		$storageCode = 13;
 
-		$this->fromLocation = new Location($locationId, $storageCode, $description);
-		$this->fromLocation->insert($this->getPDO());
+		$this->description = new Description($productId, $vendorId, $leadTime, $sku, $title);
+		$this->description->insert($this->getPDO());
 
-		$locationId = null;
-		$description = "Front Stock";
-		$storageCode = 12;
+		$productId = null;
+		$vendorId = null;
+		$leadTime = null;
+		$sku = null;
+		$title = null;
 
-		$this->toLocation = new Location($locationId, $storageCode, $description);
-		$this->toLocation->insert($this->getPDO());
+		$this->title = new Location($productId, $vendorId, $description, $leadTime, $sku);
+		$this->title->insert($this->getPDO());
 
-		$unitId = null;
-		$unitCode = "pk";
-		$quantity = 10.50;
+		$productId = null;
+		$vendorId = null;
+		$description = null;
+		$leadTime = null;
+		$sku = null;
 
-		$this->unitOfMeasure = new UnitOfMeasure($unitId, $unitCode, $quantity);
-		$this->unitOfMeasure->insert($this->getPDO());
+		$this->vendorId = new VendorId($productId, $description, $leadTime, $sku, $title);
+		$this->vendorId->insert($this->getPDO());
 	}
-	/**
-	 * STOP EDITS HERE
-	 **/
 
 	/**
 	 * test grabbing a Product by vendorId
