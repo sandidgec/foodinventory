@@ -200,7 +200,6 @@ class MovementAPITest extends InventoryTextTest {
 		$movement = json_decode($body);
 		$this->assertSame(200, $movement->status);
 	}
-
 	/**
 	 * test grabbing a Movement by valid fromLocationId
 	 **/

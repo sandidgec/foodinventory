@@ -2,7 +2,7 @@
 /**
  * product unit test for foodinventory
  *
- * This product unit test is a single class within the overall foodinventory application
+ * This product-api-test tests a single api within the overall foodinventory application
  *
  * @author Marie Vigil <marie@jtdesignsolutions>
  *
@@ -21,12 +21,13 @@ require_once(dirname(dirname(dirname(__DIR__))) . "/vendor/autoload.php");
 require_once(dirname(__DIR__) . "/php/classes/autoload.php");
 
 /**
- * Full PHPUnit test for the Product class
+ * Full PHPUnit test for the Product API
  *
- * This is a complete PHPUnit test of the Product class. It is complete because *ALL* mySQL/PDO enabled methods
+ * This is a complete PHPUnit test of the Product API.
+ * It is complete because *ALL* mySQL/PDO enabled methods
  * are tested for both invalid and valid inputs.
  *
- * @see Product
+ * @see Product/Index.php
  * @author Marie Vigil <marie@jtdesignsolutions.com>
  **/
 class ProductTest extends InventoryTextTest {
@@ -92,7 +93,7 @@ class ProductTest extends InventoryTextTest {
 	protected $vendor = null;
 
 
-	/**
+	/** THIS CHANGES BELOW!!!
 	 * create dependent objects before running each test
 	 **/
 	public final function setUp() {
@@ -103,124 +104,7 @@ class ProductTest extends InventoryTextTest {
 		$this->vendor = new Vendor(null, "Joe Cool", "joecool@gmail.com", "Joe Cool", 5055555555);
 		$this->vendor->insert($this->getPDO());
 	}
-
-
-
-	/**
-	 * test inserting a valid Product and verify that the actual mySQL data matches
-	 **/
-	public function testInsertValidProduct() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("product");
-
-		// create a new Product and insert to into mySQL
-		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
-		$product->insert($this->getPDO());
-
-		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProducts = Product::getProductByProductId($this->getPDO(), $product->getProductId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
-		$this->assertSame($pdoProducts->getVendorId(), $this->vendor->getVendorId());
-		$this->assertSame($pdoProducts->getDescription(), $this->VALID_description);
-		$this->assertSame($pdoProducts->getLeadTime(), $this->VALID_leadTime);
-		$this->assertSame($pdoProducts->getSku(), $this->VALID_sku);
-		$this->assertSame($pdoProducts->getTitle(), $this->VALID_title);
-	}
-
-	/**
-	 * test inserting a Product that already exists
-	 *
-	 * @expectedException PDOException
-	 **/
-	public function testInsertInvalidProduct() {
-		// create a product with a non null Product and watch it fail
-		$product = new Product(InventoryTextTest::INVALID_KEY, $this->vendor->getVendorId(), $this->VALID_description,
-			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
-		$product->insert($this->getPDO());
-	}
-	/**
-	 * test inserting a Product, editing it, and then updating it
-	 **/
-	public function testUpdateValidProduct() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("product");
-
-		// create a new Profile and insert to into mySQL
-		$product = new Product (null,  $this->vendor->getVendorId(), $this->VALID_description,
-			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
-		$product->insert($this->getPDO());
-
-		// edit the Product and update it in mySQL
-		$product->setLeadTime($this->VALID_leadTime2);
-		$product->update($this->getPDO());
-
-		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProducts = Product::getProductByProductId($this->getPDO(), $product->getProductId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
-		foreach($pdoProducts as $pdoProduct) {
-			$this->assertSame($pdoProduct->getVendorId(), $this->vendor->getVendorId());
-			$this->assertSame($pdoProduct->getDescription(), $this->VALID_description);
-			$this->assertSame($pdoProduct->getLeadTime(), $this->VALID_leadTime2);
-			$this->assertSame($pdoProduct->getSku(), $this->VALID_sku);
-			$this->assertSame($pdoProduct->getTitle(), $this->VALID_title);
-		}
-	}
-
-	/**
-	 * test updating a Product that does not exist
-	 *
-	 * @expectedException PDOException
-	 **/
-	public function testUpdateInvalidProduct() {
-		// create a Product and try to update it without actually inserting it
-		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
-			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
-		$product->update($this->getPDO());
-	}
-
-	/**
-	 * test creating a Product and then deleting it
-	 **/
-	public function testDeleteValidProduct() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("product");
-
-		// create a new Product and insert to into mySQL
-		$product = new Product (null,  $this->vendor->getVendorId(), $this->VALID_description,
-			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
-		$product->insert($this->getPDO());
-
-		// delete the Product from mySQL
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
-		$product->delete($this->getPDO());
-
-		// grab the data from mySQL and enforce the Profile does not exist
-		$pdoProduct = Product::getProductByProductId($this->getPDO(), $product->getProductId());
-		$this->assertNull($pdoProduct);
-		$this->assertSame($numRows, $this->getConnection()->getRowCount("product"));
-	}
-
-	/**
-	 * test deleting a Product that does not exist
-	 *
-	 * @expectedException PDOException
-	 **/
-	public function testDeleteInvalidProdcut() {
-		// create a Product and try to delete it without actually inserting it
-		$product = new Product (null,  $this->vendor->getVendorId(), $this->VALID_description,
-			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
-		$product->delete($this->getPDO());
-	}
-
-
-	/**
-	 * test grabbing a Product that does not exist
-	 **/
-	public function testGetInvalidProductByProductId() {
-		// grab a Product id that exceeds the maximum allowable Product id
-		$product = Product::getProductByProductId($this->getPDO(), InventoryTextTest::INVALID_KEY);
-		$this->assertNull($product);
-	}
+	/** THIS CHANGES ABOVE!!! **/
 
 
 	/**
@@ -349,7 +233,10 @@ class ProductTest extends InventoryTextTest {
 
 }
 
-
+/**
+ * test deleting a Product
+ * ADD THIS SECTION BELOW!!!
+ **/
 
 
 
