@@ -175,17 +175,13 @@ class MovementAPITest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing a Movement by movementId
+	 * test grabbing a Movement by valid movementId
 	 **/
 	public function testGetValidMovementByMovementId() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("movement");
-
-		// create a new Movement and insert to into mySQL
+		// create a new Movement
 		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
-		$movement->insert($this->getPDO());
 
-		// grab the data from mySQL and enforce the fields match our expectations
+		// grab the data from guzzle and enforce the status' match our expectations
 		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?movementId=' . $movement->getMovementId());
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
@@ -194,18 +190,29 @@ class MovementAPITest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing a Movement by fromLocationId
+	 * test grabbing a Movement by invalid movementId
+	 **/
+	public function testGetInvalidMovementByMovementId() {
+		// create a new Movement
+		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
+
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?movementId=' . InventoryTextTest::INVALID_KEY);
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$object = json_decode($body);
+		$this->assertSame(200, $object->status);
+	}
+
+	/**
+	 * test grabbing a Movement by valid fromLocationId
 	 **/
 	public function testGetValidMovementByFromLocationId() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("movement");
-
-		// create a new Movement and insert to into mySQL
+		// create a new Movement
 		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
-		$movement->insert($this->getPDO());
 
-		// grab the data from mySQL and enforce the fields match our expectations
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?fromLocationId=' . $this->fromLocation->getLocationId());
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?fromLocationId=' . $movement->getFromLocationId());
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$object = json_decode($body);
@@ -213,18 +220,14 @@ class MovementAPITest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing a Movement by toLocationId
+	 * test grabbing a Movement by invalid fromLocationId
 	 **/
-	public function testGetValidMovementByToLocationId() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("movement");
-
-		// create a new Movement and insert to into mySQL
+	public function testGetInvalidMovementByFromLocationId() {
+		// create a new Movement
 		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
-		$movement->insert($this->getPDO());
 
-		// grab the data from mySQL and enforce the fields match our expectations
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?toLocationId=' . $this->toLocation->getLocationId());
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?fromLocationId=' . InventoryTextTest::INVALID_KEY);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$object = json_decode($body);
@@ -232,94 +235,20 @@ class MovementAPITest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing a Movement by productId
-	 **/
-	public function testGetValidMovementByProductId() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("movement");
-
-		// create a new Movement and insert to into mySQL
-		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
-		$movement->insert($this->getPDO());
-
-		// grab the data from mySQL and enforce the fields match our expectations
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?productId=' . $this->product->getProductId());
-		$this->assertSame($response->getStatusCode(), 200);
-		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
-	}
-
-	/**
-	 * test grabbing a Movement by userId
-	 **/
-	public function testGetValidMovementByUserId() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("movement");
-
-		// create a new Movement and insert to into mySQL
-		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
-		$movement->insert($this->getPDO());
-
-		// grab the data from mySQL and enforce the fields match our expectations
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?userId=' . $this->user->getUserId());
-		$this->assertSame($response->getStatusCode(), 200);
-		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
-	}
-
-	/**
-	 * test grabbing a Movement by movementDate
-	 **/
-	public function testGetValidMovementByMovementDate() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("movement");
-
-		// create a new Movement and insert to into mySQL
-		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
-		$movement->insert($this->getPDO());
-
-		// grab the data from mySQL and enforce the fields match our expectations
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?movementDate=' . $movement->getMovementDate());
-		$this->assertSame($response->getStatusCode(), 200);
-		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
-	}
-
-	/**
-	 * test grabbing a Movement by movementType
-	 **/
-	public function testGetValidMovementByMovementType() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("movement");
-
-		// create a new Movement and insert to into mySQL
-		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
-		$movement->insert($this->getPDO());
-
-		// grab the data from guzzle and enforce the Json decoded string has a status code of 200
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?movementType=' . $movement->getMovementType());
-		$this->assertSame($response->getStatusCode(), 200);
-		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
-	}
-
-	/**
-	 * test posting a Movement
+	 * test deleting a Movement
 	 **/
 	public function testDeleteValidMovement() {
-		// grab the data from guzzle and enforce the Json decoded string has a status code of 200
-		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?movementId=' . $movement->getMovementId());
+		// create a new Movement
+		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
+
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?movementId=' . $movement->getMovementId());
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$movement = json_decode($body);
-		$this->assertSame(200, $movement->status);
+		$object = json_decode($body);
+		$this->assertSame(200, $object->status);
 
 		// delete Movement from mySQL
 		$movement->delete($this->getPDO());
 	}
-
 }
