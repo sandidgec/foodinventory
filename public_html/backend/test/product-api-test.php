@@ -93,19 +93,79 @@ class ProductTest extends InventoryTextTest {
 	protected $vendor = null;
 
 
-	/** THIS CHANGES BELOW!!!
-	 * create dependent objects before running each test
-	 **/
+/**
+ * create dependent objects before running each test
+ **/
+
 	public final function setUp() {
 		// run the default setUp() method first
 		parent::setUp();
 
-		// create and insert a Vendor id
-		$this->vendor = new Vendor(null, "Joe Cool", "joecool@gmail.com", "Joe Cool", 5055555555);
-		$this->vendor->insert($this->getPDO());
-	}
-	/** THIS CHANGES ABOVE!!! **/
 
+		$this->guzzle = new \GuzzleHttp\Client(['cookies' => true]);
+		$this->VALID_movementDate = DateTime::createFromFormat("Y-m-d H:i:s", "2015-09-26 08:45:25");
+
+		$userId = null;
+		$firstName = "Jim";
+		$lastName = "Jim";
+		$root = 1;
+		$attention = "Urgent: ";
+		$addressLineOne = "123 House St.";
+		$addressLineTwo = "P.O Box. 9965";
+		$city = "Tattoine";
+		$state = "AK";
+		$zipCode = "52467";
+		$email = "jim@naboomail.nb";
+		$phoneNumber = "5052253231";
+		$salt = bin2hex(openssl_random_pseudo_bytes(32));
+		$hash = hash_pbkdf2("sha512","password1234", $salt,262144, 128);
+
+		$this->user = new User($userId, $lastName, $firstName, $root, $attention, $addressLineOne, $addressLineTwo, $city, $state, $zipCode, $email, $phoneNumber, $salt, $hash);
+		$this->user->insert($this->getPDO());
+
+		$vendorId = null;
+		$contactName = "Trevor Rigler";
+		$vendorEmail = "trier@cnm.edu";
+		$vendorName = "TruFork";
+		$vendorPhoneNumber = "5053594687";
+
+		$vendor = new Vendor($vendorId, $contactName, $vendorEmail, $vendorName, $vendorPhoneNumber);
+		$vendor->insert($this->getPDO());
+
+		$productId = null;
+		$vendorId = $vendor->getVendorId();
+		$description = "A glorius bead to use";
+		$leadTime = 10;
+		$sku = "TGT354";
+		$title = "Bead-Green-Blue-Circular";
+
+		$this->product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
+		$this->product->insert($this->getPDO());
+
+		$locationId = null;
+		$description = "Back Stock";
+		$storageCode = 13;
+
+		$this->fromLocation = new Location($locationId, $storageCode, $description);
+		$this->fromLocation->insert($this->getPDO());
+
+		$locationId = null;
+		$description = "Front Stock";
+		$storageCode = 12;
+
+		$this->toLocation = new Location($locationId, $storageCode, $description);
+		$this->toLocation->insert($this->getPDO());
+
+		$unitId = null;
+		$unitCode = "pk";
+		$quantity = 10.50;
+
+		$this->unitOfMeasure = new UnitOfMeasure($unitId, $unitCode, $quantity);
+		$this->unitOfMeasure->insert($this->getPDO());
+	}
+	/**
+	 * STOP EDITS HERE
+	 **/
 
 	/**
 	 * test grabbing a Product by vendorId
@@ -231,13 +291,24 @@ class ProductTest extends InventoryTextTest {
 		}
 	}
 
+	/**
+	 * test deleting a Product
+	 **/
+	public function testDeleteValidProduct() {
+		// create a new Product
+		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
+
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId());
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$product = json_decode($body);
+		$this->assertSame(200, $product->status);
+
+		// delete Product from mySQL
+		$product->delete($this->getPDO());
+	}
 }
-
-/**
- * test deleting a Product
- * ADD THIS SECTION BELOW!!!
- **/
-
 
 
 
