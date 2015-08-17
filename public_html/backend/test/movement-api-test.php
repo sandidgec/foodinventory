@@ -310,17 +310,16 @@ class MovementAPITest extends InventoryTextTest {
 	/**
 	 * test posting a Movement
 	 **/
-	public function testPostValidMovement() {
+	public function testDeleteValidMovement() {
 		// grab the data from guzzle and enforce the Json decoded string has a status code of 200
-		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/post');
+		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?movementId=' . $movement->getMovementId());
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
+		$movement = json_decode($body);
+		$this->assertSame(200, $movement->status);
 
-		// create a Movement from the Json string and insert to into mySQL
-		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
-		$movement->insert($this->getPDO());
+		// delete Movement from mySQL
+		$movement->delete($this->getPDO());
 	}
 
 }
