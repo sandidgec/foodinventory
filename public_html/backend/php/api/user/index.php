@@ -47,9 +47,9 @@ try {
 		$requestContent = file_get_contents("php://input");
 		$requestObject = json_decode($requestContent);
 
-		$user = new User(null, $requestObject->VALID_lastName, $requestObject->VALID_firstName, $requestObject->VALID_root, $requestObject->VALID_attention,
-			$requestObject->VALID_addressLineOne, $requestObject->VALID_addressLineTwo, $requestObject->VALID_city, $requestObject->VALID_state,
-			$requestObject->VALID_zipCode, $requestObject->VALID_email, $requestObject->VALID_phoneNumber, $requestObject->VALID_salt, $requestObject->VALID_hash);
+		$user = new User($userId, $requestObject->lastName, $requestObject->firstName, $requestObject->root, $requestObject->attention,
+			$requestObject->addressLineOne, $requestObject->addressLineTwo, $requestObject->city, $requestObject->state,
+			$requestObject->zipCode, $requestObject->email, $requestObject->phoneNumber, $requestObject->salt, $requestObject->hash);
 		$user->insert($pdo);
 		$reply->data = "User created OK";
 
@@ -67,9 +67,9 @@ try {
 		$requestContent = file_get_contents("php://input");
 		$requestObject = json_decode($requestContent);
 
-		$user = new User($userId, $requestObject->VALID_lastName, $requestObject->VALID_firstName, $requestObject->VALID_root, $requestObject->VALID_attention,
-			$requestObject->VALID_addressLineOne, $requestObject->VALID_addressLineTwo, $requestObject->VALID_city, $requestObject->VALID_state,
-			$requestObject->VALID_zipCode, $requestObject->VALID_email, $requestObject->VALID_phoneNumber, $requestObject->VALID_salt, $requestObject->VALID_hash);
+		$user = new User($userId, $requestObject->lastName, $requestObject->firstName, $requestObject->root, $requestObject->attention,
+			$requestObject->addressLineOne, $requestObject->addressLineTwo, $requestObject->city, $requestObject->state,
+			$requestObject->zipCode, $requestObject->email, $requestObject->phoneNumber, $requestObject->salt, $requestObject->hash);
 		$user->update($pdo);
 		$reply->data = "User updated OK";
 	}

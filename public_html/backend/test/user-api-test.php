@@ -131,12 +131,11 @@ class UserAPITest extends InventoryTextTest {
 
 		// grab the data from guzzle and enforce the status' match our expectations
 		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/');
-		$response = $this->guzzle->delete('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/', ['headers' =>
-			['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newUser->getUserId()]);
+		$response = $this->guzzle->delete('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/' . $newUser->getUserId(), ['headers' =>
+			['X-XSRF-TOKEN' => $this->getXsrfToken()]]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$user = json_decode($body);
-		echo $body . PHP_EOL;
 		$this->assertSame(200, $user->status);
 	}
 
@@ -156,7 +155,6 @@ class UserAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$user = json_decode($body);
-		echo $body . PHP_EOL;
 		$this->assertSame(200, $user->status);
 	}
 
@@ -227,7 +225,7 @@ class UserAPITest extends InventoryTextTest {
 			$this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt, $this->VALID_hash);
 
 		// run a get request to establish session tokens
-		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/?city=San Diego');
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/?city=San+Diego');
 
 		// grab the data from guzzle and enforce the status' match our expectations
 		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/',['headers' =>
@@ -252,11 +250,12 @@ class UserAPITest extends InventoryTextTest {
 		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/');
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/',['headers' =>
-			['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newUser]);
+		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/' . $newUser->getUserId(),['headers' =>
+			['X-XSRF-TOKEN' => $this->getXsrfToken()]]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$user = json_decode($body);
+		echo $body . PHP_EOL;
 		$this->assertSame(200, $user->status);
 	}
 }
