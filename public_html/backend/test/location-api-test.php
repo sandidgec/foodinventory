@@ -80,6 +80,7 @@ class LocationAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$location = json_decode($body);
+		echo $body . PHP_EOL;
 		$this->assertSame(200, $location->status);
 	}
 
@@ -97,6 +98,7 @@ class LocationAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$location = json_decode($body);
+		echo $body . PHP_EOL;
 		$this->assertSame(200, $location->status);
 	}
 
@@ -115,6 +117,7 @@ class LocationAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$location = json_decode($body);
+		echo $body . PHP_EOL;
 		$this->assertSame(200, $location->status);
 	}
 
@@ -134,7 +137,6 @@ class LocationAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$location = json_decode($body);
-		echo $body . PHP_EOL;
 		$this->assertSame(200, $location->status);
 	}
 
@@ -154,7 +156,6 @@ class LocationAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$location = json_decode($body);
-		echo $body . PHP_EOL;
 		$this->assertSame(200, $location->status);
 	}
 }

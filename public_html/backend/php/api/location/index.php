@@ -33,11 +33,11 @@ try {
 		// set an XSRF cookie on GET requests
 		setXsrfCookie("/");
 		if(empty($locationId) === false) {
-			$reply->data = User::getLocationByLocationId($pdo, $locationId);
+			$reply->data = Location::getLocationByLocationId($pdo, $locationId);
 		} else if(empty($email) === false) {
-			$reply->data = User::getLocationByStorageCode($pdo, $storageCode);
+			$reply->data = Location::getLocationByStorageCode($pdo, $storageCode);
 		} else{
-			$reply->data = User::getALLLocations($pdo);
+			$reply->data = Location::getALLLocations($pdo);
 		}
 
 		// post to a new Location
