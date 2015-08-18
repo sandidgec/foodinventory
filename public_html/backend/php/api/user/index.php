@@ -29,7 +29,7 @@ try {
 
 
 	// grab the mySQL connection
-	$pdo = connectToEncryptedMySql("/etc/apache2/capstone/invtext.ini");
+	$pdo = connectToEncryptedMySql("/etc/apache2/capstone-mysql/invtext.ini");
 
 	// handle the RESTful calls to user
 	// get some or all users
