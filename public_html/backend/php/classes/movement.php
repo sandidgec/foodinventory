@@ -768,15 +768,15 @@ class Movement implements JsonSerializable{
 			throw(new RangeException($range->getMessage(), 0, $range));
 		}
 
-		$newMovementDate->format("m-d-Y");
+		$sunrise = $newMovementDate->format("Y-m-d") . " 00:00:00";
+		$sunset = $newMovementDate->format("Y-m-d") . " 23:59:59";
 
 		// create query template
-		$query	 = "SELECT movementId, fromLocationId, toLocationId, productId, unitId, userId, cost, movementDate, movementType, price FROM movement WHERE movementDate LIKE :movementDate" ;
+		$query	 = "SELECT movementId, fromLocationId, toLocationId, productId, unitId, userId, cost, movementDate, movementType, price FROM movement WHERE movementDate >= :sunrise AND movementDate <= :sunset" ;
 		$statement = $pdo->prepare($query);
 
 		// bind the movementDate to the place holder in the template
-		$newMovementDate = "%$newMovementDate%";
-		$parameters = array("movementDate" => $newMovementDate);
+		$parameters = array("sunrise" => $sunrise, "sunset" => $sunset);
 		$statement->execute($parameters);
 
 		// build an array of movements
