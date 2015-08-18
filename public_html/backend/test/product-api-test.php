@@ -18,7 +18,7 @@ require_once(dirname(__DIR__) . "/php/classes/autoload.php");
  * @see Product/Index.php
  * @author Marie Vigil <marie@jtdesignsolutions.com>
  **/
-class ProductTest extends InventoryTextTest {
+class ProductAPITest extends InventoryTextTest {
 
 	/**
 	 * creating a null Vendor
@@ -93,68 +93,6 @@ class ProductTest extends InventoryTextTest {
 
 
 		$this->guzzle = new \GuzzleHttp\Client(['cookies' => true]);
-
-		$userId = null;
-		$firstName = "Jim";
-		$lastName = "Jim";
-		$root = 1;
-		$attention = "Urgent: ";
-		$addressLineOne = "123 House St.";
-		$addressLineTwo = "P.O Box. 9965";
-		$city = "Tattoine";
-		$state = "AK";
-		$zipCode = "52467";
-		$email = "jim@naboomail.nb";
-		$phoneNumber = "5052253231";
-		$salt = bin2hex(openssl_random_pseudo_bytes(32));
-		$hash = hash_pbkdf2("sha512","password1234", $salt,262144, 128);
-
-		$this->user = new User($userId, $lastName, $firstName, $root, $attention, $addressLineOne, $addressLineTwo, $city, $state, $zipCode, $email, $phoneNumber, $salt, $hash);
-		$this->user->insert($this->getPDO());
-
-		$vendorId = null;
-		$contactName = "Trevor Rigler";
-		$vendorEmail = "trier@cnm.edu";
-		$vendorName = "TruFork";
-		$vendorPhoneNumber = "5053594687";
-
-		$vendor = new Vendor($vendorId, $contactName, $vendorEmail, $vendorName, $vendorPhoneNumber);
-		$vendor->insert($this->getPDO());
-
-		$productId = null;
-		$vendorId = $vendor->getVendorId();
-		$description = "A glorius bead to use";
-		$leadTime = 10;
-		$sku = "TGT354";
-		$title = "Bead-Green-Blue-Circular";
-
-		$this->product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
-		$this->product->insert($this->getPDO());
-
-		$locationId = null;
-		$description = "Back Stock";
-		$storageCode = 13;
-
-		$this->sku = new Sku($productId, $vendorId, $leadTime, $description, $title);
-		$this->sku->insert($this->getPDO());
-
-		$productId = null;
-		$vendorId = null;
-		$leadTime = null;
-		$sku = null;
-		$title = null;
-
-		$this->title = new Location($productId, $vendorId, $description, $leadTime, $sku);
-		$this->title->insert($this->getPDO());
-
-		$productId = null;
-		$vendorId = null;
-		$description = null;
-		$leadTime = null;
-		$sku = null;
-
-		$this->vendorId = new VendorId($productId, $description, $leadTime, $sku, $title);
-		$this->vendorId->insert($this->getPDO());
 	}
 
 	/**
