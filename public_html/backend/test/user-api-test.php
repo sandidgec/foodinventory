@@ -101,6 +101,9 @@ class UserTest extends InventoryTextTest {
 	protected $guzzle = null;
 
 
+	/**
+	 * Set up for Salt and Hash as well as guzzle/cookies
+	 **/
 	public function setUp() {
 		parent::setUp();
 
@@ -208,6 +211,9 @@ class UserTest extends InventoryTextTest {
 		$this->assertSame(200, $object->status);
 	}
 
+	/**
+	 * test ability to Post valid user
+	 **/
 	public function testPostValidUser() {
 		// create a new User
 		$newUser = new User(null, $this->VALID_lastName, $this->VALID_firstName, $this->VALID_root, $this->VALID_attention,
@@ -220,6 +226,27 @@ class UserTest extends InventoryTextTest {
 		// grab the data from guzzle and enforce the status' match our expectations
 		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/',['headers' =>
 		['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newUser]);
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$user = json_decode($body);
+		$this->assertSame(200, $user->status);
+	}
+
+	/**
+	 * test ability to Put valid user
+	 **/
+	public function testPutValidUser() {
+		// create a new User
+		$newUser = new User(null, $this->VALID_lastName, $this->VALID_firstName, $this->VALID_root, $this->VALID_attention,
+			$this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city, $this->VALID_state,
+			$this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt, $this->VALID_hash);
+
+		// run a get request to establish session tokens
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?userId=1');
+
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/',['headers' =>
+			['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newUser]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$user = json_decode($body);

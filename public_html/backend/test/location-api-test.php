@@ -37,6 +37,9 @@ class LocationTest extends InventoryTextTest {
 	protected $VALID_description = "back shelf";
 
 
+	/**
+	 * set up for guzzle/cookies
+	 */
 	public function setUp() {
 		parent::setUp();
 
@@ -110,6 +113,9 @@ class LocationTest extends InventoryTextTest {
 		$this->assertSame(200, $object->status);
 	}
 
+	/**
+	 * test ability to Post valid location
+	 **/
 	public function testPostValidLocation() {
 		// create a new Location
 		$newLocation = new Location(null, $this->VALID_storageCode, $this->VALID_description);
@@ -126,6 +132,9 @@ class LocationTest extends InventoryTextTest {
 		$this->assertSame(200, $location->status);
 	}
 
+	/**
+	 * test ability to Put valid location
+	 **/
 	public function testPutValidLocation() {
 		// create a new Location
 		$newLocation = new Location(null, $this->VALID_storageCode, $this->VALID_description);
