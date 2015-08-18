@@ -75,6 +75,17 @@ try {
 		} else if(empty($pagination) === false) {
 		$reply->data = Product::getPaginationByPagination($pdo, $pagination);
 	}
+		// post to a new Product
+		else if($method === "POST") {
+			// convert POSTed JSON to an object
+			verifyXsrf();
+			$requestContent = file_get_contents("php://input");
+			$requestObject = json_decode($requestContent);
+
+			$product = new Products(null, $requestObject->productId, $requestObject->vendorId,$requestObject->description, $requestObject->sku, $requestObject->title, $requestObject->pagination);
+			$product->insert($pdo);
+			$reply->data = "Product created OK";
+		}
 		// put to an existing Product
 	} else if($method === "PUT") {
 		// convert PUTed JSON to an object
@@ -85,17 +96,6 @@ try {
 		$product = new Products($requestObject->productId, $requestObject->vendorId,$requestObject->description, $requestObject->sku, $requestObject->title, $requestObject->pagination);
 		$product->update($pdo);
 		$reply->data = "Product updated OK";
-	}
-	// post to a new Product
-	else if($method === "POST") {
-	// convert POSTed JSON to an object
-	verifyXsrf();
-	$requestContent = file_get_contents("php://input");
-	$requestObject = json_decode($requestContent);
-
-	$product = new Products(null, $requestObject->productId, $requestObject->vendorId,$requestObject->description, $requestObject->sku, $requestObject->title, $requestObject->pagination);
-	$product->insert($pdo);
-	$reply->data = "Product created OK";
 	}
 	// delete an existing Product
 	else if($method === "DELETE") {
