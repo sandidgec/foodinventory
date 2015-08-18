@@ -70,17 +70,23 @@ class AlertLevelAPITest extends InventoryTextTest {
 	 **/
 	protected $VALID_alertOperator = "a";
 
+
+
+
 	/**
-	 * test grabbing a AlertLevel by valid alertId
+	 * Test Deleting a Valid AlertLevel
 	 **/
-	public function testGetValidAlertLevelByAlertId() {
+	public function testDeleteValidAlertLevel() {
 		// create a new AlertLevel
-		$newAlertLevel = new AlertLevel(null, $this->VALID_alertCode, $this->VALID_alertFrequency, $this->VALID_alertPoint, $this->VALID_alertOperator);
+		$newAlertLevel = new AlertLevel (null, $this->VALID_alertCode, $this->VALID_alertFrequency, $this->VALID_alertPoint, $this->VALID_alertOperator);
 		$newAlertLevel->insert($this->getPDO());
 
+		// run a get request to establish session tokens
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/alert-level/');
+
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/alert-level/?alertId=' . $newAlertLevel->getAlertId());
-		var_dump($this->guzzle);
+		$response = $this->guzzle->delete('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/alert-level/' . $newAlertLevel->getAlertId(),
+			['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()]]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$alertLevel = json_decode($body);
@@ -88,11 +94,101 @@ class AlertLevelAPITest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing a AlertLevel by invalid alertId
+	 * Test Getting Valid AlertLevel By AlertId
+	 **/
+	public function testGetValidAlertLevelByAlertId() {
+		// create a new AlertLevel
+		$newAlertLevel = new AlertLevel (null, $this->VALID_alertCode, $this->VALID_alertFrequency, $this->VALID_alertPoint, $this->VALID_alertOperator);
+		$newAlertLevel->insert($this->getPDO());
+
+		// grab the data from guzzle
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/alert-level/?alertId=' . $newAlertLevel->getAlertId());
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$alertLevel = json_decode($body);
+		$this->assertSame(200, $alertLevel->status);
+	}
+
+	/**
+	 * Test Getting Invalid AlertLevel By AlertId
 	 **/
 	public function testGetInvalidAlertLevelByAlertId() {
+		// create a new AlertLevel
+		$newAlertLevel = new AlertLevel (null, $this->VALID_alertCode, $this->VALID_alertFrequency, $this->VALID_alertPoint, $this->VALID_alertOperator);
+		$newAlertLevel->insert($this->getPDO());
+
+		// grab the data from guzzle
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/alert-level/?alertId=' . $this->INVALID_alertId);
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$alertLevel = json_decode($body);
+		$this->assertSame(200, $alertLevel->status);
+	}
+
+	/**
+	 * Test Getting Valid AlertLevel By AlertCode
+	 **/
+	public function testGetValidAlertLevelByAlertCode() {
+		// create a new AlertLevel
+		$newAlertLevel = new AlertLevel (null, $this->VALID_alertCode, $this->VALID_alertFrequency, $this->VALID_alertPoint, $this->VALID_alertOperator);
+		$newAlertLevel->insert($this->getPDO());
+
+		// grab the data from guzzle
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/alert-level/?alertCode=' . $newAlertLevel->getAlertCode());
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$alertLevel = json_decode($body);
+		$this->assertSame(200, $alertLevel->status);
+	}
+
+	/**
+	 * Test Getting Invalid AlertLevel By AlertCode
+	 **/
+	public function testGetInvalidAlertLevelByAlertCode() {
+		// create a new AlertLevel
+		$newAlertLevel = new AlertLevel (null, $this->VALID_alertCode, $this->VALID_alertFrequency, $this->VALID_alertPoint, $this->VALID_alertOperator);
+		$newAlertLevel->insert($this->getPDO());
+
+		// grab the data from guzzle
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/alert-level/?alertCode=' . $this->INVALID_alertCode);
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$alertLevel = json_decode($body);
+		$this->assertSame(200, $alertLevel->status);
+	}
+
+	/**
+	 * Test Posting Valid AlertLevel
+	 **/
+	public function testPostValidUser() {
+		// create a new AlertLevel
+		$newAlertLevel = new AlertLevel (null, $this->VALID_alertCode, $this->VALID_alertFrequency, $this->VALID_alertPoint, $this->VALID_alertOperator);
+
+		// run a get request to establish session tokens
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/?alertId=12');
+
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/alert-level/?alertId=' . InventoryTextTest::INVALID_KEY);
+		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/',
+			['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newAlertLevel]);
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$alertLevel = json_decode($body);
+		$this->assertSame(200, $alertLevel->status);
+	}
+
+	/**
+	 * Test Putting Valid AlertLevel
+	 **/
+	public function testPutValidUser() {
+		// create a new AlertLevel
+		$newAlertLevel = new AlertLevel (null, $this->VALID_alertCode, $this->VALID_alertFrequency, $this->VALID_alertPoint, $this->VALID_alertOperator);
+
+		// run a get request to establish session tokens
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/');
+
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/' . $newAlertLevel->getAlertId(),
+			['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()]]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$alertLevel = json_decode($body);
