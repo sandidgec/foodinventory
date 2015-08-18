@@ -88,40 +88,19 @@ class ProductAPITest extends InventoryTextTest {
 
 
 
+	/**
+	 * Set up for Vendor as well as guzzle/cookies
+	 **/
 	public final function setUp() {
-
 		parent::setUp();
+
+		// create and insert a Vendor id
+		$this->vendor = new Vendor(null, "Joe Cool", "joecool@gmail.com", "Joe Cool", 5055555555);
+		$this->vendor->insert($this->getPDO());
+		// create and insert a GuzzleHttp
 		$this->guzzle = new \GuzzleHttp\Client(['cookies' => true]);
 	}
 
-	/**
-	 * test grabbing a Product by ProductId
-	 **/
-	public function testGetValidProductByProductId() {
-		// create a new Product
-		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
-			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
-		$product->insert($this->getPDO());
-
-		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $product->getProductId());
-		$this->assertSame($response->getStatusCode(), 200);
-		$body = $response->getBody();
-		$product = json_decode($body);
-		$this->assertSame(200, $product->status);
-	}
-
-	/**
-	 * test grabbing a Product by invalid ProductId
-	 **/
-	public function testGetInvalidProductByProductId() {
-		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . InventoryTextTest::INVALID_KEY);
-		$this->assertSame($response->getStatusCode(), 200);
-		$body = $response->getBody();
-		$product = json_decode($body);
-		$this->assertSame(200, $product->status);
-	}
 
 	/**
 	 * test grabbing a Product by vendorId
@@ -136,22 +115,11 @@ class ProductAPITest extends InventoryTextTest {
 		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $product->getProductId());
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
+		echo $body . PHP_EOL;
 		$product = json_decode($body);
 		$this->assertSame(200, $product->status);
 	}
 
-
-	/**
-	 * test grabbing a Product by invalid vendorId
-	 **/
-	public function testGetInvalidProductByVendorId() {
-		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . InventoryTextTest::INVALID_KEY);
-		$this->assertSame($response->getStatusCode(), 200);
-		$body = $response->getBody();
-		$product = json_decode($body);
-		$this->assertSame(200, $product->status);
-	}
 
 	/**
 	 * test grabbing a Product by description
@@ -273,7 +241,7 @@ class ProductAPITest extends InventoryTextTest {
 	}
 
 	/**
-	 * test posting a Product
+	 * test ability posting a Product
 	 **/
 	public function testPostValidProduct() {
 		// create a new Product
@@ -292,7 +260,7 @@ class ProductAPITest extends InventoryTextTest {
 	}
 
 	/**
-	 * test putting a Product
+	 * test ability putting a Product
 	 **/
 	public function testPutValidProduct() {
 		// create a new Product
@@ -312,21 +280,20 @@ class ProductAPITest extends InventoryTextTest {
 
 
 	/**
-	 * test deleting a Product
+	 * test deleting a valid Product
 	 **/
 	public function testDeleteValidProduct() {
 		// create a new Product
 		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId());
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/');
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId(), ['headers' =>
+		['X-XSRF-TOKEN' => $this->getXsrfToken()]]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$product = json_decode($body);
 		$this->assertSame(200, $product->status);
-
-		// delete Product from mySQL
-		$product->delete($this->getPDO());
 	}
 }
 

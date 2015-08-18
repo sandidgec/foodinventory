@@ -55,7 +55,7 @@ try {
 
 
 	// grab the mySQL connection
-	$pdo = connectToEncryptedMySql("/etc/apache2/capstone/invtext.ini");
+	$pdo = connectToEncryptedMySql("/etc/apache2/capstone-mysql/invtext.ini");
 
 	// handle all RESTful calls to Product
 	// get some or all Products
