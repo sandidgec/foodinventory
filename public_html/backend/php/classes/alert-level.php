@@ -367,7 +367,7 @@ class AlertLevel {
 	 * @return SplFixedArray all ProductAlerts found for this alertId
 	 * @throws PDOException when mySQL related errors occur
 	 **/
-	public static function getProductAlertByAlertId(PDO &$pdo, $newAlertId) {
+	public static function getProductByAlertId(PDO &$pdo, $newAlertId) {
 		// sanitize the alertId before searching
 		$newAlertId = filter_var($newAlertId, FILTER_VALIDATE_INT);
 		if(empty($newAlertId) === true) {
