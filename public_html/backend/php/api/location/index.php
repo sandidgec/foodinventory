@@ -55,7 +55,7 @@ try {
 		// delete an existing Location
 	} else if($method === "DELETE") {
 		verifyXsrf();
-		$location = Location::getLocationByLocationid($pdo, $locationId);
+		$location = Location::getLocationByLocationId($pdo, $locationId);
 		$location->delete($pdo);
 		$reply->data = "Location deleted OK";
 
@@ -63,7 +63,7 @@ try {
 	} else if($method === "PUT") {
 		// convert PUTed JSON to an object
 		verifyXsrf();
-		$requestContent = file_get_contents("php://inputs");
+		$requestContent = file_get_contents("php://input");
 		$requestObject = json_decode($requestContent);
 
 		$location = new Location($locationId, $requestObject->storageCode, $requestObject->description);
