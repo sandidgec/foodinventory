@@ -2,11 +2,11 @@
 // grab the project test parameters
 require_once("inventorytext.php");
 
-// grab the class under scrutiny
-require_once(dirname(__DIR__) . "/php/classes/user.php");
-
 // grab the autoloader for all Composer classes
 require_once(dirname(dirname(dirname(__DIR__))) . "/vendor/autoload.php");
+
+// grab the class(s) under scrutiny
+require_once(dirname(__DIR__) . "/php/classes/autoload.php");
 
 
 /**
@@ -15,14 +15,19 @@ require_once(dirname(dirname(dirname(__DIR__))) . "/vendor/autoload.php");
  * This is a test of the api for the user class
  * enabled methods are tested for both invalid and valid inputs.
  *
- * @see User
+ * @see User/index
  * @author Charles Sandidge <sandidgec@gmail.com>
  **/
-class UserTest extends InventoryTextTest {
+class UserAPITest extends InventoryTextTest {
 
 	/**
-	 * valid last name of userId
-	 * @var string
+	 * Valid userId
+	 * @var int
+	 */
+	protected $VALID_userId = "7";
+	/**
+	 * valid lastName of userId
+	 * @var string $lastName
 	 **/
 	protected $VALID_lastName = "sandidge";
 	/**
@@ -33,17 +38,17 @@ class UserTest extends InventoryTextTest {
 	/**
 	 * valid root user level
 	 * @var boolean $root
-	 **/
+	 */
 	protected $VALID_root = TRUE;
 	/**
 	 * valid attention line
 	 * @var string $attention ;
-	 **/
+	 */
 	protected $VALID_attention = "for mr. roboto";
 	/**
 	 * valid address line 1
 	 * @var string $addressLineOne
-	 **/
+	 */
 	protected $VALID_addressLineOne = "7383 San Diego Dr.";
 	/**
 	 * valid address line 2
@@ -53,17 +58,17 @@ class UserTest extends InventoryTextTest {
 	/**
 	 * valid City
 	 * @var string $city
-	 **/
+	 */
 	protected $VALID_city = "San Diego";
 	/**
 	 * valid state
 	 * @var string $state
-	 **/
+	 */
 	protected $VALID_state = "CA";
 	/**
 	 * valid ZipCode
 	 * @var int $zipCode ;
-	 **/
+	 */
 	protected $VALID_zipCode = "92104";
 	/**
 	 * valid email of userId
@@ -73,12 +78,12 @@ class UserTest extends InventoryTextTest {
 	/**
 	 * valid email 2
 	 * @var string $email2
-	 **/
+	 */
 	protected $VALID_email2 = "tophersotheremail@mindurbiz.com";
 	/**
 	 * Invalid Email string
 	 * @var string
-	 **/
+	 */
 	protected $INVALID_email = "akddi@topher";
 	/**
 	 * valid phoneNumber of userId
@@ -88,7 +93,7 @@ class UserTest extends InventoryTextTest {
 	/**
 	 * valid password salt for userId;
 	 * @var string $passwordSalt
-	 **/
+	 */
 	protected $VALID_salt;
 	/**
 	 * valid password hash for userId;
@@ -139,19 +144,19 @@ class UserTest extends InventoryTextTest {
 	 * Test grabbing Valid User by User Id
 	 **/
 	public function testGetValidUserByUserId() {
-	// create a new User
-		$user = new User(null, $this->VALID_lastName, $this->VALID_firstName, $this->VALID_root, $this->VALID_attention,
+		// create a new User
+		$newUser = new User(null,$this->VALID_lastName, $this->VALID_firstName, $this->VALID_root, $this->VALID_attention,
 			$this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city, $this->VALID_state,
 			$this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt, $this->VALID_hash);
 
-		$user->insert($this->getPDO());
+		$newUser->insert($this->getPDO());
 
 		// grab the data from guzzle
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/?userId=' . $user->getUserId());
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/?userId=' . $newUser->getUserId());
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
+		$user = json_decode($body);
+		$this->assertSame(200, $user->status);
 	}
 
 	/**
@@ -159,18 +164,18 @@ class UserTest extends InventoryTextTest {
 	 **/
 	public function testGetValidUserByValidEmail() {
 		// create a new User
-		$user = new User(null, $this->VALID_lastName, $this->VALID_firstName, $this->VALID_root, $this->VALID_attention,
+		$newUser = new User(null,$this->VALID_lastName, $this->VALID_firstName, $this->VALID_root, $this->VALID_attention,
 			$this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city, $this->VALID_state,
 			$this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt, $this->VALID_hash);
 
-		$user->insert($this->getPDO());
+		$newUser->insert($this->getPDO());
 
 		// grab the data from guzzle
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/?email=' . $user->getEmail());
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/?email=' . $newUser->getEmail());
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
+		$user = json_decode($body);
+		$this->assertSame(200, $user->status);
 	}
 
 	/**
@@ -178,18 +183,18 @@ class UserTest extends InventoryTextTest {
 	 **/
 	public function testGetValidUserByInvalidEmail() {
 		// create a new User
-		$user = new User(null, $this->VALID_lastName, $this->VALID_firstName, $this->VALID_root, $this->VALID_attention,
+		$newUser = new User(null,$this->VALID_lastName, $this->VALID_firstName, $this->VALID_root, $this->VALID_attention,
 			$this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city, $this->VALID_state,
 			$this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt, $this->VALID_hash);
 
-		$user->insert($this->getPDO());
+		$newUser->insert($this->getPDO());
 
-	// grab the data from guzzle
-	$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/?email=' . $this->INVALID_email);
-	$this->assertSame($response->getStatusCode(), 200);
-	$body = $response->getBody();
-	$object = json_decode($body);
-	$this->assertSame(200, $object->status);
+		// grab the data from guzzle
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/?email=' . $this->INVALID_email);
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$user = json_decode($body);
+		$this->assertSame(200, $user->status);
 	}
 
 	/**
@@ -197,18 +202,18 @@ class UserTest extends InventoryTextTest {
 	 **/
 	public function testGetAllUsers() {
 		// create a new User
-		$user = new User(null, $this->VALID_lastName, $this->VALID_firstName, $this->VALID_root, $this->VALID_attention,
+		$newUser = new User(null,$this->VALID_lastName, $this->VALID_firstName, $this->VALID_root, $this->VALID_attention,
 			$this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city, $this->VALID_state,
 			$this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt, $this->VALID_hash);
 
-		$user->insert($this->getPDO());
+		$newUser->insert($this->getPDO());
 
 		// grab the data from guzzle
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/?');
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/');
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
+		$user = json_decode($body);
+		$this->assertSame(200, $user->status);
 	}
 
 	/**
@@ -221,7 +226,7 @@ class UserTest extends InventoryTextTest {
 			$this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt, $this->VALID_hash);
 
 		// run a get request to establish session tokens
-		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?userId=1');
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/');
 
 		// grab the data from guzzle and enforce the status' match our expectations
 		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/',['headers' =>
@@ -242,7 +247,7 @@ class UserTest extends InventoryTextTest {
 			$this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt, $this->VALID_hash);
 
 		// run a get request to establish session tokens
-		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?userId=1');
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/');
 
 		// grab the data from guzzle and enforce the status' match our expectations
 		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/',['headers' =>
