@@ -40,8 +40,6 @@ try {
 			$reply->data = Notification::getNotificationByEmailStatus($pdo, $emailStatus);
 		} else if(empty($date) === false) {
 			$reply->data = Notification::getNotificationByNotificationDateTime($pdo, $notificationDateTime);
-		} else if(empty($alertId) === false) {
-			$reply->data = Notification::getNotificationByAlertId($pdo, $alertId);
 		} else if(empty($page) === false) {
 			$reply->data = Notification::getAllNotifications($pdo, $page)->toArray();
 		} else {
