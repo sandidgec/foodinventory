@@ -184,54 +184,63 @@ class ProductTest extends InventoryTextTest {
 		$this->assertSame(200, $product->status);
 	}
 
+	/**
+	 * test grabbing a Product by vendorId
+	 **/
+	public function testGetValidProductByVendorId() {
+		// create a new Product
+		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
+			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
+		$newProduct->insert($this->getPDO());
+
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId());
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$product = json_decode($body);
+		$this->assertSame(200, $product->status);
+	}
+
+
+	/**
+	 * test grabbing a Product by invalid vendorId
+	 **/
+	public function testGetInvalidProductByVendorId() {
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . InventoryTextTest::INVALID_KEY);
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$product = json_decode($body);
+		$this->assertSame(200, $product->status);
+	}
 
 	/**
 	 * test grabbing a Product by description
 	 **/
 	public function testGetValidProductByDescription() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("product");
-
-		// create a new Product and insert to into mySQL
-		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
+		// create a new Product
+		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
 			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
-		$product->insert($this->getPDO());
+		$newProduct->insert($this->getPDO());
 
-		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProducts = Product::getProductByDescription($this->getPDO(), $product->getDescription());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
-		foreach($pdoProducts as $pdoProduct) {
-			$this->assertSame($pdoProduct->getVendorId(), $this->vendor->getVendorId());
-			$this->assertSame($pdoProduct->getDescription(), $this->VALID_description);
-			$this->assertSame($pdoProduct->getLeadTime(), $this->VALID_leadTime);
-			$this->assertSame($pdoProduct->getSku(), $this->VALID_sku);
-			$this->assertSame($pdoProduct->getTitle(), $this->VALID_title);
-		}
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId());
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$product = json_decode($body);
+		$this->assertSame(200, $product->status);
 	}
 
-
 	/**
-	 * test grabbing a Product by leadTime
+	 * test grabbing a Product by invalid description
 	 **/
-	public function testGetValidProductByLeadTIme() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("product");
-
-		// create a new Product and insert to into mySQL
-		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
-			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
-		$product->insert($this->getPDO());
-
-		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProducts = Product::getProductByLeadTime($this->getPDO(), $product->getLeadTime());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
-		foreach($pdoProducts as $pdoProduct) {
-			$this->assertSame($pdoProduct->getVendorId(), $this->vendor->getVendorId());
-			$this->assertSame($pdoProduct->getDescription(), $this->VALID_description);
-			$this->assertSame($pdoProduct->getLeadTime(), $this->VALID_leadTime);
-			$this->assertSame($pdoProduct->getSku(), $this->VALID_sku);
-			$this->assertSame($pdoProduct->getTitle(), $this->VALID_title);
-		}
+	public function testGetInvalidProductByDescription() {
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . InventoryTextTest::INVALID_KEY);
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$product = json_decode($body);
+		$this->assertSame(200, $product->status);
 	}
 
 
@@ -239,49 +248,73 @@ class ProductTest extends InventoryTextTest {
 	 * test grabbing a Product by sku
 	 **/
 	public function testGetValidProductBySku() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("product");
-
-		// create a new Product and insert to into mySQL
-		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
-			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
-		$product->insert($this->getPDO());
-
-		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProducts = Product::getProductBySku($this->getPDO(), $product->getSku());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
-		foreach($pdoProducts as $pdoProduct) {
-			$this->assertSame($pdoProduct->getVendorId(), $this->vendor->getVendorId());
-			$this->assertSame($pdoProduct->getDescription(), $this->VALID_description);
-			$this->assertSame($pdoProduct->getLeadTime(), $this->VALID_leadTime);
-			$this->assertSame($pdoProduct->getSku(), $this->VALID_sku);
-			$this->assertSame($pdoProduct->getTitle(), $this->VALID_title);
-		}
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . InventoryTextTest::INVALID_KEY);
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$product = json_decode($body);
+		$this->assertSame(200, $product->status);
 	}
 
+
+	/**
+	 * test grabbing a Product by invalid sku
+	 **/
+	public function testGetInvalidProductBySku() {
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . InventoryTextTest::INVALID_KEY);
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$product = json_decode($body);
+		$this->assertSame(200, $product->status);
+	}
 
 	/**
 	 * test grabbing a Product by title
 	 **/
 	public function testGetValidProductByTitle() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("product");
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . InventoryTextTest::INVALID_KEY);
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$product = json_decode($body);
+		$this->assertSame(200, $product->status);
+	}
 
-		// create a new Product and insert to into mySQL
-		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
-			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
-		$product->insert($this->getPDO());
+	/**
+	 * test grabbing a Product by invalid title
+	 **/
+	public function testGetInvalidProductByTitle() {
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . InventoryTextTest::INVALID_KEY);
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$product = json_decode($body);
+		$this->assertSame(200, $product->status);
+	}
 
-		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProducts = Product::getProductByTitle($this->getPDO(), $product->getTitle());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
-		foreach($pdoProducts as $pdoProduct) {
-			$this->assertSame($pdoProduct->getVendorId(), $this->vendor->getVendorId());
-			$this->assertSame($pdoProduct->getDescription(), $this->VALID_description);
-			$this->assertSame($pdoProduct->getLeadTime(), $this->VALID_leadTime);
-			$this->assertSame($pdoProduct->getSku(), $this->VALID_sku);
-			$this->assertSame($pdoProduct->getTitle(), $this->VALID_title);
-		}
+	/**
+	 * test grabbing a Product by pagination
+	 **/
+	public function testGetValidProductByPagination() {
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . InventoryTextTest::INVALID_KEY);
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$product = json_decode($body);
+		$this->assertSame(200, $product->status);
+	}
+
+	/**
+	 * test grabbing a Product by invalid pagination
+	 **/
+	public function testGetInvalidProductByPagination() {
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . InventoryTextTest::INVALID_KEY);
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$product = json_decode($body);
+		$this->assertSame(200, $product->status);
 	}
 
 	/**
