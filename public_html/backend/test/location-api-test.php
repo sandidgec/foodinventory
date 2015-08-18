@@ -80,7 +80,6 @@ class LocationAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$location = json_decode($body);
-		echo $body . PHP_EOL;
 		$this->assertSame(200, $location->status);
 	}
 
@@ -98,7 +97,6 @@ class LocationAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$location = json_decode($body);
-		echo $body . PHP_EOL;
 		$this->assertSame(200, $location->status);
 	}
 
@@ -117,7 +115,6 @@ class LocationAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$location = json_decode($body);
-		echo $body . PHP_EOL;
 		$this->assertSame(200, $location->status);
 	}
 
@@ -146,6 +143,8 @@ class LocationAPITest extends InventoryTextTest {
 	public function testPutValidLocation() {
 		// create a new Location
 		$newLocation = new Location(null, $this->VALID_storageCode, $this->VALID_description);
+
+		$newLocation->insert($this->getPDO());
 
 		// run a get request to establish session tokens
 		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/');
