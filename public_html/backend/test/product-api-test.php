@@ -107,14 +107,14 @@ class ProductAPITest extends InventoryTextTest {
 	 **/
 	public function testGetValidProductByVendorId() {
 		// create a new Product
-		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
+		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
 			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
-		$product->insert($this->getPDO());
+		$newProduct->insert($this->getPDO());
 
-		$product->insert($this->getPDO());
+		$newProduct->insert($this->getPDO());
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $product->getProductId());
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId());
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		echo $body . PHP_EOL;
@@ -127,14 +127,14 @@ class ProductAPITest extends InventoryTextTest {
 	 **/
 	public function testGetValidProductByDescription() {
 		// create a new Product
-		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
+		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
 			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
-		$product->insert($this->getPDO());
+		$newProduct->insert($this->getPDO());
 
-		$product->insert($this->getPDO());
+		$newProduct->insert($this->getPDO());
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $product->getProductId());
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId());
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$product = json_decode($body);
@@ -159,14 +159,14 @@ class ProductAPITest extends InventoryTextTest {
 	 **/
 	public function testGetValidProductBySku() {
 		// create a new Product
-		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
+		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
 			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
-		$product->insert($this->getPDO());
+		$newProduct->insert($this->getPDO());
 
-		$product->insert($this->getPDO());
+		$newProduct->insert($this->getPDO());
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $product->getProductId());
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId());
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$product = json_decode($body);
@@ -192,14 +192,14 @@ class ProductAPITest extends InventoryTextTest {
 	 **/
 	public function testGetValidProductByTitle() {
 			// create a new Product
-			$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
+			$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
 				$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
-			$product->insert($this->getPDO());
+			$newProduct->insert($this->getPDO());
 
-		$product->insert($this->getPDO());
+		$newProduct->insert($this->getPDO());
 
 		// grab the data from guzzle and enforce the status' match our expectations
-			$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $product->getProductId());
+			$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId());
 			$this->assertSame($response->getStatusCode(), 200);
 			$body = $response->getBody();
 			$product = json_decode($body);
@@ -223,14 +223,14 @@ class ProductAPITest extends InventoryTextTest {
 	 **/
 	public function testGetValidProductByPagination() {
 			// create a new Product
-			$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
+			$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
 				$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
-			$product->insert($this->getPDO());
+			$newProduct->insert($this->getPDO());
 
-		$product->insert($this->getPDO());
+		$newProduct->insert($this->getPDO());
 
 		// grab the data from guzzle and enforce the status' match our expectations
-			$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $product->getProductId());
+			$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId());
 			$this->assertSame($response->getStatusCode(), 200);
 			$body = $response->getBody();
 			$product = json_decode($body);
@@ -254,16 +254,16 @@ class ProductAPITest extends InventoryTextTest {
 	 **/
 	public function testPostValidProduct() {
 		// create a new Product
-		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
+		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
 			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 
 		// run a get request to establish session tokens
 		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?page=0');
 
-		$product->insert($this->getPDO());
+		$newProduct->insert($this->getPDO());
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/', ['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $product]);
+		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/', ['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newProduct]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		echo $body . PHP_EOL;
@@ -276,16 +276,16 @@ class ProductAPITest extends InventoryTextTest {
 	 **/
 	public function testPutValidProduct() {
 		// create a new Product
-		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
+		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
 			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 
 		// run a get request to establish session tokens
 		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?page=0');
 
-		$product->insert($this->getPDO());
+		$newProduct->insert($this->getPDO());
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/', ['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $product]);
+		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/', ['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newProduct]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		echo $body . PHP_EOL;
@@ -299,13 +299,13 @@ class ProductAPITest extends InventoryTextTest {
 	 **/
 	public function testDeleteValidProduct() {
 		// create a new Product
-		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
+		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 
-		$product->insert($this->getPDO());
+		$newProduct->insert($this->getPDO());
 
 		// grab the data from guzzle and enforce the status' match our expectations
 		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/');
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $product->getProductId(), ['headers' =>
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId(), ['headers' =>
 		['X-XSRF-TOKEN' => $this->getXsrfToken()]]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
