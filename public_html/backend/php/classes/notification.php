@@ -424,41 +424,47 @@ class Notification {
 	 * gets the Notification by notification Date Time
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
-	 * @param DateTime $notificationDateTime date of notification sent
-	 * @return mixed notification found or null if not found
+	 * @param DateTime $newNotificationDateTime date of notification sent
+	 * @return mixed notifications found or null if not found
 	 * @throws PDOException when mySQL related errors occur
 	 **/
-	public static function getNotificationByNotificationDateTime(PDO &$pdo, $notificationDateTime) {
+	public static function getNotificationByNotificationDateTime(PDO &$pdo, $newNotificationDateTime) {
 		// sanitize the notificationDateTime before searching
 		try {
-			$notificationDateTime = validateDate::validateDate($notificationDateTime);
+			$newNotificationDateTime = validateDate::validateDate($newNotificationDateTime);
 		} catch(InvalidArgumentException $invalidArgument) {
 			throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
 		} catch(RangeException $range) {
 			throw(new RangeException($range->getMessage(), 0, $range));
 		}
+
+		$newNotificationDateTime->format("m-d-Y");
+
 		// create query template
 		$query = "SELECT notificationId, alertId, emailStatus, notificationDateTime, notificationHandle, notificationContent FROM notification WHERE notificationDateTime = :notificationDateTime";
 		$statement = $pdo->prepare($query);
 
 		// bind the email id to the place holder in the template
-		$parameters = array("notificationDateTime" => $notificationDateTime);
+		$newNotificationDateTime = "%$newNotificationDateTime%";
+		$parameters = array("notificationDateTime" => $newNotificationDateTime);
 		$statement->execute($parameters);
 
-		// grab the notification from mySQL
-		try {
-			$notification = null;
-			$statement->setFetchMode(PDO::FETCH_ASSOC);
-			$row = $statement->fetch();
-			if($row !== false) {
+		//build an array of movements
+		$notifications = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false){
+			try {
 				$notification = new Notification($row["notificationId"], $row["alertId"], $row["emailStatus"], $row["notificationDateTime"], $row["notificationHandle"], $row["notificationContent"]);
+				$notifications[$notifications->key()] = $notification;
+				$notifications->next();
+			} catch(Exception $exception) {
+				// if the row could't be ccnverted
+				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
-		} catch(Exception $exception) {
-			// if the row couldn't be converted, rethrow it
-			throw(new PDOException($exception->getMessage(), 0, $exception));
 		}
-		return ($notification);
+		return($notification);
 	}
+
 	/**
 	 * gets all notifications
 	 *
