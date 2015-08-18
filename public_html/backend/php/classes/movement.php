@@ -768,11 +768,14 @@ class Movement implements JsonSerializable{
 			throw(new RangeException($range->getMessage(), 0, $range));
 		}
 
+		$newMovementDate->format("m-d-Y");
+
 		// create query template
-		$query	 = "SELECT movementId, fromLocationId, toLocationId, productId, unitId, userId, cost, movementDate, movementType, price FROM movement WHERE movementDate = :movementDate" ;
+		$query	 = "SELECT movementId, fromLocationId, toLocationId, productId, unitId, userId, cost, movementDate, movementType, price FROM movement WHERE movementDate LIKE :movementDate" ;
 		$statement = $pdo->prepare($query);
 
 		// bind the movementDate to the place holder in the template
+		$newMovementDate = "%$newMovementDate%";
 		$parameters = array("movementDate" => $newMovementDate);
 		$statement->execute($parameters);
 

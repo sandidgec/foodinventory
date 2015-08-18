@@ -318,6 +318,7 @@ class AlertLevel {
 		}
 		return ($alertLevel);
 	}
+
 	/**
 	* gets the AlertLevel by alertCode
 	*
@@ -342,7 +343,75 @@ class AlertLevel {
 		$parameters = array("alertCode" => $newAlertCode);
 		$statement->execute($parameters);
 
-		// build an array of alertCodes
+		// build an array of alertLevels
+		$alertLevels = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$alertLevel = new AlertLevel($row["alertId"], $row["alertCode"], $row["alertFrequency"], $row["alertPoint"], $row["alertOperator"]);
+				$alertLevels[$alertLevels->key()] = $alertLevel;
+				$alertLevels->next();
+			} catch(PDOException $exception) {
+				//if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return ($alertLevels);
+	}
+
+	/**
+	 * gets the ProductAlert by alertId
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int $newAlertId the alertId for table join
+	 * @return SplFixedArray all ProductAlerts found for this alertId
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getProductAlertByAlertId(PDO &$pdo, $newAlertId) {
+		// sanitize the alertId before searching
+		$newAlertId = filter_var($newAlertId, FILTER_VALIDATE_INT);
+		if(empty($newAlertId) === true) {
+			throw(new PDOException("productId is an invalid integer"));
+		}
+
+		// create query template
+		$query = "SELECT productAlert.productId, productAlert.alertId, alertLevel.alertCode, alertLevel.alertFrequency, alertLevel.alertPoint,
+					 alertLevel.alertOperator FROM productAlert JOIN alertLevel WHERE productAlert.alertId = alertLevel.alertId";
+		$statement = $pdo->prepare($query);
+
+		// bind the alertId to the place holder in the template
+		$parameters = array("alertId" => $newAlertId);
+		$statement->execute($parameters);
+
+		// build an array of alertLevels
+		$alertLevels = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$alertLevel = new AlertLevel($row["alertId"], $row["alertCode"], $row["alertFrequency"], $row["alertPoint"], $row["alertOperator"]);
+				$alertLevels[$alertLevels->key()] = $alertLevel;
+				$alertLevels->next();
+			} catch(PDOException $exception) {
+				//if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return ($alertLevels);
+	}
+
+	/**
+	 * gets all alertLevels
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @return SplFixedArray all movements found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getAllAlertLevels(PDO &$pdo) {
+		// create query template
+		$query = "SELECT alertId, alertCode, alertFrequency, alertPoint, alertOperator FROM alertLevel";
+		$statement = $pdo->prepare($query);
+
+		// build an array of alertLevels
 		$alertLevels = new SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
