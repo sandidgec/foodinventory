@@ -373,30 +373,36 @@ class AlertLevel {
 		if(empty($newAlertId) === true) {
 			throw(new PDOException("productId is an invalid integer"));
 		}
-
-		// create query template
-		$query = "SELECT productAlert.productId, productAlert.alertId, alertLevel.alertCode, alertLevel.alertFrequency, alertLevel.alertPoint,
-					 alertLevel.alertOperator FROM productAlert JOIN alertLevel WHERE productAlert.alertId = alertLevel.alertId";
+		$query = "SELECT product.productId, product.description, product.sku, product.title, alertLevel.alertId, alertLevel.alertCode, alertLevel.alertFrequency, alertLevel.alertPoint, alertLevel.alertOperator
+					FROM productAlert
+					INNER JOIN alertLevel ON alertLevel.alertId = productAlert.alertId
+					INNER JOIN product ON product.productId = productAlert.productId
+					WHERE alertLevel.alertId = :alertId";
 		$statement = $pdo->prepare($query);
 
 		// bind the alertId to the place holder in the template
 		$parameters = array("alertId" => $newAlertId);
 		$statement->execute($parameters);
 
-		// build an array of alertLevels
-		$alertLevels = new SplFixedArray($statement->rowCount());
+		// build an array of Products and an associated alertLevel
+		$products = new SplFixedArray($statement->rowCount() + 1);
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$alertLevel = new AlertLevel($row["alertId"], $row["alertCode"], $row["alertFrequency"], $row["alertPoint"], $row["alertOperator"]);
-				$alertLevels[$alertLevels->key()] = $alertLevel;
-				$alertLevels->next();
+				if($products->key() === 0) {
+					$alertLevel = new AlertLevel($row["alertId"], $row["alertCode"], $row["alertFrequency"], $row["alertPoint"], $row["alertOperator"]);
+					$products[$products->key()] = $alertLevel;
+					$products->next();
+				}
+				$product = new Product($row["productId"], $row["vendorId"], $row["description"], $row["leadTime"], $row["sku"], $row["title"]);
+				$products[$products->key()] = $product;
+				$products->next();
 			} catch(PDOException $exception) {
 				//if the row couldn't be converted, rethrow it
 				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
-		return ($alertLevels);
+		return ($products);
 	}
 
 	/**
