@@ -51,7 +51,7 @@ class NotificationAPITest extends InventoryTextTest {
 	 * invalid notification date time to use
 	 * @var dateTime $INVALID_notificationDateTime
 	 **/
-	protected $INVALID_notificationDateTime = "06/1985/28 4:26:03";
+	protected $INVALID_notificationDateTime = null;
 	/**
 	 * valid notification handle to use
 	 * @var string $VALID-notificationHandle
@@ -106,107 +106,103 @@ class NotificationAPITest extends InventoryTextTest {
 		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("notification");
 
-		// create a new notification and insert to into mySQL
-		$notification = new Notification(null, $this->alertLevel->getAlertId(), $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
-		$notification->insert($this->getPDO());
+		// create a new vendor and insert to into mySQL
+		$newNotification = new Notification(null, $this->alertLevel->getAlertId(), $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
+		$newNotification->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$response = $this->guzzle->get('http://bootcamp-coders.cnm.edu/~invtext/backend/php/api/notification/?notificationId=' . $notification->getNotificationId());
+		$response = $this->guzzle->get('http://bootcamp-coders.cnm.edu/~invtext/backend/php/api/notification/?notificationId=' . $newNotification->getNotificationId());
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
+		$notification = json_decode($body);
+		$this->assertSame(200, $notification->status);
 	}
 	/**
 	 * test grabbing a notification by  invalid notification id
 	 **/
 	public function testGetInvalidNotificationByNotificationId() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("notification");
-
-		// create a new notification and insert to into mySQL
-		$notification = new Notification(null, $this->alertLevel->getAlertId(), $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
-		$notification->insert($this->getPDO());
-
 		// grab the data from mySQL and enforce the fields match our expectations
 		$response = $this->guzzle->get('http://bootcamp-coders.cnm.edu/~invtext/backend/php/api/notification/?notificationId=' . InventoryTextTest::INVALID_KEY);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
+		$notification = json_decode($body);
+		$this->assertSame(200, $notification->status);
 	}
 		/**
-	 * test grabbing a notification by email status
+	 * test grabbing a notification by valid email status
 	 **/
 	public function testGetValidNotificationByEmailStatus() {
 		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("notification");
 
 		// create a new notification and insert to into mySQL
-		$notification = new Notification(null, $this->alertLevel->getAlertId(), $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
-		$notification->insert($this->getPDO());
+		$newNotification = new Notification(null, $this->alertLevel->getAlertId(), $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
+		$newNotification->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$response = $this->guzzle->get('http://bootcamp-coders.cnm.edu/~invtext/backend/php/api/notification/?emailStatus=' . $notification->getEmailStatus());
+		$response = $this->guzzle->get('http://bootcamp-coders.cnm.edu/~invtext/backend/php/api/notification/?emailStatus=' . $newNotification->getEmailStatus());
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
+		$notification = json_decode($body);
+		$this->assertSame(200, $notification->status);
 	}
 	/**
 	 * test grabbing a notification by invalid emailStatus
 	 **/
 	public function testGetInvalidNotificationByEmailStatus() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("notification");
-
-		// create a new notification and insert to into mySQL
-		$notification = new Notification(null, $this->alertLevel->getAlertId(), $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
-		$notification->insert($this->getPDO());
-
 		// grab the data from mySQL and enforce the fields match our expectations
 		$response = $this->guzzle->get('http://bootcamp-coders.cnm.edu/~invtext/backend/php/api/notification/?emailStatus=' . InventoryTextTest::INVALID_KEY);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
+		$notification = json_decode($body);
+		$this->assertSame(200, $notification->status);
 	}
 
 	/**
 	 * test grabbing a notification by notificationDateTime
 	 **/
 	public function testGetValidNotificationByNotificationDateTime() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("notification");
-
 		// create a new notification and insert to into mySQL
-		$notification = new Notification(null, $this->alertLevel->getAlertId(), $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
-		$notification->insert($this->getPDO());
+		$newNotification = new Notification(null, $this->alertLevel->getAlertId(), $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
+		$newNotification->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$response = $this->guzzle->get('http://bootcamp-coders.cnm.edu/~invtext/backend/php/api/notification/?date=' . $notification->getNotificationDateTime());
+		$angularDate = $newNotification->getNotificationDateTime()->getTimestamp() * 1000;
+		$response = $this->guzzle->get('http://bootcamp-coders.cnm.edu/~invtext/backend/php/api/notification/?notificationDateTime=' . $angularDate);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
+		$notification = json_decode($body);
+		$this->assertSame(200, $notification->status);
 	}
 	/**
 	 * test grabbing a notification by invalid notificationDateTime
 	 **/
 	public function testGetInvalidNotificationByNotificationDateTime() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("notification");
-
-		// create a new notification and insert to into mySQL
-		$notification = new Notification(null, $this->alertLevel->getAlertId(), $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
-		$notification->insert($this->getPDO());
-
-		// grab the data from mySQL and enforce the fields match our expectations
-		$response = $this->guzzle->get('http://bootcamp-coders.cnm.edu/~invtext/backend/php/api/notification/?date=' . InventoryTextTest::INVALID_KEY);
+	// grab the data from mySQL and enforce the fields match our expectations
+		$angularDate = $this->VALID_notificationDateTime->getTimestamp() * 1000;
+		$response = $this->guzzle->get('http://bootcamp-coders.cnm.edu/~invtext/backend/php/api/notification/?date=' . $angularDate);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
+		$notification = json_decode($body);
+		$this->assertSame(200, $notification->status);
+	}
+
+	/**
+	 *test posting a Notification
+	 **/
+	public function testPostValidNotification(){
+		//creat a new Notification
+		$newNotification = new Notification(null, $this->alertLevel->getAlertId(), $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
+
+		//run a get request to establish session tokens
+		$this->guzzle->get('http://bootcamp-coders.cnm.edu/~invtext/backend/php/api/notification/?page=0');
+
+		// grab the data from guzzle and enforce the status matches our expectations
+		$response = $this->guzzle-> post('http://bootcamp-coders.cnm.edu/~invtext/backend/php/api/notification/', ['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newNotification]);
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$notification = json_decode($body);
+		$this->assertSame(200, $notification->status);
 	}
 }
 
