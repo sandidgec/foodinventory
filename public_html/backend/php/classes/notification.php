@@ -459,5 +459,41 @@ class Notification {
 		}
 		return ($notification);
 	}
+	/**
+	 * gets all notifications
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reverence
+	 * @param int $page the page of results the viewer is on
+	 * @returns SplFixedArray all notifications found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getAllNotifications(PDO &$pdo, $page){
+		//number of results per page
+		$page = filter_var($page, FILTER_VALIDATE_INT);
+		$pageSize = 25;
+		$start = $page * $pageSize;
+
+		//create query template
+		$query = "SELECT notificattionID, alertId, emailStatus, notificationDateTime, notificationHandle, NotificationContent FROM notification ORDER BY notificationDateTime LIMIT :start, :pageSize";
+		$statement = $pdo->prepare($query);
+		$statement->bindParam(":start", $start, PDO::PARAM_INT);
+		$statement->bindParam(":pageSize", $pageSize, PDO::PARAM_INT);
+		$statement->execute();
+
+		// build an array of notifications
+		$notifications = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$notification = new Notification($row["notificationId"], $row["alertId"], $row["emailStatus"], $row["notificationDateTime"], $row["notificationHandle"], $row["notificationContent"]);
+				$notifications[$notifications->key()] = $notification;
+				$notifications->next();
+			} catch(Exception $exception) {
+				//if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($notifications);
+	}
 }
 

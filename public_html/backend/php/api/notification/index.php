@@ -24,7 +24,7 @@ try {
 	$emailStatus = filter_input(INPUT_GET,"emailStatus", FILTER_VALIDATE_BOOLEAN);
 
 	//sanitize the date
-	$notificationDate = filter_input(INPUT_GET, "date", FILTER_VALIDATE_INT);
+	$notificationDateTime = filter_input(INPUT_GET, "notificationDateTime", FILTER_VALIDATE_INT);
 
 	// grab the mySQL connection
 	$pdo = connectToEncryptedMySql("/etc/apache2/capstone-mysql/invtext.ini");
@@ -39,11 +39,13 @@ try {
 		} else if(empty($emailStatus) === false) {
 			$reply->data = Notification::getNotificationByEmailStatus($pdo, $emailStatus);
 		} else if(empty($date) === false) {
-			$reply->data = Notification::getNotificationByNotificationDateTime($pdo, $notificationDate);
+			$reply->data = Notification::getNotificationByNotificationDateTime($pdo, $notificationDateTime);
 		} else if(empty($alertId) === false) {
 			$reply->data = Notification::getNotificationByAlertId($pdo, $alertId);
+		} else if(empty($page) === false) {
+			$reply->data = Notification::getAllNotifications($pdo, $page)->toArray();
 		} else {
-			$reply->data = Notification::getAllNotifications($pdo)->toArray();
+			throw(new InvalidArgumentException("no parameters given", 405));
 		}
 		// post to a new Notification
 	} else if($method === "POST") {
@@ -55,7 +57,7 @@ try {
 		$notificationDateTime = new DateTime();
 		$notificationDateTime-> setTimestamp($requestObject->notificationDateTime / 1000);
 
-		$notification = new Notification(null, $requestObject->alertId, $requestObject->emailStatus, $requestObject->notificationDate,
+		$notification = new Notification(null, $requestObject->alertId, $requestObject->emailStatus, $requestObject->notificationDateTime,
 			$requestObject->notificationHandle, $requestObject->notificationContent);
 		$notification->insert($pdo);
 		$reply->data = "Notification created OK";

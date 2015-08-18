@@ -97,8 +97,6 @@ class NotificationAPITest extends InventoryTextTest {
 
 		$this->alertLevel = new AlertLevel($alertId, $alertCode, $alertFrequency, $alertLevel, $alertOperator);
 		$this->alertLevel->insert($this->getPDO());
-
-		$this->VALID_notificationDateTime = DateTime::createFromFormat("Y-m-d H:i:s", "1985-06-28 04:26:03");
 	}
 
 	/**
@@ -132,9 +130,6 @@ class NotificationAPITest extends InventoryTextTest {
 	 * test grabbing a notification by valid email status
 	 **/
 	public function testGetValidNotificationByEmailStatus() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("notification");
-
 		// create a new notification and insert to into mySQL
 		$newNotification = new Notification(null, $this->alertLevel->getAlertId(), $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
 		$newNotification->insert($this->getPDO());
