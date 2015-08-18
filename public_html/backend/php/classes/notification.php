@@ -439,7 +439,7 @@ class Notification {
 		}
 
 		$sunrise = $newNotificationDateTime->format("Y-m-d") . " 00:00:00";
-		$sunset = $newNotificationDateTime->format("Y-m-D") .  " 23:59:59";
+		$sunset = $newNotificationDateTime->format("Y-m-d") .  " 23:59:59";
 
 		// create query template
 		$query = "SELECT notificationId, alertId, emailStatus, notificationDateTime, notificationHandle, notificationContent FROM notification WHERE notificationDateTime >= :sunrise AND notificationDateTime <= :sunset";
