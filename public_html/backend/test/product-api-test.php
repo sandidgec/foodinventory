@@ -288,6 +288,7 @@ class ProductAPITest extends InventoryTextTest {
 		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/', ['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $product]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
+		echo $body . PHP_EOL;
 		$product = json_decode($body);
 		$this->assertSame(200, $product->status);
 	}
