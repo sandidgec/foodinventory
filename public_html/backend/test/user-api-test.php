@@ -123,21 +123,20 @@ class UserAPITest extends InventoryTextTest {
 	 **/
 	public function testDeleteValidUser() {
 		// create a new User
-		$user = new User(null, $this->VALID_lastName, $this->VALID_firstName, $this->VALID_root, $this->VALID_attention,
+		$newUser = new User(null,$this->VALID_lastName, $this->VALID_firstName, $this->VALID_root, $this->VALID_attention,
 			$this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city, $this->VALID_state,
 			$this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt, $this->VALID_hash);
 
-		$user->insert($this->getPDO());
+		$newUser->insert($this->getPDO());
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->delete('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/delete');
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/');
+		$response = $this->guzzle->delete('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/', ['headers' =>
+			['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newUser->getUserId()]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$object = json_decode($body);
 		$this->assertNull($object->status);
-
-		// delete User from mySQL
-		$user->delete($this->getPDO());
 	}
 
 	/**
@@ -156,6 +155,7 @@ class UserAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$user = json_decode($body);
+		echo $body . PHP_EOL;
 		$this->assertSame(200, $user->status);
 	}
 
