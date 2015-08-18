@@ -90,8 +90,6 @@ class ProductAPITest extends InventoryTextTest {
 
 	public final function setUp() {
 		parent::setUp();
-
-
 		$this->guzzle = new \GuzzleHttp\Client(['cookies' => true]);
 	}
 
