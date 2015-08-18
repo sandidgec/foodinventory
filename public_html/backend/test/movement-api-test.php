@@ -41,7 +41,7 @@ class MovementAPITest extends InventoryTextTest {
 	 * invalid movementDate to use
 	 * @var DateTime $INVALID_movementDate
 	 **/
-	protected $INVALID_movementDate = "2015/26/09 14:25:50";
+	protected $INVALID_movementDate = null;
 
 	/**
 	 * valid movementType to use
@@ -53,7 +53,7 @@ class MovementAPITest extends InventoryTextTest {
 	 * invalid movementType to use
 	 * @var string $INVALID_movementType
 	 **/
-	protected $INVALID_movementType = "RET";
+	protected $INVALID_movementType = "88";
 
 	/**
 	 * valid price to use
@@ -107,7 +107,8 @@ class MovementAPITest extends InventoryTextTest {
 		parent::setUp();
 
 		$this->guzzle = new \GuzzleHttp\Client(['cookies' => true]);
-		$this->VALID_movementDate = new DateTime();
+		$this->VALID_movementDate = DateTime::createFromFormat("Y-m-d H:i:s", "2015-09-26 08:45:25");
+		$this->INVALID_movementDate = DateTime::createFromFormat("Y-m-d H:i:s", "2015-14-26 06:25:25");
 
 		$userId = null;
 		$firstName = "Jim";
@@ -169,7 +170,7 @@ class MovementAPITest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing a Movement by valid movementId
+	 * Test Getting Valid Movement By MovementId
 	 **/
 	public function testGetValidMovementByMovementId() {
 		// create a new Movement
@@ -185,7 +186,7 @@ class MovementAPITest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing a Movement by invalid movementId
+	 * Test Getting Invalid Movement By MovementId
 	 **/
 	public function testGetInvalidMovementByMovementId() {
 		// grab the data from guzzle and enforce the status' match our expectations
@@ -197,7 +198,7 @@ class MovementAPITest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing a Movement by valid fromLocationId
+	 * Test Getting Valid Movement By FromLocationId
 	 **/
 	public function testGetValidMovementByFromLocationId() {
 		// create a new Movement
@@ -213,7 +214,7 @@ class MovementAPITest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing a Movement by invalid fromLocationId
+	 * Test Getting Invalid Movement By FromLocationId
 	 **/
 	public function testGetInvalidMovementByFromLocationId() {
 		// grab the data from guzzle and enforce the status' match our expectations
@@ -225,7 +226,7 @@ class MovementAPITest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing a Movement by valid toLocationId
+	 * Test Getting Valid Movement By ToLocationId
 	 **/
 	public function testGetValidMovementByToLocationId() {
 		// create a new Movement
@@ -241,7 +242,7 @@ class MovementAPITest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing a Movement by invalid toLocationId
+	 * Test Getting Invalid Movement By ToLocationId
 	 **/
 	public function testGetInvalidMovementByToLocationId() {
 		// grab the data from guzzle and enforce the status' match our expectations
@@ -253,7 +254,7 @@ class MovementAPITest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing a Movement by valid productId
+	 * Test Getting Valid Movement By ProductId
 	 **/
 	public function testGetValidMovementByProductId() {
 		// create a new Movement
@@ -269,7 +270,7 @@ class MovementAPITest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing a Movement by invalid productId
+	 * Test Getting Invalid Movement By ProductId
 	 **/
 	public function testGetInvalidMovementByProductId() {
 		// grab the data from guzzle and enforce the status' match our expectations
@@ -281,7 +282,7 @@ class MovementAPITest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing a Movement by valid userId
+	 * Test Getting Valid Movement By UserId
 	 **/
 	public function testGetValidMovementByUserId() {
 		// create a new Movement
@@ -297,7 +298,7 @@ class MovementAPITest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing a Movement by invalid userId
+	 * Test Getting Invalid Movement By UserId
 	 **/
 	public function testGetInvalidMovementByUserId() {
 		// grab the data from guzzle and enforce the status' match our expectations
@@ -309,28 +310,25 @@ class MovementAPITest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing a Movement by valid movementDate
+	 * Test Getting Valid Movement By MovementDate
 	 **/
 	public function testGetValidMovementByMovementDate() {
 		// create a new Movement
 		$newMovement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
 		$newMovement->insert($this->getPDO());
 
-		var_dump($newMovement);
-
 		// grab the data from guzzle and enforce the status' match our expectations
 		$angularDate = $newMovement->getMovementDate()->getTimestamp() * 1000;
-		var_dump($angularDate);
 		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?movementDate=' . $angularDate);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$movement = json_decode($body);
-		var_dump($movement);
+		echo $body . PHP_EOL;
 		$this->assertSame(200, $movement->status);
 	}
 
 	/**
-	 * test grabbing a Movement by invalid movementDate
+	 * Test Getting Invalid Movement By MovementDate
 	 **/
 	public function testGetInvalidMovementByMovementDate() {
 		// grab the data from guzzle and enforce the status' match our expectations
@@ -339,12 +337,12 @@ class MovementAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$movement = json_decode($body);
-		var_dump($movement);
+		echo $body . PHP_EOL;
 		$this->assertSame(200, $movement->status);
 	}
 
 	/**
-	 * test grabbing a Movement by valid movementType
+	 * Test Getting Valid Movement By MovementType
 	 **/
 	public function testGetValidMovementByMovementType() {
 		// create a new Movement
@@ -360,7 +358,7 @@ class MovementAPITest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing a Movement by invalid movementType
+	 * Test Getting Invalid Movement By MovementType
 	 **/
 	public function testGetInvalidMovementByMovementType() {
 		// grab the data from guzzle and enforce the status' match our expectations
@@ -368,11 +366,12 @@ class MovementAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$movement = json_decode($body);
+		echo $body . PHP_EOL;
 		$this->assertSame(200, $movement->status);
 	}
 
 	/**
-	 * test posting a Movement
+	 * Test Posting Valid Movement
 	 **/
 	public function testPostValidMovement() {
 		// create a new Movement
