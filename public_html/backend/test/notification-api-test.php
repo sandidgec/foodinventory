@@ -91,7 +91,8 @@ class NotificationAPITest extends InventoryTextTest {
 		parent::setUp();
 
 		$this->guzzle = new \GuzzleHttp\Client(['cookies' => true]);
-		$this->VALID_notificationDateTime = new DateTime();
+		$this->VALID_notificationDateTime = DateTime::createFromFormat("Y-m-d H:i:s", "2015-09-26 08:45:25");
+		$this->INVALID_notificationDateTime = DateTime::createFromFormat("Y-m-d H:i:s", "2015-14-26 06:25:25");
 
 		$alertId = null;
 		$alertCode = "33";
