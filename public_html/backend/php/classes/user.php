@@ -8,7 +8,6 @@
  *
  * @author Charles Sandidge sandidgec@gmail.com
  **/
-
 class User implements JsonSerializable {
 
 	/**
@@ -103,7 +102,7 @@ class User implements JsonSerializable {
 	 * @throws Exception for thrown exceptions
 	 **/
 	public function __construct($newUserId, $newLastName, $newFirstName, $newRoot, $newAttention, $newAddressLineOne, $newAddressLineTwo,
-								$newCity, $newState, $newZipCode, $newEmail, $newPhoneNumber, $newSalt, $newHash) {
+										 $newCity, $newState, $newZipCode, $newEmail, $newPhoneNumber, $newSalt, $newHash) {
 		try {
 			$this->setUserId($newUserId);
 			$this->setLastName($newLastName);
@@ -121,13 +120,13 @@ class User implements JsonSerializable {
 			$this->setHash($newHash);
 		} catch(InvalidArgumentException $invalidArgument) {
 			//rethrow the exception to the caller
-				throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
-		} catch(RangeException $range)  {
+			throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
+		} catch(RangeException $range) {
 			// rethrow the exception to the caller
-				throw (new RangeException($range->getMessage(),0, $range));
+			throw (new RangeException($range->getMessage(), 0, $range));
 		} catch(Exception $exception) {
 			// rethrow generic exception
-				throw(new Exception($exception->getMessage(), 0, $exception));
+			throw(new Exception($exception->getMessage(), 0, $exception));
 		}
 	}
 
@@ -136,7 +135,7 @@ class User implements JsonSerializable {
 	 * accessor method for userId
 	 *
 	 * @return int value of unique userId
-	**/
+	 **/
 	public function getUserId() {
 		return ($this->userId);
 	}
@@ -150,7 +149,7 @@ class User implements JsonSerializable {
 	public function setUserId($newUserId) {
 		// base case: if the userId is null,
 		// this is a new user without a mySQL assigned id (yet)
-		if($newUserId=== null) {
+		if($newUserId === null) {
 			$this->userId = null;
 			return;
 		}
@@ -232,7 +231,7 @@ class User implements JsonSerializable {
 	public function setRoot($newRoot) {
 		//verify Root is no more than 1 char
 		$newRoot = filter_var($newRoot, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-		if ($newRoot === null) {
+		if($newRoot === null) {
 			throw (new InvalidArgumentException ("root invalid"));
 		}
 		$this->root = $newRoot;
@@ -256,7 +255,7 @@ class User implements JsonSerializable {
 	 **/
 	public function setAttention($newAttention) {
 		//verify attention is no more than 64 varchar
-		$newAttention =trim($newAttention);
+		$newAttention = trim($newAttention);
 		$newAttention = filter_var($newAttention, FILTER_SANITIZE_STRING);
 		if(empty($newAttention) === true) {
 			throw new InvalidArgumentException ("attention invalid");
@@ -522,10 +521,10 @@ class User implements JsonSerializable {
 		$this->hash = $newHash;
 	}
 
-		public function JsonSerialize() {
-				$fields = get_object_vars($this);
-				return($fields);
-				}
+	public function JsonSerialize() {
+		$fields = get_object_vars($this);
+		return ($fields);
+	}
 
 
 	/**
@@ -549,7 +548,7 @@ class User implements JsonSerializable {
 		$parameters = array("lastName" => $this->lastName, "firstName" => $this->firstName, "root" => $this->root,
 			"attention" => $this->attention,
 			"addressLineOne" => $this->addressLineOne, "addressLineTwo" => $this->addressLineTwo, "city" => $this->city,
-			"state" => $this->state, "zipCode" => $this->zipCode, "email" => $this->email, "phoneNumber"=> $this->phoneNumber,
+			"state" => $this->state, "zipCode" => $this->zipCode, "email" => $this->email, "phoneNumber" => $this->phoneNumber,
 			"salt" => $this->salt, "hash" => $this->hash);
 		$statement->execute($parameters);
 
@@ -587,13 +586,13 @@ class User implements JsonSerializable {
 	public function update(PDO &$pdo) {
 
 		// create query template
-		$query	 = "UPDATE user SET firstName = :firstName, lastName = :lastName, root = :root, attention = :attention, addressLineOne = :addressLineOne,
+		$query = "UPDATE user SET firstName = :firstName, lastName = :lastName, root = :root, attention = :attention, addressLineOne = :addressLineOne,
  		addressLineTwo = :addressLineTwo, city = :city, state = :state, zipCode = :zipCode, email = :email, phoneNumber = :phoneNumber,
 		hash = :hash, salt = :salt WHERE userId = :userId";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables
-		$parameters = array("firstName" => $this->firstName, "lastName" => $this->lastName,"root" => $this->root, "attention" => $this->attention,
+		$parameters = array("firstName" => $this->firstName, "lastName" => $this->lastName, "root" => $this->root, "attention" => $this->attention,
 			"addressLineOne" => $this->addressLineOne, "addressLineTwo" => $this->addressLineTwo, "city" => $this->city, "state" => $this->state,
 			"zipCode" => $this->zipCode, "email" => $this->email, "phoneNumber" => $this->phoneNumber, "hash" => $this->hash,
 			"salt" => $this->salt, "userId" => $this->userId);
@@ -630,7 +629,7 @@ class User implements JsonSerializable {
 		try {
 			$user = null;
 			$statement->setFetchMode(PDO::FETCH_ASSOC);
-			$row   = $statement->fetch();
+			$row = $statement->fetch();
 			if($row !== false) {
 				$user = new User ($row["userId"], $row["lastName"], $row["firstName"], $row["root"], $row["attention"],
 					$row["addressLineOne"], $row["addressLineTwo"], $row["city"], $row["state"], $row["zipCode"],
@@ -640,7 +639,7 @@ class User implements JsonSerializable {
 			// if the row couldn't be converted, rethrow it
 			throw(new PDOException($exception->getMessage(), 0, $exception));
 		}
-		return($user);
+		return ($user);
 	}
 
 	/**
@@ -655,9 +654,7 @@ class User implements JsonSerializable {
 		$user = filter_var($user, FILTER_SANITIZE_EMAIL);
 		if($user === false) {
 			throw(new PDOException(""));
-
 		}
-
 		// create query template
 		$query = "SELECT userId, email, firstName, lastName, phoneNumber, attention, addressLineOne, addressLineTwo,
 					city, state, zipCode, root, salt, hash FROM user WHERE email = :email";
@@ -671,17 +668,47 @@ class User implements JsonSerializable {
 		try {
 			$user = null;
 			$statement->setFetchMode(PDO::FETCH_ASSOC);
-			$row   = $statement->fetch();
+			$row = $statement->fetch();
 			if($row !== false) {
 				$user = new User ($row["userId"], $row["lastName"], $row["firstName"], $row["root"], $row["attention"],
-								$row["addressLineOne"], $row["addressLineTwo"], $row["city"], $row["state"], $row["zipCode"],
-								$row["email"], $row["phoneNumber"], $row["salt"], $row["hash"]);
+					$row["addressLineOne"], $row["addressLineTwo"], $row["city"], $row["state"], $row["zipCode"],
+					$row["email"], $row["phoneNumber"], $row["salt"], $row["hash"]);
 			}
 		} catch(Exception $exception) {
 			// if the row couldn't be converted, rethrow it
 			throw(new PDOException($exception->getMessage(), 0, $exception));
 		}
-		return($user);
+		return ($user);
+	}
+
+	/**
+	 * Get all Users
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @return mixed|User
+	 **/
+	public static function getAllUsers(PDO &$pdo) {
+
+		// create query template
+		$query = "SELECT userId, email, firstName, lastName, phoneNumber, attention, addressLineOne,
+				addressLineTwo, city, state, zipCode, root, salt, hash FROM user";
+		$statement = $pdo->prepare($query);
+
+		// grab the user from mySQL
+		try {
+			$user = null;
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$user = new User ($row["userId"], $row["lastName"], $row["firstName"], $row["root"], $row["attention"],
+					$row["addressLineOne"], $row["addressLineTwo"], $row["city"], $row["state"], $row["zipCode"],
+					$row["email"], $row["phoneNumber"], $row["salt"], $row["hash"]);
+			}
+		} catch(Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new PDOException($exception->getMessage(), 0, $exception));
+		}
+		return ($user);
 	}
 }
 
