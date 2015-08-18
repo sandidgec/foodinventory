@@ -122,7 +122,6 @@ class ProductAPITest extends InventoryTextTest {
 		$this->assertSame(200, $product->status);
 	}
 
-
 	/**
 	 * test grabbing a Product by description
 	 **/
