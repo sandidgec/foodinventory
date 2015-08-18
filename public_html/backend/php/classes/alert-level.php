@@ -373,7 +373,7 @@ class AlertLevel {
 		if(empty($newAlertId) === true) {
 			throw(new PDOException("productId is an invalid integer"));
 		}
-		$query = "SELECT product.productId, product.description, product.sku, product.title, alertLevel.alertId, alertLevel.alertCode, alertLevel.alertFrequency, alertLevel.alertPoint, alertLevel.alertOperator
+		$query = "SELECT product.productId, product.vendorId, product.description, product.sku, product.title, alertLevel.alertId, alertLevel.alertCode, alertLevel.alertFrequency, alertLevel.alertPoint, alertLevel.alertOperator
 					FROM productAlert
 					INNER JOIN alertLevel ON alertLevel.alertId = productAlert.alertId
 					INNER JOIN product ON product.productId = productAlert.productId
