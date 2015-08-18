@@ -1,14 +1,5 @@
 <?php
-/**
- * product unit test for foodinventory
- *
- * This product-api-test tests a single api within the overall foodinventory application
- *
- * @author Marie Vigil <marie@jtdesignsolutions>
- *
- **/
-
-// grab the class(s) under scrutiny
+// grab the project test parameters
 require_once("inventorytext.php");
 
 // grab the autoloader for all Composer classes
@@ -80,12 +71,6 @@ class ProductTest extends InventoryTextTest {
 	protected $VALID_title = "test";
 
 	/**
-	 * programatic web platform
-	 * @var Guzzle $guzzle
-	 **/
-	protected $guzzle = null;
-
-	/**
 	 * invalid title to use
 	 * @var string $INVALID_title
 	 **/
@@ -99,17 +84,13 @@ class ProductTest extends InventoryTextTest {
 	protected $vendor = null;
 
 
-/**
- * create dependent objects before running each test
- **/
 
 	public final function setUp() {
-		// run the default setUp() method first
 		parent::setUp();
 
 
 		$this->guzzle = new \GuzzleHttp\Client(['cookies' => true]);
-		$this->VALID_sku = Sku::createFromFormat("4294967296");
+		$this->VALID_description = new Description();
 
 		$userId = null;
 		$firstName = "Jim";
@@ -152,8 +133,8 @@ class ProductTest extends InventoryTextTest {
 		$description = "Back Stock";
 		$storageCode = 13;
 
-		$this->description = new Description($productId, $vendorId, $leadTime, $sku, $title);
-		$this->description->insert($this->getPDO());
+		$this->sku = new Sku($productId, $vendorId, $leadTime, $description, $title);
+		$this->sku->insert($this->getPDO());
 
 		$productId = null;
 		$vendorId = null;
@@ -175,27 +156,32 @@ class ProductTest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing a Product by vendorId
+	 * test grabbing a Product by ProductId
 	 **/
-	public function testGetValidProductByVendorId() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("product");
-
-		// create a new Product and insert to into mySQL
-		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
+	public function testGetValidProductByProductId() {
+		// create a new Product
+		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
 			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
-		$product->insert($this->getPDO());
+		$newProduct->insert($this->getPDO());
 
-		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProducts = Product::getProductByVendorId($this->getPDO(), $product->getVendorId());
-		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
-		foreach($pdoProducts as $pdoProduct) {
-			$this->assertSame($pdoProduct->getVendorId(), $this->vendor->getVendorId());
-			$this->assertSame($pdoProduct->getDescription(), $this->VALID_description);
-			$this->assertSame($pdoProduct->getLeadTime(), $this->VALID_leadTime);
-			$this->assertSame($pdoProduct->getSku(), $this->VALID_sku);
-			$this->assertSame($pdoProduct->getTitle(), $this->VALID_title);
-		}
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId());
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$product = json_decode($body);
+		$this->assertSame(200, $product->status);
+	}
+
+	/**
+	 * test grabbing a Product by invalid ProductId
+	 **/
+	public function testGetInvalidProductByProductId() {
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . InventoryTextTest::INVALID_KEY);
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$product = json_decode($body);
+		$this->assertSame(200, $product->status);
 	}
 
 
