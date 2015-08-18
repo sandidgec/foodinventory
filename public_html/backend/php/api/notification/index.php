@@ -1,6 +1,6 @@
 <?php
 require_once(dirname(dirname(__DIR__)) . "/classes/autoload.php");
-require_once(dirname(dirname(dirname(__DIR__))) . "/lib/php/xsrf.php");
+require_once(dirname(dirname(__DIR__)) . "/lib/xsrf.php");
 require_once("/etc/apache2/data-design/encrypted-config.php");
 
 // start the session and create a XSRF token
@@ -19,24 +19,12 @@ try {
 
 	// sanitize the notification id
 	$notificationId = filter_input(INPUT_GET, "notificationId", FILTER_VALIDATE_INT);
-	if(($method === "DELETE" || $method === "PUT") && (empty($notificationId) === true || $notificationId < 0)) {
-		throw(new InvalidArgumentException("notificationId cannot be empty or negative", 405));
-	}
+
 	//sanitize the email status
 	$emailStatus = filter_input(INPUT_GET,"emailStatus", FILTER_VALIDATE_BOOLEAN);
-	if(($method === "DELETE" || $method === "PUT") && (empty($emailStatus) === true || $emailStatus < 0)) {
-		throw(new InvalidArgumentException("emailStatus cannot be empty or negative", 405));
-	}
+
 	//sanitize the date
 	$notificationDate = filter_input(INPUT_GET, "date", FILTER_VALIDATE_INT);
-	if(($method === "DELETE" || $method === "PUT") && (empty($date) === true || $date < 0)) {
-		throw(new InvalidArgumentException("date cannot be empty or negative", 405));
-	}
-	//sanitize the productId
-	$alertId = filter_input(INPUT_GET, "alertId", FILTER_VALIDATE_INT);
-	if(($method === "DELETE" || $method === "PUT") && (empty($alertId) === true || $alertId < 0)) {
-		throw(new InvalidArgumentException("alertId cannot be empty or negative", 405));
-	}
 
 	// grab the mySQL connection
 	$pdo = connectToEncryptedMySql("/etc/apache2/capstone-mysql/invtext.ini");
@@ -63,6 +51,9 @@ try {
 		verifyXsrf();
 		$requestContent = file_get_contents("php://input");
 		$requestObject = json_decode($requestContent);
+
+		$notificationDateTime = new DateTime();
+		$notificationDateTime-> setTimestamp($requestObject->notificationDateTime / 1000);
 
 		$notification = new Notification(null, $requestObject->alertId, $requestObject->emailStatus, $requestObject->notificationDate,
 			$requestObject->notificationHandle, $requestObject->notificationContent);

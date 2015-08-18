@@ -78,37 +78,27 @@ class VendorAPITest extends InventoryTextTest {
 	 * test grabbing a Vendor by valid vendorId
 	 **/
 	public function testGetValidVendorByVendorId() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("vendor");
-
 		// create a new Vendor and insert to into mySQL
-		$vendor = new Vendor(null, $this->VALID_contactName, $this->VALID_vendorEmail, $this->VALID_vendorName, $this->VALID_vendorPhoneNumber);
-		$vendor->insert($this->getPDO());
+		$newVendor = new Vendor(null, $this->VALID_contactName, $this->VALID_vendorEmail, $this->VALID_vendorName, $this->VALID_vendorPhoneNumber);
+		$newVendor->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$response = $this->guzzle->get('http://bootcamp-coders.cnm.edu/~invtext/backend/php/api/vendor/?vendorId=' . $vendor->getVendorId());
+		$response = $this->guzzle->get('http://bootcamp-coders.cnm.edu/~invtext/backend/php/api/vendor/?vendorId=' . $newVendor->getVendorId());
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
+		$vendor = json_decode($body);
+		$this->assertSame(200, $vendor->status);
 	}
 	/**
 	 * test grabbing a invalid vendor by vendorId
 	 **/
 	public function testGetInvalidVendorByVendorId() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("vendor");
-
-		// create a new Vendor and insert to into mySQL
-		$vendor = new Vendor(null, $this->VALID_contactName, $this->VALID_vendorEmail, $this->VALID_vendorName, $this->VALID_vendorPhoneNumber);
-		$vendor->insert($this->getPDO());
-
 		// grab the data from mySQL and enforce the fields match our expectations
 		$response = $this->guzzle->get('http://bootcamp-coders.cnm.edu/~invtext/backend/php/api/vendor/?vendorId=' . InventoryTextTest::INVALID_KEY);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
+		$vendor = json_decode($body);
+		$this->assertSame(200, $vendor->status);
 	}
 	/**
 	 * test grabbing a valid Vendor by vendor name
