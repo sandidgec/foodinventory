@@ -68,8 +68,14 @@ try {
 			$requestObject->zipCode, $requestObject->email, $requestObject->phoneNumber, $requestObject->hash, $requestObject->salt);
 		$user->insert($pdo);
 		$reply->data = "User created OK";
-	}
 
+	// delete an existing User
+} else if($method === "DELETE") {
+	verifyXsrf();
+	$user = User::getUserByUserId($pdo, $userId);
+	$user->delete($pdo);
+	$reply->data = "User deleted OK";
+}
 
 	// create an exception to pass back to the RESTful caller
 } 	catch(Exception $exception) {

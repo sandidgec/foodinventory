@@ -111,6 +111,28 @@ class UserTest extends InventoryTextTest {
 
 
 	/**
+	 * Test Deleting a Valid User
+	 **/
+	public function testDeleteValidUser() {
+		// create a new User
+		$user = new User(null, $this->VALID_lastName, $this->VALID_firstName, $this->VALID_root, $this->VALID_attention,
+			$this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city, $this->VALID_state,
+			$this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt, $this->VALID_hash);
+
+		$user->insert($this->getPDO());
+
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->delete('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/delete');
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$object = json_decode($body);
+		$this->assertNull($object->status);
+
+		// delete User from mySQL
+		$user->delete($this->getPDO());
+	}
+
+	/**
 	 * Test grabbing Valid User by User Id
 	 **/
 	public function testGetValidUserByUserId() {
@@ -118,6 +140,8 @@ class UserTest extends InventoryTextTest {
 		$user = new User(null, $this->VALID_lastName, $this->VALID_firstName, $this->VALID_root, $this->VALID_attention,
 			$this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city, $this->VALID_state,
 			$this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt, $this->VALID_hash);
+
+		$user->insert($this->getPDO());
 
 		// grab the data from guzzle
 		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/?userId=' . $user->getUserId());
@@ -136,6 +160,8 @@ class UserTest extends InventoryTextTest {
 			$this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city, $this->VALID_state,
 			$this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt, $this->VALID_hash);
 
+		$user->insert($this->getPDO());
+
 		// grab the data from guzzle
 		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/?email=' . $user->getEmail());
 		$this->assertSame($response->getStatusCode(), 200);
@@ -148,6 +174,13 @@ class UserTest extends InventoryTextTest {
 	 *  test grabbing User by Invalid Email
 	 **/
 	public function testGetValidUserByInvalidEmail() {
+		// create a new User
+		$user = new User(null, $this->VALID_lastName, $this->VALID_firstName, $this->VALID_root, $this->VALID_attention,
+			$this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city, $this->VALID_state,
+			$this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt, $this->VALID_hash);
+
+		$user->insert($this->getPDO());
+
 	// grab the data from guzzle
 	$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/?email=' . $this->INVALID_email);
 	$this->assertSame($response->getStatusCode(), 200);
@@ -165,6 +198,8 @@ class UserTest extends InventoryTextTest {
 			$this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city, $this->VALID_state,
 			$this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt, $this->VALID_hash);
 
+		$user->insert($this->getPDO());
+
 		// grab the data from guzzle
 		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/?');
 		$this->assertSame($response->getStatusCode(), 200);
@@ -173,23 +208,21 @@ class UserTest extends InventoryTextTest {
 		$this->assertSame(200, $object->status);
 	}
 
-	/**
-	 * Test Deleting a Valid User
-	 **/
-	public function testDeleteValidUser() {
+	public function testPostValidUser() {
 		// create a new User
-		$user = new User(null, $this->VALID_lastName, $this->VALID_firstName, $this->VALID_root, $this->VALID_attention,
+		$newUser = new User(null, $this->VALID_lastName, $this->VALID_firstName, $this->VALID_root, $this->VALID_attention,
 			$this->VALID_addressLineOne, $this->VALID_addressLineTwo, $this->VALID_city, $this->VALID_state,
 			$this->VALID_zipCode, $this->VALID_email, $this->VALID_phoneNumber, $this->VALID_salt, $this->VALID_hash);
 
+		// run a get request to establish session tokens
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?userId=1');
+
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->delete('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/delete');
+		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/',['headers' =>
+		['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newUser]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertNull($object->status);
-
-		// delete User from mySQL
-		$user->delete($this->getPDO());
+		$user = json_decode($body);
+		$this->assertSame(200, $user->status);
 	}
 }

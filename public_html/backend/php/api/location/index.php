@@ -65,6 +65,13 @@ try {
 		$location = new Location(null, $locationId, $requestObject->storageCode, $requestObject->description);
 		$location->insert($pdo);
 		$reply->data = "Location created OK";
+
+// delete an existing Location
+	} else if($method === "DELETE") {
+		verifyXsrf();
+		$location = Location::getLocationByLocationid($pdo, $locationId);
+		$location->delete($pdo);
+		$reply->data = "Location deleted OK";
 	}
 
 	// create an exception to pass back to the RESTful caller
