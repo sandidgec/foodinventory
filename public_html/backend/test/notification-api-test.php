@@ -82,6 +82,10 @@ class NotificationAPITest extends InventoryTextTest {
 	 * @var AlertLevel $alertLevel
 	 **/
 	protected $alertLevel = null;
+	/**
+	 * @var guzzle
+	 **/
+	protected $guzzle = null;
 
 	public function setUp() {
 		parent::setUp();
@@ -112,7 +116,7 @@ class NotificationAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$notification = json_decode($body);
-		var_dump($notification);
+		echo $body . PHP_EOL;
 		$this->assertSame(200, $notification->status);
 	}
 	/**
@@ -124,6 +128,7 @@ class NotificationAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$notification = json_decode($body);
+		echo $body . PHP_EOL;
 		$this->assertSame(200, $notification->status);
 	}
 		/**
@@ -139,6 +144,7 @@ class NotificationAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$notification = json_decode($body);
+		echo $body . PHP_EOL;
 		$this->assertSame(200, $notification->status);
 	}
 	/**
@@ -150,6 +156,7 @@ class NotificationAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$notification = json_decode($body);
+		echo $body . PHP_EOL;
 		$this->assertSame(200, $notification->status);
 	}
 
@@ -167,6 +174,7 @@ class NotificationAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$notification = json_decode($body);
+		echo $body . PHP_EOL;
 		$this->assertSame(200, $notification->status);
 	}
 	/**
@@ -179,6 +187,7 @@ class NotificationAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$notification = json_decode($body);
+		echo $body . PHP_EOL;
 		$this->assertSame(200, $notification->status);
 	}
 
@@ -197,6 +206,7 @@ class NotificationAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$notification = json_decode($body);
+		echo $body . PHP_EOL;
 		$this->assertSame(200, $notification->status);
 	}
 }
