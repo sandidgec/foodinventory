@@ -45,10 +45,8 @@ try {
 			$reply->data = Notification::getNotificationByNotificationDateTime($pdo, $notificationDateTime);
 			$notificationDateTimeInt = new DateTime();
 			$notificationDateTimeInt->setTimestamp($notificationDateTime / 1000);
-		} else if(empty($page) ===false) {
-			$reply->data = Notification::getAllNotifications($pdo, $page)->toArray();
 		} else {
-			throw(new InvalidArgumentException("no parameters given", 405));
+			$reply->data = Notification::getAllNotifications($pdo, $page);
 		}
 
 		// post to a new Notification
