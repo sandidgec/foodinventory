@@ -474,7 +474,7 @@ class Notification {
 		$start = $page * $pageSize;
 
 		//create query template
-		$query = "SELECT notificattionID, alertId, emailStatus, notificationDateTime, notificationHandle, NotificationContent FROM notification ORDER BY notificationDateTime LIMIT :start, :pageSize";
+		$query = "SELECT notificationId, alertId, emailStatus, notificationDateTime, notificationHandle, NotificationContent FROM notification ORDER BY notificationDateTime LIMIT :start, :pageSize";
 		$statement = $pdo->prepare($query);
 		$statement->bindParam(":start", $start, PDO::PARAM_INT);
 		$statement->bindParam(":pageSize", $pageSize, PDO::PARAM_INT);
