@@ -323,7 +323,6 @@ class MovementAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$movement = json_decode($body);
-		echo $body . PHP_EOL;
 		$this->assertSame(200, $movement->status);
 	}
 
@@ -337,7 +336,6 @@ class MovementAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$movement = json_decode($body);
-		echo $body . PHP_EOL;
 		$this->assertSame(200, $movement->status);
 	}
 
@@ -366,7 +364,6 @@ class MovementAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$movement = json_decode($body);
-		echo $body . PHP_EOL;
 		$this->assertSame(200, $movement->status);
 	}
 
