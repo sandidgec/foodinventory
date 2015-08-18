@@ -37,7 +37,7 @@ try {
 		} else if(empty($email) === false) {
 			$reply->data = User::getUserByEmail($pdo, $email);
 		} else {
-			$reply->data = User::getAllUsers($pdo, $userId);
+			$reply->data = User::getAllUsers($pdo);
 		}
 
 		// post to a new User

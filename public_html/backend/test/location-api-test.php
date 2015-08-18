@@ -2,11 +2,11 @@
 // grab the project test parameters
 require_once("inventorytext.php");
 
-// grab the class under scrutiny
-require_once(dirname(__DIR__) . "/php/classes/location.php");
-
 // grab the autoloader for all Composer classes
 require_once(dirname(dirname(dirname(__DIR__))) . "/vendor/autoload.php");
+
+// grab the class(s) under scrutiny
+require_once(dirname(__DIR__) . "/php/classes/autoload.php");
 
 
 /**
@@ -15,10 +15,10 @@ require_once(dirname(dirname(dirname(__DIR__))) . "/vendor/autoload.php");
  * This is a test of the api for the location class
  * enabled methods are tested for both invalid and valid inputs.
  *
- * @see Location
+ * @see Location/index
  * @author Charles Sandidge <sandidgec@gmail.com>
  **/
-class LocationTest extends InventoryTextTest {
+class LocationAPITest extends InventoryTextTest {
 
 	/**
 	 * Valid locationId
@@ -52,17 +52,18 @@ class LocationTest extends InventoryTextTest {
 	 **/
 	public function testDeleteValidLocation() {
 		// create a new Location
-		$location = new Location(null, $this->VALID_storageCode, $this->VALID_description);
+		$newLocation = new Location(null,$this->VALID_storageCode, $this->VALID_description);
+
+		$newLocation->insert($this->getPDO());
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->delete('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/delete');
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/');
+		$response = $this->guzzle->delete('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/' . $newLocation->getLocationId(), ['headers' =>
+			['X-XSRF-TOKEN' => $this->getXsrfToken()]]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertNull($object->status);
-
-		// delete User from mySQL
-		$location->delete($this->getPDO());
+		$location = json_decode($body);
+		$this->assertSame(200, $location->status);
 	}
 
 	/**
@@ -70,14 +71,16 @@ class LocationTest extends InventoryTextTest {
 	 **/
 	public function testGetValidLocationByLocationId() {
 		// create a new Location
-		$location = new Location(null, $this->VALID_storageCode, $this->VALID_description);
+		$newLocation = new Location(null,$this->VALID_storageCode, $this->VALID_description);
+
+		$newLocation->insert($this->getPDO());
 
 		// grab the data from guzzle
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/?locationId=' . $location->getLocationId());
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/?locationId=' . $newLocation->getLocationId());
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
+		$location = json_decode($body);
+		$this->assertSame(200, $location->status);
 	}
 
 	/**
@@ -85,14 +88,16 @@ class LocationTest extends InventoryTextTest {
 	 **/
 	public function testGetValidLocationByValidStorageCode() {
 		// create a new Location
-		$location = new Location(null, $this->VALID_storageCode, $this->VALID_description);
+		$newLocation = new Location(null, $this->VALID_storageCode, $this->VALID_description);
+
+		$newLocation->insert($this->getPDO());
 
 		// grab the data from guzzle
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/?storageCode=' . $location->getStorageCode());
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/?storageCode=' . $newLocation->getStorageCode());
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
+		$location = json_decode($body);
+		$this->assertSame(200, $location->status);
 	}
 
 
@@ -101,16 +106,16 @@ class LocationTest extends InventoryTextTest {
 	 **/
 	public function testGetAllLocations() {
 		// create a new Location
-		$location = new Location(null, $this->VALID_storageCode, $this->VALID_description);
+		$newLocation = new Location(null, $this->VALID_storageCode, $this->VALID_description);
 
-		$location->insert($this->getPDO());
+		$newLocation->insert($this->getPDO());
 
 		// grab the data from guzzle
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/?');
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/');
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
+		$location = json_decode($body);
+		$this->assertSame(200, $location->status);
 	}
 
 	/**
@@ -121,7 +126,7 @@ class LocationTest extends InventoryTextTest {
 		$newLocation = new Location(null, $this->VALID_storageCode, $this->VALID_description);
 
 		// run a get request to establish session tokens
-		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/?locationId=1');
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/?storageCode=br');
 
 		// grab the data from guzzle and enforce the status' match our expectations
 		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/',['headers' =>
@@ -140,10 +145,10 @@ class LocationTest extends InventoryTextTest {
 		$newLocation = new Location(null, $this->VALID_storageCode, $this->VALID_description);
 
 		// run a get request to establish session tokens
-		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/?locationId=1');
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/');
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/',['headers' =>
+		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/' . $newLocation->getLocationId(),['headers' =>
 			['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newLocation]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();

@@ -8,7 +8,6 @@
  * The class to handle location
  * @author Charles Sandidge sandidgec@gmail.com
  **/
-
 class Location implements JsonSerializable {
 
 	/**
@@ -40,24 +39,24 @@ class Location implements JsonSerializable {
 	 * @throws Exception for other exceptions
 	 * @throws RangeException if data values are out of range
 	 **/
-public function __construct($newLocationId, $newStorageCode, $newDescription) {
-	try {
-		$this->setLocationId($newLocationId);
-		$this->setStorageCode($newStorageCode);
-		$this->setDescription($newDescription);
-	} catch
-	(InvalidArgumentException $invalidArgument) {
-		//rethrow the exception to the caller
-		throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
-	} catch
-	(RangeException $range) {
-		// rethrow the exception to the caller
-		throw (new RangeException($range->getMessage(), 0, $range));
-	} catch(Exception $exception) {
-		// rethrow generic exception
-		throw(new Exception($exception->getMessage(), 0, $exception));
+	public function __construct($newLocationId, $newStorageCode, $newDescription) {
+		try {
+			$this->setLocationId($newLocationId);
+			$this->setStorageCode($newStorageCode);
+			$this->setDescription($newDescription);
+		} catch
+		(InvalidArgumentException $invalidArgument) {
+			//rethrow the exception to the caller
+			throw(new InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
+		} catch
+		(RangeException $range) {
+			// rethrow the exception to the caller
+			throw (new RangeException($range->getMessage(), 0, $range));
+		} catch(Exception $exception) {
+			// rethrow generic exception
+			throw(new Exception($exception->getMessage(), 0, $exception));
+		}
 	}
-}
 
 
 	/**
@@ -67,7 +66,7 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 	 **/
 	public function getLocationId() {
 		return ($this->locationId);
-}
+	}
 
 	/**
 	 * Mutator method for LocationId
@@ -89,6 +88,7 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 		}
 		$this->locationId = $newLocationId;
 	}
+
 	/**
 	 * accessor method for storage code
 	 * @return string for storage code
@@ -139,7 +139,7 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 
 	public function JsonSerialize() {
 		$fields = get_object_vars($this);
-		return($fields);
+		return ($fields);
 	}
 
 	/**
@@ -162,7 +162,7 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 
 		// bind the variables to the place holders in the template
 		$parameters = array("locationId" => $this->locationId, "storageCode" => $this->storageCode,
-									"description" => $this->description);
+			"description" => $this->description);
 
 		$statement->execute($parameters);
 
@@ -198,11 +198,11 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 	 * @throws PDOException for mySQL related issues
 	 **/
 	public function update(PDO &$pdo) {
-		if ($this->locationId === null) {
+		if($this->locationId === null) {
 			throw (new PDOException("can't update location that hasn't been saved"));
 		}
 
-			// create query template
+		// create query template
 		$query = "UPDATE location SET storageCode = :storageCode, description = :description WHERE locationId = :locationId";
 		$statement = $pdo->prepare($query);
 
@@ -242,7 +242,7 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 		try {
 			$location = null;
 			$statement->setFetchMode(PDO::FETCH_ASSOC);
-			$row   = $statement->fetch();
+			$row = $statement->fetch();
 			if($row !== false) {
 				$location = new Location ($row["locationId"], $row["storageCode"], $row["description"]);
 			}
@@ -250,7 +250,7 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 			// if the row couldn't be converted, rethrow it
 			throw(new PDOException($exception->getMessage(), 0, $exception));
 		}
-		return($location);
+		return ($location);
 	}
 
 
@@ -267,7 +267,6 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 		if($storageCode === false) {
 			throw(new PDOException("storage code is not valid"));
 		}
-
 		// create query template
 		$query = "SELECT locationId, storageCode, description FROM location WHERE storageCode = :storageCode";
 		$statement = $pdo->prepare($query);
@@ -276,11 +275,11 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 		$parameters = array("storageCode" => $storageCode);
 		$statement->execute($parameters);
 
-		// grab the location from mySQL
+		// grab the user from mySQL
 		try {
 			$location = null;
 			$statement->setFetchMode(PDO::FETCH_ASSOC);
-			$row   = $statement->fetch();
+			$row = $statement->fetch();
 			if($row !== false) {
 				$location = new Location ($row["locationId"], $row["storageCode"], $row["description"]);
 			}
@@ -288,7 +287,37 @@ public function __construct($newLocationId, $newStorageCode, $newDescription) {
 			// if the row couldn't be converted, rethrow it
 			throw(new PDOException($exception->getMessage(), 0, $exception));
 		}
-		return($location);
+		return ($location);
 	}
-}
+
+		/**
+		 *  Get all Locations
+		 * @param PDO $pdo pointer to PDO connection, by reference
+		 * @return mixed|location
+		 **/
+		public
+		static function getAllLocations(PDO &$pdo) {
+
+			// create query template
+			$query = "SELECT locationId, storageCode, description FROM location";
+			$statement = $pdo->prepare($query);
+
+			// grab the location from mySQL
+			try {
+				$location = null;
+				$statement->setFetchMode(PDO::FETCH_ASSOC);
+				$row = $statement->fetch();
+				if($row !== false) {
+					$location = new Location ($row["locationId"], $row["storageCode"], $row["description"]);
+				}
+			} catch(Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+			return ($location);
+		}
+	}
+
+
+
 
