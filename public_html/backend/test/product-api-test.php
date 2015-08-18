@@ -22,6 +22,14 @@ require_once(dirname(__DIR__) . "/php/classes/autoload.php");
  * @author Marie Vigil <marie@jtdesignsolutions.com>
  **/
 class ProductTest extends InventoryTextTest {
+
+	/**
+	 * creating a null Vendor
+	 * object for global scope
+	 * @var Vendor $vendor
+	 **/
+	protected $vendor = null;
+
 	/**
 	 * valid description to use
 	 * @var string $VALID_description
@@ -77,11 +85,9 @@ class ProductTest extends InventoryTextTest {
 	protected $INVALID_title = null;
 
 	/**
-	 * creating a null Vendor
-	 * object for global scope
-	 * @var Vendor $vendor
+	 * @var guzzle
 	 **/
-	protected $vendor = null;
+	protected $guzzle = null;
 
 
 
@@ -329,7 +335,7 @@ class ProductTest extends InventoryTextTest {
 		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?page=0');
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/', ['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newMovement]);
+		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/', ['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newProduct]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$product = json_decode($body);
@@ -348,7 +354,7 @@ class ProductTest extends InventoryTextTest {
 		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?page=0');
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/', ['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newMovement]);
+		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/', ['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newProduct]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$product = json_decode($body);
