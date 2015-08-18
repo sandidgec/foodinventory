@@ -318,7 +318,7 @@ class MovementAPITest extends InventoryTextTest {
 		$newMovement->insert($this->getPDO());
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$angularDate = $newMovement->getMovementDate()->getTimestamp() * 1000;
+		$angularDate = $this->VALID_movementDate->getTimestamp() * 1000;
 		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?movementDate=' . $angularDate);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
@@ -332,7 +332,7 @@ class MovementAPITest extends InventoryTextTest {
 	 **/
 	public function testGetInvalidMovementByMovementDate() {
 		// grab the data from guzzle and enforce the status' match our expectations
-		$angularDate = $this->VALID_movementDate->getTimestamp() * 1000;
+		$angularDate = $this->INVALID_movementDate->getTimestamp() * 1000;
 		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?movementDate=' . $angularDate);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
