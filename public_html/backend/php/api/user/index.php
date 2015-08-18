@@ -27,7 +27,7 @@ try {
 	// grab the mySQL connection
 	$pdo = connectToEncryptedMySql("/etc/apache2/capstone-mysql/invtext.ini");
 
-	// handle all RESTful calls to User
+	// handle all RESTful calls to User today
 	// get some or all Users
 	if($method === "GET") {
 		// set an XSRF cookie on GET requests

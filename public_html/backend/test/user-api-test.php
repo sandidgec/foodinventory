@@ -234,7 +234,7 @@ class UserAPITest extends InventoryTextTest {
 		$body = $response->getBody();
 		$user = json_decode($body);
 		echo $body . PHP_EOL;
-		$this->assertSame(200, $user->status);
+		$this->assertSame(201, $user->status);
 	}
 
 	/**
