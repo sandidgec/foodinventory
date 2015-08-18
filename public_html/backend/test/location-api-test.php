@@ -115,10 +115,26 @@ class LocationTest extends InventoryTextTest {
 		$newLocation = new Location(null, $this->VALID_storageCode, $this->VALID_description);
 
 		// run a get request to establish session tokens
-		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?userId=1');
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/?locationId=1');
 
 		// grab the data from guzzle and enforce the status' match our expectations
 		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/',['headers' =>
+			['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newLocation]);
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$location = json_decode($body);
+		$this->assertSame(200, $location->status);
+	}
+
+	public function testPutValidLocation() {
+		// create a new Location
+		$newLocation = new Location(null, $this->VALID_storageCode, $this->VALID_description);
+
+		// run a get request to establish session tokens
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/?locationId=1');
+
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/',['headers' =>
 			['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newLocation]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
