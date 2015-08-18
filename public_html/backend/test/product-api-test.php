@@ -111,6 +111,8 @@ class ProductAPITest extends InventoryTextTest {
 			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 		$product->insert($this->getPDO());
 
+		$product->insert($this->getPDO());
+
 		// grab the data from guzzle and enforce the status' match our expectations
 		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $product->getProductId());
 		$this->assertSame($response->getStatusCode(), 200);
@@ -128,6 +130,8 @@ class ProductAPITest extends InventoryTextTest {
 		// create a new Product
 		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
 			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
+		$product->insert($this->getPDO());
+
 		$product->insert($this->getPDO());
 
 		// grab the data from guzzle and enforce the status' match our expectations
@@ -158,6 +162,8 @@ class ProductAPITest extends InventoryTextTest {
 		// create a new Product
 		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
 			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
+		$product->insert($this->getPDO());
+
 		$product->insert($this->getPDO());
 
 		// grab the data from guzzle and enforce the status' match our expectations
@@ -191,7 +197,9 @@ class ProductAPITest extends InventoryTextTest {
 				$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 			$product->insert($this->getPDO());
 
-			// grab the data from guzzle and enforce the status' match our expectations
+		$product->insert($this->getPDO());
+
+		// grab the data from guzzle and enforce the status' match our expectations
 			$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $product->getProductId());
 			$this->assertSame($response->getStatusCode(), 200);
 			$body = $response->getBody();
@@ -220,7 +228,9 @@ class ProductAPITest extends InventoryTextTest {
 				$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 			$product->insert($this->getPDO());
 
-			// grab the data from guzzle and enforce the status' match our expectations
+		$product->insert($this->getPDO());
+
+		// grab the data from guzzle and enforce the status' match our expectations
 			$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $product->getProductId());
 			$this->assertSame($response->getStatusCode(), 200);
 			$body = $response->getBody();
@@ -251,10 +261,13 @@ class ProductAPITest extends InventoryTextTest {
 		// run a get request to establish session tokens
 		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?page=0');
 
+		$newProduct->insert($this->getPDO());
+
 		// grab the data from guzzle and enforce the status' match our expectations
 		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/', ['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newProduct]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
+		echo $body . PHP_EOL;
 		$product = json_decode($body);
 		$this->assertSame(200, $product->status);
 	}
@@ -269,6 +282,8 @@ class ProductAPITest extends InventoryTextTest {
 
 		// run a get request to establish session tokens
 		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?page=0');
+
+		$newProduct->insert($this->getPDO());
 
 		// grab the data from guzzle and enforce the status' match our expectations
 		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/', ['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newProduct]);
@@ -285,6 +300,8 @@ class ProductAPITest extends InventoryTextTest {
 	public function testDeleteValidProduct() {
 		// create a new Product
 		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
+
+		$newProduct->insert($this->getPDO());
 
 		// grab the data from guzzle and enforce the status' match our expectations
 		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/');
