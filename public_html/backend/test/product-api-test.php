@@ -318,6 +318,45 @@ class ProductTest extends InventoryTextTest {
 	}
 
 	/**
+	 * test posting a Product
+	 **/
+	public function testPostValidProduct() {
+		// create a new Product
+		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
+			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
+
+		// run a get request to establish session tokens
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?page=0');
+
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/', ['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newMovement]);
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$movement = json_decode($body);
+		$this->assertSame(200, $movement->status);
+	}
+
+	/**
+	 * test puting a Product
+	 **/
+	public function testPutValidProduct() {
+		// create a new Product
+		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
+			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
+
+		// run a get request to establish session tokens
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?page=0');
+
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/', ['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newMovement]);
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$movement = json_decode($body);
+		$this->assertSame(200, $movement->status);
+	}
+
+
+	/**
 	 * test deleting a Product
 	 **/
 	public function testDeleteValidProduct() {
