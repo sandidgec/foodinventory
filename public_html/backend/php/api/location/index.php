@@ -25,16 +25,15 @@ try {
 	$storageCode = filter_input(INPUT_GET, "storageCode", FILTER_SANITIZE_STRING);
 
 	// grab the mySQL connection
-	$pdo = connectToEncryptedMySql("/etc/apache2/capstone/invtext.ini");
+	$pdo = connectToEncryptedMySql("/etc/apache2/capstone-mysql/invtext.ini");
 
 	// handle the RESTful calls to location
 	// get some or all locations
-
 	if($method === "GET") {
 		// set an XSRF cookie on GET requests
 		setXsrfCookie("/");
 		if(empty($locationId) === false) {
-			$reply->data = User::getLocationbyLocationId($pdo, $locationId);
+			$reply->data = User::getLocationByLocationId($pdo, $locationId);
 		} else if(empty($email) === false) {
 			$reply->data = User::getLocationByStorageCode($pdo, $storageCode);
 		} else{

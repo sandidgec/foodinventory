@@ -32,7 +32,7 @@ try {
 	if($method === "GET") {
 		// set an XSRF cookie on GET requests
 		setXsrfCookie("/");
-		if(empty($movementId) === false) {
+		if(empty($userId) === false) {
 			$reply->data = User::getUserByUserId($pdo, $userId);
 		} else if(empty($email) === false) {
 			$reply->data = User::getUserByEmail($pdo, $email);
