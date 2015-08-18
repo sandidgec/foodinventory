@@ -9,7 +9,7 @@ if(session_status() !== PHP_SESSION_ACTIVE) {
 }
 
 // prepare an empty reply
-$reply = new stdC();
+$reply = new stdClass();
 $reply->status = 200;
 $reply->data = null;
 
