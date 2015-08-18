@@ -19,33 +19,9 @@ try {
 
 	// sanitize the alertId
 	$alertId = filter_input(INPUT_GET, "alertId", FILTER_VALIDATE_INT);
-	if(($method === "DELETE" || $method === "PUT") && (empty($alertId) === true || $alertId < 0)) {
-		throw(new InvalidArgumentException("alertId cannot be empty or negative", 405));
-	}
 
 	// sanitize the alertCode
 	$alertCode = filter_input(INPUT_GET, "alertCode", FILTER_SANITIZE_STRING);
-	if(($method === "DELETE" || $method === "PUT") && (empty($alertCode) === true || $alertCode < 0)) {
-		throw(new InvalidArgumentException("alertCode cannot be empty or negative", 405));
-	}
-
-	// sanitize the alertFrequency
-	$alertFrequency = filter_input(INPUT_GET, "alertFrequency", FILTER_SANITIZE_STRING);
-	if(($method === "DELETE" || $method === "PUT") && (empty($alertFrequency) === true || $alertFrequency < 0)) {
-		throw(new InvalidArgumentException("alertFrequency cannot be empty or negative", 405));
-	}
-
-	// sanitize the alertPoint
-	$alertPoint = filter_input(INPUT_GET, "alertPoint", FILTER_SANITIZE_STRING);
-	if(($method === "DELETE" || $method === "PUT") && (empty($alertPoint) === true || $alertPoint < 0)) {
-		throw(new InvalidArgumentException("alertPoint cannot be empty or negative", 405));
-	}
-
-	// sanitize the alertOperator
-	$alertOperator = filter_input(INPUT_GET, "alertOperator", FILTER_SANITIZE_STRING);
-	if(($method === "DELETE" || $method === "PUT") && (empty($alertOperator) === true || $alertOperator < 0)) {
-		throw(new InvalidArgumentException("alertOperator cannot be empty or negative", 405));
-	}
 
 	// grab the mySQL connection
 	$pdo = connectToEncryptedMySql("/etc/apache2/capstone/invtext.ini");
@@ -60,19 +36,38 @@ try {
 		} else if(empty($alertCode) === false) {
 			$reply->data = AlertLevel::getAlertLevelByAlertCode($pdo, $alertCode);
 		} else {
-			$reply->data = Movement::getAllMovements($pdo)->toArray();
+			$reply->data = AlertLevel::getAllAlertLevels($pdo);
 		}
-		// post to a new Movement
+
+		// post to a new User
 	} else if($method === "POST") {
 		// convert POSTed JSON to an object
 		verifyXsrf();
 		$requestContent = file_get_contents("php://input");
 		$requestObject = json_decode($requestContent);
 
-		$alertLevel = new AlertLevel(null, $requestObject->alertCode, $requestObject->alertFrequency,
-											  $requestObject->alertPoint, $requestObject->alertOperator);
+		$alertLevel = new AlertLevel($alertId, $requestObject->alertCode, $requestObject->alertFrequency, $requestObject->alertPoint, $requestObject->alertOperator);
 		$alertLevel->insert($pdo);
 		$reply->data = "AlertLevel created OK";
+
+		// delete an existing User
+	} else if($method === "DELETE") {
+		verifyXsrf();
+
+		$alertLevel = AlertLevel::getAlertLevelByAlertId($pdo, $alertId);
+		$user->delete($pdo);
+		$reply->data = "AlertLevel deleted OK";
+
+		// put to an existing User
+	} else if($method === "PUT") {
+		// convert PUTed JSON to an object
+		verifyXsrf();
+		$requestContent = file_get_contents("php://input");
+		$requestObject = json_decode($requestContent);
+
+		$alertLevel = new AlertLevel($alertId, $requestObject->alertCode, $requestObject->alertFrequency, $requestObject->alertPoint, $requestObject->alertOperator);
+		$alertLevel->update($pdo);
+		$reply->data = "AlertLevel updated OK";
 	}
 
 	// create an exception to pass back to the RESTful caller
