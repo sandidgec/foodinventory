@@ -3,9 +3,6 @@
 require_once("inventorytext.php");
 
 // grab the autoloader for all Composer classes
-require_once(dirname(dirname(dirname(__DIR__))) . "/product/autoload.php");
-
-// grab the autoloader for all Composer classes
 require_once(dirname(dirname(dirname(__DIR__))) . "/vendor/autoload.php");
 
 // grab the class(s) under scrutiny
@@ -96,7 +93,6 @@ class ProductTest extends InventoryTextTest {
 
 
 		$this->guzzle = new \GuzzleHttp\Client(['cookies' => true]);
-		$this->VALID_description = new Description();
 
 		$userId = null;
 		$firstName = "Jim";

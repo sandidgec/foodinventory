@@ -1,16 +1,16 @@
 <phpunit>
 	<testsuites>
 		<testsuite name="Inventory Message">
-			<file>user-test.php</file>
+<!--			<file>user-test.php</file>
 			<file>user-api-test.php</file>
 			<file>unitofmeasure-test.php</file>
 			<file>alert-level-test.php</file>
 			<file>alert-level-api-test.php</file>
 			<file>vendor-test.php</file>
 			<file>vendor-api-test.php</file>
-			<file>product-test.php</file>
+			<file>product-test.php</file> -->
 			<file>product-api-test.php</file>
-			<file>product-alert-test.php</file>
+<!--			<file>product-alert-test.php</file>
 			<file>location-test.php</file>
 			<file>location-api-test.php</file>
 			<file>finished-product-test.php</file>
@@ -18,7 +18,7 @@
 			<file>movement-test.php</file>
 			<file>movement-api-test.php</file>
 			<file>notification-test.php</file>
-			<file>notification-api-test.php</file>
+			<file>notification-api-test.php</file> -->
 		</testsuite>
 	</testsuites>
 </phpunit>
