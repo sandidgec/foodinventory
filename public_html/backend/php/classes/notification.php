@@ -424,8 +424,8 @@ class Notification {
 	 * gets the Notification by notification Date Time
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
-	 * @param DateTime $newNotificationDateTime date of notification sent
-	 * @return mixed notifications found or null if not found
+	 * @param DateTime $newNotificationDateTime the notification date to search for
+	 * @return mixed notification(s) found or null if not found
 	 * @throws PDOException when mySQL related errors occur
 	 **/
 	public static function getNotificationByNotificationDateTime(PDO &$pdo, $newNotificationDateTime) {
@@ -438,15 +438,15 @@ class Notification {
 			throw(new RangeException($range->getMessage(), 0, $range));
 		}
 
-		$newNotificationDateTime->format("m-d-Y");
+		$sunrise = $newNotificationDateTime->format("Y-m-d") . " 00:00:00";
+		$sunset = $newNotificationDateTime->format("Y-m-D") .  " 23:59:59";
 
 		// create query template
-		$query = "SELECT notificationId, alertId, emailStatus, notificationDateTime, notificationHandle, notificationContent FROM notification WHERE notificationDateTime = :notificationDateTime";
+		$query = "SELECT notificationId, alertId, emailStatus, notificationDateTime, notificationHandle, notificationContent FROM notification WHERE notificationDateTime >= :sunrise AND notificationDateTime <= :sunset";
 		$statement = $pdo->prepare($query);
 
 		// bind the email id to the place holder in the template
-		$newNotificationDateTime = "%$newNotificationDateTime%";
-		$parameters = array("notificationDateTime" => $newNotificationDateTime);
+		$parameters = array("sunrise" => $sunrise, "sunset" => $sunset);
 		$statement->execute($parameters);
 
 		//build an array of movements
