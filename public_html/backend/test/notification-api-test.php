@@ -77,7 +77,6 @@ class NotificationAPITest extends InventoryTextTest {
 	 * @var string $INVALID_notificationContent
 	 **/
 	protected $INVALID_notificationContent = "place holder cause Topher doesn't know";
-
 	/**
 	 * seting up for Foreign key alert id
 	 * @var AlertLevel $alertLevel
@@ -86,6 +85,9 @@ class NotificationAPITest extends InventoryTextTest {
 
 	public function setUp() {
 		parent::setUp();
+
+		$this->guzzle = new \GuzzleHttp\Client(['cookies' => true]);
+		$this->VALID_notificationDateTime = new DateTime();
 
 		$alertId = null;
 		$alertCode = "33";
@@ -103,9 +105,6 @@ class NotificationAPITest extends InventoryTextTest {
 	 * test grabbing a notification by valid notificationId
 	 **/
 	public function testGetValidNotificationByNotificationId() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("notification");
-
 		// create a new vendor and insert to into mySQL
 		$newNotification = new Notification(null, $this->alertLevel->getAlertId(), $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
 		$newNotification->insert($this->getPDO());
@@ -115,6 +114,7 @@ class NotificationAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$notification = json_decode($body);
+		var_dump($notification);
 		$this->assertSame(200, $notification->status);
 	}
 	/**
@@ -151,7 +151,7 @@ class NotificationAPITest extends InventoryTextTest {
 	 **/
 	public function testGetInvalidNotificationByEmailStatus() {
 		// grab the data from mySQL and enforce the fields match our expectations
-		$response = $this->guzzle->get('http://bootcamp-coders.cnm.edu/~invtext/backend/php/api/notification/?emailStatus=' . InventoryTextTest::INVALID_KEY);
+		$response = $this->guzzle->get('http://bootcamp-coders.cnm.edu/~invtext/backend/php/api/notification/?emailStatus=' . $this->INVALID_emailStatus);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$notification = json_decode($body);
@@ -191,7 +191,7 @@ class NotificationAPITest extends InventoryTextTest {
 	 *test posting a Notification
 	 **/
 	public function testPostValidNotification(){
-		//creat a new Notification
+		//create a new Notification
 		$newNotification = new Notification(null, $this->alertLevel->getAlertId(), $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
 
 		//run a get request to establish session tokens
