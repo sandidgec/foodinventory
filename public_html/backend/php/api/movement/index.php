@@ -60,7 +60,6 @@ try {
 		} else if(empty($userId) === false) {
 			$reply->data = Movement::getMovementByUserId($pdo, $userId);
 		} else if(empty($movementDate) === false) {
-			$movementDate->setTimestamp($movementDate / 1000);
 			$reply->data = Movement::getMovementByMovementDate($pdo, $movementDate);
 		} else if(empty($movementType) === false) {
 			$reply->data = Movement::getMovementByMovementType($pdo, $movementType);
