@@ -332,12 +332,12 @@ class ProductTest extends InventoryTextTest {
 		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/', ['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newMovement]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$movement = json_decode($body);
-		$this->assertSame(200, $movement->status);
+		$product = json_decode($body);
+		$this->assertSame(200, $product->status);
 	}
 
 	/**
-	 * test puting a Product
+	 * test putting a Product
 	 **/
 	public function testPutValidProduct() {
 		// create a new Product
@@ -348,11 +348,11 @@ class ProductTest extends InventoryTextTest {
 		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?page=0');
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/', ['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newMovement]);
+		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/', ['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newMovement]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$movement = json_decode($body);
-		$this->assertSame(200, $movement->status);
+		$product = json_decode($body);
+		$this->assertSame(200, $product->status);
 	}
 
 
