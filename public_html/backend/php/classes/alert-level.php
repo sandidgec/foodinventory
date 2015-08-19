@@ -373,11 +373,12 @@ class AlertLevel {
 		if(empty($newAlertId) === true) {
 			throw(new PDOException("productId is an invalid integer"));
 		}
-		$query = "SELECT product.productId, product.vendorId, product.description, product.leadTime, product.sku, product.title, alertLevel.alertId, alertLevel.alertCode, alertLevel.alertFrequency, alertLevel.alertPoint, alertLevel.alertOperator
-					FROM productAlert
-					INNER JOIN alertLevel ON alertLevel.alertId = productAlert.alertId
-					INNER JOIN product ON product.productId = productAlert.productId
-					WHERE alertLevel.alertId = :alertId";
+		$query = "SELECT product.productId, product.vendorId, product.description, product.leadTime, product.sku, product.title,
+							  alertLevel.alertId, alertLevel.alertCode, alertLevel.alertFrequency, alertLevel.alertPoint, alertLevel.alertOperator
+						FROM productAlert
+						INNER JOIN alertLevel ON alertLevel.alertId = productAlert.alertId
+						INNER JOIN product ON product.productId = productAlert.productId
+						WHERE alertLevel.alertId = :alertId";
 		$statement = $pdo->prepare($query);
 
 		// bind the alertId to the place holder in the template
