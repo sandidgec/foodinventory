@@ -112,6 +112,8 @@ class ProductTest extends InventoryTextTest {
 		$storageCode = "br";
 		$description = "back shelf";
 
+		$unitId = null;
+
 		$this->location = new Location($locationId, $storageCode, $description);
 		$this->location->insert($this->getPDO());
 	}
