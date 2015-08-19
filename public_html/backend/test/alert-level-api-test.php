@@ -35,11 +35,6 @@ class AlertLevelAPITest extends InventoryTextTest {
 	 **/
 	protected $VALID_alertCode = "A6";
 	/**
-	 * valid alert code 2 to use
-	 * @var string $VALID_alertCode2
-	 **/
-	protected $VALID_alertCode2 = "B6";
-	/**
 	 * invalid alert code to use
 	 * @var string $INVALID_alertCode
 	 **/
@@ -70,7 +65,41 @@ class AlertLevelAPITest extends InventoryTextTest {
 	 **/
 	protected $VALID_alertOperator = "a";
 
+	/**
+	 * creating a null Product
+	 * object for global scope
+	 * @var Product $product
+	 **/
+	protected $product = null;
 
+
+	/**
+	 * Set up for Salt and Hash as well as guzzle/cookies
+	 **/
+	public function setUp() {
+		parent::setUp();
+
+		$this->guzzle = new \GuzzleHttp\Client(['cookies' => true]);
+
+		$vendorId = null;
+		$contactName = "Trevor Rigler";
+		$vendorEmail = "trier@cnm.edu";
+		$vendorName = "TruFork";
+		$vendorPhoneNumber = "5053594687";
+
+		$vendor = new Vendor($vendorId, $contactName, $vendorEmail, $vendorName, $vendorPhoneNumber);
+		$vendor->insert($this->getPDO());
+
+		$productId = null;
+		$vendorId = $vendor->getVendorId();
+		$description = "A glorius bead to use";
+		$leadTime = 10;
+		$sku = "TGT354";
+		$title = "Bead-Green-Blue-Circular";
+
+		$this->product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
+		$this->product->insert($this->getPDO());
+	}
 
 
 	/**
@@ -158,17 +187,37 @@ class AlertLevelAPITest extends InventoryTextTest {
 	}
 
 	/**
-	 * Test Posting Valid AlertLevel
+	 * Test grabbing Valid Product by alertId
 	 **/
-	public function testPostValidUser() {
+	public function testGetValidProductByAlertId() {
+		// create a new AlertLevel
+		$newAlertLevel = new AlertLevel (null, $this->VALID_alertCode, $this->VALID_alertFrequency, $this->VALID_alertPoint, $this->VALID_alertOperator);
+		$newAlertLevel->insert($this->getPDO());
+
+		// create a new ProductAlert
+		$newProductAlert = new ProductAlert($newAlertLevel->getAlertId(), $this->product->getProductId(), true);
+		$newProductAlert->insert($this->getPDO());
+
+		// grab the data from guzzle
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/alert-level/?alertId=' . $newAlertLevel->getAlertId() . "&getProducts=true");
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$alertLevel = json_decode($body);
+		$this->assertSame(200, $alertLevel->status);
+	}
+
+	/**
+	 * test ability to Post valid AlertLevel
+	 **/
+	public function testPostValidAlertLevel() {
 		// create a new AlertLevel
 		$newAlertLevel = new AlertLevel (null, $this->VALID_alertCode, $this->VALID_alertFrequency, $this->VALID_alertPoint, $this->VALID_alertOperator);
 
 		// run a get request to establish session tokens
-		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/?alertId=12');
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/alert-level/?alertCode=br');
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/',
+		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/alert-level/',
 			['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newAlertLevel]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
@@ -177,18 +226,19 @@ class AlertLevelAPITest extends InventoryTextTest {
 	}
 
 	/**
-	 * Test Putting Valid AlertLevel
+	 * test ability to Put valid AlertLevel
 	 **/
-	public function testPutValidUser() {
+	public function testPutValidAlertLevel() {
 		// create a new AlertLevel
 		$newAlertLevel = new AlertLevel (null, $this->VALID_alertCode, $this->VALID_alertFrequency, $this->VALID_alertPoint, $this->VALID_alertOperator);
+		$newAlertLevel->insert($this->getPDO());
 
 		// run a get request to establish session tokens
-		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/');
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/alert-level/');
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/user/' . $newAlertLevel->getAlertId(),
-			['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()]]);
+		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/alert-level/' . $newAlertLevel->getAlertId(),
+			['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newAlertLevel]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$alertLevel = json_decode($body);
