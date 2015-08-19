@@ -73,6 +73,12 @@ class ProductTest extends InventoryTextTest {
 	 **/
 	protected $VALID_title = "test";
 
+
+	/**
+	 * @var Location $location
+	 **/
+	protected $location = null;
+
 	/**
 	 * invalid title to use
 	 * @var string $INVALID_title
@@ -85,11 +91,6 @@ class ProductTest extends InventoryTextTest {
 	 * @var Vendor $vendor
 	 **/
 	protected $vendor = null;
-
-	/**
-	 * @var Location $location
-	 **/
-	protected $location = null;
 
 
 	/**
