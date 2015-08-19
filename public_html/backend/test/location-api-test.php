@@ -35,6 +35,15 @@ class LocationAPITest extends InventoryTextTest {
 	 * @var string $description
 	 **/
 	protected $VALID_description = "back shelf";
+	/**
+	 * @var Product $product
+	 **/
+	protected $product = null;
+	/**
+	 * @var UnitOfMeasure $unitOfMeasure
+	 **/
+	protected $unitOfMeasure = null;
+
 
 
 	/**
@@ -44,6 +53,32 @@ class LocationAPITest extends InventoryTextTest {
 		parent::setUp();
 
 		$this->guzzle = new \GuzzleHttp\Client(['cookies' => true]);
+
+		$vendorId = null;
+		$contactName = "Trevor Rigler";
+		$vendorEmail = "trier@cnm.edu";
+		$vendorName = "TruFork";
+		$vendorPhoneNumber = "5053594687";
+
+		$vendor = new Vendor($vendorId, $contactName, $vendorEmail, $vendorName, $vendorPhoneNumber);
+		$vendor->insert($this->getPDO());
+
+		$productId = null;
+		$vendorId = $vendor->getVendorId();
+		$description = "A glorius bead to use";
+		$leadTime = 10;
+		$sku = "TGT354";
+		$title = "Bead-Green-Blue-Circular";
+
+		$this->product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
+		$this->product->insert($this->getPDO());
+
+		$unitId = null;
+		$quantity = 3.5;
+		$unitCode = "ea";
+
+		$this->unitOfMeasure = new UnitOfMeasure($unitId, $unitCode, $quantity);
+		$this->unitOfMeasure->insert($this->getPDO());
 	}
 
 
@@ -52,7 +87,7 @@ class LocationAPITest extends InventoryTextTest {
 	 **/
 	public function testDeleteValidLocation() {
 		// create a new Location
-		$newLocation = new Location(null,$this->VALID_storageCode, $this->VALID_description);
+		$newLocation = new Location(null, $this->VALID_storageCode, $this->VALID_description);
 
 		$newLocation->insert($this->getPDO());
 
@@ -71,7 +106,7 @@ class LocationAPITest extends InventoryTextTest {
 	 **/
 	public function testGetValidLocationByLocationId() {
 		// create a new Location
-		$newLocation = new Location(null,$this->VALID_storageCode, $this->VALID_description);
+		$newLocation = new Location(null, $this->VALID_storageCode, $this->VALID_description);
 
 		$newLocation->insert($this->getPDO());
 
@@ -104,16 +139,23 @@ class LocationAPITest extends InventoryTextTest {
 	 * Test grabbing Valid Product by LocationId
 	 **/
 	public function testGetValidProductByLocationId() {
-		// create a new Location
+		// create a new location and insert to into mySQL
 		$newLocation = new Location(null, $this->VALID_storageCode, $this->VALID_description);
-
 		$newLocation->insert($this->getPDO());
+
+		$quantity = 5.9;
+
+		// create a new location and insert to into mySQL
+		$productLocation = new productLocation($newLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(),
+			$quantity);
+		$productLocation->insert($this->getPDO());
 
 		// grab the data from guzzle
 		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/?locationId=' . $newLocation->getLocationId() . "&getProducts=true");
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$location = json_decode($body);
+		echo $body . PHP_EOL;
 		$this->assertSame(200, $location->status);
 	}
 
@@ -146,7 +188,7 @@ class LocationAPITest extends InventoryTextTest {
 		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/?storageCode=br');
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/',['headers' =>
+		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/', ['headers' =>
 			['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newLocation]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
@@ -167,7 +209,7 @@ class LocationAPITest extends InventoryTextTest {
 		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/');
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/' . $newLocation->getLocationId(),['headers' =>
+		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/' . $newLocation->getLocationId(), ['headers' =>
 			['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newLocation]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
