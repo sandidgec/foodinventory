@@ -254,13 +254,13 @@ class ProductAPITest extends InventoryTextTest {
 		// run a get request to establish session tokens
 		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/');
 
-		$newProduct->insert($this->getPDO());
+
 
 		// grab the data from guzzle and enforce the status' match our expectations
 		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/', ['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newProduct]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-//		echo $body . PHP_EOL;
+		echo $body . PHP_EOL;
 		$product = json_decode($body);
 		$this->assertSame(200, $product->status);
 	}
@@ -282,7 +282,7 @@ class ProductAPITest extends InventoryTextTest {
 		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/' . $newProduct->getProductId(), ['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newProduct]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		echo $body . PHP_EOL;
+//		echo $body . PHP_EOL;
 		$product = json_decode($body);
 		$this->assertSame(200, $product->status);
 	}
