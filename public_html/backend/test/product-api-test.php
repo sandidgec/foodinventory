@@ -95,7 +95,7 @@ class ProductAPITest extends InventoryTextTest {
 		parent::setUp();
 
 		// create and insert a Vendor id
-		$this->vendor = new Vendor(null, "Joe Cool", "joecool@gmail.com", "Joe Cool", 5055555555);
+		$this->vendor = new Vendor(null, "Joe Cool", "joecool@gmail.com", "Joe Cool", "5055555555");
 		$this->vendor->insert($this->getPDO());
 		// create and insert a GuzzleHttp
 		$this->guzzle = new \GuzzleHttp\Client(['cookies' => true]);
@@ -257,7 +257,7 @@ class ProductAPITest extends InventoryTextTest {
 		$newProduct->insert($this->getPDO());
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/' . $newProduct->getProductId(), ['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newProduct]);
+		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/', ['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newProduct]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$product = json_decode($body);
@@ -273,7 +273,7 @@ class ProductAPITest extends InventoryTextTest {
 			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 
 		// run a get request to establish session tokens
-		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?page=0');
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/');
 
 		$newProduct->insert($this->getPDO());
 
@@ -296,7 +296,7 @@ class ProductAPITest extends InventoryTextTest {
 
 		// grab the data from guzzle and enforce the status' match our expectations
 		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/');
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId(), ['headers' =>
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/' . $newProduct->getProductId(), ['headers' =>
 		['X-XSRF-TOKEN' => $this->getXsrfToken()]]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
