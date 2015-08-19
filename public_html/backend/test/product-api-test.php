@@ -107,7 +107,7 @@ class ProductAPITest extends InventoryTextTest {
 	 **/
 	public function testGetValidProductByVendorId() {
 		// create a new Product
-		$newProduct = new Product(null, $this->product->getVendorId(), $this->VALID_description,
+		$newProduct = new Product(null, $this->vendorId->getVendorId(), $this->VALID_description,
 			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 		$newProduct->insert($this->getPDO());
 
