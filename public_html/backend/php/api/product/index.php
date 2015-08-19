@@ -55,15 +55,15 @@ try {
 		} else if(empty($vendorId) === false) {
 			$reply->data = Product::getProductByVendorId($pdo, $vendorId);
 		} else if(empty($description) === false) {
-			$reply->data = Product::getDescriptionByDescription($pdo, $description);
+			$reply->data = Product::getProductByDescription($pdo, $description);
 		} else if(empty($leadTIme) === false) {
-			$reply->data = Product::getLeadTimeByLeadTime($pdo, $leadTime);
+			$reply->data = Product::getProductByLeadTime($pdo, $leadTime);
 		} else if(empty($sku) === false) {
-			$reply->data = Product::getSkuBySku($pdo, $sku);
+			$reply->data = Product::getProductBySku($pdo, $sku);
 		} else if(empty($title) === false) {
-	$reply->data = Product::getTitleByTitle($pdo, $title);
+	$reply->data = Product::getProductByTitle($pdo, $title);
 		} else if(empty($pagination) === false) {
-		$reply->data = Product::getPaginationByPagination($pdo, $pagination);
+		$reply->data = Product::getAllProducts($pdo, $pagination);
 	}
 		// post to a new Product
 		else if($method === "POST") {
