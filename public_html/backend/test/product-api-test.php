@@ -6,7 +6,7 @@ require_once("inventorytext.php");
 require_once(dirname(dirname(dirname(__DIR__))) . "/vendor/autoload.php");
 
 // grab the class(s) under scrutiny
-require_once(dirname(__DIR__) . "/php/classes/autoload.php");
+require_once(dirname(__DIR__) . "/php/classes/product.php");
 
 /**
  * Full PHPUnit test for the Product API
@@ -107,7 +107,7 @@ class ProductAPITest extends InventoryTextTest {
 	 **/
 	public function testGetValidProductByVendorId() {
 		// create a new Product
-		$newProduct = new Product(null, $this->vendorId->getVendorId(), $this->VALID_description,
+		$newProduct = new Product(null, $this->product->getVendorId(), $this->VALID_description,
 			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 		$newProduct->insert($this->getPDO());
 
@@ -252,7 +252,7 @@ class ProductAPITest extends InventoryTextTest {
 			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 
 		// run a get request to establish session tokens
-		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/?page=0');
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/');
 
 		$newProduct->insert($this->getPDO());
 

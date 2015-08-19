@@ -18,16 +18,19 @@ try {
 	$method = array_key_exists("HTTP_X_HTTP_METHOD", $_SERVER) ? $_SERVER["HTTP_X_HTTP_METHOD"] : $_SERVER["REQUEST_METHOD"];
 
 	// sanitize the productId
-	$productId = filter_input(INPUT_GET, "productId", FILTER_VALIDATE_STRING);
+	$productId = filter_input(INPUT_GET, "productId", FILTER_VALIDATE_INT);
 	if(($method === "DELETE" || $method === "PUT") && (empty($productId) === true || $productId < 0)) {
 		throw(new InvalidArgumentException("productId cannot be empty or negative", 405));
 	}
 
 	// sanitize the vendorId
-	$vendorId = filter_input(INPUT_GET, "vendorId", FILTER_VALIDATE_STRING);
+	$vendorId = filter_input(INPUT_GET, "vendorId", FILTER_VALIDATE_INT);
 
 	// sanitize the description
 	$description = filter_input(INPUT_GET, "description", FILTER_SANITIZE_STRING);
+
+	// sanitize the leadTime
+	$leadTime = filter_input(INPUT_GET, "leadTime", FILTER_VALIDATE_INT);
 
 	// sanitize the sku
 	$sku = filter_input(INPUT_GET, "sku", FILTER_SANITIZE_STRING);
