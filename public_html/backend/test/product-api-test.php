@@ -6,7 +6,7 @@ require_once("inventorytext.php");
 require_once(dirname(dirname(dirname(__DIR__))) . "/vendor/autoload.php");
 
 // grab the class(s) under scrutiny
-require_once(dirname(__DIR__) . "/php/classes/product.php");
+require_once(dirname(__DIR__) . "/php/classes/autoload.php");
 
 /**
  * Full PHPUnit test for the Product API
