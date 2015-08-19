@@ -12,8 +12,7 @@
 require_once("inventorytext.php");
 
 // grab the class(s) under scrutiny
-require_once(dirname(__DIR__) . "/php/classes/product.php");
-require_once(dirname(__DIR__) . "/php/classes/vendor.php");
+require_once(dirname(__DIR__) . "/php/classes/autoload.php");
 
 /**
  * Full PHPUnit test for the Product class
@@ -109,14 +108,11 @@ class ProductTest extends InventoryTextTest {
 		$vendor = new Vendor($vendorId, $contactName, $vendorEmail, $vendorName, $vendorPhoneNumber);
 		$vendor->insert($this->getPDO());
 
-		$productId = null;
-		$vendorId = $vendor->getVendorId();
-		$description = "A glorius bead to use";
-		$leadTime = 10;
-		$sku = "TGT354";
-		$title = "Bead-Green-Blue-Circular";
+		$locationId = null;
+		$storageCode = "br";
+		$description = "back shelf";
 
-		$this->location = new Location($locationId, $storageCode, $description, $unitOfMeasurement);
+		$this->location = new Location($locationId, $storageCode, $description);
 		$this->location->insert($this->getPDO());
 	}
 
