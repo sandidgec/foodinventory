@@ -86,19 +86,38 @@ class ProductTest extends InventoryTextTest {
 	 **/
 	protected $vendor = null;
 
+	/**
+	 * @var Location $location
+	 **/
+	protected $location = null;
+
 
 	/**
 	 * create dependent objects before running each test
 	 **/
-	public final function setUp() {
-		// run the default setUp() method first
+
+	public function setUp() {
 		parent::setUp();
 
-		// create and insert a Vendor id
-		$this->vendor = new Vendor(null, "Joe Cool", "joecool@gmail.com", "Joe Cool", 5055555555);
-		$this->vendor->insert($this->getPDO());
-	}
+		$vendorId = null;
+		$contactName = "Trevor Rigler";
+		$vendorEmail = "trier@cnm.edu";
+		$vendorName = "TruFork";
+		$vendorPhoneNumber = "5053594687";
 
+		$vendor = new Vendor($vendorId, $contactName, $vendorEmail, $vendorName, $vendorPhoneNumber);
+		$vendor->insert($this->getPDO());
+
+		$productId = null;
+		$vendorId = $vendor->getVendorId();
+		$description = "A glorius bead to use";
+		$leadTime = 10;
+		$sku = "TGT354";
+		$title = "Bead-Green-Blue-Circular";
+
+		$this->location = new Location($locationId, $storageCode, $description, $unitOfMeasurement);
+		$this->location->insert($this->getPDO());
+	}
 
 
 	/**
@@ -130,9 +149,10 @@ class ProductTest extends InventoryTextTest {
 	public function testInsertInvalidProduct() {
 		// create a product with a non null Product and watch it fail
 		$product = new Product(InventoryTextTest::INVALID_KEY, $this->vendor->getVendorId(), $this->VALID_description,
-									  $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
+			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 		$product->insert($this->getPDO());
 	}
+
 	/**
 	 * test inserting a Product, editing it, and then updating it
 	 **/
@@ -141,8 +161,8 @@ class ProductTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("product");
 
 		// create a new Profile and insert to into mySQL
-		$product = new Product (null,  $this->vendor->getVendorId(), $this->VALID_description,
-													$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
+		$product = new Product (null, $this->vendor->getVendorId(), $this->VALID_description,
+			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 		$product->insert($this->getPDO());
 
 		// edit the Product and update it in mySQL
@@ -181,7 +201,7 @@ class ProductTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("product");
 
 		// create a new Product and insert to into mySQL
-		$product = new Product (null,  $this->vendor->getVendorId(), $this->VALID_description,
+		$product = new Product (null, $this->vendor->getVendorId(), $this->VALID_description,
 			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 		$product->insert($this->getPDO());
 
@@ -202,7 +222,7 @@ class ProductTest extends InventoryTextTest {
 	 **/
 	public function testDeleteInvalidProdcut() {
 		// create a Product and try to delete it without actually inserting it
-		$product = new Product (null,  $this->vendor->getVendorId(), $this->VALID_description,
+		$product = new Product (null, $this->vendor->getVendorId(), $this->VALID_description,
 			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 		$product->delete($this->getPDO());
 	}
@@ -218,27 +238,27 @@ class ProductTest extends InventoryTextTest {
 	}
 
 
-/**
- * test grabbing a Product by vendorId
- **/
-public function testGetValidProductByVendorId() {
-	// count the number of rows and save it for later
-	$numRows = $this->getConnection()->getRowCount("product");
+	/**
+	 * test grabbing a Product by vendorId
+	 **/
+	public function testGetValidProductByVendorId() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("product");
 
-	// create a new Product and insert to into mySQL
-	$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
-								  $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
-	$product->insert($this->getPDO());
+		// create a new Product and insert to into mySQL
+		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
+			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
+		$product->insert($this->getPDO());
 
-	// grab the data from mySQL and enforce the fields match our expectations
-	$pdoProducts = Product::getProductByVendorId($this->getPDO(), $product->getVendorId());
-	$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
-	foreach($pdoProducts as $pdoProduct) {
-		$this->assertSame($pdoProduct->getVendorId(), $this->vendor->getVendorId());
-		$this->assertSame($pdoProduct->getDescription(), $this->VALID_description);
-		$this->assertSame($pdoProduct->getLeadTime(), $this->VALID_leadTime);
-		$this->assertSame($pdoProduct->getSku(), $this->VALID_sku);
-		$this->assertSame($pdoProduct->getTitle(), $this->VALID_title);
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoProducts = Product::getProductByVendorId($this->getPDO(), $product->getVendorId());
+		$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("product"));
+		foreach($pdoProducts as $pdoProduct) {
+			$this->assertSame($pdoProduct->getVendorId(), $this->vendor->getVendorId());
+			$this->assertSame($pdoProduct->getDescription(), $this->VALID_description);
+			$this->assertSame($pdoProduct->getLeadTime(), $this->VALID_leadTime);
+			$this->assertSame($pdoProduct->getSku(), $this->VALID_sku);
+			$this->assertSame($pdoProduct->getTitle(), $this->VALID_title);
 		}
 	}
 
@@ -302,7 +322,7 @@ public function testGetValidProductByVendorId() {
 
 		// create a new Product and insert to into mySQL
 		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
-									  $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
+			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 		$product->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
@@ -327,7 +347,7 @@ public function testGetValidProductByVendorId() {
 
 		// create a new Product and insert to into mySQL
 		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
-									  $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
+			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 		$product->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
@@ -342,8 +362,40 @@ public function testGetValidProductByVendorId() {
 		}
 	}
 
-}
 
+	/**
+	 * test grabbing product by locationId
+	 **/
+	public function testGetValidLocationByProductId() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("product");
+
+		// create a new product and insert to into mySQL
+		$product = new Product(null, $this->VALID_vendor, $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
+		$product->insert($this->getPDO());
+
+		$quantity = 5.9; //what do I do here???
+
+		// create a new product and insert to into mySQL
+		$locationProduct = new locationProduct($product->getProductId(), $this->location->getLocationId(), $this->vendor->getVendorId());
+		$locationProduct->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoLocationArray = Product::getLocationByProductId($this->getPDO(), $product->getProductId());
+		for($i = 0; $i < count($pdoLocationArray); $i++) {
+			if($i === 0) {
+				$this->assertSame($pdoLocationArray[$i]->getDescription(), $this->VALID_description);
+				$this->assertSame($pdoLocationArray[$i]->getSku(), $this->VALID_sku);
+				$this->assertSame($pdoLocationArray[$i]->getTitle(), $this->VALID_title);
+
+			} else {
+				$this->assertSame($pdoLocationArray[$i]->getStorageCode(), $this->location->getLocationId());
+				$this->assertSame($pdoLocationArray[$i]->getStorageCode(), $this->location->getStorageCode());
+				$this->assertSame($pdoLocationArray[$i]->getDescription(), $this->location->getDescription());
+			}
+		}
+	}
+}
 
 
 
