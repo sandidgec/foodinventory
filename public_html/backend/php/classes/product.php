@@ -11,12 +11,12 @@
 class Product {
 	/**
 	 * id for this Product; this is the primary key
-	 * @var string $productId
+	 * @var int $productId
 	 **/
 	private $productId;
 	/**
 	 * id for the related Vendor; this is a foreign key
-	 * @var string $vendorId
+	 * @var int $vendorId
 	 **/
 	private $vendorId;
 	/**
@@ -44,8 +44,8 @@ class Product {
 	/**
 	 * constructor for this Product
 	 *
-	 * @param string $newProductId id for this Product
-	 * @param string $newVendorId id for the related Vendor
+	 * @param int $newProductId id for this Product
+	 * @param int $newVendorId id for the related Vendor
 	 * @param string $newDescription textual description of this Product
 	 * @param int $newLeadTime leadTime for this Product
 	 * @param string $newSku sku for this Product
@@ -78,7 +78,7 @@ class Product {
 	/**
 	 * accessor method for product id
 	 *
-	 * @return string value of product id
+	 * @return int value of product id
 	 **/
 	public function getProductId() {
 		return ($this->productId);
@@ -99,9 +99,9 @@ class Product {
 		}
 
 		// verify the product id is valid
-		$newProductId = filter_var($newProductId, FILTER_VALIDATE_STRING);
+		$newProductId = filter_var($newProductId, FILTER_VALIDATE_INT);
 		if($newProductId === false) {
-			throw(new InvalidArgumentException("product id is not a valid string"));
+			throw(new InvalidArgumentException("product id is not a valid integer"));
 		}
 
 		// verify the product id is positive
@@ -116,7 +116,7 @@ class Product {
 	/**
 	 * accessor method for vendor id
 	 *
-	 * @return string value of vendor id
+	 * @return int value of vendor id
 	 **/
 	public function getVendorId() {
 		return ($this->vendorId);
@@ -126,14 +126,14 @@ class Product {
 	 * mutator method for vendor id
 	 *
 	 * @param mixed $newVendorId new value of vendor id
-	 * @throws InvalidArgumentException if $newVendorId is not a valid string
+	 * @throws InvalidArgumentException if $newVendorId is not a valid integer
 	 * @throws RangeException if $newVendorId is not positive
 	 **/
 	public function setVendorId($newVendorId) {
 		// verify the vendor id is valid
-		$newVendorId = filter_var($newVendorId, FILTER_VALIDATE_STRING);
+		$newVendorId = filter_var($newVendorId, FILTER_VALIDATE_INT);
 		if($newVendorId === false) {
-			throw(new InvalidArgumentException("vendor id is not a valid string"));
+			throw(new InvalidArgumentException("vendor id is not a valid integer"));
 		}
 
 		// verify the vendor id is positive
@@ -360,13 +360,13 @@ class Product {
 	 * gets the Product by productId
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
-	 * @param string $newProductId the product id to search for
+	 * @param int $newProductId the product id to search for
 	 * @return mixed Product found or null if not found
 	 * @throws PDOException when mySQL related errors occur
 	 **/
 	public static function getProductByProductId(PDO &$pdo, $newProductId) {
 		// sanitize the productId before searching
-		$newProductId = filter_var($newProductId, FILTER_VALIDATE_STRING);
+		$newProductId = filter_var($newProductId, FILTER_VALIDATE_INT);
 		if($newProductId === false) {
 			throw(new PDOException("product id is not an string"));
 		}
@@ -402,13 +402,13 @@ class Product {
 	 * gets the Product by vendorId
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
-	 * @param string $newVendorId the vendor id to search for
+	 * @param int $newVendorId the vendor id to search for
 	 * @return SplFixedArray all products found for this vendorId
 	 * @throws PDOException when mySQL related errors occur
 	 **/
 	public static function getProductByVendorId(PDO &$pdo, $newVendorId) {
 		// sanitize the vendorId before searching
-		$newVendorId = filter_var($newVendorId, FILTER_VALIDATE_STRING);
+		$newVendorId = filter_var($newVendorId, FILTER_VALIDATE_INT);
 		if($newVendorId === false) {
 			throw(new PDOException("vendor id is not an string"));
 		}
@@ -606,7 +606,7 @@ class Product {
 	 * gets the Product by pagination
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
-	 * @param string $page the page of results the viewer is on
+	 * @param int $page the page of results the viewer is on
 	 * @return SplFixedArray all products found for this pagination
 	 * @throws PDOException when mySQL related errors occur
 	 **/
