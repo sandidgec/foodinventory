@@ -100,10 +100,8 @@ class UserAPITest extends InventoryTextTest {
 	 * @var string $passwordHash
 	 **/
 	protected $VALID_hash;
-	/**
-	 * @var guzzle
-	 **/
-	protected $guzzle = null;
+
+	protected $VALID_password = "password1234";
 
 
 	/**

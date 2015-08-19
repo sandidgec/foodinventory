@@ -523,6 +523,8 @@ class User implements JsonSerializable {
 
 	public function JsonSerialize() {
 		$fields = get_object_vars($this);
+		unset ($fields["salt"]);
+		unset ($fields["hash"]);
 		return ($fields);
 	}
 
