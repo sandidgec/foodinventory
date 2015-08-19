@@ -3,8 +3,7 @@
 require_once("inventorytext.php");
 
 // grab the class under scrutiny
-require_once(dirname(__DIR__) . "/php/classes/notification.php");
-require_once(dirname(__DIR__) . "/php/classes/alert-level.php");
+require_once(dirname(__DIR__) . "/php/classes/autoload.php");
 
 /**
  * Full PHPUnit test for the Notification class
@@ -109,13 +108,6 @@ class NotificationTest extends InventoryTextTest {
 		$this->alertLevel = new AlertLevel($alertId, $alertCode, $alertFrequency, $alertLevel, $alertOperator);
 		$this->alertLevel->insert($this->getPDO());
 
-		$alertId = null;
-		$productId = null;
-		$productEnabled = "1";
-
-		$this->productAlert = new ProductAlert($alertId, $productId, $productEnabled);
-		$this->productAlert->insert($this->getPDO());
-
 		$productId = null;
 		$vendorId = 25;
 		$description = "A glorius bead to use";
@@ -125,6 +117,11 @@ class NotificationTest extends InventoryTextTest {
 
 		$this->product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
 		$this->product->insert($this->getPDO());
+
+		$productEnabled = "1";
+
+		$this->productAlert = new ProductAlert($this->alertLevel->getAlertId(), $this->product->getProductId(), $productEnabled);
+		$this->productAlert->insert($this->getPDO());
 
 		$this->VALID_notificationDateTime = DateTime::createFromFormat("Y-m-d H:i:s", "1985-06-28 04:26:03");
 
