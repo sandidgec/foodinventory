@@ -262,11 +262,11 @@ class AlertLevelTest extends InventoryTextTest {
 		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("alertLevel");
 
-		// create a new alert level and insert to into mySQL
+		// create a new alertLevel and insert to into mySQL
 		$alertLevel = new AlertLevel(null, $this->VALID_alertCode, $this->VALID_alertFrequency, $this->VALID_alertPoint, $this->VALID_alertOperator);
 		$alertLevel->insert($this->getPDO());
 
-		// create a new alert level and insert to into mySQL
+		// create a new productAlert and insert to into mySQL
 		$productAlert = new productAlert($alertLevel->getAlertId(), $this->product->getProductId(), true);
 		$productAlert->insert($this->getPDO());
 
