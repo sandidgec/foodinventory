@@ -392,4 +392,31 @@ class Vendor {
 		}
 		return ($vendors);
 	}
+	/**
+	 * gets all Vendors
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @return SplFixedArray all vendors found
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getAllVendors(PDO &$pdo) {
+		// create query template
+		$query = "SELECT vendorId, contactName, vendorEmail, vendorName, vendorPhoneNumber FROM vendor";
+		$statement = $pdo->prepare($query);
+
+		//build an array of vendors
+		$vendors = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !==false){
+			try {
+				$vendor = new Vendor($row["vendorId"], $row["contactName"], $row["vendorEmail"], $row["vendorName"], $row["vendorPhoneNumber"]);
+				$vendors[$vendors->key()] = $vendor;
+				$vendors->next();
+			} catch(PDOException $exception) {
+				//if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($vendors);
+	}
 }

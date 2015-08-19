@@ -255,4 +255,25 @@ class VendorTest extends InventoryTextTest {
 			$this->assertNull($ven);
 		}
 	}
+	/**
+	 * test grabbinbg all Vendors
+	 **/
+	public function testGetAllValidVendors(){
+		//count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("vendor");
+
+		//create a new vendor and insert it into mySQL
+		$vendor = new Vendor(null, $this->VALID_contactName, $this->VALID_vendorEmail, $this->VALID_vendorName, $this->VALID_vendorPhoneNumber);
+		$vendor->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoVendor = Vendor::getAllVendors($this->getPDO());
+		foreach($pdoVendor as $ven) {
+			$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("vendor"));
+			$this->assertSame($ven->getContactName(), $this->VALID_contactName);
+			$this->assertSame($ven->getVendorEmail(), $this->VALID_vendorEmail);
+			$this->assertSame($ven->getVendorName(), $this->VALID_vendorName);
+			$this->assertSame($ven->getVendorPhoneNumber(), $this->VALID_vendorPhoneNumber);
+		}
+	}
 }
