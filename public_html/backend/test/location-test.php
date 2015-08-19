@@ -33,7 +33,40 @@ class LocationTest extends InventoryTextTest {
 	 **/
 	protected $VALID_description = "back shelf";
 
+	protected $product = null;
 
+	protected $unitOfMeasure = null;
+
+
+	public function setUp() {
+		parent::setUp();
+
+		$vendorId = null;
+		$contactName = "Trevor Rigler";
+		$vendorEmail = "trier@cnm.edu";
+		$vendorName = "TruFork";
+		$vendorPhoneNumber = "5053594687";
+
+		$vendor = new Vendor($vendorId, $contactName, $vendorEmail, $vendorName, $vendorPhoneNumber);
+		$vendor->insert($this->getPDO());
+
+		$productId = null;
+		$vendorId = $vendor->getVendorId();
+		$description = "A glorius bead to use";
+		$leadTime = 10;
+		$sku = "TGT354";
+		$title = "Bead-Green-Blue-Circular";
+
+		$this->product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
+		$this->product->insert($this->getPDO());
+
+		$unitId = null;
+		$quantity = 3.5;
+		$unitCode = "ea";
+
+		$this->unitOfMeasure = new UnitOfMeasure($unitId, $unitCode, $quantity);
+		$this->unitOfMeasure->insert($this->getPDO());
+	}
 
 	/**
 	 * test inserting a valid Location and verify that the actual mySQL data matches
@@ -188,11 +221,39 @@ class LocationTest extends InventoryTextTest {
 		Location::getLocationByStorageCode($this->getPDO(), "does@not.exist");
 	}
 
-	public function testGetAllLocations() {
+	/**
+	 * test grabbing location by productId
+	 **/
+	public function testGetValidProductByLocationId() {
 		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("location");
 
-		// create a new location and insert into mySQL
+		// create a new location and insert to into mySQL
+		$location = new Location(null, $this->VALID_storageCode, $this->VALID_description);
+		$location->insert($this->getPDO());
+
+		$quantity = 5.9;
+
+		// create a new location and insert to into mySQL
+		$productLocation = new productLocation($location->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(),
+			$quantity);
+		$productLocation->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoProductArray = Location::getProductByLocationId($this->getPDO(), $location->getLocationId());
+		for($i = 0; $i < count($pdoProductArray); $i++) {
+			if($i === 0) {
+				$this->assertSame($pdoProductArray[$i]->getStorageCode(), $this->VALID_storageCode);
+				$this->assertSame($pdoProductArray[$i]->getDescription(), $this->VALID_description);
+			} else {
+				$this->assertSame($pdoProductArray[$i]->getProductId(), $this->product->getProductId());
+				$this->assertSame($pdoProductArray[$i]->getVendorId(), $this->product->getVendorId());
+				$this->assertSame($pdoProductArray[$i]->getDescription(), $this->product->getDescription());
+				$this->assertSame($pdoProductArray[$i]->getSku(), $this->product->getSku());
+				$this->assertSame($pdoProductArray[$i]->getTitle(), $this->product->getTitle());
+			}
+		}
 	}
+
 }
 

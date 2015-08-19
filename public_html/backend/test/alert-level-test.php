@@ -256,8 +256,8 @@ class AlertLevelTest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing an AlertLevel by alert code
-	 **/
+ * test grabbing an AlertLevel by alert code
+ **/
 	public function testGetValidProductByAlertId() {
 		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("alertLevel");
