@@ -170,7 +170,7 @@ class NotificationAPITest extends InventoryTextTest {
 		$newNotification->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$angularDate = $newNotification->getNotificationDateTime()->getTimestamp() * 1000;
+		$angularDate = $this->VALID_notificationDateTime->getTimestamp() * 1000;
 		$response = $this->guzzle->get('http://bootcamp-coders.cnm.edu/~invtext/backend/php/api/notification/?notificationDateTime=' . $angularDate);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();

@@ -458,11 +458,11 @@ class Notification {
 				$notifications[$notifications->key()] = $notification;
 				$notifications->next();
 			} catch(Exception $exception) {
-				// if the row could't be ccnverted
+				// if the row could't be converted
 				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
-		return($notification);
+		return($notifications);
 	}
 
 	/**
