@@ -187,5 +187,12 @@ class LocationTest extends InventoryTextTest {
 		// grab an storage code that does not exist
 		Location::getLocationByStorageCode($this->getPDO(), "does@not.exist");
 	}
+
+	public function testGetAllLocations() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("location");
+
+		// create a new location and insert into mySQL
+	}
 }
 

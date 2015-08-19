@@ -290,6 +290,48 @@ class Location implements JsonSerializable {
 		return ($location);
 	}
 
+
+	public static function getProductByLocationId(PDO &$pdo, $newLocationId) {
+		// sanitize the alertId before searching
+		$newLocationId = filter_var($newLocationId, FILTER_VALIDATE_INT);
+		if(empty($newLocationId) === true) {
+			throw(new PDOException("productId is an invalid integer"));
+		}
+		$query = "SELECT product.productId, product.vendorId, product.description, product.leadTime, product.sku, product.title,
+					location.locationId, location.storageCode, location.description
+					FROM productLocation
+					INNER JOIN location ON location.locationId = productLocation.locationId
+					INNER JOIN product ON product.productId = productLocation.productId
+					WHERE location.locationId = :locationId";
+		$statement = $pdo->prepare($query);
+
+		// bind the locationId to the place holder in the template
+		$parameters = array("locationId" => $newLocationId);
+		$statement->execute($parameters);
+
+		// build an array of Products and an associated alertLevel
+		$products = new SplFixedArray($statement->rowCount() + 1);
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				if($products->key() === 0) {
+					$location = new Location($row["locationId"], $row["storageCode"], $row["description"]);
+					$products[$products->key()] = $location;
+					$products->next();
+				}
+				$product = new Product($row["productId"], $row["vendorId"], $row["description"], $row["leadTime"], $row["sku"], $row["title"]);
+				$products[$products->key()] = $product;
+				$products->next();
+			} catch(PDOException $exception) {
+				//if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return ($products);
+	}
+
+
+
 		/**
 		 *  Get all Locations
 		 * @param PDO $pdo pointer to PDO connection, by reference
@@ -301,22 +343,24 @@ class Location implements JsonSerializable {
 			// create query template
 			$query = "SELECT locationId, storageCode, description FROM location";
 			$statement = $pdo->prepare($query);
+			$statement->execute();
 
-			// grab the location from mySQL
-			try {
-				$location = null;
-				$statement->setFetchMode(PDO::FETCH_ASSOC);
-				$row = $statement->fetch();
-				if($row !== false) {
-					$location = new Location ($row["locationId"], $row["storageCode"], $row["description"]);
+			// build an array of movements
+			$location = new SplFixedArray($statement->rowCount());
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			while(($row = $statement->fetch()) !== false) {
+				try {
+					$location = new Location($row["locationId"],$row["storageCode"], $row["description"]);
+					$location[$location->key()] = $location;
+					$location->next();
+				} catch(Exception $exception) {
+					// if the row couldn't be converted, rethrow it
+					throw(new PDOException($exception->getMessage(), 0, $exception));
 				}
-			} catch(Exception $exception) {
-				// if the row couldn't be converted, rethrow it
-				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
-			return ($location);
+			return($location);
 		}
-	}
+}
 
 
 
