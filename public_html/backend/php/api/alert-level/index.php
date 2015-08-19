@@ -24,7 +24,7 @@ try {
 	$alertCode = filter_input(INPUT_GET, "alertCode", FILTER_SANITIZE_STRING);
 
 	// sanitize getProducts
-	$getProducts = filter_input(INPUT_GET, "getProducts", FILTER_VALIDATE_BOOLEAN);
+//	$getProducts = filter_input(INPUT_GET, "getProducts", FILTER_VALIDATE_BOOLEAN);
 
 	// grab the mySQL connection
 	$pdo = connectToEncryptedMySql("/etc/apache2/capstone/invtext.ini");
@@ -35,11 +35,11 @@ try {
 		// set an XSRF cookie on GET requests
 		setXsrfCookie("/");
 		if(empty($locationId) === false) {
-			if($getProducts === true) {
-				$reply->data = AlertLevel::getProductByAlertId($pdo, $alertId);
-			} else {
+//			if($getProducts === true) {
+//				$reply->data = AlertLevel::getProductByAlertId($pdo, $alertId);
+//			} else {
 				$reply->data = AlertLevel::getAlertLevelByAlertId($pdo, $alertId);
-			}
+//			}
 		} else if(empty($alertCode) === false) {
 			$reply->data = AlertLevel::getAlertLevelByAlertCode($pdo, $alertCode);
 		} else {
