@@ -466,6 +466,54 @@ class Notification {
 	}
 
 	/**
+	 * get Notifications by alert ID
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @param int $newAlertId the alertId for table join
+	 * @return SplFixedArray all Notifications fount for this alertId
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public static function getNotificationsByAlertId(PDO, &$pdo, $newAlertId){
+		//sanitize the alertId before searching
+		$newAlertId = filter_var($newAlertId, FILTER_VALIDATE_INT);
+		if(empty($newAlertId) === true){
+			throw(new PDOException("productId in an invalid interger"));
+		}
+		$query = "SELECT product.productId, product.vendorId, product.description, product.leadTime, product.sku, product.title,
+						notification.notificationId, notification.alertId, notification.emailstatus, notification.notificationDateTime, notification.notificationHandle, notification.notificationContent
+					FROM alertLevel
+					INNER JOIN notification ON notification.alertId = alertLevel.alertId
+					INNER JOIN alertLevel ON alertLevel.alertId = productAlert.alertId
+					INNER JOIN productAlert ON productAlert.productId = product.productId
+					WHERE notification.alertId = :alertId";
+		$statement = $pdo->prepare($query);
+
+		//bind the alertId to the place holder in the template
+		$parameters = array("alertId" => $newAlertId);
+		$statement->execute($parameters);
+
+		//build an array of Products and an associated notification
+		$products = new SplFixedArray($statement->rowcount() + 1);
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false){
+			try{
+				if($products->key() === 0){
+					$notification = new Notification($row["notificationId"], $row["alertId"], $row["emailStatus"], $row["notificationDateTime"], $row["notificationHandle"], $row["notificationContent"]);
+					$products[$products->key()] = $notification;
+					$products->next();
+				}
+				$product = new Product($row["productId"], $row["vendorId"], $row["description"], $row["leadTime"], $row["sku"], $row["title"]);
+				$products[$products->key()] = $product;
+				$products->next();
+			} catch(PDOException $exception){
+				//if the row could't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(),0, $exception));
+			}
+		}
+		return($products);
+	}
+
+	/**
 	 * gets all notifications
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reverence
