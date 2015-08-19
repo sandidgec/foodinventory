@@ -122,6 +122,9 @@ class ProductTest extends InventoryTextTest {
 
 		$this->location = new Location($locationId, $storageCode, $description);
 		$this->location->insert($this->getPDO());
+
+		$this->unitOfMeasure = new UnitOfMeasure($unitId, $unitCode, $quantity);
+		$this->unitOfMeasure->insert($this->getPDO());
 	}
 
 
