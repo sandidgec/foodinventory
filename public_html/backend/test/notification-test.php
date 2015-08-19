@@ -77,6 +77,12 @@ class NotificationTest extends InventoryTextTest {
 	protected $INVALID_notificationContent = "place holder cause Topher doesn't know";
 
 	/**
+	 * creating a vendor
+	 * @var Vendor $vendor
+	 **/
+	protected $vendor = null;
+
+	/**
 	 * seting up for Foreign key alert id
 	 * @var AlertLevel $alertLevel
 	 **/
@@ -99,6 +105,25 @@ class NotificationTest extends InventoryTextTest {
 	public function setUp() {
 		parent::setUp();
 
+		$vendorId = null;
+		$contactName = "Trevor Rigler";
+		$vendorEmail = "trier@cnm.edu";
+		$vendorName = "TruFork";
+		$vendorPhoneNumber = "5053594687";
+
+		$vendor = new Vendor($vendorId, $contactName, $vendorEmail, $vendorName, $vendorPhoneNumber);
+		$vendor->insert($this->getPDO());
+
+		$productId = null;
+		$vendorId = $vendor->getVendorId();
+		$description = "A glorius bead to use";
+		$leadTime = 10;
+		$sku = "TGT354";
+		$title = "Bead-Green-Blue-Circular";
+
+		$this->product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
+		$this->product->insert($this->getPDO());
+
 		$alertId = null;
 		$alertCode = "33";
 		$alertFrequency = "11";
@@ -107,16 +132,6 @@ class NotificationTest extends InventoryTextTest {
 
 		$this->alertLevel = new AlertLevel($alertId, $alertCode, $alertFrequency, $alertLevel, $alertOperator);
 		$this->alertLevel->insert($this->getPDO());
-
-		$productId = null;
-		$vendorId = 25;
-		$description = "A glorius bead to use";
-		$leadTime = 10;
-		$sku = "TGT354";
-		$title = "Bead-Green-Blue-Circular";
-
-		$this->product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
-		$this->product->insert($this->getPDO());
 
 		$productEnabled = "1";
 
