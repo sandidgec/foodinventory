@@ -137,6 +137,7 @@ class ProductAPITest extends InventoryTextTest {
 		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId());
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
+		echo $body . PHP_EOL;
 		$product = json_decode($body);
 		$this->assertSame(200, $product->status);
 	}
@@ -169,6 +170,7 @@ class ProductAPITest extends InventoryTextTest {
 		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId());
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
+		echo $body . PHP_EOL;
 		$product = json_decode($body);
 		$this->assertSame(200, $product->status);
 	}
@@ -179,12 +181,12 @@ class ProductAPITest extends InventoryTextTest {
 		 **/
 		public
 		function testGetInvalidProductBySku() {
-			// grab the data from guzzle and enforce the status' match our expectations
-			$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . InventoryTextTest::INVALID_KEY);
-			$this->assertSame($response->getStatusCode(), 200);
-			$body = $response->getBody();
-			$product = json_decode($body);
-			$this->assertSame(200, $product->status);
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . InventoryTextTest::INVALID_KEY);
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$product = json_decode($body);
+		$this->assertSame(200, $product->status);
 		}
 
 	/**
@@ -199,11 +201,12 @@ class ProductAPITest extends InventoryTextTest {
 		$newProduct->insert($this->getPDO());
 
 		// grab the data from guzzle and enforce the status' match our expectations
-			$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId());
-			$this->assertSame($response->getStatusCode(), 200);
-			$body = $response->getBody();
-			$product = json_decode($body);
-			$this->assertSame(200, $product->status);
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId());
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		echo $body . PHP_EOL;
+		$product = json_decode($body);
+		$this->assertSame(200, $product->status);
 	}
 
 	/**
@@ -230,11 +233,12 @@ class ProductAPITest extends InventoryTextTest {
 		$newProduct->insert($this->getPDO());
 
 		// grab the data from guzzle and enforce the status' match our expectations
-			$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId());
-			$this->assertSame($response->getStatusCode(), 200);
-			$body = $response->getBody();
-			$product = json_decode($body);
-			$this->assertSame(200, $product->status);
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId());
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		echo $body . PHP_EOL;
+		$product = json_decode($body);
+		$this->assertSame(200, $product->status);
 	}
 
 	/**
@@ -266,7 +270,6 @@ class ProductAPITest extends InventoryTextTest {
 		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/movement/', ['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newProduct]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		echo $body . PHP_EOL;
 		$product = json_decode($body);
 		$this->assertSame(200, $product->status);
 	}
