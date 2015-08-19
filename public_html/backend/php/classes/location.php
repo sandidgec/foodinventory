@@ -347,19 +347,19 @@ class Location implements JsonSerializable {
 			$statement->execute();
 
 			// build an array of movements
-			$location = new SplFixedArray($statement->rowCount());
+			$locations = new SplFixedArray($statement->rowCount());
 			$statement->setFetchMode(PDO::FETCH_ASSOC);
 			while(($row = $statement->fetch()) !== false) {
 				try {
 					$location = new Location($row["locationId"],$row["storageCode"], $row["description"]);
-					$location[$location->key()] = $location;
-					$location->next();
+					$locations[$locations->key()] = $location;
+					$locations->next();
 				} catch(Exception $exception) {
 					// if the row couldn't be converted, rethrow it
 					throw(new PDOException($exception->getMessage(), 0, $exception));
 				}
 			}
-			return($location);
+			return($locations);
 		}
 }
 
