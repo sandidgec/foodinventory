@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * Class for Location
  *
@@ -297,8 +298,8 @@ class Location implements JsonSerializable {
 		if(empty($newLocationId) === true) {
 			throw(new PDOException("productId is an invalid integer"));
 		}
-		$query = "SELECT product.productId, product.vendorId, product.description, product.leadTime, product.sku, product.title,
-					location.locationId, location.storageCode, location.description
+		$query = "SELECT product.productId, product.vendorId, product.description AS productDescription, product.leadTime, product.sku, product.title,
+					location.locationId, location.storageCode, location.description AS locationDescription
 					FROM productLocation
 					INNER JOIN location ON location.locationId = productLocation.locationId
 					INNER JOIN product ON product.productId = productLocation.productId
@@ -315,11 +316,11 @@ class Location implements JsonSerializable {
 		while(($row = $statement->fetch()) !== false) {
 			try {
 				if($products->key() === 0) {
-					$location = new Location($row["locationId"], $row["storageCode"], $row["description"]);
+					$location = new Location($row["locationId"], $row["storageCode"], $row["locationDescription"]);
 					$products[$products->key()] = $location;
 					$products->next();
 				}
-				$product = new Product($row["productId"], $row["vendorId"], $row["description"], $row["leadTime"], $row["sku"], $row["title"]);
+				$product = new Product($row["productId"], $row["vendorId"], $row["productDescription"], $row["leadTime"], $row["sku"], $row["title"]);
 				$products[$products->key()] = $product;
 				$products->next();
 			} catch(PDOException $exception) {

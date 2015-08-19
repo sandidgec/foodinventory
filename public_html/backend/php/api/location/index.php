@@ -24,6 +24,9 @@ try {
 	// sanitize the storageCode
 	$storageCode = filter_input(INPUT_GET, "storageCode", FILTER_SANITIZE_STRING);
 
+	// sanitize getProducts
+	$getProducts = filter_input(INPUT_GET, "getProducts", FILTER_VALIDATE_BOOLEAN);
+
 	// grab the mySQL connection
 	$pdo = connectToEncryptedMySql("/etc/apache2/capstone-mysql/invtext.ini");
 
@@ -33,8 +36,12 @@ try {
 		// set an XSRF cookie on GET requests
 		setXsrfCookie("/");
 		if(empty($locationId) === false) {
-			$reply->data = Location::getLocationByLocationId($pdo, $locationId);
-		} else if(empty($email) === false) {
+			if($getProducts === true) {
+				$reply->data = Location::getProductByLocationId($pdo, $locationId);
+			} else {
+				$reply->data = Location::getLocationByLocationId($pdo, $locationId);
+			}
+		} else if(empty($storageCode) === false) {
 			$reply->data = Location::getLocationByStorageCode($pdo, $storageCode);
 		} else{
 			$reply->data = Location::getALLLocations($pdo);

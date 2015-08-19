@@ -100,6 +100,22 @@ class LocationAPITest extends InventoryTextTest {
 		$this->assertSame(200, $location->status);
 	}
 
+	/**
+	 * Test grabbing Valid Location by Valid Storage Code
+	 **/
+	public function testGetValidProductByLocationId() {
+		// create a new Location
+		$newLocation = new Location(null, $this->VALID_storageCode, $this->VALID_description);
+
+		$newLocation->insert($this->getPDO());
+
+		// grab the data from guzzle
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/location/?locationId=' . $newLocation->getLocationId() . "&getProducts=true");
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$location = json_decode($body);
+		$this->assertSame(200, $location->status);
+	}
 
 	/**
 	 * Test Get All Locations

@@ -3,7 +3,7 @@
 require_once("inventorytext.php");
 
 // grab the class under scrutiny
-require_once(dirname(__DIR__) . "/php/classes/location.php");
+require_once(dirname(__DIR__) . "/php/classes/autoload.php");
 
 
 /**
@@ -32,9 +32,13 @@ class LocationTest extends InventoryTextTest {
 	 * @var string $description
 	 **/
 	protected $VALID_description = "back shelf";
-
+	/**
+	 * @var Product $product
+	 **/
 	protected $product = null;
-
+	/**
+	 * @var UnitOfMeasure $unitOfMeasure
+	 **/
 	protected $unitOfMeasure = null;
 
 
