@@ -35,11 +35,11 @@ try {
 		// set an XSRF cookie on GET requests
 		setXsrfCookie("/");
 		if(empty($locationId) === false) {
-//			if($getProducts === true) {
-//				$reply->data = AlertLevel::getProductByAlertId($pdo, $alertId);
-//			} else {
+			if($getProducts === true) {
+				$reply->data = AlertLevel::getProductByAlertId($pdo, $alertId);
+			} else {
 				$reply->data = AlertLevel::getAlertLevelByAlertId($pdo, $alertId);
-//			}
+			}
 		} else if(empty($alertCode) === false) {
 			$reply->data = AlertLevel::getAlertLevelByAlertCode($pdo, $alertCode);
 		} else {
