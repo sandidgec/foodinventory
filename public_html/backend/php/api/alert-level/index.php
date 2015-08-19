@@ -27,7 +27,7 @@ try {
 //	$getProducts = filter_input(INPUT_GET, "getProducts", FILTER_VALIDATE_BOOLEAN);
 
 	// grab the mySQL connection
-	$pdo = connectToEncryptedMySql("/etc/apache2/capstone/invtext.ini");
+	$pdo = connectToEncryptedMySql("/etc/apache2/capstone-mysql/invtext.ini");
 
 	// handle all RESTful calls to AlertLevel
 	// get some or all AlertLevels
