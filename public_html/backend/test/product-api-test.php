@@ -95,8 +95,8 @@ class ProductAPITest extends InventoryTextTest {
 		parent::setUp();
 
 		// create and insert a Vendor id
-		$this->vendor = new Vendor(null, "Joe Cool", "joecool@gmail.com", "Joe Cool", "5055555555");
-		$this->vendor->insert($this->getPDO());
+		$this->vendorId = new Vendor(null, "Joe Cool", "joecool@gmail.com", "Joe Cool", "5055555555");
+		$this->vendorId->insert($this->getPDO());
 		// create and insert a GuzzleHttp
 		$this->guzzle = new \GuzzleHttp\Client(['cookies' => true]);
 	}
@@ -107,7 +107,7 @@ class ProductAPITest extends InventoryTextTest {
 	 **/
 	public function testGetValidProductByVendorId() {
 		// create a new Product
-		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
+		$newProduct = new Product(null, $this->vendorId->getVendorId(), $this->VALID_description,
 			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 		$newProduct->insert($this->getPDO());
 
@@ -125,7 +125,7 @@ class ProductAPITest extends InventoryTextTest {
 	 **/
 	public function testGetValidProductByDescription() {
 		// create a new Product
-		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
+		$newProduct = new Product(null, $this->vendorId->getVendorId(), $this->VALID_description,
 			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 		$newProduct->insert($this->getPDO());
 
@@ -156,7 +156,7 @@ class ProductAPITest extends InventoryTextTest {
 	 **/
 	public function testGetValidProductBySku() {
 		// create a new Product
-		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
+		$newProduct = new Product(null, $this->vendorId->getVendorId(), $this->VALID_description,
 			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 		$newProduct->insert($this->getPDO());
 
@@ -188,7 +188,7 @@ class ProductAPITest extends InventoryTextTest {
 	 **/
 	public function testGetValidProductByTitle() {
 			// create a new Product
-			$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
+			$newProduct = new Product(null, $this->vendorId->getVendorId(), $this->VALID_description,
 				$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 			$newProduct->insert($this->getPDO());
 
@@ -218,7 +218,7 @@ class ProductAPITest extends InventoryTextTest {
 	 **/
 	public function testGetValidProductByPagination() {
 			// create a new Product
-			$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
+			$newProduct = new Product(null, $this->vendorId->getVendorId(), $this->VALID_description,
 				$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 			$newProduct->insert($this->getPDO());
 
@@ -248,7 +248,7 @@ class ProductAPITest extends InventoryTextTest {
 	 **/
 	public function testPostValidProduct() {
 		// create a new Product
-		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
+		$newProduct = new Product(null, $this->vendorId->getVendorId(), $this->VALID_description,
 			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 
 		// run a get request to establish session tokens
@@ -269,7 +269,7 @@ class ProductAPITest extends InventoryTextTest {
 	 **/
 	public function testPutValidProduct() {
 		// create a new Product
-		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description,
+		$newProduct = new Product(null, $this->vendorId->getVendorId(), $this->VALID_description,
 			$this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 
 		// run a get request to establish session tokens
@@ -292,7 +292,7 @@ class ProductAPITest extends InventoryTextTest {
 	 **/
 	public function testDeleteValidProduct() {
 		// create a new Product
-		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
+		$newProduct = new Product(null, $this->vendorId->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 
 		// grab the data from guzzle and enforce the status' match our expectations
 		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/');
