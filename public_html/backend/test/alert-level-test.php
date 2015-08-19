@@ -3,7 +3,7 @@
 require_once("inventorytext.php");
 
 // grab the class under scrutiny
-require_once(dirname(__DIR__) . "/php/classes/alert-level.php");
+require_once(dirname(__DIR__) . "/php/classes/autoload.php");
 
 	/**
 	 * Full PHPUnit test for the alert level class
@@ -65,6 +65,36 @@ class AlertLevelTest extends InventoryTextTest {
 	 * @var string $VALID_alertOperator
 	 **/
 	protected $VALID_alertOperator = "a";
+
+	/**
+	 * creating a null Product
+	 * object for global scope
+	 * @var Product $product
+	 **/
+	protected $product = null;
+
+	public function setUp() {
+		parent::setUp();
+
+		$vendorId = null;
+		$contactName = "Trevor Rigler";
+		$vendorEmail = "trier@cnm.edu";
+		$vendorName = "TruFork";
+		$vendorPhoneNumber = "5053594687";
+
+		$vendor = new Vendor($vendorId, $contactName, $vendorEmail, $vendorName, $vendorPhoneNumber);
+		$vendor->insert($this->getPDO());
+
+		$productId = null;
+		$vendorId = $vendor->getVendorId();
+		$description = "A glorius bead to use";
+		$leadTime = 10;
+		$sku = "TGT354";
+		$title = "Bead-Green-Blue-Circular";
+
+		$this->product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
+		$this->product->insert($this->getPDO());
+	}
 
 	/**
 	 * test inserting a valid Alert Level and verify that the actual mySQL data matches
@@ -213,6 +243,7 @@ class AlertLevelTest extends InventoryTextTest {
 			$this->assertSame($al->getAlertOperator(), $this->VALID_alertOperator);
 		}
 	}
+
 	/**
 	 * test grabbing an AlertLevel that does not exist
 	 **/
@@ -221,6 +252,61 @@ class AlertLevelTest extends InventoryTextTest {
 		$alertLevel = AlertLevel::getAlertLevelByAlertCode($this->getPDO(), $this->INVALID_alertCode);
 		foreach($alertLevel as $al){
 			$this->assertNull($al);
+		}
+	}
+
+	/**
+	 * test grabbing an AlertLevel by alert code
+	 **/
+	public function testGetValidProductByAlertId() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("alertLevel");
+
+		// create a new alert level and insert to into mySQL
+		$alertLevel = new AlertLevel(null, $this->VALID_alertCode, $this->VALID_alertFrequency, $this->VALID_alertPoint, $this->VALID_alertOperator);
+		$alertLevel->insert($this->getPDO());
+
+		// create a new alert level and insert to into mySQL
+		$productAlert = new productAlert($alertLevel->getAlertId(), $this->product->getProductId(), true);
+		$productAlert->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoProductArray = AlertLevel::getProductByAlertId($this->getPDO(), $alertLevel->getAlertId());
+		for($i = 0; $i < count($pdoProductArray); $i++) {
+			if($i === 0) {
+				$this->assertSame($pdoProductArray[$i]->getAlertCode(), $this->VALID_alertCode);
+				$this->assertSame($pdoProductArray[$i]->getAlertFrequency(), $this->VALID_alertFrequency);
+				$this->assertSame($pdoProductArray[$i]->getAlertPoint(), $this->VALID_alertPoint);
+				$this->assertSame($pdoProductArray[$i]->getAlertOperator(), $this->VALID_alertOperator);
+			} else {
+				$this->assertSame($pdoProductArray[$i]->getProductId(), $this->product->getProductId());
+				$this->assertSame($pdoProductArray[$i]->getVendorId(), $this->product->getVendorId());
+				$this->assertSame($pdoProductArray[$i]->getDescription(), $this->product->getDescription());
+				$this->assertSame($pdoProductArray[$i]->getSku(), $this->product->getSku());
+				$this->assertSame($pdoProductArray[$i]->getTitle(), $this->product->getTitle());
+			}
+		}
+	}
+
+	/**
+	 * test grabbing all AlertLevels
+	 **/
+	public function testGetValidAllAlertLevels() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("alertLevel");
+
+		// create a new alert level and insert to into mySQL
+		$alertLevel = new AlertLevel (null, $this->VALID_alertCode, $this->VALID_alertFrequency, $this->VALID_alertPoint, $this->VALID_alertOperator);
+		$alertLevel->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoAlertLevel = AlertLevel::getAllAlertLevels($this->getPDO());
+		foreach($pdoAlertLevel as $al) {
+			$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("alertLevel"));
+			$this->assertSame($al->getAlertCode(), $this->VALID_alertCode);
+			$this->assertSame($al->getAlertFrequency(), $this->VALID_alertFrequency);
+			$this->assertSame($al->getAlertPoint(), $this->VALID_alertPoint);
+			$this->assertSame($al->getAlertOperator(), $this->VALID_alertOperator);
 		}
 	}
 }
