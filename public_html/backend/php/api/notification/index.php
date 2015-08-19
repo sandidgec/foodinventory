@@ -42,9 +42,9 @@ try {
 		} else if(empty($emailStatus) === false) {
 			$reply->data = Notification::getNotificationByEmailStatus($pdo, $emailStatus);
 		} else if(empty($notificationDateTime) === false) {
-			$reply->data = Notification::getNotificationByNotificationDateTime($pdo, $notificationDateTimeInt);
 			$notificationDateTimeInt = new DateTime();
 			$notificationDateTimeInt->setTimestamp($notificationDateTime / 1000);
+			$reply->data = Notification::getNotificationByNotificationDateTime($pdo, $notificationDateTimeInt);
 		} else {
 			$reply->data = Notification::getAllNotifications($pdo, $page);
 		}
