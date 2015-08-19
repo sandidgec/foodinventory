@@ -7,7 +7,7 @@
  *
  * @author James Huber <jhuber8@cnm.edu>
  **/
-class AlertLevel {
+class AlertLevel implements JsonSerializable {
 	/**
 	 * id for this alert level class, this is the primary key
 	 * @var int $alertId
@@ -215,12 +215,24 @@ class AlertLevel {
 		//store alert operator
 		$this->alertOperator = $newAlertOperator;
 	}
-/**
-* * inserts this AlertLevel into mySQL
-*
-* @param PDO $pdo pointer to PDO connection, by reference
-* @throws PDOException when mySQL related errors occur
-**/
+
+	/**
+	 * determines which variables to include in json_encode()
+	 *
+	 * @see http://php.net/manual/en/class.jsonserializable.php JsonSerializable interface
+	 * @return array all object variables, including private variables
+	 **/
+	public function JsonSerialize() {
+		$fields = get_object_vars($this);
+		return ($fields);
+	}
+
+	/**
+	 * inserts this AlertLevel into mySQL
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @throws PDOException when mySQL related errors occur
+	 **/
 	public function insert(PDO &$pdo) {
 		// enforce the notificationId is null (i.e., don't insert a alert level that already exists)
 		if($this->alertId !== null) {
