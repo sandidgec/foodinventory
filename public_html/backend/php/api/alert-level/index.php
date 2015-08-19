@@ -74,7 +74,7 @@ try {
 
 		$alertLevel = new AlertLevel($alertId, $requestObject->alertCode, $requestObject->alertFrequency, $requestObject->alertPoint, $requestObject->alertOperator);
 		$alertLevel->update($pdo);
-		$reply->data = "AlertLevel updated OK";
+		$reply->data = "AlertLevel Updated Ok";
 	}
 
 	// create an exception to pass back to the RESTful caller
