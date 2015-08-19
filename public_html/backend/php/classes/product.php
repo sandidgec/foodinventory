@@ -22,7 +22,7 @@ class Product implements JsonSerializable {
 	/**
 	 * textual description of this Product
 	 * @var string $description
-	 **/vn
+	 **/
 	private $description;
 	/**
 	 * leadTime for this Product
