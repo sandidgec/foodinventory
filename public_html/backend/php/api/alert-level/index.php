@@ -46,7 +46,7 @@ try {
 			$reply->data = AlertLevel::getAllAlertLevels($pdo);
 		}
 
-		// post to a new User
+		// post a new AlertLevel
 	} else if($method === "POST") {
 		// convert POSTed JSON to an object
 		verifyXsrf();
@@ -57,15 +57,15 @@ try {
 		$alertLevel->insert($pdo);
 		$reply->data = "AlertLevel created OK";
 
-		// delete an existing User
+		// delete an existing AlertLevel
 	} else if($method === "DELETE") {
 		verifyXsrf();
 
 		$alertLevel = AlertLevel::getAlertLevelByAlertId($pdo, $alertId);
-		$user->delete($pdo);
+		$alertLevel->delete($pdo);
 		$reply->data = "AlertLevel deleted OK";
 
-		// put to an existing User
+		// put to an existing AlertLevel
 	} else if($method === "PUT") {
 		// convert PUTed JSON to an object
 		verifyXsrf();
