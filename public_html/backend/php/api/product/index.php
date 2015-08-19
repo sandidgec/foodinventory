@@ -82,7 +82,7 @@ try {
 			$requestContent = file_get_contents("php://input");
 			$requestObject = json_decode($requestContent);
 
-			$product = new Products(null, $requestObject->vendorId, $requestObject->description, $requestObject->sku, $requestObject->title, $requestObject->pagination);
+			$product = new Product(null, $requestObject->vendorId, $requestObject->description, $requestObject->sku, $requestObject->title, $requestObject->pagination);
 			$product->insert($pdo);
 			$reply->data = "Product created OK";
 		}
@@ -93,7 +93,7 @@ try {
 		$requestContent = file_get_contents("php://input");
 		$requestObject = json_decode($requestContent);
 
-		$product = new Products($productId, $requestObject->vendorId, $requestObject->description, $requestObject->sku, $requestObject->title, $requestObject->pagination);
+		$product = new Product($productId, $requestObject->vendorId, $requestObject->description, $requestObject->sku, $requestObject->title, $requestObject->pagination);
 		$product->update($pdo);
 		$reply->data = "Product updated OK";
 	}
