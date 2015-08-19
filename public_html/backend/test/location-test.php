@@ -41,7 +41,10 @@ class LocationTest extends InventoryTextTest {
 	 **/
 	protected $unitOfMeasure = null;
 
-
+	/**
+ * Set up to create vendor, product, unitOfMeasure objects
+ *
+ **/
 	public function setUp() {
 		parent::setUp();
 
@@ -71,7 +74,6 @@ class LocationTest extends InventoryTextTest {
 		$this->unitOfMeasure = new UnitOfMeasure($unitId, $unitCode, $quantity);
 		$this->unitOfMeasure->insert($this->getPDO());
 	}
-
 	/**
 	 * test inserting a valid Location and verify that the actual mySQL data matches
 	 **/

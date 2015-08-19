@@ -17,6 +17,10 @@ try {
 	// determine which HTTP method was used
 	$method = array_key_exists("HTTPS_X_HTTP_METHOD", $_SERVER) ? $_SERVER["HTTP_X_HTTP_METHOD"] : $_SERVER["REQUEST_METHOD"];
 
+	// sanitize the locationId
+	$locationId = filter_input(INPUT_GET, "locationId", FILTER_VALIDATE_INT);
+	if(($method === "DELETE" || $method === "PUT") && (empty($locationId) === true || $locationId < 0)) {
+		throw(new InvalidArgumentException("locationId cannot be empty or negative", 405));
 
 	// sanitize the locationId
 	$locationId = filter_input(INPUT_GET, "locationId", FILTER_VALIDATE_INT);
@@ -26,6 +30,8 @@ try {
 
 	// sanitize getProducts
 	$getProducts = filter_input(INPUT_GET, "getProducts", FILTER_VALIDATE_BOOLEAN);
+
+
 
 	// grab the mySQL connection
 	$pdo = connectToEncryptedMySql("/etc/apache2/capstone-mysql/invtext.ini");

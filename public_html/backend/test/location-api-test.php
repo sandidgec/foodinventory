@@ -47,8 +47,9 @@ class LocationAPITest extends InventoryTextTest {
 
 
 	/**
-	 * set up for guzzle/cookies
-	 */
+	 * Set up to create vendor, product, unitOfMeasure objects
+	 *
+	 **/
 	public function setUp() {
 		parent::setUp();
 
