@@ -27,13 +27,13 @@ try {
 	$vendorId = filter_input(INPUT_GET, "vendorId", FILTER_VALIDATE_INT);
 
 	// sanitize the description
-	$description = filter_input(INPUT_GET, "description", FILTER_VALIDATE_INT);
+	$description = filter_input(INPUT_GET, "description", FILTER_SANITIZE_STRING);
 
 	// sanitize the sku
-	$sku = filter_input(INPUT_GET, "sku", FILTER_VALIDATE_INT);
+	$sku = filter_input(INPUT_GET, "sku", FILTER_SANITIZE_STRING);
 
 	// sanitize the title
-	$title = filter_input(INPUT_GET, "title", FILTER_VALIDATE_INT);
+	$title = filter_input(INPUT_GET, "title", FILTER_SANITIZE_STRING);
 
 	// sanitize the pagination
 	$pagination = filter_input(INPUT_GET, "pagination", FILTER_VALIDATE_INT);
