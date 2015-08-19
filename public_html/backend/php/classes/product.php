@@ -198,7 +198,7 @@ class Product {
 		// verify the leadTime is valid
 		$newLeadTime = filter_var($newLeadTime, FILTER_VALIDATE_INT);
 		if($newLeadTime === false) {
-			throw(new InvalidArgumentException("leadTime is not a valid integer: " . $newLeadTime));
+			throw(new InvalidArgumentException("leadTime is not a valid integer"));
 		}
 
 		// verify the leadTime is positive

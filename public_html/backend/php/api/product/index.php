@@ -25,33 +25,18 @@ try {
 
 	// sanitize the vendorId
 	$vendorId = filter_input(INPUT_GET, "vendorId", FILTER_VALIDATE_INT);
-	if(($method === "DELETE" || $method === "PUT") && (empty($vendorId) === true || $vendorId < 0)) {
-		throw(new InvalidArgumentException("vendorId cannot be empty or negative", 405));
-	}
 
 	// sanitize the description
 	$description = filter_input(INPUT_GET, "description", FILTER_VALIDATE_INT);
-	if(($method === "DELETE" || $method === "PUT") && (empty($description) === true || $description < 0)) {
-		throw(new InvalidArgumentException("description cannot be empty or negative", 405));
-	}
 
 	// sanitize the sku
 	$sku = filter_input(INPUT_GET, "sku", FILTER_VALIDATE_INT);
-	if(($method === "DELETE" || $method === "PUT") && (empty($sku) === true || $sku < 0)) {
-		throw(new InvalidArgumentException("sku cannot be empty or negative", 405));
-	}
 
 	// sanitize the title
 	$title = filter_input(INPUT_GET, "title", FILTER_VALIDATE_INT);
-	if(($method === "DELETE" || $method === "PUT") && (empty($title) === true || $title < 0)) {
-		throw(new InvalidArgumentException("title cannot be empty or negative", 405));
-	}
 
 	// sanitize the pagination
 	$pagination = filter_input(INPUT_GET, "pagination", FILTER_VALIDATE_INT);
-	if(($method === "DELETE" || $method === "PUT") && (empty($productId) === true || $pagination < 0)) {
-		throw(new InvalidArgumentException("pagination cannot be empty or negative", 405));
-	}
 
 
 	// grab the mySQL connection
