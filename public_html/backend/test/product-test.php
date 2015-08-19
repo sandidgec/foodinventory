@@ -385,7 +385,7 @@ class ProductTest extends InventoryTextTest {
 		$quantity = 5.9; //what do I do here???
 
 		// create a new product and insert to into mySQL
-		$productLocation = new ProductLocation($location->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(),
+		$productLocation = new ProductLocation( $this->location->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(),
 			$quantity);
 		$productLocation->insert($this->getPDO());
 
