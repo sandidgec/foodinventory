@@ -519,8 +519,10 @@ class MovementTest extends InventoryTextTest {
 		$movement = new Movement(null, $this->fromLocation->getLocationId(), $this->toLocation->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(), $this->user->getUserId(), $this->VALID_cost, $this->VALID_movementDate, $this->VALID_movementType, $this->VALID_price);
 		$movement->insert($this->getPDO());
 
+		$page = 1;
+
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoMovement = Movement::getAllMovements($this->getPDO());
+		$pdoMovement = Movement::getAllMovements($this->getPDO(), $page);
 		foreach($pdoMovement as $pdoM) {
 			$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("movement"));
 			$this->assertSame($pdoM->getFromLocationId(), $this->fromLocation->getLocationId());
@@ -541,8 +543,10 @@ class MovementTest extends InventoryTextTest {
 	 * @expectedException
 	 **/
 	public function testGetInvalidAllMovements() {
-		// grab an movementType that does not exist
-		$pdoMovement = Movement::getAllMovements($this->getPDO());
+		// grab all movements with a page number that does not exist
+		$page = 2;
+
+		$pdoMovement = Movement::getAllMovements($this->getPDO(), $page);
 		foreach($pdoMovement as $pdoM) {
 			$this->assertNull($pdoM);
 		}
