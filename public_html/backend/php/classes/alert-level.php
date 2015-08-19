@@ -46,7 +46,7 @@ class AlertLevel {
 	 * @throws RangeException if data values are out of bounds (e.g., strings too long, negative integers)
 	 * @throws Exception if any other Exceptions are thrown
 	 **/
-	public function __construct($newAlertId, $newAlertCode, $newAlertFrequency, $newAlertPoint, $newAlertOperator=null) {
+	public function __construct($newAlertId, $newAlertCode, $newAlertFrequency, $newAlertPoint, $newAlertOperator) {
 		try {
 			$this->setAlertId($newAlertId);
 			$this->setAlertCode($newAlertCode);
