@@ -360,7 +360,7 @@ class Product {
 	 * gets the Product by productId
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
-	 * @param int $newProductId the product id to search for
+	 * @param string $newProductId the product id to search for
 	 * @return mixed Product found or null if not found
 	 * @throws PDOException when mySQL related errors occur
 	 **/
@@ -402,15 +402,15 @@ class Product {
 	 * gets the Product by vendorId
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
-	 * @param int $newVendorId the vendor id to search for
+	 * @param string $newVendorId the vendor id to search for
 	 * @return SplFixedArray all products found for this vendorId
 	 * @throws PDOException when mySQL related errors occur
 	 **/
 	public static function getProductByVendorId(PDO &$pdo, $newVendorId) {
 		// sanitize the vendorId before searching
-		$newVendorId = filter_var($newVendorId, FILTER_VALIDATE_INT);
+		$newVendorId = filter_var($newVendorId, FILTER_VALIDATE_STRING);
 		if($newVendorId === false) {
-			throw(new PDOException("vendor id is not an integer"));
+			throw(new PDOException("vendor id is not an string"));
 		}
 		if($newVendorId <= 0) {
 			throw(new PDOException("vendor id is not positive"));
