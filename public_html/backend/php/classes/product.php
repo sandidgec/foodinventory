@@ -610,9 +610,9 @@ class Product implements JsonSerializable {
 		}
 		$query ="SELECT location.locationId, location.storageCode, location.description AS locationDescription,
 					 product.productId, product.vendorId, product.description AS productDescription, product.leadTime, product.sku, product.title
-					FROM locationProduct
-					INNER JOIN product ON product.productId = locationProduct.ProductId
-					INNER JOIN location ON location.locationId = locationProduct.locationId
+					FROM productLocation
+					INNER JOIN product ON product.productId = productLocation.productId
+					INNER JOIN location ON location.locationId = productLocation.locationId
 					WHERE product.productId = :productId";
 		$statement = $pdo->prepare($query);
 

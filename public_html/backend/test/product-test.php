@@ -105,8 +105,8 @@ class ProductTest extends InventoryTextTest {
 		$vendorName = "TruFork";
 		$vendorPhoneNumber = "5053594687";
 
-		$vendor = new Vendor($vendorId, $contactName, $vendorEmail, $vendorName, $vendorPhoneNumber);
-		$vendor->insert($this->getPDO());
+		$this->vendor = new Vendor($vendorId, $contactName, $vendorEmail, $vendorName, $vendorPhoneNumber);
+		$this->vendor->insert($this->getPDO());
 
 		$locationId = null;
 		$storageCode = "br";
@@ -368,14 +368,14 @@ class ProductTest extends InventoryTextTest {
 		$numRows = $this->getConnection()->getRowCount("product");
 
 		// create a new product and insert to into mySQL
-		$product = new Product(null, $this->VALID_vendor, $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
+		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 		$product->insert($this->getPDO());
 
 		$quantity = 5.9; //what do I do here???
 
 		// create a new product and insert to into mySQL
-		$locationProduct = new locationProduct($product->getProductId(), $this->location->getLocationId(), $this->vendor->getVendorId());
-		$locationProduct->insert($this->getPDO());
+		$productLocation = new ProductLocation($this->location->getLocationId(),$product->getProductId(), $this->unityId->getUnityId(), $this->$quantity->getQuantity() );
+		$productLocation->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoLocationArray = Product::getLocationByProductId($this->getPDO(), $product->getProductId());
