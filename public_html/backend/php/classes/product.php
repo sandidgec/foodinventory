@@ -8,7 +8,7 @@
  **/
 
 
-class Product {
+class Product implements JsonSerializable {
 	/**
 	 * id for this Product; this is the primary key
 	 * @var int $productId
@@ -600,6 +600,45 @@ class Product {
 			}
 		}
 		return ($products);
+	}
+
+	public static function getLocationByProductId(PDO &$pdo, $newProductId) {
+		// sanitize the ProductId before searching
+		$newProductId = filter_var($newProductId, FILTER_VALIDATE_INT);
+		if(empty($newProductId) === true) {
+			throw(new PDOException("locationId is an invalid integer"));
+		}
+		$query ="SELECT location.locationId, location.storageCode, location.description AS locationDescription,
+					 product.productId, product.vendorId, product.description AS productDescription, product.leadTime, product.sku, product.title
+					FROM locationProduct
+					INNER JOIN product ON product.productId = locationProduct.ProductId
+					INNER JOIN location ON location.locationId = locationProduct.locationId
+					WHERE product.productId = :productId";
+		$statement = $pdo->prepare($query);
+
+		// bind the productId to the place holder in the template
+		$parameters = array("productId" => $newProductId);
+		$statement->execute($parameters);
+
+		// build an array of Locations and an associated Products
+		$locations = new SplFixedArray($statement->rowCount() + 1);
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				if($locations->key() === 0) {
+					$product = new Product($row["productId"], $row["vendorId"], $row["productDescription"], $row["leadTime"], $row["sku"], $row["title"]);
+					$locations[$locations->key()] = $product;
+					$locations->next();
+				}
+				$location = new location($row["locationId"], $row["storageCode"], $row["locationDescription"]);
+				$locations[$locations->key()] = $location;
+				$locations->next();
+			} catch(PDOException $exception) {
+				//if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return ($locations);
 	}
 
 	/**
