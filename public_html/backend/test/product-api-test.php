@@ -23,9 +23,9 @@ class ProductAPITest extends InventoryTextTest {
 	/**
 	 * creating a null Vendor
 	 * object for global scope
-	 * @var Vendor $vendor
+	 * @var string $vendorId
 	 **/
-	protected $vendor = null;
+	protected $vendorId = null;
 
 	/**
 	 * valid description to use
@@ -59,15 +59,15 @@ class ProductAPITest extends InventoryTextTest {
 
 	/**
 	 * valid sku to use
-	 * @var int $VALID_sku
+	 * @var string $VALID_sku
 	 **/
 	protected $VALID_sku = "TGT345";
 
 	/**
 	 * invalid sku to use
-	 * @var int $INVALID_sku
+	 * @var string $INVALID_sku
 	 **/
-	protected $INVALID_sku = 4294967296;
+	protected $INVALID_sku = "4294967296";
 
 	/**
 	 * valid title to use
