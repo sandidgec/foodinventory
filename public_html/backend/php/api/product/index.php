@@ -18,13 +18,13 @@ try {
 	$method = array_key_exists("HTTP_X_HTTP_METHOD", $_SERVER) ? $_SERVER["HTTP_X_HTTP_METHOD"] : $_SERVER["REQUEST_METHOD"];
 
 	// sanitize the productId
-	$productId = filter_input(INPUT_GET, "productId", FILTER_VALIDATE_INT);
+	$productId = filter_input(INPUT_GET, "productId", FILTER_VALIDATE_STRING);
 	if(($method === "DELETE" || $method === "PUT") && (empty($productId) === true || $productId < 0)) {
 		throw(new InvalidArgumentException("productId cannot be empty or negative", 405));
 	}
 
 	// sanitize the vendorId
-	$vendorId = filter_input(INPUT_GET, "vendorId", FILTER_VALIDATE_INT);
+	$vendorId = filter_input(INPUT_GET, "vendorId", FILTER_VALIDATE_STRING);
 
 	// sanitize the description
 	$description = filter_input(INPUT_GET, "description", FILTER_SANITIZE_STRING);
@@ -53,6 +53,8 @@ try {
 			$reply->data = Product::getProductByVendorId($pdo, $vendorId);
 		} else if(empty($description) === false) {
 			$reply->data = Product::getDescriptionByDescription($pdo, $description);
+		} else if(empty($leadTIme) === false) {
+			$reply->data = Product::getLeadTimeByLeadTime($pdo, $leadTime);
 		} else if(empty($sku) === false) {
 			$reply->data = Product::getSkuBySku($pdo, $sku);
 		} else if(empty($title) === false) {
