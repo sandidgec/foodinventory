@@ -473,7 +473,7 @@ class Notification {
 	 * @return SplFixedArray all Notifications fount for this alertId
 	 * @throws PDOException when mySQL related errors occur
 	 **/
-	public static function getNotificationsByAlertId(PDO, &$pdo, $newAlertId){
+	public static function getNotificationsByAlertId(PDO &$pdo, $newAlertId){
 		//sanitize the alertId before searching
 		$newAlertId = filter_var($newAlertId, FILTER_VALIDATE_INT);
 		if(empty($newAlertId) === true){

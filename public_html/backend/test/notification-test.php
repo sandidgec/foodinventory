@@ -83,6 +83,20 @@ class NotificationTest extends InventoryTextTest {
 	 **/
 	protected $alertLevel = null;
 
+	/**
+	 * creating a productAlert
+	 * object for global scope
+	 * @var ProductAlert $productAlert
+	 **/
+	protected $productAlert = null;
+
+	/**
+	 * creating a product
+	 * object for global scope
+	 * @var Product $product
+	 **/
+	protected $product = null;
+
 	public function setUp() {
 		parent::setUp();
 
@@ -94,6 +108,23 @@ class NotificationTest extends InventoryTextTest {
 
 		$this->alertLevel = new AlertLevel($alertId, $alertCode, $alertFrequency, $alertLevel, $alertOperator);
 		$this->alertLevel->insert($this->getPDO());
+
+		$alertId = null;
+		$productId = null;
+		$productEnabled = "1";
+
+		$this->productAlert = new ProductAlert($alertId, $productId, $productEnabled);
+		$this->productAlert->insert($this->getPDO());
+
+		$productId = null;
+		$vendorId = 25;
+		$description = "A glorius bead to use";
+		$leadTime = 10;
+		$sku = "TGT354";
+		$title = "Bead-Green-Blue-Circular";
+
+		$this->product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
+		$this->product->insert($this->getPDO());
 
 		$this->VALID_notificationDateTime = DateTime::createFromFormat("Y-m-d H:i:s", "1985-06-28 04:26:03");
 
@@ -213,11 +244,66 @@ class NotificationTest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing a notification by an alert id that does not exists
+	 * test grabbing a notification by an email status that does not exists
 	 **/
 	public function testGetInvalidNotificationByEmailStatus() {
 		// grab an email id that does not exist
 		$notification = Notification::getNotificationByAlertId($this->getPDO(), "4294967296");
 			$this->assertNull($notification);
 	}
+	/**
+	 * test grabbing an product by alert Id
+	 **/
+	public function testGetValidProductByAlertId() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("alertLevel");
+
+		// create a new alert level and insert to into mySQL
+		$alertLevel = new AlertLevel(null, $this->alertLevel->getAlertCode(), $this->alertLevel->getAlertFrequency(), $this->alertLevel->getAlertPoint(), $this->alertLevel->getAlertOperator());
+		$alertLevel->insert($this->getPDO());
+
+		// create a new alert level and insert to into mySQL
+		$productAlert = new productAlert($alertLevel->getAlertId(), $this->product->getProductId(), true);
+		$productAlert->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoProductArray = AlertLevel::getProductByAlertId($this->getPDO(), $alertLevel->getAlertId());
+		for($i = 0; $i < count($pdoProductArray); $i++) {
+			if($i === 0) {
+				$this->assertSame($pdoProductArray[$i]->getAlertCode(), $this->alertLevel->getAlertCode());
+				$this->assertSame($pdoProductArray[$i]->getAlertFrequency(), $this->alertLevel->getAlertFrequency());
+				$this->assertSame($pdoProductArray[$i]->getAlertPoint(), $this->alertLevel->getAlertPoint());
+				$this->assertSame($pdoProductArray[$i]->getAlertOperator(), $this->alertLevel->getAlertOperator());
+			} else {
+				$this->assertSame($pdoProductArray[$i]->getProductId(), $this->product->getProductId());
+				$this->assertSame($pdoProductArray[$i]->getVendorId(), $this->product->getVendorId());
+				$this->assertSame($pdoProductArray[$i]->getDescription(), $this->product->getDescription());
+				$this->assertSame($pdoProductArray[$i]->getSku(), $this->product->getSku());
+				$this->assertSame($pdoProductArray[$i]->getTitle(), $this->product->getTitle());
+			}
+		}
+	}
+	/**
+	 * test grabbing all Notifications
+	 **/
+	public function testGetValidAllNotifications() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("notification");
+
+		// create a new notification and insert to into mySQL
+		$notification = new Notification (null, $this->alertLevel->getAlertId(), $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
+		$notification->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoNotification = Notification::getAllNotification($this->getPDO(), $this->VALID_notificationId);
+		foreach($pdoNotification as $note) {
+			$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("notification"));
+			$this->assertSame($note->getAlertId(), $this->alertLevel->getAlertId());
+			$this->assertSame($note->getEmailStatus(), $this->VALID_emailStatus);
+			$this->assertEquals($note->getNotificationDateTime(), $this->VALID_notificationDateTime);
+			$this->assertSame($note->getNotificationHandle(), $this->VALID_notificationHandle2);
+			$this->assertSame($note->getNotificationContent(), $this->VALID_notificationContent);
+		}
+	}
+
 }
