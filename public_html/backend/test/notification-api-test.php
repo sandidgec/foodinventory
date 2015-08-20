@@ -91,6 +91,13 @@ class NotificationAPITest extends InventoryTextTest {
 	protected $product = null;
 
 	/**
+	 * creating a null ProductAlert
+	 * object for global scope
+	 * @var ProductAlert $productAlert
+	 **/
+	protected $productAlert = null;
+
+	/**
 	 * @var guzzle
 	 **/
 	protected $guzzle = null;
@@ -129,6 +136,13 @@ class NotificationAPITest extends InventoryTextTest {
 
 		$this->product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
 		$this->product->insert($this->getPDO());
+
+		$alertId1 = $this->alertLevel->getAlertId();
+		$productId1 = $this->product->getProductId();
+		$alertEnabled = true;
+
+		$this->productAlert = new ProductAlert($alertId1, $productId1, $alertEnabled);
+		$this->productAlert->insert($this->getPDO());
 	}
 
 	/**
@@ -226,14 +240,6 @@ class NotificationAPITest extends InventoryTextTest {
 		// create a new notification and insert to into mySQL
 		$newNotification = new Notification(null, $this->alertLevel->getAlertId(), $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
 		$newNotification->insert($this->getPDO());
-
-		//create an new alertLevel
-		$newAlertLevel = new AlertLevel(null, $this->alertLevel->getAlertCode(), $this->alertLevel->getAlertFrequency(), $this->alertLevel->getAlertPoint(), $this->alertLevel->getAlertOperator());
-		$newAlertLevel->insert($this->getPDO());
-
-		// create a new ProductAlert
-		$newProductAlert = new ProductAlert($newAlertLevel->getAlertId(), $this->product->getProductId(), true);
-		$newProductAlert->insert($this->getPDO());
 
 		// grab the data from guzzle
 		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/notification/?alertId=' . $newNotification->getAlertId() . "&getProducts=true");
