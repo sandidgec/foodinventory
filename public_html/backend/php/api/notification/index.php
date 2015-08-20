@@ -45,6 +45,8 @@ try {
 			$notificationDateTimeInt = new DateTime();
 			$notificationDateTimeInt->setTimestamp($notificationDateTime / 1000);
 			$reply->data = Notification::getNotificationByNotificationDateTime($pdo, $notificationDateTimeInt);
+		}	else if(empty($alertId) === false){
+			$reply->data = Notification::getProductByAlertId($pdo, $alertId);
 		} else {
 			$reply->data = Notification::getAllNotifications($pdo, $page);
 		}

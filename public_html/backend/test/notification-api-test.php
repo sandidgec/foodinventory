@@ -193,6 +193,29 @@ class NotificationAPITest extends InventoryTextTest {
 	}
 
 	/**
+	 * test grabbing valid product by alertId
+	 **/
+	public function testGetValidProductByAlertId(){
+		// create a new notification and insert to into mySQL
+		$newNotification = new Notification(null, $this->alertLevel->getAlertId(), $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
+		$newNotification->insert($this->getPDO());
+
+		//create an new alertLevel
+		$newAlertLevel = new AlertLevel(null, $this->alertLevel->getAlertCode(), $this->alertLevel->getAlertFrequency(), $this->alertLevel->getAlertPoint(), $this->alertLevel->getAlertOperator());
+		$newAlertLevel->insert($this->getPDO());
+
+		// create a new ProductAlert
+		$newProductAlert = new ProductAlert($newAlertLevel->getAlertId(), $this->product->getProductId(), true);
+		$newProductAlert->insert($this->getPDO());
+
+		// grab the data from guzzle
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/notification/?alertId=' . $newNotification->getAlertId() . "&getProducts=true");
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$alertLevel = json_decode($body);
+		$this->assertSame(200, $alertLevel->status);
+	}
+	/**
 	 *test posting a Notification
 	 **/
 	public function testPostValidNotification(){
