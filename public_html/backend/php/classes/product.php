@@ -822,3 +822,4 @@ class Product implements JsonSerializable {
 		return ($products);
 	}
 }
+
