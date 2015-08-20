@@ -81,10 +81,12 @@ class VendorAPITest extends InventoryTextTest {
 		$newVendor = new  Vendor(null, $this->VALID_contactName, $this->VALID_vendorEmail, $this->VALID_vendorName, $this->VALID_vendorPhoneNumber);
 		$newVendor->insert($this->getPDO());
 
-		// grab the data from guzzle and enforce the status' match our expectations
+		//run a request to establish session tokens
 		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/vendor/');
-		$response = $this->guzzle->delete('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/vendor/' . $newVendor->getVendorId(), ['headers' =>
-			['X-XSRF-TOKEN' => $this->getXsrfToken()]]);
+
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->delete('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/vendor/' . $newVendor->getVendorId(),
+			['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()]]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$vendor = json_decode($body);

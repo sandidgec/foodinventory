@@ -19,14 +19,10 @@ try {
 
 	// sanitize the vendorId
 	$vendorId = filter_input(INPUT_GET, "vendorId", FILTER_VALIDATE_INT);
-	if(($method === "DELETE" || $method === "PUT") && (empty($vendorId) === true || $vendorId < 0)) {
-		throw(new InvalidArgumentException("vendorId cannot be empty or negative", 405));
-	}
+
 	//sanitize the vendor name
 	$vendorName = filter_input(INPUT_GET, "vendorName", FILTER_SANITIZE_STRING);
-	if(($method === "DELETE" || $method === "PUT") && (empty($vendorName) === true || $vendorId < 0)) {
-		throw(new InvalidArgumentException("vendor name is invalid", 405));
-	}
+
 
 	// grab the mySQL connection
 	$pdo = connectToEncryptedMySql("/etc/apache2/capstone-mysql/invtext.ini");
@@ -37,7 +33,7 @@ try {
 		// set an XSRF cookie on GET requests
 		setXsrfCookie("/");
 		if(empty($vendorId) === false) {
-			$reply->data = Vendor::getVendorByVendorId($pdo, $VendorId);
+			$reply->data = Vendor::getVendorByVendorId($pdo, $vendorId);
 		} else if(empty($vendorName) === false) {
 			$reply->data = Vendor::getVendorByVendorName($pdo, $vendorName);
 		} else {
