@@ -118,7 +118,7 @@ class ProductTest extends InventoryTextTest {
 		$unitCode = "ea";
 
 		$productId = null;
-		$vendorId = $vendor->getVendorId();
+		$this->vendor->getVendorId();
 		$description = "This is a bead";
 		$leadTime = 10;
 		$sku = "TGT354";
