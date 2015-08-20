@@ -747,7 +747,7 @@ class Product implements JsonSerializable {
 		if(empty($newProductId) === true) {
 			throw(new PDOException("productId is an invalid integer"));
 		}
-		$query ="SELECT notification.notificationId, notification.alertId, notification.emailStatus, notification.notificationDateTime, notification.notificationContent,
+		$query ="SELECT notification.notificationId, notification.alertId, notification.emailStatus, notification.notificationDateTime, notification.notificationContent, notification.notificationHandle,
 					 product.productId, product.vendorId, product.description, product.leadTime, product.sku, product.title
 					FROM notification
 					INNER JOIN alertLevel ON notification.alertId = alertLevel.alertId
