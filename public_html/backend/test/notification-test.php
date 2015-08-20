@@ -271,22 +271,15 @@ class NotificationTest extends InventoryTextTest {
 		$notification = new Notification(null, $this->alertLevel->getAlertId(), $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
 		$notification->insert($this->getPDO());
 
-		// create a new alert level and insert to into mySQL
-//		$productAlert = new ProductAlert($alertLevel->getAlertId(), $this->product->getProductId(), true);
-//		$productAlert->insert($this->getPDO());
-//		var_dump($this->getConnection()->getRowCount("productAlert"));
-//		var_dump($this->productAlert);
-//		var_dump($this->alertLevel->getAlertId());
-
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProductArray = Notification::getProductByAlertId($this->getPDO(), $this->alertLevel->getAlertId());
-		var_dump($pdoProductArray);
+		$pdoProductArray = Notification::getProductByAlertId($this->getPDO(), $notification->getAlertId());
 		for($i = 0; $i < count($pdoProductArray); $i++) {
 			if($i === 0) {
-				$this->assertSame($pdoProductArray[$i]->getAlertCode(), $this->alertLevel->getAlertCode());
-				$this->assertSame($pdoProductArray[$i]->getAlertFrequency(), $this->alertLevel->getAlertFrequency());
-				$this->assertSame($pdoProductArray[$i]->getAlertPoint(), $this->alertLevel->getAlertPoint());
-				$this->assertSame($pdoProductArray[$i]->getAlertOperator(), $this->alertLevel->getAlertOperator());
+				$this->assertSame($pdoProductArray[$i]->getAlertId(), $this->alertLevel->getAlertId());
+				$this->assertSame($pdoProductArray[$i]->getEmailStatus(), $this->VALID_emailStatus);
+				$this->assertEquals($pdoProductArray[$i]->getNotificationDateTime(), $this->VALID_notificationDateTime);
+				$this->assertSame($pdoProductArray[$i]->getNotificationHandle(), $this->VALID_notificationHandle);
+				$this->assertSame($pdoProductArray[$i]->getNotificationContent(), $this->VALID_notificationContent);
 			} else {
 				$this->assertSame($pdoProductArray[$i]->getProductId(), $this->product->getProductId());
 				$this->assertSame($pdoProductArray[$i]->getVendorId(), $this->product->getVendorId());
@@ -308,7 +301,7 @@ class NotificationTest extends InventoryTextTest {
 		$notification->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoNotification = Notification::getAllNotification($this->getPDO(), $this->VALID_notificationId);
+		$pdoNotification = Notification::getAllNotifications($this->getPDO(), $this->VALID_notificationId);
 		foreach($pdoNotification as $note) {
 			$this->assertSame($numRows + 1, $this->getConnection()->getRowCount("notification"));
 			$this->assertSame($note->getAlertId(), $this->alertLevel->getAlertId());
