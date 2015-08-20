@@ -109,9 +109,6 @@ class ProductTest extends InventoryTextTest {
 		$vendorName = "TruFork";
 		$vendorPhoneNumber = "5053594687";
 
-		$this->vendor = new Vendor($vendorId, $contactName, $vendorEmail, $vendorName, $vendorPhoneNumber);
-		$this->vendor->insert($this->getPDO());
-
 		$locationId = null;
 		$storageCode = "br";
 		$description = "back shelf";
@@ -119,6 +116,19 @@ class ProductTest extends InventoryTextTest {
 		$unitId = null;
 		$quantity = 3.5;
 		$unitCode = "ea";
+
+		$productId = null;
+		$vendorId = null;
+		$description = "A glorius bead to use";
+		$leadTime = 10;
+		$sku = "TGT354";
+		$title = "Bead-Green-Blue-Circular";
+
+		$this->vendor = new Vendor($vendorId, $contactName, $vendorEmail, $vendorName, $vendorPhoneNumber);
+		$this->vendor->insert($this->getPDO());
+
+		$this->product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
+		$this->product->insert($this->getPDO());
 
 		$this->location = new Location($locationId, $storageCode, $description);
 		$this->location->insert($this->getPDO());
