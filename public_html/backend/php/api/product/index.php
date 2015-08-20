@@ -46,6 +46,7 @@ try {
 	$pdo = connectToEncryptedMySql("/etc/apache2/capstone-mysql/invtext.ini");
 
 	// handle all RESTful calls to Product
+
 	// get some or all Products
 	if($method === "GET") {
 		// set an XSRF cookie on GET requests
@@ -61,32 +62,14 @@ try {
 		} else if(empty($sku) === false) {
 			$reply->data = Product::getProductBySku($pdo, $sku);
 		} else if(empty($title) === false) {
-	$reply->data = Product::getProductByTitle($pdo, $title);
+			$reply->data = Product::getProductByTitle($pdo, $title);
 		} else if(empty($pagination) === false) {
-		$reply->data = Product::getAllProducts($pdo, $pagination);
-	}
-		// post to a new Product
-		else if($method === "POST") {
-			// convert POSTed JSON to an object
-			verifyXsrf();
-			$requestContent = file_get_contents("php://input");
-			$requestObject = json_decode($requestContent);
-
-			$product = new Product(null, $requestObject->vendorId, $requestObject->description, $requestObject->leadTime, $requestObject->sku, $requestObject->title);
-			$product->insert($pdo);
-			$reply->data = "Product created OK";
+			$reply->data = Product::getAllProducts($pdo, $pagination);
 		}
-		// put to an existing Product
-	} else if($method === "PUT") {
-		// convert PUTed JSON to an object
-		verifyXsrf();
-		$requestContent = file_get_contents("php://input");
-		$requestObject = json_decode($requestContent);
 
-		$product = new Product($productId, $requestObject->vendorId, $requestObject->description, $requestObject->leadTime, $requestObject->sku, $requestObject->title);
-		$product->update($pdo);
-		$reply->data = "Product updated OK";
-	}
+
+		// put to an existing Product
+
 	// delete an existing Product
 	else if($method === "DELETE") {
 	verifyXsrf();
@@ -94,6 +77,19 @@ try {
 	$product->delete($pdo);
 	$reply->data = "Product deleted OK";
 	}
+
+		// post to a new Product
+	} else if($method === "POST") {
+		// convert POSTed JSON to an object
+		verifyXsrf();
+		$requestContent = file_get_contents("php://input");
+		$requestObject = json_decode($requestContent);
+
+		$product = new Product(null, $requestObject->vendorId, $requestObject->description, $requestObject->leadTime, $requestObject->sku, $requestObject->title);
+		$product->insert($pdo);
+		$reply->data = "Product created OK";
+	}
+
 // create an exception to pass back to the RESTful caller
 	} catch(Exception $exception) {
 	$reply->status = $exception->getCode();
