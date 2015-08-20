@@ -239,8 +239,9 @@ class NotificationAPITest extends InventoryTextTest {
 		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/notification/?alertId=' . $newNotification->getAlertId() . "&getProducts=true");
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$alertLevel = json_decode($body);
-		$this->assertSame(200, $alertLevel->status);
+		$notification = json_decode($body);
+		echo PHP_EOL;
+		$this->assertSame(200, $notification->status);
 	}
 	/**
 	 *test posting a Notification
