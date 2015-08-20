@@ -393,8 +393,8 @@ class Notification implements JsonSerializable {
 	 **/
 	public static function getNotificationByEmailStatus(PDO &$pdo, $emailStatus) {
 		// sanitize the emailStatus before searching
-		$emailStatus = filter_var($emailStatus, FILTER_VALIDATE_BOOLEAN);
-		if($emailStatus === false) {
+		$emailStatus = filter_var($emailStatus, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+		if($emailStatus === null) {
 			throw(new PDOException("email status is not a boolean"));
 		}
 

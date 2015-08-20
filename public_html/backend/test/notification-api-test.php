@@ -198,8 +198,7 @@ class NotificationAPITest extends InventoryTextTest {
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$notification = json_decode($body);
-		echo $body . PHP_EOL;
-		$this->assertSame(200, $notification->status);
+		$this->assertSame(405, $notification->status);
 	}
 
 	/**
