@@ -567,6 +567,3 @@ class ProductTest extends InventoryTextTest {
 
 
 
-
-
-
