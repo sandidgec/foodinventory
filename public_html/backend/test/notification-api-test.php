@@ -41,7 +41,7 @@ class NotificationAPITest extends InventoryTextTest {
 	 * invalid email status to use
 	 * @var int $VALID_emailStatus
 	 **/
-	protected $INVALID_emailStatus = "4294967296";
+	protected $INVALID_emailStatus = "this !== boolean";
 	/**
 	 * valid notification date and time to use
 	 * @var dateTime $VALID_notificationDateTime

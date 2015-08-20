@@ -21,7 +21,7 @@ try {
 	$notificationId = filter_input(INPUT_GET, "notificationId", FILTER_VALIDATE_INT);
 
 	//sanitize the email status
-	$emailStatus = filter_input(INPUT_GET,"emailStatus", FILTER_VALIDATE_BOOLEAN);
+	$emailStatus = filter_input(INPUT_GET,"emailStatus", FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
 	//sanitize the date
 	$notificationDateTime = filter_input(INPUT_GET, "notificationDateTime", FILTER_VALIDATE_INT);
@@ -42,7 +42,7 @@ try {
 		setXsrfCookie("/");
 		if(empty($notificationId) === false) {
 			$reply->data = Notification::getNotificationByNotificationId($pdo, $notificationId);
-		} else if(empty($emailStatus) === false) {
+		} else if(is_bool($emailStatus) === true) {
 			$reply->data = Notification::getNotificationByEmailStatus($pdo, $emailStatus);
 		} else if(empty($notificationDateTime) === false) {
 			$notificationDateTimeInt = new DateTime();
