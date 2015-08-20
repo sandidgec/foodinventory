@@ -252,7 +252,7 @@ class ProductAPITest extends InventoryTextTest {
 		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId() . "&getLocations=true");
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		echo $body . PHP_EOL;
+//		echo $body . PHP_EOL;
 		$product = json_decode($body);
 		$this->assertSame(200, $product->status);
 	}
@@ -261,77 +261,77 @@ class ProductAPITest extends InventoryTextTest {
 	/**
 	 * Test grabbing Valid Notifications by productId
 	 **/
-//	public function testGetValidNotificationByProductId() {
-//		// create a new Product
-//		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
-//		$newProduct->insert($this->getPDO());
-//
-//		// create a new ProductAlert and insert to into mySQL
-//		$productAlert = new ProductAlert( $this->alertLevel->getAlertId(), $newProduct->getProductId(), true);
-//		$productAlert->insert($this->getPDO());
-//
-//		// grab the data from guzzle
-//		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId() . "&getNotifications=true");
-//		$this->assertSame($response->getStatusCode(), 200);
-//		$body = $response->getBody();
-//		$product = json_decode($body);
-//		$this->assertSame(200, $product->status);
-//	}
+	public function testGetValidNotificationByProductId() {
+		// create a new Product
+		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
+		$newProduct->insert($this->getPDO());
+
+		// create a new ProductAlert and insert to into mySQL
+		$productAlert = new ProductAlert( $this->alertLevel->getAlertId(), $newProduct->getProductId(), true);
+		$productAlert->insert($this->getPDO());
+
+		// grab the data from guzzle
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId() . "&getNotifications=true");
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$product = json_decode($body);
+		$this->assertSame(200, $product->status);
+	}
 
 	/**
 	 * Test grabbing Valid UnitOfMeasure by productId
 	 **/
-//	public function testGetValidUnitOfMeasureByProductId() {
-//		// create a new Product
-//		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
-//		$newProduct->insert($this->getPDO());
-//
-//		// create a new ProductLocation
-//
-//		$quantity = 1.5;
-//
-//		$newProductLocation = new ProductLocation($this->location->getLocationId(), $newProduct->getProductId(), $this->unitOfMeasure->getUnitId(), $quantity);
-//		$newProductLocation->insert($this->getPDO());
-//
-//		// grab the data from guzzle
-//		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId() . "&getUnitOfMeasure=true");
-//		$this->assertSame($response->getStatusCode(), 200);
-//		$body = $response->getBody();
-//		$product = json_decode($body);
-//		$this->assertSame(200, $product->status);
-//	}
+	public function testGetValidUnitOfMeasureByProductId() {
+		// create a new Product
+		$newProduct = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
+		$newProduct->insert($this->getPDO());
+
+		// create a new ProductLocation
+
+		$quantity = 1.5;
+
+		$newProductLocation = new ProductLocation($this->location->getLocationId(), $newProduct->getProductId(), $this->unitOfMeasure->getUnitId(), $quantity);
+		$newProductLocation->insert($this->getPDO());
+
+		// grab the data from guzzle
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $newProduct->getProductId() . "&getUnitOfMeasure=true");
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$product = json_decode($body);
+		$this->assertSame(200, $product->status);
+	}
 
 
 	/**
 	 * Test grabbing Valid FinishedProduct by productId
 	 **/
-//	public function testGetValidFinishedProductByProductId() {
-//		// create a new product and insert to into mySQL
-//		$finishedProduct1 = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
-//		$finishedProduct1->insert($this->getPDO());
-//
-//		$description = "Today is Thursday";
-//		$leadTime = 38;
-//		$sku = "302840779045";
-//		$title = "This is a title.";
-//
-//		$rawMaterial = new Product(null, $this->vendor->getVendorId(), $description, $leadTime, $sku, $title);
-//		$rawMaterial->insert($this->getPDO());
-//
-//		$finishedProductId = $finishedProduct1->getProductId();
-//		$rawMaterialId = $rawMaterial->getProductId();
-//		$rawQuantity = 56;
-//
-//		$finishedProduct = new FinishedProduct($finishedProductId, $rawMaterialId, $rawQuantity);
-//		$finishedProduct->insert($this->getPDO());
-//
-//		// grab the data from guzzle
-//		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $finishedProduct1->getProductId() . "&getFinishedProducts=true");
-//		$this->assertSame($response->getStatusCode(), 200);
-//		$body = $response->getBody();
-//		$product = json_decode($body);
-//		$this->assertSame(200, $product->status);
-//	}
+	public function testGetValidFinishedProductByProductId() {
+		// create a new product and insert to into mySQL
+		$finishedProduct1 = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
+		$finishedProduct1->insert($this->getPDO());
+
+		$description = "Today is Thursday";
+		$leadTime = 38;
+		$sku = "302840779045";
+		$title = "This is a title.";
+
+		$rawMaterial = new Product(null, $this->vendor->getVendorId(), $description, $leadTime, $sku, $title);
+		$rawMaterial->insert($this->getPDO());
+
+		$finishedProductId = $finishedProduct1->getProductId();
+		$rawMaterialId = $rawMaterial->getProductId();
+		$rawQuantity = 56;
+
+		$finishedProduct = new FinishedProduct($finishedProductId, $rawMaterialId, $rawQuantity);
+		$finishedProduct->insert($this->getPDO());
+
+		// grab the data from guzzle
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/product/?productId=' . $finishedProduct1->getProductId() . "&getFinishedProducts=true");
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$product = json_decode($body);
+		$this->assertSame(200, $product->status);
+	}
 
 
 
