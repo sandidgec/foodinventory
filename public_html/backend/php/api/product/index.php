@@ -38,8 +38,20 @@ try {
 	// sanitize the title
 	$title = filter_input(INPUT_GET, "title", FILTER_SANITIZE_STRING);
 
-	// sanitize the pagination
-	$pagination = filter_input(INPUT_GET, "pagination", FILTER_VALIDATE_INT);
+	// sanitize getLocations
+	$getProducts = filter_input(INPUT_GET, "getLocations", FILTER_VALIDATE_BOOLEAN);
+
+	// sanitize getNotifications
+	$getProducts = filter_input(INPUT_GET, "getNotifications", FILTER_VALIDATE_BOOLEAN);
+
+	// sanitize getUnitOfMeasures
+	$getProducts = filter_input(INPUT_GET, "getUnitOfMeasures", FILTER_VALIDATE_BOOLEAN);
+
+	// sanitize getFinishedProducts
+	$getProducts = filter_input(INPUT_GET, "getFinishedProducts", FILTER_VALIDATE_BOOLEAN);
+
+	// sanitize the page
+	$page = filter_input(INPUT_GET, "page", FILTER_VALIDATE_INT);
 
 
 	// grab the mySQL connection
@@ -53,11 +65,11 @@ try {
 		if(empty($productId) === false) {
 			if($getLocations === true) {
 				$reply->data = Product::getLocationByProductId($pdo, $alertId);
-			} else if($getNotifications){
+			} else if($getNotifications) {
 				$reply->data = Product::getNotificationByProductId($pdo, $productId);
-			} else if($getUnitOfMeasure){
+			} else if($getUnitOfMeasures) {
 				$reply->data = Product::getUnitOfMeasureByProductId($pdo, $productId);
-			} else if($getFinishedProduct){
+			} else if($getFinishedProducts) {
 				$reply->data = Product::getFinishedProductByProductId($pdo, $productId);
 			} else {
 				$reply->data = Product::getProductByProductId($pdo, $productId);
@@ -72,19 +84,20 @@ try {
 			$reply->data = Product::getProductBySku($pdo, $sku);
 		} else if(empty($title) === false) {
 			$reply->data = Product::getProductByTitle($pdo, $title);
-		} else if(empty($pagination) === false) {
-			$reply->data = Product::getAllProducts($pdo, $pagination);
+		} else if(empty($page) === false) {
+			$reply->data = Product::getAllProducts($pdo, $page)->toArray();
+		} else {
+			throw(new InvalidArgumentException("no parameters given", 405));
 		} // post to a new Product
-		else if($method === "POST") {
-			// convert POSTed JSON to an object
-			verifyXsrf();
-			$requestContent = file_get_contents("php://input");
-			$requestObject = json_decode($requestContent);
+	} else if($method === "POST") {
+		// convert POSTed JSON to an object
+		verifyXsrf();
+		$requestContent = file_get_contents("php://input");
+		$requestObject = json_decode($requestContent);
 
-			$product = new Product(null, $requestObject->vendorId, $requestObject->description, $requestObject->leadTime, $requestObject->sku, $requestObject->title);
-			$product->insert($pdo);
-			$reply->data = "Product created OK";
-		}
+		$product = new Product(null, $requestObject->vendorId, $requestObject->description, $requestObject->leadTime, $requestObject->sku, $requestObject->title);
+		$product->insert($pdo);
+		$reply->data = "Product created OK";
 		// put to an existing Product
 	} else if($method === "PUT") {
 		// convert PUTed JSON to an object
@@ -95,8 +108,8 @@ try {
 		$product = new Product($productId, $requestObject->vendorId, $requestObject->description, $requestObject->leadTime, $requestObject->sku, $requestObject->title);
 		$product->update($pdo);
 		$reply->data = "Product updated OK";
-	} // delete an existing Product
-	else if($method === "DELETE") {
+		// delete an existing Product
+	} else if($method === "DELETE") {
 		verifyXsrf();
 		$product = Product::getProductByProductId($pdo, $productId);
 		$product->delete($pdo);
