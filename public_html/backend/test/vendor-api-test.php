@@ -87,8 +87,8 @@ class VendorAPITest extends InventoryTextTest {
 			['X-XSRF-TOKEN' => $this->getXsrfToken()]]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$location = json_decode($body);
-		$this->assertSame(200, $location->status);
+		$vendor = json_decode($body);
+		$this->assertSame(200, $vendor->status);
 	}
 	/**
 	 * test grabbing a Vendor by valid vendorId
@@ -139,9 +139,6 @@ class VendorAPITest extends InventoryTextTest {
 	 * test grabbing a invalid Vendor by vendor name
 	 **/
 	public function testGetInvalidVendorByVendorName() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("vendor");
-
 		// create a new Vendor and insert to into mySQL
 		$vendor = new Vendor(null, $this->VALID_contactName, $this->VALID_vendorEmail, $this->VALID_vendorName, $this->VALID_vendorPhoneNumber);
 		$vendor->insert($this->getPDO());
@@ -150,8 +147,8 @@ class VendorAPITest extends InventoryTextTest {
 		$response = $this->guzzle->get('http://bootcamp-coders.cnm.edu/~invtext/backend/php/api/vendor/?vendorName=' . InventoryTextTest::INVALID_KEY);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
-		$object = json_decode($body);
-		$this->assertSame(200, $object->status);
+		$vendor = json_decode($body);
+		$this->assertSame(200, $vendor->status);
 	}
 	/**
 	* Test Get All Vendors
