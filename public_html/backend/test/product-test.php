@@ -79,25 +79,11 @@ class ProductTest extends InventoryTextTest {
 	protected $INVALID_title = null;
 
 	/**
-	 * creating a null Vendor
+	 * creating a null Alert Level
 	 * object for global scope
-	 * @var Vendor $vendor
+	 * @var AlertLevel alertLevel
 	 **/
-	protected $vendor = null;
-
-	/**
-	 * creating a null Location
-	 * object for global scope
-	 * @var Location $location
-	 **/
-	protected $location = null;
-
-	/**
-	 * creating a null Location
-	 * object for global scope
-	 * @var UnitOfMeasure $unitOfMeasure
-	 **/
-	protected $unitOfMeasure = null;
+	protected $alertLevel = null;
 
 	/**
 	 * creating a null Finished Product
@@ -107,6 +93,13 @@ class ProductTest extends InventoryTextTest {
 	protected $finishedProduct = null;
 
 	/**
+	 * creating a null Location
+	 * object for global scope
+	 * @var Location $location
+	 **/
+	protected $location = null;
+
+	/**
 	 * creating a null Notification
 	 * object for global scope
 	 * @var Notification $notification
@@ -114,11 +107,20 @@ class ProductTest extends InventoryTextTest {
 	protected $notification = null;
 
 	/**
-	 * creating a null Product
+	 * creating a null Location
 	 * object for global scope
-	 * @var Product $product
+	 * @var UnitOfMeasure $unitOfMeasure
 	 **/
-	//protected $product = null;
+	protected $unitOfMeasure = null;
+
+	/**
+	 * creating a null Vendor
+	 * object for global scope
+	 * @var Vendor $vendor
+	 **/
+	protected $vendor = null;
+
+
 
 
 	/**
@@ -137,16 +139,6 @@ class ProductTest extends InventoryTextTest {
 		$vendor = new Vendor($vendorId, $contactName, $vendorEmail, $vendorName, $vendorPhoneNumber);
 		$vendor->insert($this->getPDO());
 
-		$productId = null;
-		$vendorId = $vendor->getVendorId();
-		$description = "A glorius bead to use";
-		$leadTime = 10;
-		$sku = "TGT354";
-		$title = "Bead-Green-Blue-Circular";
-
-		$this->product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
-		$this->product->insert($this->getPDO());
-
 		$locationId = null;
 		$description = "Front Stock";
 		$storageCode = 12;
@@ -161,16 +153,17 @@ class ProductTest extends InventoryTextTest {
 		$this->unitOfMeasure = new UnitOfMeasure($unitId, $unitCode, $quantity);
 		$this->unitOfMeasure->insert($this->getPDO());
 
-		$finishedProductId = null;
-		$rawMaterialId = "5053594687";
-		$rawQuantity = 400.25;
+		$alertId = null;
+		$alertCode = "78";
+		$alertFrequency = "56";
+		$alertPoint = 1.4;
+		$alertOperator = "A";
 
-		$this->finishedProduct = new FinishedProduct($finishedProductId, $rawMaterialId, $rawQuantity);
-		$this->finishedProduct->insert($this->getPDO());
-
+		$this->alertLevel = new Alertlevel($alertId, $alertCode, $alertFrequency, $alertPoint, $alertOperator);
+		$this->alertLevel->insert($this->getPDO());
 
 		$notificationId = null;
-		$alertId = "69";
+		$alertId = $this->alertLevel->getAlertId();
 		$emailStatus = "4294967296";
 		$notificationDateTime = "06/1985/28 4:26:03";
 		$notificationHandle = "unit test";
@@ -178,7 +171,6 @@ class ProductTest extends InventoryTextTest {
 
 		$this->notification = new Notification($notificationId, $alertId, $emailStatus, $notificationDateTime, $notificationHandle, $notificationContent);
 		$this->notification->insert($this->getPDO());
-
 	}
 
 
@@ -426,11 +418,9 @@ class ProductTest extends InventoryTextTest {
 
 
 	/**
-	 * test grabbing product by location
+	 * test grabbing location by product
 	 **/
 	public function testGetValidLocationByProductId() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("product");
 
 		// create a new product and insert to into mySQL
 		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
@@ -439,7 +429,7 @@ class ProductTest extends InventoryTextTest {
 		$quantity = 5.9;
 
 		// create a new product and insert to into mySQL
-		$productLocation = new ProductLocation( $this->location->getLocationId(), $this->vendor->getVendorId(), $this->unitOfMeasure->getUnitId(),
+		$productLocation = new ProductLocation( $this->location->getLocationId(), $product->getProductId(), $this->unitOfMeasure->getUnitId(),
 			$quantity);
 		$productLocation->insert($this->getPDO());
 
@@ -447,7 +437,9 @@ class ProductTest extends InventoryTextTest {
 		$pdoLocationArray = Product::getLocationByProductId($this->getPDO(), $product->getProductId());
 		for($i = 0; $i < count($pdoLocationArray); $i++) {
 			if($i === 0) {
+				$this->assertSame($pdoLocationArray[$i]->getVendorId(), $this->vendor->getVendorId());
 				$this->assertSame($pdoLocationArray[$i]->getDescription(), $this->VALID_description);
+				$this->assertSame($pdoLocationArray[$i]->getLeadTime(), $this->VALID_leadTime);
 				$this->assertSame($pdoLocationArray[$i]->getSku(), $this->VALID_sku);
 				$this->assertSame($pdoLocationArray[$i]->getTitle(), $this->VALID_title);
 
@@ -460,11 +452,9 @@ class ProductTest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing product by unit of measure
+	 * test grabbing unit of measure by the product id
 	 **/
 	public function testGetValidUnitOfMeasurementByProductId() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("product");
 
 		// create a new product and insert to into mySQL
 		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
@@ -473,15 +463,17 @@ class ProductTest extends InventoryTextTest {
 		$quantity = 5.9;
 
 		// create a new product and insert to into mySQL
-		$productLocation = new ProductLocation( $this->location->getLocationId(), $this->vendor->getVendorId(), $this->unitOfMeasure->getUnitId(),
+		$productLocation = new ProductLocation( $this->location->getLocationId(), $product->getProductId(), $this->unitOfMeasure->getUnitId(),
 			$quantity);
 		$productLocation->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoUnitOfMeasureArray = Product::getLocationByProductId($this->getPDO(), $product->getProductId());
+		$pdoUnitOfMeasureArray = Product::getUnitOfMeasurementByProductId($this->getPDO(), $product->getProductId());
 		for($i = 0; $i < count($pdoUnitOfMeasureArray); $i++) {
 			if($i === 0) {
+				$this->assertSame($pdoUnitOfMeasureArray[$i]->getVendorId(), $this->vendor->getVendorId());
 				$this->assertSame($pdoUnitOfMeasureArray[$i]->getDescription(), $this->VALID_description);
+				$this->assertSame($pdoUnitOfMeasureArray[$i]->getLeadTime(), $this->VALID_leadTime);
 				$this->assertSame($pdoUnitOfMeasureArray[$i]->getSku(), $this->VALID_sku);
 				$this->assertSame($pdoUnitOfMeasureArray[$i]->getTitle(), $this->VALID_title);
 
@@ -494,35 +486,46 @@ class ProductTest extends InventoryTextTest {
 	}
 
 	/**
-	 * test grabbing product by finished product
+	 * test grabbing finished product by product
 	 **/
 	public function testGetValidFinishedProductByProductId() {
 		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("product");
 
 		// create a new product and insert to into mySQL
-		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
-		$product->insert($this->getPDO());
+		$finishedProduct1 = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
+		$finishedProduct1->insert($this->getPDO());
 
-		$quantity = 5.9;
+		$description = "Today is Thursday";
+		$leadTime = 38;
+		$sku = "302840779045";
+		$title = "This is a title.";
 
-		// create a new product and insert to into mySQL
-		$productLocation = new ProductLocation( $this->location->getLocationId(), $this->vendor->getVendorId(), $this->unitOfMeasure->getUnitId(),
-			$quantity);
-		$productLocation->insert($this->getPDO());
+		$rawMaterial = new Product(null, $this->vendor->getVendorId(), $description, $leadTime, $sku, $title);
+		$rawMaterial->insert($this->getPDO());
+
+		$finishedProductId = $finishedProduct1->getProductId();
+		$rawMaterialId = $rawMaterial->getProductId();
+		$rawQuantity = 56;
+
+		$finishedProduct = new FinishedProduct($finishedProductId, $rawMaterialId, $rawQuantity);
+		$finishedProduct->insert($this->getPDO());
+
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoFinishedProductArray = Product::getLocationByProductId($this->getPDO(), $product->getProductId());
+		$pdoFinishedProductArray = Product::getFinishedProductByProductId($this->getPDO(), $finishedProduct1->getProductId());
 		for($i = 0; $i < count($pdoFinishedProductArray); $i++) {
 			if($i === 0) {
+				$this->assertSame($pdoFinishedProductArray[$i]->getVendorId(), $this->vendor->getVendorId());
 				$this->assertSame($pdoFinishedProductArray[$i]->getDescription(), $this->VALID_description);
+				$this->assertSame($pdoFinishedProductArray[$i]->getLeadTime(), $this->VALID_leadTime);
 				$this->assertSame($pdoFinishedProductArray[$i]->getSku(), $this->VALID_sku);
 				$this->assertSame($pdoFinishedProductArray[$i]->getTitle(), $this->VALID_title);
 
 			} else {
-				$this->assertSame($pdoFinishedProductArray[$i]->getFinishedProductId(), $this->finishedProduct->getFinishedProductId());
-				$this->assertSame($pdoFinishedProductArray[$i]->getRawMaterialId(), $this->finishedProduct->getRawMaterialId());
-				$this->assertSame($pdoFinishedProductArray[$i]->getRawQuantity(), $this->finishedProduct->getRawQuantity());
+				$this->assertSame($pdoFinishedProductArray[$i]->getFinishedProductId(), $finishedProduct->getFinishedProductId());
+				$this->assertSame($pdoFinishedProductArray[$i]->getRawMaterialId(), $finishedProduct->getRawMaterialId());
+				$this->assertSame($pdoFinishedProductArray[$i]->getRawQuantity(), $finishedProduct->getRawQuantity());
 			}
 		}
 	}
@@ -531,8 +534,6 @@ class ProductTest extends InventoryTextTest {
 	 * test grabbing product by notification
 	 **/
 	public function testGetValidNotificationByProductId() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("product");
 
 		// create a new product and insert to into mySQL
 		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
@@ -541,15 +542,16 @@ class ProductTest extends InventoryTextTest {
 		$quantity = 5.9;
 
 		// create a new product and insert to into mySQL
-		$productLocation = new ProductLocation( $this->location->getLocationId(), $this->vendor->getVendorId(), $this->unitOfMeasure->getUnitId(),
-			$quantity);
+		$productLocation = new ProductAlert( $this->alertLevel->getAlertId(), $product->getProductId(), true);
 		$productLocation->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoNotificationArray = Product::getLocationByProductId($this->getPDO(), $product->getProductId());
+		$pdoNotificationArray = Product::getNotificationByProductId($this->getPDO(), $product->getProductId());
 		for($i = 0; $i < count($pdoNotificationArray); $i++) {
 			if($i === 0) {
+				$this->assertSame($pdoNotificationArray[$i]->getVendorId(), $this->vendor->getVendorId());
 				$this->assertSame($pdoNotificationArray[$i]->getDescription(), $this->VALID_description);
+				$this->assertSame($pdoNotificationArray[$i]->getLeadTime(), $this->VALID_leadTime);
 				$this->assertSame($pdoNotificationArray[$i]->getSku(), $this->VALID_sku);
 				$this->assertSame($pdoNotificationArray[$i]->getTitle(), $this->VALID_title);
 
