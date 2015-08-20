@@ -64,7 +64,7 @@ try {
 		setXsrfCookie("/");
 		if(empty($productId) === false) {
 			if($getLocations === true) {
-				$reply->data = Product::getLocationByProductId($pdo, $alertId);
+				$reply->data = Product::getLocationByProductId($pdo, $productId);
 			} else if($getNotifications) {
 				$reply->data = Product::getNotificationByProductId($pdo, $productId);
 			} else if($getUnitOfMeasures) {
