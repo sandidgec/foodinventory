@@ -602,6 +602,12 @@ class Product implements JsonSerializable {
 		return ($products);
 	}
 
+
+	/**
+	 * gets the Product by joining to location
+	 *
+	 **/
+
 	public static function getLocationByProductId(PDO &$pdo, $newProductId) {
 		// sanitize the ProductId before searching
 		$newProductId = filter_var($newProductId, FILTER_VALIDATE_INT);
@@ -641,11 +647,18 @@ class Product implements JsonSerializable {
 		return ($locations);
 	}
 
+
+
+	/**
+	 * gets the Product by joining to unit of measure
+	 *
+	 **/
+
 	public static function getValidUnitOfMeasurementByProductId(PDO &$pdo, $newProductId) {
 		// sanitize the ProductId before searching
 		$newProductId = filter_var($newProductId, FILTER_VALIDATE_INT);
 		if(empty($newProductId) === true) {
-			throw(new PDOException("locationId is an invalid integer"));
+			throw(new PDOException("unitId is an invalid integer"));
 		}
 		$query ="SELECT unitOfMeasure.unitId, unitOfMeasure.unitCode AS unitOfMeasureQuantity,
 					 product.productId, product.vendorId, product.description AS productDescription, product.leadTime, product.sku, product.title
@@ -678,6 +691,50 @@ class Product implements JsonSerializable {
 			}
 		}
 		return ($unitOfMeasure);
+	}
+
+	/**
+	 * gets the Product by joining to finished product
+	 *
+	 **/
+
+	public static function getValidFinishedProductByProductId(PDO &$pdo, $newProductId) {
+		// sanitize the ProductId before searching
+		$newProductId = filter_var($newProductId, FILTER_VALIDATE_INT);
+		if(empty($newProductId) === true) {
+			throw(new PDOException("finishedProductId is an invalid integer"));
+		}
+		$query ="SELECT finishedProduct.rawMaterialId AS unitOfMeasureRawQuantity,
+					 product.productId, product.vendorId, product.description AS productDescription, product.leadTime, product.sku, product.title
+					FROM productLocation
+					INNER JOIN product ON product.productId = productLocation.unitId
+					INNER JOIN unitOfMeasure ON unitOfMeasure.quantity = productLocation.quantity
+					WHERE product.productId = :productId";
+		$statement = $pdo->prepare($query);
+
+		// bind the productId to the place holder in the template
+		$parameters = array("productId" => $newProductId);
+		$statement->execute($parameters);
+
+		// build an array of unit measure and an associated Products
+		$finishedProduct = new SplFixedArray($statement->rowCount() + 1);
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				if($finishedProduct->key() === 0) {
+					$product = new Product($row["productId"], $row["vendorId"], $row["productDescription"], $row["leadTime"], $row["sku"], $row["title"]);
+					$finishedProduct[$finishedProduct->key()] = $product;
+					$finishedProduct->next();
+				}
+				$finishedProduct = new finishedProduct($row["finishedProductId"], $row["rawMaterialId"], $row["finishedProductRawQuantity"]);
+				$finishedProduct[$finishedProduct->key()] = $finishedProduct;
+				$finishedProduct->next();
+			} catch(PDOException $exception) {
+				//if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return ($finishedProduct);
 	}
 
 	/**
