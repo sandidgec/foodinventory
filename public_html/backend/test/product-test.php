@@ -118,8 +118,8 @@ class ProductTest extends InventoryTextTest {
 		$unitCode = "ea";
 
 		$productId = null;
-		$vendorId = null;
-		$description = "A glorius bead to use";
+		$vendorId = $vendor->getVendorId();
+		$description = "This is a bead";
 		$leadTime = 10;
 		$sku = "TGT354";
 		$title = "Bead-Green-Blue-Circular";
