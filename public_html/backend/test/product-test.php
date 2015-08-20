@@ -488,9 +488,6 @@ class ProductTest extends InventoryTextTest {
 	 * test grabbing finished product by product
 	 **/
 	public function testGetValidFinishedProductByProductId() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("product");
-
 		// create a new product and insert to into mySQL
 		$finishedProduct1 = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 		$finishedProduct1->insert($this->getPDO());
@@ -538,11 +535,9 @@ class ProductTest extends InventoryTextTest {
 		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 		$product->insert($this->getPDO());
 
-		$quantity = 5.9;
-
 		// create a new product and insert to into mySQL
-		$productLocation = new ProductAlert( $this->alertLevel->getAlertId(), $product->getProductId(), true);
-		$productLocation->insert($this->getPDO());
+		$productAlert = new ProductAlert( $this->alertLevel->getAlertId(), $product->getProductId(), true);
+		$productAlert->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoNotificationArray = Product::getNotificationByProductId($this->getPDO(), $product->getProductId());
@@ -558,7 +553,7 @@ class ProductTest extends InventoryTextTest {
 				$this->assertSame($pdoNotificationArray[$i]->getNotificationId(), $this->notification->getNotificationId());
 				$this->assertSame($pdoNotificationArray[$i]->getAlertId(), $this->notification->getAlertId());
 				$this->assertSame($pdoNotificationArray[$i]->getEmailStatus(), $this->notification->getEmailStatus());
-				$this->assertSame($pdoNotificationArray[$i]->getNotificationDateTime(), $this->notification->getNotificationDateTime());
+				$this->assertEquals($pdoNotificationArray[$i]->getNotificationDateTime(), $this->notification->getNotificationDateTime());
 				$this->assertSame($pdoNotificationArray[$i]->getNotificationHandle(), $this->notification->getNotificationHandle());
 				$this->assertSame($pdoNotificationArray[$i]->getNotificationContent(), $this->notification->getNotificationContent());
 			}
