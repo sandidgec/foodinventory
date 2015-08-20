@@ -6,7 +6,6 @@ require_once("inventorytext.php");
 require_once(dirname(dirname(dirname(__DIR__))) . "/vendor/autoload.php");
 
 // grab the class(s) under scrutiny
-
 require_once(dirname(__DIR__) . "/php/classes/autoload.php");
 /**
  * Full PHPUnit test for the Vendor API
@@ -75,6 +74,23 @@ class VendorAPITest extends InventoryTextTest {
 	protected $INVALID_vendorPhoneNumber = "555555555555555555555";
 
 	/**
+	 * Test Deleting a Valid Vendor
+	 **/
+	public function testDeleteValidVendor() {
+		// create a new Vendor
+		$newVendor = new  Vendor(null, $this->VALID_contactName, $this->VALID_vendorEmail, $this->VALID_vendorName, $this->VALID_vendorPhoneNumber);
+		$newVendor->insert($this->getPDO());
+
+		// grab the data from guzzle and enforce the status' match our expectations
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/vendor/');
+		$response = $this->guzzle->delete('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/vendor/' . $newVendor->getVendorId(), ['headers' =>
+			['X-XSRF-TOKEN' => $this->getXsrfToken()]]);
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$location = json_decode($body);
+		$this->assertSame(200, $location->status);
+	}
+	/**
 	 * test grabbing a Vendor by valid vendorId
 	 **/
 	public function testGetValidVendorByVendorId() {
@@ -136,5 +152,60 @@ class VendorAPITest extends InventoryTextTest {
 		$body = $response->getBody();
 		$object = json_decode($body);
 		$this->assertSame(200, $object->status);
+	}
+	/**
+	* Test Get All Vendors
+	**/
+	public function testGetAllVendors() {
+		// create a new Location
+		$newVendor = new Vendor(null, $this->VALID_contactName, $this->VALID_vendorEmail, $this->VALID_vendorName, $this->VALID_vendorPhoneNumber);
+
+		$newVendor->insert($this->getPDO());
+
+		// grab the data from guzzle
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/vendor/');
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$vendor = json_decode($body);
+		$this->assertSame(200, $vendor->status);
+	}
+	/**
+	 * test ability to Post valid vendor
+	 **/
+	public function testPostValidVendor() {
+		// create a new Vendor
+		$newVendor = new Vendor(null, $this->VALID_contactName, $this->VALID_vendorEmail, $this->VALID_vendorName, $this->VALID_vendorPhoneNumber);
+
+		// run a get request to establish session tokens
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/vendor/?vendorName=br');
+
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/vendor/', ['headers' =>
+			['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newVendor]);
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$vendor = json_decode($body);
+		$this->assertSame(200, $vendor->status);
+	}
+
+	/**
+	 * test ability to Put valid vendor
+	 **/
+	public function testPutValidVendor() {
+		// create a new Location
+		$newVendor = new Vendor(null, $this->VALID_contactName, $this->VALID_vendorEmail, $this->VALID_vendorName, $this->VALID_vendorPhoneNumber);
+
+		$newVendor->insert($this->getPDO());
+
+		// run a get request to establish session tokens
+		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/vendor/');
+
+		// grab the data from guzzle and enforce the status' match our expectations
+		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/vendor/' . $newVendor->getVendorId(), ['headers' =>
+			['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newVendor]);
+		$this->assertSame($response->getStatusCode(), 200);
+		$body = $response->getBody();
+		$vendor = json_decode($body);
+		$this->assertSame(200, $vendor->status);
 	}
 }
