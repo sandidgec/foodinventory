@@ -85,14 +85,12 @@ class ProductTest extends InventoryTextTest {
 	 **/
 	protected $vendor = null;
 
-
 	/**
 	 * creating a null Location
 	 * object for global scope
 	 * @var Location $location
 	 **/
 	protected $location = null;
-
 
 	/**
 	 * creating a null Location
@@ -114,6 +112,14 @@ class ProductTest extends InventoryTextTest {
 	 * @var Notification $notification
 	 **/
 	protected $notification = null;
+
+	/**
+	 * creating a null Product
+	 * object for global scope
+	 * @var Product $product
+	 **/
+	//protected $product = null;
+
 
 	/**
 	 * create dependent objects before running each test
@@ -498,7 +504,7 @@ class ProductTest extends InventoryTextTest {
 		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 		$product->insert($this->getPDO());
 
-		$quantity = 5.9; //what do I do here???
+		$quantity = 5.9;
 
 		// create a new product and insert to into mySQL
 		$productLocation = new ProductLocation( $this->location->getLocationId(), $this->vendor->getVendorId(), $this->unitOfMeasure->getUnitId(),
@@ -532,7 +538,7 @@ class ProductTest extends InventoryTextTest {
 		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 		$product->insert($this->getPDO());
 
-		$quantity = 5.9; //what do I do here???
+		$quantity = 5.9;
 
 		// create a new product and insert to into mySQL
 		$productLocation = new ProductLocation( $this->location->getLocationId(), $this->vendor->getVendorId(), $this->unitOfMeasure->getUnitId(),
@@ -557,7 +563,6 @@ class ProductTest extends InventoryTextTest {
 			}
 		}
 	}
-
 }
 
 
