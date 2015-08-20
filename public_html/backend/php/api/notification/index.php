@@ -26,8 +26,11 @@ try {
 	//sanitize the date
 	$notificationDateTime = filter_input(INPUT_GET, "notificationDateTime", FILTER_VALIDATE_INT);
 
-	// sanitize getProducts
-	$getProducts = filter_input(INPUT_GET, "getProducts", FILTER_VALIDATE_BOOLEAN);
+	//sanitize the page
+	$alertId = filter_input(INPUT_GET, "alertId", FILTER_VALIDATE_INT);
+
+	// sanitize the page
+	$page = filter_input(INPUT_GET, "page", FILTER_VALIDATE_INT);
 
 	// grab the mySQL connection
 	$pdo = connectToEncryptedMySql("/etc/apache2/capstone-mysql/invtext.ini");
@@ -38,19 +41,19 @@ try {
 		// set an XSRF cookie on GET requests
 		setXsrfCookie("/");
 		if(empty($notificationId) === false) {
-			if($getProducts === true) {
-				$reply->data = Notification::getProductByAlertId($pdo, $alertId);
-			} else {
-				$reply->data = Notification::getNotificationByAlertId($pdo, $alertId);
-			}
+			$reply->data = Notification::getNotificationByNotificationId($pdo, $notificationId);
 		} else if(empty($emailStatus) === false) {
 			$reply->data = Notification::getNotificationByEmailStatus($pdo, $emailStatus);
 		} else if(empty($notificationDateTime) === false) {
 			$notificationDateTimeInt = new DateTime();
 			$notificationDateTimeInt->setTimestamp($notificationDateTime / 1000);
 			$reply->data = Notification::getNotificationByNotificationDateTime($pdo, $notificationDateTimeInt);
+		}	else if(empty($alertId) === false){
+			$reply->data = Notification::getProductByAlertId($pdo, $alertId);
+		} else if(empty($page) === false) {
+			$reply->data = Notification::getAllNotifications($pdo, $page)->toArray();
 		} else {
-			$reply->data = Notification::getAllNotifications($pdo, $page);
+			throw(new InvalidArgumentException("no parameters given", 405));
 		}
 
 		// post to a new Notification
