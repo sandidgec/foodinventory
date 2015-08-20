@@ -56,7 +56,7 @@ try {
 			} else if($getNotifications){
 				$reply->data = Product::getNotificationByProductId($pdo, $productId);
 			} else if($getUnitOfMeasure){
-				$reply->data = Product::getUnitOfMeasurementByProductId($pdo, $productId);
+				$reply->data = Product::getUnitOfMeasureByProductId($pdo, $productId);
 			} else if($getFinishedProduct){
 				$reply->data = Product::getFinishedProductByProductId($pdo, $productId);
 			} else {
