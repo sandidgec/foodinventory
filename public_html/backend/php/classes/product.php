@@ -612,13 +612,13 @@ class Product implements JsonSerializable {
 		// sanitize the ProductId before searching
 		$newProductId = filter_var($newProductId, FILTER_VALIDATE_INT);
 		if(empty($newProductId) === true) {
-			throw(new PDOException("locationId is an invalid integer"));
+			throw(new PDOException("productId is an invalid integer"));
 		}
 		$query ="SELECT location.locationId, location.storageCode, location.description AS locationDescription,
 					 product.productId, product.vendorId, product.description AS productDescription, product.leadTime, product.sku, product.title
-					FROM productLocation
+					FROM location
+					INNER JOIN productLocation ON location.locationId = productLocation.locationId
 					INNER JOIN product ON product.productId = productLocation.productId
-					INNER JOIN location ON location.locationId = productLocation.locationId
 					WHERE product.productId = :productId";
 		$statement = $pdo->prepare($query);
 
@@ -636,7 +636,7 @@ class Product implements JsonSerializable {
 					$locations[$locations->key()] = $product;
 					$locations->next();
 				}
-				$location = new location($row["locationId"], $row["storageCode"], $row["locationDescription"]);
+				$location = new Location($row["locationId"], $row["storageCode"], $row["locationDescription"]);
 				$locations[$locations->key()] = $location;
 				$locations->next();
 			} catch(PDOException $exception) {
@@ -658,13 +658,13 @@ class Product implements JsonSerializable {
 		// sanitize the ProductId before searching
 		$newProductId = filter_var($newProductId, FILTER_VALIDATE_INT);
 		if(empty($newProductId) === true) {
-			throw(new PDOException("unitId is an invalid integer"));
+			throw(new PDOException("productId is an invalid integer"));
 		}
-		$query ="SELECT unitOfMeasure.unitId, unitOfMeasure.unitCode AS unitOfMeasureQuantity,
-					 product.productId, product.vendorId, product.description AS productDescription, product.leadTime, product.sku, product.title
-					FROM productLocation
-					INNER JOIN product ON product.productId = productLocation.unitId
-					INNER JOIN unitOfMeasure ON unitOfMeasure.quantity = productLocation.quantity
+		$query ="SELECT unitOfMeasure.unitId, unitOfMeasure.unitCode, unitOfMeasure.quantity,
+					 product.productId, product.vendorId, product.description, product.leadTime, product.sku, product.title
+					FROM unitOfMeasure
+					INNER JOIN productLocation ON unitOfMeasure.unitId = productLocation.unitId
+					INNER JOIN product ON product.productId = productLocation.productId
 					WHERE product.productId = :productId";
 		$statement = $pdo->prepare($query);
 
@@ -673,24 +673,24 @@ class Product implements JsonSerializable {
 		$statement->execute($parameters);
 
 		// build an array of unit measure and an associated Products
-		$unitOfMeasure = new SplFixedArray($statement->rowCount() + 1);
+		$unitOfMeasures = new SplFixedArray($statement->rowCount() + 1);
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				if($unitOfMeasure->key() === 0) {
+				if($unitOfMeasures->key() === 0) {
 					$product = new Product($row["productId"], $row["vendorId"], $row["productDescription"], $row["leadTime"], $row["sku"], $row["title"]);
-					$unitOfMeasure[$unitOfMeasure->key()] = $product;
-					$unitOfMeasure->next();
+					$unitOfMeasures[$unitOfMeasures->key()] = $product;
+					$unitOfMeasures->next();
 				}
-				$unitOfMeasure = new unitOfMeasure($row["unitId"], $row["unitCode"], $row["unitOfMeasureQuantity"]);
-				$unitOfMeasure[$unitOfMeasure->key()] = $unitOfMeasure;
-				$unitOfMeasure->next();
+				$unitOfMeasure = new UnitOfMeasure($row["unitId"], $row["unitCode"], $row["unitOfMeasureQuantity"]);
+				$unitOfMeasures[$unitOfMeasures->key()] = $unitOfMeasure;
+				$unitOfMeasures->next();
 			} catch(PDOException $exception) {
 				//if the row couldn't be converted, rethrow it
 				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
-		return ($unitOfMeasure);
+		return ($unitOfMeasures);
 	}
 
 	/**
@@ -702,13 +702,12 @@ class Product implements JsonSerializable {
 		// sanitize the ProductId before searching
 		$newProductId = filter_var($newProductId, FILTER_VALIDATE_INT);
 		if(empty($newProductId) === true) {
-			throw(new PDOException("finishedProductId is an invalid integer"));
+			throw(new PDOException("productId is an invalid integer"));
 		}
-		$query ="SELECT finishedProduct.rawMaterialId AS unitOfMeasureRawQuantity,
-					 product.productId, product.vendorId, product.description AS productDescription, product.leadTime, product.sku, product.title
-					FROM productLocation
-					INNER JOIN product ON product.productId = productLocation.unitId
-					INNER JOIN finishedProduct ON finishedProduct.finishedProductId = productLocation.productId
+		$query ="SELECT finishedProduct.finishedProductId, finishedProduct.rawMaterialId, finishedProduct.rawQuantity,
+					 product.productId, product.vendorId, product.description, product.leadTime, product.sku, product.title
+					FROM finishedProduct
+					INNER JOIN product ON finishedProduct.finishedProductId = product.productId
 					WHERE product.productId = :productId";
 		$statement = $pdo->prepare($query);
 
@@ -717,24 +716,24 @@ class Product implements JsonSerializable {
 		$statement->execute($parameters);
 
 		// build an array of unit measure and an associated Products
-		$finishedProduct = new SplFixedArray($statement->rowCount() + 1);
+		$finishedProducts = new SplFixedArray($statement->rowCount() + 1);
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				if($finishedProduct->key() === 0) {
+				if($finishedProducts->key() === 0) {
 					$product = new Product($row["productId"], $row["vendorId"], $row["productDescription"], $row["leadTime"], $row["sku"], $row["title"]);
-					$finishedProduct[$finishedProduct->key()] = $product;
-					$finishedProduct->next();
+					$finishedProducts[$finishedProducts->key()] = $product;
+					$finishedProducts->next();
 				}
-				$finishedProduct = new finishedProduct($row["finishedProductId"], $row["rawMaterialId"], $row["finishedProductRawQuantity"]);
-				$finishedProduct[$finishedProduct->key()] = $finishedProduct;
-				$finishedProduct->next();
+				$finishedProduct = new FinishedProduct($row["finishedProductId"], $row["rawMaterialId"], $row["finishedProductRawQuantity"]);
+				$finishedProducts[$finishedProducts->key()] = $finishedProduct;
+				$finishedProducts->next();
 			} catch(PDOException $exception) {
 				//if the row couldn't be converted, rethrow it
 				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
-		return ($finishedProduct);
+		return ($finishedProducts);
 	}
 
 	/**
@@ -746,13 +745,14 @@ class Product implements JsonSerializable {
 		// sanitize the ProductId before searching
 		$newProductId = filter_var($newProductId, FILTER_VALIDATE_INT);
 		if(empty($newProductId) === true) {
-			throw(new PDOException("notificationId is an invalid integer"));
+			throw(new PDOException("productId is an invalid integer"));
 		}
-		$query ="SELECT notification.notificationId, notification.alertId, notification.emailStatus, notification.notificationDateTime, notification.notificationDateTime AS notificationNotificationContent,
-					 product.productId, product.vendorId, product.description AS productDescription, product.leadTime, product.sku, product.title
-					FROM productLocation
-					INNER JOIN product ON product.productId = productLocation.productId
-					INNER JOIN notification ON notification.notificationId = productLocation.productId
+		$query ="SELECT notification.notificationId, notification.alertId, notification.emailStatus, notification.notificationDateTime, notification.notificationContent,
+					 product.productId, product.vendorId, product.description, product.leadTime, product.sku, product.title
+					FROM notification
+					INNER JOIN alertLevel ON notification.alertId = alertLevel.alertId
+					INNER JOIN productAlert ON alertLevel.alertId = productAlert.alertId
+					INNER JOIN product ON product.productId = productAlert.productId
 					WHERE product.productId = :productId";
 		$statement = $pdo->prepare($query);
 
@@ -761,24 +761,24 @@ class Product implements JsonSerializable {
 		$statement->execute($parameters);
 
 		// build an array of notification and an associated Products
-		$notification = new SplFixedArray($statement->rowCount() + 1);
+		$notifications = new SplFixedArray($statement->rowCount() + 1);
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				if($notification->key() === 0) {
+				if($notifications->key() === 0) {
 					$product = new Product($row["productId"], $row["vendorId"], $row["productDescription"], $row["leadTime"], $row["sku"], $row["title"]);
-					$notification[$notification->key()] = $product;
-					$notification->next();
+					$notifications[$notifications->key()] = $product;
+					$notifications->next();
 				}
 				$notification = new finishedProduct($row["notificationId"], $row["alertId"], $row["emailStatus"], $row["notificationDateTime"], $row["notificationHandle"], $row["notificationNotificationContent"]);
-				$notification[$notification->key()] = $notification;
-				$notification->next();
+				$notifications[$notifications->key()] = $notification;
+				$notifications->next();
 			} catch(PDOException $exception) {
 				//if the row couldn't be converted, rethrow it
 				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
-		return ($notification);
+		return ($notifications);
 	}
 
 
