@@ -420,6 +420,42 @@ class ProductTest extends InventoryTextTest {
 			}
 		}
 	}
+
+	/**
+	 * test grabbing product by unit of measure
+	 **/
+	public function testGetValidUnitOfMeasurementByProductId() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("product");
+
+		// create a new product and insert to into mySQL
+		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
+		$product->insert($this->getPDO());
+
+		$quantity = 5.9; //what do I do here???
+
+		// create a new product and insert to into mySQL
+		$productLocation = new ProductLocation( $this->location->getLocationId(), $this->vendor->getVendorId(), $this->unitOfMeasure->getUnitId(),
+			$quantity);
+		$productLocation->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoUnitOfMeasureArray = Product::getLocationByProductId($this->getPDO(), $product->getProductId());
+		for($i = 0; $i < count($pdoUnitOfMeasureArray); $i++) {
+			if($i === 0) {
+				$this->assertSame($pdoUnitOfMeasureArray[$i]->getDescription(), $this->VALID_description);
+				$this->assertSame($pdoUnitOfMeasureArray[$i]->getSku(), $this->VALID_sku);
+				$this->assertSame($pdoUnitOfMeasureArray[$i]->getTitle(), $this->VALID_title);
+
+			} else {
+				$this->assertSame($pdoUnitOfMeasureArray[$i]->getStorageCode(), $this->unitOfMeasure->getUnitId());
+				$this->assertSame($pdoUnitOfMeasureArray[$i]->getStorageCode(), $this->unitOfMeasure->getUnitCode());
+				$this->assertSame($pdoUnitOfMeasureArray[$i]->getDescription(), $this->unitOfMeasure->getQuantity());
+			}
+		}
+	}
+
+
 }
 
 
