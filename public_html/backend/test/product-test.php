@@ -81,7 +81,7 @@ class ProductTest extends InventoryTextTest {
 	/**
 	 * creating a null Alert Level
 	 * object for global scope
-	 * @var AlertLevel alertLevel
+	 * @var AlertLevel $alertLevel
 	 **/
 	protected $alertLevel = null;
 
@@ -136,8 +136,8 @@ class ProductTest extends InventoryTextTest {
 		$vendorName = "TruFork";
 		$vendorPhoneNumber = "5053594687";
 
-		$vendor = new Vendor($vendorId, $contactName, $vendorEmail, $vendorName, $vendorPhoneNumber);
-		$vendor->insert($this->getPDO());
+		$this->vendor = new Vendor($vendorId, $contactName, $vendorEmail, $vendorName, $vendorPhoneNumber);
+		$this->vendor->insert($this->getPDO());
 
 		$locationId = null;
 		$description = "Front Stock";
@@ -153,19 +153,18 @@ class ProductTest extends InventoryTextTest {
 		$this->unitOfMeasure = new UnitOfMeasure($unitId, $unitCode, $quantity);
 		$this->unitOfMeasure->insert($this->getPDO());
 
-		$alertId = null;
 		$alertCode = "78";
 		$alertFrequency = "56";
 		$alertPoint = 1.4;
 		$alertOperator = "A";
 
-		$this->alertLevel = new Alertlevel($alertId, $alertCode, $alertFrequency, $alertPoint, $alertOperator);
+		$this->alertLevel = new AlertLevel(null, $alertCode, $alertFrequency, $alertPoint, $alertOperator);
 		$this->alertLevel->insert($this->getPDO());
 
 		$notificationId = null;
 		$alertId = $this->alertLevel->getAlertId();
-		$emailStatus = "4294967296";
-		$notificationDateTime = "06/1985/28 4:26:03";
+		$emailStatus = false;
+		$notificationDateTime = "1985-06-28 04:26:03";
 		$notificationHandle = "unit test";
 		$notificationContent = "place holder";
 

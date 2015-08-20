@@ -678,11 +678,11 @@ class Product implements JsonSerializable {
 		while(($row = $statement->fetch()) !== false) {
 			try {
 				if($unitOfMeasures->key() === 0) {
-					$product = new Product($row["productId"], $row["vendorId"], $row["productDescription"], $row["leadTime"], $row["sku"], $row["title"]);
+					$product = new Product($row["productId"], $row["vendorId"], $row["description"], $row["leadTime"], $row["sku"], $row["title"]);
 					$unitOfMeasures[$unitOfMeasures->key()] = $product;
 					$unitOfMeasures->next();
 				}
-				$unitOfMeasure = new UnitOfMeasure($row["unitId"], $row["unitCode"], $row["unitOfMeasureQuantity"]);
+				$unitOfMeasure = new UnitOfMeasure($row["unitId"], $row["unitCode"], $row["quantity"]);
 				$unitOfMeasures[$unitOfMeasures->key()] = $unitOfMeasure;
 				$unitOfMeasures->next();
 			} catch(PDOException $exception) {
@@ -721,11 +721,11 @@ class Product implements JsonSerializable {
 		while(($row = $statement->fetch()) !== false) {
 			try {
 				if($finishedProducts->key() === 0) {
-					$product = new Product($row["productId"], $row["vendorId"], $row["productDescription"], $row["leadTime"], $row["sku"], $row["title"]);
+					$product = new Product($row["productId"], $row["vendorId"], $row["description"], $row["leadTime"], $row["sku"], $row["title"]);
 					$finishedProducts[$finishedProducts->key()] = $product;
 					$finishedProducts->next();
 				}
-				$finishedProduct = new FinishedProduct($row["finishedProductId"], $row["rawMaterialId"], $row["finishedProductRawQuantity"]);
+				$finishedProduct = new FinishedProduct($row["finishedProductId"], $row["rawMaterialId"], $row["rawQuantity"]);
 				$finishedProducts[$finishedProducts->key()] = $finishedProduct;
 				$finishedProducts->next();
 			} catch(PDOException $exception) {
@@ -766,11 +766,11 @@ class Product implements JsonSerializable {
 		while(($row = $statement->fetch()) !== false) {
 			try {
 				if($notifications->key() === 0) {
-					$product = new Product($row["productId"], $row["vendorId"], $row["productDescription"], $row["leadTime"], $row["sku"], $row["title"]);
+					$product = new Product($row["productId"], $row["vendorId"], $row["description"], $row["leadTime"], $row["sku"], $row["title"]);
 					$notifications[$notifications->key()] = $product;
 					$notifications->next();
 				}
-				$notification = new finishedProduct($row["notificationId"], $row["alertId"], $row["emailStatus"], $row["notificationDateTime"], $row["notificationHandle"], $row["notificationNotificationContent"]);
+				$notification = new finishedProduct($row["notificationId"], $row["alertId"], $row["emailStatus"], $row["notificationDateTime"], $row["notificationHandle"], $row["notificationContent"]);
 				$notifications[$notifications->key()] = $notification;
 				$notifications->next();
 			} catch(PDOException $exception) {
