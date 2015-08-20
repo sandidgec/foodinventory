@@ -104,9 +104,16 @@ class ProductTest extends InventoryTextTest {
 	/**
 	 * creating a null Finished Product
 	 * object for global scope
-	 * @var Finished Product $finishedProduct
+	 * @var FinishedProduct $finishedProduct
 	 **/
 	protected $finishedProduct = null;
+
+	/**
+	 * creating a null Notification
+	 * object for global scope
+	 * @var Notification $notification
+	 **/
+	protected $notification = null;
 
 	/**
 	 * create dependent objects before running each test
@@ -134,13 +141,6 @@ class ProductTest extends InventoryTextTest {
 		$this->product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
 		$this->product->insert($this->getPDO());
 
-		$finishedProductId = null;
-		$rawMaterialId =  "5053594687";
-		$rawQuantity = 400.25;
-
-		$this->finishedProduct = new FinishedProduct($finishedProductId, $rawMaterialId, $rawQuantity);
-		$this->finishedProduct->insert($this->getPDO());
-
 		$locationId = null;
 		$description = "Front Stock";
 		$storageCode = 12;
@@ -154,6 +154,25 @@ class ProductTest extends InventoryTextTest {
 
 		$this->unitOfMeasure = new UnitOfMeasure($unitId, $unitCode, $quantity);
 		$this->unitOfMeasure->insert($this->getPDO());
+
+		$finishedProductId = null;
+		$rawMaterialId = "5053594687";
+		$rawQuantity = 400.25;
+
+		$this->finishedProduct = new FinishedProduct($finishedProductId, $rawMaterialId, $rawQuantity);
+		$this->finishedProduct->insert($this->getPDO());
+
+
+		$notificationId = null;
+		$alertId = "69";
+		$emailStatus = "4294967296";
+		$notificationDateTime = "06/1985/28 4:26:03";
+		$notificationHandle = "unit test";
+		$notificationContent = "place holder";
+
+		$this->notification = new Notification($notificationId, $alertId, $emailStatus, $notificationDateTime, $notificationHandle, $notificationContent);
+		$this->notification->insert($this->getPDO());
+
 	}
 
 
@@ -401,7 +420,7 @@ class ProductTest extends InventoryTextTest {
 
 
 	/**
-	 * test grabbing product by locationId
+	 * test grabbing product by location
 	 **/
 	public function testGetValidLocationByProductId() {
 		// count the number of rows and save it for later
@@ -427,7 +446,7 @@ class ProductTest extends InventoryTextTest {
 				$this->assertSame($pdoLocationArray[$i]->getTitle(), $this->VALID_title);
 
 			} else {
-				$this->assertSame($pdoLocationArray[$i]->getStorageCode(), $this->location->getLocationId());
+				$this->assertSame($pdoLocationArray[$i]->getLocationId(), $this->location->getLocationId());
 				$this->assertSame($pdoLocationArray[$i]->getStorageCode(), $this->location->getStorageCode());
 				$this->assertSame($pdoLocationArray[$i]->getDescription(), $this->location->getDescription());
 			}
@@ -461,9 +480,9 @@ class ProductTest extends InventoryTextTest {
 				$this->assertSame($pdoUnitOfMeasureArray[$i]->getTitle(), $this->VALID_title);
 
 			} else {
-				$this->assertSame($pdoUnitOfMeasureArray[$i]->getStorageCode(), $this->unitOfMeasure->getUnitId());
-				$this->assertSame($pdoUnitOfMeasureArray[$i]->getStorageCode(), $this->unitOfMeasure->getUnitCode());
-				$this->assertSame($pdoUnitOfMeasureArray[$i]->getDescription(), $this->unitOfMeasure->getQuantity());
+				$this->assertSame($pdoUnitOfMeasureArray[$i]->getUnitId(), $this->unitOfMeasure->getUnitId());
+				$this->assertSame($pdoUnitOfMeasureArray[$i]->getUnitCode(), $this->unitOfMeasure->getUnitCode());
+				$this->assertSame($pdoUnitOfMeasureArray[$i]->getQuantity(), $this->unitOfMeasure->getQuantity());
 			}
 		}
 	}
@@ -495,9 +514,46 @@ class ProductTest extends InventoryTextTest {
 				$this->assertSame($pdoFinishedProductArray[$i]->getTitle(), $this->VALID_title);
 
 			} else {
-				$this->assertSame($pdoFinishedProductArray[$i]->getStorageCode(), $this->finishedProduct->getFinishedProductId());
-				$this->assertSame($pdoFinishedProductArray[$i]->getStorageCode(), $this->finishedProduct->getRawMaterialId());
-				$this->assertSame($pdoFinishedProductArray[$i]->getDescription(), $this->finishedProduct->getRawQuantity());
+				$this->assertSame($pdoFinishedProductArray[$i]->getFinishedProductId(), $this->finishedProduct->getFinishedProductId());
+				$this->assertSame($pdoFinishedProductArray[$i]->getRawMaterialId(), $this->finishedProduct->getRawMaterialId());
+				$this->assertSame($pdoFinishedProductArray[$i]->getRawQuantity(), $this->finishedProduct->getRawQuantity());
+			}
+		}
+	}
+
+	/**
+	 * test grabbing product by notification
+	 **/
+	public function testGetValidNotificationByProductId() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("product");
+
+		// create a new product and insert to into mySQL
+		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
+		$product->insert($this->getPDO());
+
+		$quantity = 5.9; //what do I do here???
+
+		// create a new product and insert to into mySQL
+		$productLocation = new ProductLocation( $this->location->getLocationId(), $this->vendor->getVendorId(), $this->unitOfMeasure->getUnitId(),
+			$quantity);
+		$productLocation->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoNotificationArray = Product::getLocationByProductId($this->getPDO(), $product->getProductId());
+		for($i = 0; $i < count($pdoNotificationArray); $i++) {
+			if($i === 0) {
+				$this->assertSame($pdoNotificationArray[$i]->getDescription(), $this->VALID_description);
+				$this->assertSame($pdoNotificationArray[$i]->getSku(), $this->VALID_sku);
+				$this->assertSame($pdoNotificationArray[$i]->getTitle(), $this->VALID_title);
+
+			} else {
+				$this->assertSame($pdoNotificationArray[$i]->getNotificationId(), $this->notification->getNotificationId());
+				$this->assertSame($pdoNotificationArray[$i]->getAlertId(), $this->notification->getAlertId());
+				$this->assertSame($pdoNotificationArray[$i]->getEmailStatus(), $this->notification->getEmailStatus());
+				$this->assertSame($pdoNotificationArray[$i]->getNotificationDateTime(), $this->notification->getNotificationDateTime());
+				$this->assertSame($pdoNotificationArray[$i]->getNotificationHandle(), $this->notification->getNotificationHandle());
+				$this->assertSame($pdoNotificationArray[$i]->getNotificationContent(), $this->notification->getNotificationContent());
 			}
 		}
 	}

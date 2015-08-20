@@ -708,7 +708,7 @@ class Product implements JsonSerializable {
 					 product.productId, product.vendorId, product.description AS productDescription, product.leadTime, product.sku, product.title
 					FROM productLocation
 					INNER JOIN product ON product.productId = productLocation.unitId
-					INNER JOIN unitOfMeasure ON unitOfMeasure.quantity = productLocation.quantity
+					INNER JOIN finishedProduct ON finishedProduct.finishedProductId = productLocation.productId
 					WHERE product.productId = :productId";
 		$statement = $pdo->prepare($query);
 
@@ -736,6 +736,51 @@ class Product implements JsonSerializable {
 		}
 		return ($finishedProduct);
 	}
+
+	/**
+	 * gets the Product by joining to notification
+	 *
+	 **/
+
+	public static function getValidNotificationByProductId(PDO &$pdo, $newProductId) {
+		// sanitize the ProductId before searching
+		$newProductId = filter_var($newProductId, FILTER_VALIDATE_INT);
+		if(empty($newProductId) === true) {
+			throw(new PDOException("notificationId is an invalid integer"));
+		}
+		$query ="SELECT notification.notificationId, notification.alertId, notification.emailStatus, notification.notificationDateTime, notification.notificationDateTime AS notificationNotificationContent,
+					 product.productId, product.vendorId, product.description AS productDescription, product.leadTime, product.sku, product.title
+					FROM productLocation
+					INNER JOIN product ON product.productId = productLocation.productId
+					INNER JOIN notification ON notification.notificationId = productLocation.productId
+					WHERE product.productId = :productId";
+		$statement = $pdo->prepare($query);
+
+		// bind the productId to the place holder in the template
+		$parameters = array("productId" => $newProductId);
+		$statement->execute($parameters);
+
+		// build an array of notification and an associated Products
+		$notification = new SplFixedArray($statement->rowCount() + 1);
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				if($notification->key() === 0) {
+					$product = new Product($row["productId"], $row["vendorId"], $row["productDescription"], $row["leadTime"], $row["sku"], $row["title"]);
+					$notification[$notification->key()] = $product;
+					$notification->next();
+				}
+				$notification = new finishedProduct($row["notificationId"], $row["alertId"], $row["emailStatus"], $row["notificationDateTime"], $row["notificationHandle"], $row["notificationNotificationContent"]);
+				$notification[$notification->key()] = $notification;
+				$notification->next();
+			} catch(PDOException $exception) {
+				//if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return ($notification);
+	}
+
 
 	/**
 	 * gets the Product by pagination
