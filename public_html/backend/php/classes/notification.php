@@ -482,17 +482,16 @@ class Notification {
 		var_dump($newAlertId);
 		$query = "SELECT product.productId, product.vendorId, product.description, product.leadTime, product.sku, product.title,
 						notification.notificationId, notification.alertId, notification.emailStatus, notification.notificationDateTime, notification.notificationHandle, notification.notificationContent
-					FROM productAlert
-					INNER JOIN product ON productAlert.productId = product.productId
-					INNER JOIN notification ON productAlert.alertId = notification.alertId
-					WHERE productAlert.alertId = :alertId";
+					FROM product
+					INNER JOIN productAlert ON product.productId = productAlert.productId
+					INNER JOIN alertLevel ON productAlert.alertId = alertLevel.alertId
+					INNER JOIN notification ON alertLevel.alertId = notification.alertId
+					WHERE notification.alertId = :alertId";
 		$statement = $pdo->prepare($query);
 
 		//bind the alertId to the place holder in the template
-//		$parameters = array("alertId" => $newAlertId);
-//		$statement->execute($parameters);
-		$statement->bindParam("alertId", $newAlertId, PDO::PARAM_INT);
-		$statement->execute();
+		$parameters = array("alertId" => $newAlertId);
+		$statement->execute($parameters);
 
 		//build an array of Products and an associated notification
 		var_dump($statement->rowCount());
