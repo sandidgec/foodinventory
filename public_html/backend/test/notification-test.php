@@ -133,7 +133,7 @@ class NotificationTest extends InventoryTextTest {
 		$this->alertLevel = new AlertLevel($alertId, $alertCode, $alertFrequency, $alertLevel, $alertOperator);
 		$this->alertLevel->insert($this->getPDO());
 
-		$productEnabled = "1";
+		$productEnabled = true;
 
 		$this->productAlert = new ProductAlert($this->alertLevel->getAlertId(), $this->product->getProductId(), $productEnabled);
 		$this->productAlert->insert($this->getPDO());
@@ -266,20 +266,24 @@ class NotificationTest extends InventoryTextTest {
 	/**
 	 * test grabbing an product by alert Id
 	 **/
-	public function testGetValidProductByAlertId() {
+	public function testGetValidNotificationsByAlertId() {
 		// count the number of rows and save it for later
 		$numRows = $this->getConnection()->getRowCount("alertLevel");
 
 		// create a new alert level and insert to into mySQL
-		$alertLevel = new AlertLevel(null, $this->alertLevel->getAlertCode(), $this->alertLevel->getAlertFrequency(), $this->alertLevel->getAlertPoint(), $this->alertLevel->getAlertOperator());
-		$alertLevel->insert($this->getPDO());
+//		$alertLevel = new AlertLevel(null, $this->alertLevel->getAlertCode(), $this->alertLevel->getAlertFrequency(), $this->alertLevel->getAlertPoint(), $this->alertLevel->getAlertOperator());
+//		$alertLevel->insert($this->getPDO());
 
 		// create a new alert level and insert to into mySQL
-		$productAlert = new productAlert($alertLevel->getAlertId(), $this->product->getProductId(), true);
-		$productAlert->insert($this->getPDO());
+//		$productAlert = new ProductAlert($alertLevel->getAlertId(), $this->product->getProductId(), true);
+//		$productAlert->insert($this->getPDO());
+		var_dump($this->getConnection()->getRowCount("productAlert"));
+		var_dump($this->productAlert);
+		var_dump($this->alertLevel->getAlertId());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProductArray = AlertLevel::getProductByAlertId($this->getPDO(), $alertLevel->getAlertId());
+		$pdoProductArray = Notification::getNotificationsByAlertId($this->getPDO(), $this->alertLevel->getAlertId());
+		var_dump($pdoProductArray);
 		for($i = 0; $i < count($pdoProductArray); $i++) {
 			if($i === 0) {
 				$this->assertSame($pdoProductArray[$i]->getAlertCode(), $this->alertLevel->getAlertCode());

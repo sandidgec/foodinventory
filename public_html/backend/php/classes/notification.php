@@ -477,23 +477,26 @@ class Notification {
 		//sanitize the alertId before searching
 		$newAlertId = filter_var($newAlertId, FILTER_VALIDATE_INT);
 		if(empty($newAlertId) === true){
-			throw(new PDOException("productId in an invalid interger"));
+			throw(new PDOException("alert id in an invalid integer"));
 		}
+		var_dump($newAlertId);
 		$query = "SELECT product.productId, product.vendorId, product.description, product.leadTime, product.sku, product.title,
-						notification.notificationId, notification.alertId, notification.emailstatus, notification.notificationDateTime, notification.notificationHandle, notification.notificationContent
-					FROM alertLevel
-					INNER JOIN notification ON notification.alertId = alertLevel.alertId
-					INNER JOIN alertLevel ON alertLevel.alertId = productAlert.alertId
-					INNER JOIN productAlert ON productAlert.productId = product.productId
-					WHERE notification.alertId = :alertId";
+						notification.notificationId, notification.alertId, notification.emailStatus, notification.notificationDateTime, notification.notificationHandle, notification.notificationContent
+					FROM productAlert
+					INNER JOIN product ON productAlert.productId = product.productId
+					INNER JOIN notification ON productAlert.alertId = notification.alertId
+					WHERE productAlert.alertId = :alertId";
 		$statement = $pdo->prepare($query);
 
 		//bind the alertId to the place holder in the template
-		$parameters = array("alertId" => $newAlertId);
-		$statement->execute($parameters);
+//		$parameters = array("alertId" => $newAlertId);
+//		$statement->execute($parameters);
+		$statement->bindParam("alertId", $newAlertId, PDO::PARAM_INT);
+		$statement->execute();
 
 		//build an array of Products and an associated notification
-		$products = new SplFixedArray($statement->rowcount() + 1);
+		var_dump($statement->rowCount());
+		$products = new SplFixedArray($statement->rowCount() + 1);
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false){
 			try{
