@@ -85,12 +85,18 @@ class ProductTest extends InventoryTextTest {
 	 **/
 	protected $vendor = null;
 
+
 	/**
+	 * creating a null Location
+	 * object for global scope
 	 * @var Location $location
 	 **/
 	protected $location = null;
 
+
 	/**
+	 * creating a null Location
+	 * object for global scope
 	 * @var UnitOfMeasure $unitOfMeasure
 	 **/
 	protected $unitOfMeasure = null;
@@ -109,29 +115,19 @@ class ProductTest extends InventoryTextTest {
 		$vendorName = "TruFork";
 		$vendorPhoneNumber = "5053594687";
 
+		$vendor = new Vendor($vendorId, $contactName, $vendorEmail, $vendorName, $vendorPhoneNumber);
+		$vendor->insert($this->getPDO());
+
 		$locationId = null;
-		$storageCode = "br";
-		$description = "back shelf";
-
-		$unitId = null;
-		$quantity = 3.5;
-		$unitCode = "ea";
-
-		$productId = null;
-		$this->vendor->getVendorId();
-		$description = "This is a bead";
-		$leadTime = 10;
-		$sku = "TGT354";
-		$title = "Bead-Green-Blue-Circular";
-
-		$this->vendor = new Vendor($vendorId, $contactName, $vendorEmail, $vendorName, $vendorPhoneNumber);
-		$this->vendor->insert($this->getPDO());
-
-		$this->product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
-		$this->product->insert($this->getPDO());
+		$description = "Front Stock";
+		$storageCode = 12;
 
 		$this->location = new Location($locationId, $storageCode, $description);
 		$this->location->insert($this->getPDO());
+
+		$unitId = null;
+		$unitCode = "pk";
+		$quantity = 10.50;
 
 		$this->unitOfMeasure = new UnitOfMeasure($unitId, $unitCode, $quantity);
 		$this->unitOfMeasure->insert($this->getPDO());
@@ -395,7 +391,7 @@ class ProductTest extends InventoryTextTest {
 		$quantity = 5.9; //what do I do here???
 
 		// create a new product and insert to into mySQL
-		$productLocation = new ProductLocation( $this->location->getLocationId(), $this->product->getProductId(), $this->unitOfMeasure->getUnitId(),
+		$productLocation = new ProductLocation( $this->location->getLocationId(), $this->vendor->getVendorId(), $this->unitOfMeasure->getUnitId(),
 			$quantity);
 		$productLocation->insert($this->getPDO());
 
