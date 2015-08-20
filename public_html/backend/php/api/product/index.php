@@ -39,16 +39,16 @@ try {
 	$title = filter_input(INPUT_GET, "title", FILTER_SANITIZE_STRING);
 
 	// sanitize getLocations
-	$getProducts = filter_input(INPUT_GET, "getLocations", FILTER_VALIDATE_BOOLEAN);
+	$getLocations = filter_input(INPUT_GET, "getLocations", FILTER_VALIDATE_BOOLEAN);
 
 	// sanitize getNotifications
-	$getProducts = filter_input(INPUT_GET, "getNotifications", FILTER_VALIDATE_BOOLEAN);
+	$getNotifications = filter_input(INPUT_GET, "getNotifications", FILTER_VALIDATE_BOOLEAN);
 
 	// sanitize getUnitOfMeasures
-	$getProducts = filter_input(INPUT_GET, "getUnitOfMeasures", FILTER_VALIDATE_BOOLEAN);
+	$getUnitOfMeasures = filter_input(INPUT_GET, "getUnitOfMeasures", FILTER_VALIDATE_BOOLEAN);
 
 	// sanitize getFinishedProducts
-	$getProducts = filter_input(INPUT_GET, "getFinishedProducts", FILTER_VALIDATE_BOOLEAN);
+	$getFinishedProducts = filter_input(INPUT_GET, "getFinishedProducts", FILTER_VALIDATE_BOOLEAN);
 
 	// sanitize the page
 	$page = filter_input(INPUT_GET, "page", FILTER_VALIDATE_INT);
