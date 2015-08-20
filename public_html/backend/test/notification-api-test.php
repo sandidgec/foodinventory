@@ -82,6 +82,14 @@ class NotificationAPITest extends InventoryTextTest {
 	 * @var AlertLevel $alertLevel
 	 **/
 	protected $alertLevel = null;
+
+	/**
+	 * creating a null Product
+	 * object for global scope
+	 * @var Product $product
+	 **/
+	protected $product = null;
+
 	/**
 	 * @var guzzle
 	 **/
@@ -102,6 +110,25 @@ class NotificationAPITest extends InventoryTextTest {
 
 		$this->alertLevel = new AlertLevel($alertId, $alertCode, $alertFrequency, $alertLevel, $alertOperator);
 		$this->alertLevel->insert($this->getPDO());
+
+		$vendorId = null;
+		$contactName = "Trevor Rigler";
+		$vendorEmail = "trier@cnm.edu";
+		$vendorName = "TruFork";
+		$vendorPhoneNumber = "5053594687";
+
+		$vendor = new Vendor($vendorId, $contactName, $vendorEmail, $vendorName, $vendorPhoneNumber);
+		$vendor->insert($this->getPDO());
+
+		$productId = null;
+		$vendorId = $vendor->getVendorId();
+		$description = "A glorius bead to use";
+		$leadTime = 10;
+		$sku = "TGT354";
+		$title = "Bead-Green-Blue-Circular";
+
+		$this->product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
+		$this->product->insert($this->getPDO());
 	}
 
 	/**

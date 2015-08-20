@@ -10,7 +10,7 @@ require_once(dirname(__DIR__) . "/traits/validate-date.php");
  *
  * @author James Huber <jhuber8@cnm.edu>
  **/
-class Notification {
+class Notification implements JsonSerializable {
 	/**
 	 * id for this notification, this is the primary key
 	 * @var int $notificationId
