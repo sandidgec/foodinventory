@@ -66,7 +66,7 @@ try {
 		$requestContent = file_get_contents("php://input");
 		$requestObject = json_decode($requestContent);
 
-		$vendor = new Vendor(null, $requestObject->contactName, $requestObject->vendorEmail,
+		$vendor = new Vendor($vendorId, $requestObject->contactName, $requestObject->vendorEmail,
 			$requestObject->vendorName, $requestObject->vendorPhoneNumber);
 		$vendor->update($pdo);
 		$reply->data = "Vendor Updated Ok";

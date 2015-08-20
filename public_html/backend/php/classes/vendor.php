@@ -7,7 +7,7 @@
  *
  * @author James Huber <jhuber8@cnm.edu>
  **/
-class Vendor {
+class Vendor implements JsonSerializable {
 	/**
 	 * id for each vendor, this is the primary key
 	 * @var int $vendorId
