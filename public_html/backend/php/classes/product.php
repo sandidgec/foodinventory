@@ -654,7 +654,7 @@ class Product implements JsonSerializable {
 	 *
 	 **/
 
-	public static function getValidUnitOfMeasurementByProductId(PDO &$pdo, $newProductId) {
+	public static function getUnitOfMeasurementByProductId(PDO &$pdo, $newProductId) {
 		// sanitize the ProductId before searching
 		$newProductId = filter_var($newProductId, FILTER_VALIDATE_INT);
 		if(empty($newProductId) === true) {
@@ -698,7 +698,7 @@ class Product implements JsonSerializable {
 	 *
 	 **/
 
-	public static function getValidFinishedProductByProductId(PDO &$pdo, $newProductId) {
+	public static function getFinishedProductByProductId(PDO &$pdo, $newProductId) {
 		// sanitize the ProductId before searching
 		$newProductId = filter_var($newProductId, FILTER_VALIDATE_INT);
 		if(empty($newProductId) === true) {
@@ -741,7 +741,7 @@ class Product implements JsonSerializable {
 	 *
 	 **/
 
-	public static function getValidNotificationByProductId(PDO &$pdo, $newProductId) {
+	public static function getNotificationByProductId(PDO &$pdo, $newProductId) {
 		// sanitize the ProductId before searching
 		$newProductId = filter_var($newProductId, FILTER_VALIDATE_INT);
 		if(empty($newProductId) === true) {
