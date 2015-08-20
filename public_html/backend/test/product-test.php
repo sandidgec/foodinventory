@@ -118,6 +118,16 @@ class ProductTest extends InventoryTextTest {
 		$vendor = new Vendor($vendorId, $contactName, $vendorEmail, $vendorName, $vendorPhoneNumber);
 		$vendor->insert($this->getPDO());
 
+		$productId = null;
+		$vendorId = $vendor->getVendorId();
+		$description = "A glorius bead to use";
+		$leadTime = 10;
+		$sku = "TGT354";
+		$title = "Bead-Green-Blue-Circular";
+
+		$this->product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
+		$this->product->insert($this->getPDO());
+
 		$locationId = null;
 		$description = "Front Stock";
 		$storageCode = 12;
