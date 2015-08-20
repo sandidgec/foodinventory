@@ -60,7 +60,7 @@ try {
 			} else if($getFinishedProduct){
 				$reply->data = Product::getFinishedProductByProductId($pdo, $productId);
 			} else {
-				$reply->data = AlertLevel::getAlertLevelByAlertId($pdo, $productId);
+				$reply->data = Product::getProductByProductId($pdo, $productId);
 			}
 		} else if(empty($vendorId) === false) {
 			$reply->data = Product::getProductByVendorId($pdo, $vendorId);
