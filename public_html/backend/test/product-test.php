@@ -101,6 +101,12 @@ class ProductTest extends InventoryTextTest {
 	 **/
 	protected $unitOfMeasure = null;
 
+	/**
+	 * creating a null Finished Product
+	 * object for global scope
+	 * @var Finished Product $finishedProduct
+	 **/
+	protected $finishedProduct = null;
 
 	/**
 	 * create dependent objects before running each test
@@ -127,6 +133,13 @@ class ProductTest extends InventoryTextTest {
 
 		$this->product = new Product($productId, $vendorId, $description, $leadTime, $sku, $title);
 		$this->product->insert($this->getPDO());
+
+		$finishedProductId = null;
+		$rawMaterialId =  "5053594687";
+		$rawQuantity = 400.25;
+
+		$this->finishedProduct = new FinishedProduct($finishedProductId, $rawMaterialId, $rawQuantity);
+		$this->finishedProduct->insert($this->getPDO());
 
 		$locationId = null;
 		$description = "Front Stock";
@@ -398,7 +411,7 @@ class ProductTest extends InventoryTextTest {
 		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 		$product->insert($this->getPDO());
 
-		$quantity = 5.9; //what do I do here???
+		$quantity = 5.9;
 
 		// create a new product and insert to into mySQL
 		$productLocation = new ProductLocation( $this->location->getLocationId(), $this->vendor->getVendorId(), $this->unitOfMeasure->getUnitId(),
@@ -432,7 +445,7 @@ class ProductTest extends InventoryTextTest {
 		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
 		$product->insert($this->getPDO());
 
-		$quantity = 5.9; //what do I do here???
+		$quantity = 5.9;
 
 		// create a new product and insert to into mySQL
 		$productLocation = new ProductLocation( $this->location->getLocationId(), $this->vendor->getVendorId(), $this->unitOfMeasure->getUnitId(),
@@ -455,6 +468,39 @@ class ProductTest extends InventoryTextTest {
 		}
 	}
 
+	/**
+	 * test grabbing product by finished product
+	 **/
+	public function testGetValidFinishedProductByProductId() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("product");
+
+		// create a new product and insert to into mySQL
+		$product = new Product(null, $this->vendor->getVendorId(), $this->VALID_description, $this->VALID_leadTime, $this->VALID_sku, $this->VALID_title);
+		$product->insert($this->getPDO());
+
+		$quantity = 5.9; //what do I do here???
+
+		// create a new product and insert to into mySQL
+		$productLocation = new ProductLocation( $this->location->getLocationId(), $this->vendor->getVendorId(), $this->unitOfMeasure->getUnitId(),
+			$quantity);
+		$productLocation->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoFinishedProductArray = Product::getLocationByProductId($this->getPDO(), $product->getProductId());
+		for($i = 0; $i < count($pdoFinishedProductArray); $i++) {
+			if($i === 0) {
+				$this->assertSame($pdoFinishedProductArray[$i]->getDescription(), $this->VALID_description);
+				$this->assertSame($pdoFinishedProductArray[$i]->getSku(), $this->VALID_sku);
+				$this->assertSame($pdoFinishedProductArray[$i]->getTitle(), $this->VALID_title);
+
+			} else {
+				$this->assertSame($pdoFinishedProductArray[$i]->getStorageCode(), $this->finishedProduct->getFinishedProductId());
+				$this->assertSame($pdoFinishedProductArray[$i]->getStorageCode(), $this->finishedProduct->getRawMaterialId());
+				$this->assertSame($pdoFinishedProductArray[$i]->getDescription(), $this->finishedProduct->getRawQuantity());
+			}
+		}
+	}
 
 }
 
