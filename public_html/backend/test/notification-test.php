@@ -267,22 +267,19 @@ class NotificationTest extends InventoryTextTest {
 	 * test grabbing an product by alert Id
 	 **/
 	public function testGetValidNotificationsByAlertId() {
-		// count the number of rows and save it for later
-		$numRows = $this->getConnection()->getRowCount("alertLevel");
-
-		// create a new alert level and insert to into mySQL
-//		$alertLevel = new AlertLevel(null, $this->alertLevel->getAlertCode(), $this->alertLevel->getAlertFrequency(), $this->alertLevel->getAlertPoint(), $this->alertLevel->getAlertOperator());
-//		$alertLevel->insert($this->getPDO());
+		// create a new notification and insert to into mySQL
+		$notification = new Notification(null, $this->alertLevel->getAlertId(), $this->VALID_emailStatus, $this->VALID_notificationDateTime, $this->VALID_notificationHandle, $this->VALID_notificationContent);
+		$notification->insert($this->getPDO());
 
 		// create a new alert level and insert to into mySQL
 //		$productAlert = new ProductAlert($alertLevel->getAlertId(), $this->product->getProductId(), true);
 //		$productAlert->insert($this->getPDO());
-		var_dump($this->getConnection()->getRowCount("productAlert"));
-		var_dump($this->productAlert);
-		var_dump($this->alertLevel->getAlertId());
+//		var_dump($this->getConnection()->getRowCount("productAlert"));
+//		var_dump($this->productAlert);
+//		var_dump($this->alertLevel->getAlertId());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoProductArray = Notification::getNotificationsByAlertId($this->getPDO(), $this->alertLevel->getAlertId());
+		$pdoProductArray = Notification::getProductByAlertId($this->getPDO(), $this->alertLevel->getAlertId());
 		var_dump($pdoProductArray);
 		for($i = 0; $i < count($pdoProductArray); $i++) {
 			if($i === 0) {
