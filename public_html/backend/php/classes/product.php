@@ -770,7 +770,7 @@ class Product implements JsonSerializable {
 					$notifications[$notifications->key()] = $product;
 					$notifications->next();
 				}
-				$notification = new finishedProduct($row["notificationId"], $row["alertId"], $row["emailStatus"], $row["notificationDateTime"], $row["notificationHandle"], $row["notificationContent"]);
+				$notification = new Notification($row["notificationId"], $row["alertId"], $row["emailStatus"], $row["notificationDateTime"], $row["notificationHandle"], $row["notificationContent"]);
 				$notifications[$notifications->key()] = $notification;
 				$notifications->next();
 			} catch(PDOException $exception) {
