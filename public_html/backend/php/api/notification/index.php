@@ -26,8 +26,8 @@ try {
 	//sanitize the date
 	$notificationDateTime = filter_input(INPUT_GET, "notificationDateTime", FILTER_VALIDATE_INT);
 
-	//sanitize the page
-	$page = filter_input(INPUT_GET, "page", FILTER_VALIDATE_INT);
+	// sanitize getProducts
+	$getProducts = filter_input(INPUT_GET, "getProducts", FILTER_VALIDATE_BOOLEAN);
 
 	// grab the mySQL connection
 	$pdo = connectToEncryptedMySql("/etc/apache2/capstone-mysql/invtext.ini");
@@ -38,15 +38,17 @@ try {
 		// set an XSRF cookie on GET requests
 		setXsrfCookie("/");
 		if(empty($notificationId) === false) {
-			$reply->data = Notification::getNotificationByNotificationId($pdo, $notificationId);
+			if($getProducts === true) {
+				$reply->data = Notification::getProductByAlertId($pdo, $alertId);
+			} else {
+				$reply->data = Notification::getNotificationByAlertId($pdo, $alertId);
+			}
 		} else if(empty($emailStatus) === false) {
 			$reply->data = Notification::getNotificationByEmailStatus($pdo, $emailStatus);
 		} else if(empty($notificationDateTime) === false) {
 			$notificationDateTimeInt = new DateTime();
 			$notificationDateTimeInt->setTimestamp($notificationDateTime / 1000);
 			$reply->data = Notification::getNotificationByNotificationDateTime($pdo, $notificationDateTimeInt);
-		}	else if(empty($alertId) === false){
-			$reply->data = Notification::getProductByAlertId($pdo, $alertId);
 		} else {
 			$reply->data = Notification::getAllNotifications($pdo, $page);
 		}
