@@ -115,8 +115,8 @@ class Vendor {
 		//verify the contact name is secure
 		$newContactName = trim($newContactName);
 		$newContactName = filter_var($newContactName, FILTER_SANITIZE_STRING);
-		if(empty($newContactName)===true){
-			throw(new InvalidArgumentException("contact names is empty or insecure"));
+		if(empty($newContactName)=== true){
+			throw(new InvalidArgumentException("contact name is empty or insecure"));
 		}
 		//verify the contact name will fit into database
 		if(strlen($newContactName)>64){
@@ -223,11 +223,11 @@ class Vendor {
 		}
 
 		// create query template
-		$query = "INSERT INTO vendor(vendorId, contactName, vendorEmail, vendorName, vendorPhoneNumber)VALUES(:vendorId, :contactName, :vendorEmail, :vendorName, :vendorPhoneNumber)";
+		$query = "INSERT INTO vendor(contactName, vendorEmail, vendorName, vendorPhoneNumber)VALUES(:contactName, :vendorEmail, :vendorName, :vendorPhoneNumber)";
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
-		$parameters = array("vendorId" => $this->vendorId, "contactName" => $this->contactName, "vendorEmail" => $this->vendorEmail,
+		$parameters = array("contactName" => $this->contactName, "vendorEmail" => $this->vendorEmail,
 			 "vendorName" => $this->vendorName, "vendorPhoneNumber" => $this->vendorPhoneNumber);
 		$statement->execute($parameters);
 

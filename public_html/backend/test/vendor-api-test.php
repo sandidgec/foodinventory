@@ -72,7 +72,19 @@ class VendorAPITest extends InventoryTextTest {
 	 * @var string $VALID_notificationHandle2
 	 **/
 	protected $INVALID_vendorPhoneNumber = "555555555555555555555";
+	/**
+	 * because guzzle
+	 **/
+	protected $guzzle = null;
 
+	/**
+	 * setting shit up to guzzle
+	 **/
+	public function setUp() {
+		parent::setUp();
+
+		$this->guzzle = new \GuzzleHttp\Client(['cookies' => true]);
+	}
 	/**
 	 * Test Deleting a Valid Vendor
 	 **/
@@ -179,11 +191,12 @@ class VendorAPITest extends InventoryTextTest {
 		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/vendor/?vendorName=br');
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/vendor/', ['headers' =>
-			['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newVendor]);
+		$response = $this->guzzle->post('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/vendor/',
+			['headers' => ['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newVendor]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$vendor = json_decode($body);
+		echo $body.PHP_EOL;
 		$this->assertSame(200, $vendor->status);
 	}
 
@@ -191,20 +204,20 @@ class VendorAPITest extends InventoryTextTest {
 	 * test ability to Put valid vendor
 	 **/
 	public function testPutValidVendor() {
-		// create a new Location
+		// create a new vendor
 		$newVendor = new Vendor(null, $this->VALID_contactName, $this->VALID_vendorEmail, $this->VALID_vendorName, $this->VALID_vendorPhoneNumber);
-
 		$newVendor->insert($this->getPDO());
 
 		// run a get request to establish session tokens
 		$this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/vendor/');
 
 		// grab the data from guzzle and enforce the status' match our expectations
-		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/vendor/' . $newVendor->getVendorId(), ['headers' =>
-			['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newVendor]);
+		$response = $this->guzzle->put('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/vendor/' . $newVendor->getVendorId(),
+			['headers' =>	['X-XSRF-TOKEN' => $this->getXsrfToken()], 'json' => $newVendor]);
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$vendor = json_decode($body);
+		echo $body.PHP_EOL;
 		$this->assertSame(200, $vendor->status);
 	}
 }
