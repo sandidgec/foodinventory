@@ -51,7 +51,17 @@ try {
 		// set an XSRF cookie on GET requests
 		setXsrfCookie("/");
 		if(empty($productId) === false) {
-			$reply->data = Product::getProductByProductId($pdo, $productId);
+			if($getLocations === true) {
+				$reply->data = Product::getLocationByProductId($pdo, $alertId);
+			} else if($getNotifications){
+				$reply->data = Product::getNotificationByProductId($pdo, $productId);
+			} else if($getUnitOfMeasure){
+				$reply->data = Product::getUnitOfMeasurementByProductId($pdo, $productId);
+			} else if($getFinishedProduct){
+				$reply->data = Product::getFinishedProductByProductId($pdo, $productId);
+			} else {
+				$reply->data = AlertLevel::getAlertLevelByAlertId($pdo, $productId);
+			}
 		} else if(empty($vendorId) === false) {
 			$reply->data = Product::getProductByVendorId($pdo, $vendorId);
 		} else if(empty($description) === false) {
