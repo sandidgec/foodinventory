@@ -641,6 +641,45 @@ class Product implements JsonSerializable {
 		return ($locations);
 	}
 
+	public static function getValidUnitOfMeasurementByProductId(PDO &$pdo, $newProductId) {
+		// sanitize the ProductId before searching
+		$newProductId = filter_var($newProductId, FILTER_VALIDATE_INT);
+		if(empty($newProductId) === true) {
+			throw(new PDOException("locationId is an invalid integer"));
+		}
+		$query ="SELECT unitOfMeasure.unitId, unitOfMeasure.unitCode AS unitOfMeasureQuantity,
+					 product.productId, product.vendorId, product.description AS productDescription, product.leadTime, product.sku, product.title
+					FROM productLocation
+					INNER JOIN product ON product.productId = productLocation.unitId
+					INNER JOIN unitOfMeasure ON unitOfMeasure.quantity = productLocation.quantity
+					WHERE product.productId = :productId";
+		$statement = $pdo->prepare($query);
+
+		// bind the productId to the place holder in the template
+		$parameters = array("productId" => $newProductId);
+		$statement->execute($parameters);
+
+		// build an array of unit measure and an associated Products
+		$unitOfMeasure = new SplFixedArray($statement->rowCount() + 1);
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				if($unitOfMeasure->key() === 0) {
+					$product = new Product($row["productId"], $row["vendorId"], $row["productDescription"], $row["leadTime"], $row["sku"], $row["title"]);
+					$unitOfMeasure[$unitOfMeasure->key()] = $product;
+					$unitOfMeasure->next();
+				}
+				$unitOfMeasure = new unitOfMeasure($row["unitId"], $row["unitCode"], $row["unitOfMeasureQuantity"]);
+				$unitOfMeasure[$unitOfMeasure->key()] = $unitOfMeasure;
+				$unitOfMeasure->next();
+			} catch(PDOException $exception) {
+				//if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return ($unitOfMeasure);
+	}
+
 	/**
 	 * gets the Product by pagination
 	 *
