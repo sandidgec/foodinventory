@@ -161,8 +161,8 @@ class Notification {
 	 **/
 	public function setEmailStatus($newEmailStatus) {
 		// verify the email status is valid
-		$newEmailStatus = filter_var($newEmailStatus, FILTER_VALIDATE_BOOLEAN);
-		if($newEmailStatus === false) {
+		$newEmailStatus = filter_var($newEmailStatus, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+		if($newEmailStatus === null) {
 			throw(new InvalidArgumentException("email status is not a valid boolean"));
 		}
 		// convert and store the alert id
