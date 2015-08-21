@@ -43,7 +43,7 @@ app.service("MovementEditorService", function($http, $q) {
 	 * @returns accepts the promise when movements are found, rejected otherwise
 	 **/
 	this.getMovements = function(fromLocationId) {
-		return($http.get(this.MOVEMENTEDITOR_ENDPOINT + fromLocationId)
+		return($http.get(this.MOVEMENTEDITOR_ENDPOINT + "?fromLocationId=" + fromLocationId)
 			.then(function(reply){
 				if(typeof reply.data === "object") {
 					return(reply.data);
@@ -61,7 +61,7 @@ app.service("MovementEditorService", function($http, $q) {
 	 * @returns accepts the promise when movements are found, rejected otherwise
 	 **/
 	this.getMovements = function(toLocationId) {
-		return($http.get(this.MOVEMENTEDITOR_ENDPOINT + toLocationId)
+		return($http.get(this.MOVEMENTEDITOR_ENDPOINT + "?toLocationId=" + toLocationId)
 			.then(function(reply){
 				if(typeof reply.data === "object") {
 					return(reply.data);
@@ -79,7 +79,7 @@ app.service("MovementEditorService", function($http, $q) {
 	 * @returns accepts the promise when movements are found, rejected otherwise
 	 **/
 	this.getMovements = function(productId) {
-		return($http.get(this.MOVEMENTEDITOR_ENDPOINT + productId)
+		return($http.get(this.MOVEMENTEDITOR_ENDPOINT + "?productId=" + productId)
 			.then(function(reply){
 				if(typeof reply.data === "object") {
 					return(reply.data);
@@ -97,7 +97,7 @@ app.service("MovementEditorService", function($http, $q) {
 	 * @returns accepts the promise when movements are found, rejected otherwise
 	 **/
 	this.getMovements = function(userId) {
-		return($http.get(this.MOVEMENTEDITOR_ENDPOINT + userId)
+		return($http.get(this.MOVEMENTEDITOR_ENDPOINT + "?userId=" + userId)
 			.then(function(reply){
 				if(typeof reply.data === "object") {
 					return(reply.data);
@@ -115,7 +115,7 @@ app.service("MovementEditorService", function($http, $q) {
 	 * @returns accepts the promise when movements are found, rejected otherwise
 	 **/
 	this.getMovements = function(movementDate) {
-		return($http.get(this.MOVEMENTEDITOR_ENDPOINT + movementDate)
+		return($http.get(this.MOVEMENTEDITOR_ENDPOINT + "?movementDate=" + movementDate)
 			.then(function(reply){
 				if(typeof reply.data === "object") {
 					return(reply.data);
@@ -133,7 +133,7 @@ app.service("MovementEditorService", function($http, $q) {
 	 * @returns accepts the promise when movements are found, rejected otherwise
 	 **/
 	this.getMovements = function(movementType) {
-		return($http.get(this.MOVEMENTEDITOR_ENDPOINT + movementType)
+		return($http.get(this.MOVEMENTEDITOR_ENDPOINT + "?movementType=" + movementType)
 			.then(function(reply){
 				if(typeof reply.data === "object") {
 					return(reply.data);
@@ -150,8 +150,8 @@ app.service("MovementEditorService", function($http, $q) {
 	 *
 	 * @returns accepts the promise when the movement is added, rejected otherwise
 	 **/
-	this.addMovement = function(movementId) {
-		return($http.post(this.MOVEMENTEDITOR_ENDPOINT + movementId)
+	this.addMovement = function(movement) {
+		return($http.post(this.MOVEMENTEDITOR_ENDPOINT + movement)
 			.then(function(reply) {
 				if(typeof reply.data === "object") {
 					return(reply.data);
