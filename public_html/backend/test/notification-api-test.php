@@ -236,7 +236,7 @@ class NotificationAPITest extends InventoryTextTest {
 		$newNotification->insert($this->getPDO());
 
 		// grab the data from guzzle
-		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/notification/?alertId=' . $newNotification->getAlertId() . "&getProducts=true");
+		$response = $this->guzzle->get('https://bootcamp-coders.cnm.edu/~invtext/backend/php/api/notification/?alertId=' . $newNotification->getAlertId());
 		$this->assertSame($response->getStatusCode(), 200);
 		$body = $response->getBody();
 		$notification = json_decode($body);

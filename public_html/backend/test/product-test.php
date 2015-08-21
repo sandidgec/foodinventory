@@ -467,7 +467,7 @@ class ProductTest extends InventoryTextTest {
 		$productLocation->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoUnitOfMeasureArray = Product::getUnitOfMeasurementByProductId($this->getPDO(), $product->getProductId());
+		$pdoUnitOfMeasureArray = Product::getUnitOfMeasureByProductId($this->getPDO(), $product->getProductId());
 		for($i = 0; $i < count($pdoUnitOfMeasureArray); $i++) {
 			if($i === 0) {
 				$this->assertSame($pdoUnitOfMeasureArray[$i]->getVendorId(), $this->vendor->getVendorId());
