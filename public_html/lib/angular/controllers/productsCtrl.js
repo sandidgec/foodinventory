@@ -15,10 +15,25 @@ function angularModule() {
 	var app = angular.module("", []);
 
 	app.controller("productsCtrl", function ($scope, $modal, $filter, Data) {
+		//get data for product
 		$scope.product = {};
 		Data.get("products").then(function(data){
 			$scope.products = data.data;
 		});
+		//change product status using product status and data put
+		$scope.changeProductStatus = function(product){
+			product.status = (product.status=="Active" ? "Inactive" : "Active");
+			Data.put("products/"+product.id,{status:product.status});
+		};
+		//delete product but confirm with message first
+		$scope.deleteProduct = function(product){
+			if(confirm("Are you sure you want to remove the product?")){
+				Data.delete("products/"+product.id).then(function(result){
+					$scope.products = _.without($scope.products, _.findWhere($scope.products, {id:product.id}));
+				});
+			}
+		};
+
 
 
 
