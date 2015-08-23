@@ -88,7 +88,7 @@ function angularModule() {
 
 
 	//create app.controller for product-editCtrl
-	app.controller("product-editCtrl", function ($scope, $modalInstance, item, Data) {
+	app.controller("Product-editCtrl", function ($scope, $modalInstance, item, Data) {
 		//create $modalInstance for product items by copying and editing to update and save revised product
 		$scope.product = angular.copy(item);
 
