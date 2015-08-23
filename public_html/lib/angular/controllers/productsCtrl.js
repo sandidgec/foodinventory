@@ -15,7 +15,7 @@ function angularModule() {
 	var app = angular.module("", []);
 
 	//create app.controller for productsCtrl
-	app.controller("productsCtrl", function ($scope, $modal, $filter, Data) {
+	app.controller("ProductsCtrl", function ($scope, $modal, $filter, Data) {
 		//get data for product
 		$scope.product = {};
 		Data.get("products").then(function(data){
