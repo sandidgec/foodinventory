@@ -12,8 +12,9 @@
 
 function angularModule() {
 // wrapping angular.module within a javaScript function
-
-var app = angular.module("FoodInventory", ["ngRoute", "ui.bootstrap","ngMessage", "ngAnimate"]);
+//creating var app angular module for FoodInventory with angular.js defined functions used within web app
+var app = angular.module("FoodInventory", ["ui.bootstrap", "ngRoute", "ngMessage", "ngMessages", "ngAnimate",
+	"ngShow", "ngHide", "ngRepeat", "ngView", "ngModel", "ngForm", "ngInclude", "ngSwitch", "ngClass", ]);
 	app.config(["$routeProvider",
 	function($routeProvider){
 		$routeProvider.

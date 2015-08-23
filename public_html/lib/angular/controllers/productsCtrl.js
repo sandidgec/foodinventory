@@ -33,8 +33,16 @@ function angularModule() {
 				});
 			}
 		};
+		$scope.open = function (p,size) {
 
 
+
+
+
+
+
+
+		};
 
 
 
