@@ -14,6 +14,7 @@ function angularModule() {
 
 	var app = angular.module("", []);
 
+	//create app.controller for productsCtrl
 	app.controller("productsCtrl", function ($scope, $modal, $filter, Data) {
 		//get data for product
 		$scope.product = {};
@@ -82,24 +83,25 @@ function angularModule() {
 			{text:"alertId",predicate:"alertId",sortable:true,dataType:"number"},
 			{text:"finishedProductId",predicate:"finishedProductId",sortable:true,dataType:"number"},
 		];
-
-
-
-
-
-
-
-
-
-
-
-
 	});
 
 
 
-
+	//create app.controller for product-editCtrl
 	app.controller("product-editCtrl", function ($scope, $modalInstance, item, Data) {
+		//create $modalInstance for product items by copying and editing to update and save revised product
+		$scope.product = angular.copy(item);
+
+		$scope.cancel = function () {
+			$modalInstance.dismiss("Close");
+		};
+		$scope.title = (item.id > 0) ? "Edit Product" : "Add Product";
+		$scope.buttonText = (item.id > 0) ? "Update Product" : "Add New Product";
+
+		var original = item;
+		$scope.isClean = function() {
+			return angular.equals(original, $scope.product);
+		}
 
 
 
