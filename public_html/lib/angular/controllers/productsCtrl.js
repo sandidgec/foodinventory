@@ -33,7 +33,39 @@ function angularModule() {
 				});
 			}
 		};
+		//create a modalInstance that allows editing of product
 		$scope.open = function (p,size) {
+			var modalInstance = $modal.open({
+				templateUrl: "partials/product-edit.php",
+				controller: "product-editCtrl",
+				//object size
+				size: size,
+				resolve: {
+					item: function () {
+						//return if or else if results below to insert and update
+						return p;
+					}
+				}
+			});
+			modalInstance.result.then(function(selectedObject) {
+				//insert product
+				if(selectedObject.save == "insert"){
+					$scope.products.push(selectedObject);
+					$scope.products = $filter("orderBy")($scope.products, "id", "reverse");
+					//update and save product
+				}else if(selectedObject.save == "update"){
+					p.productId = selectedObject.productId;
+					p.vendorId = selectedObject.vendorId;
+					p.description = selectedObject.description;
+					p.leadTime = selectedObject.leadTime;
+					p.sku = selectedObject.sku;
+					p.title = selectedObject.title;
+					p.locations = selectedObject.locations;
+					p.notifications = selectedObject.notifications;
+					p.unitOfMeasures = selectedObject.unitOfMeasures;
+					p.finishedProducts = selectedObject.finishedProducts;
+				}
+			});
 
 
 
