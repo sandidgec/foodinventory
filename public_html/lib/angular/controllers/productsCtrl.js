@@ -55,20 +55,35 @@ function angularModule() {
 					//update and save product
 				}else if(selectedObject.save == "update"){
 					p.productId = selectedObject.productId;
-					p.vendorId = selectedObject.vendorId;
-					p.description = selectedObject.description;
-					p.leadTime = selectedObject.leadTime;
-					p.sku = selectedObject.sku;
 					p.title = selectedObject.title;
-					p.location = selectedObject.location;
-					p.notification = selectedObject.notification;
-					p.unitOfMeasure = selectedObject.unitOfMeasure;
-					p.finishedProduct = selectedObject.finishedProduct;
+					p.description = selectedObject.description;
+					p.vendorId = selectedObject.vendorId;
+					p.sku = selectedObject.sku;
+					p.locationId = selectedObject.locationId;
+					p.quantity = selectedObject.quantity;
+					p.leadTime = selectedObject.leadTime;
+					p.alertId = selectedObject.alertId;
+					p.finishedProductId = selectedObject.finishedProductId;
 				}
 			});
 		};
 
 		//create $scope columns
+		$scope.columns = [
+			{image:"image",predicate:"img",sortable:true},
+			{text:"productId",predicate:"productId",sortable:true,dataType:"number"},
+			{text:"title",predicate:"title",sortable:true},
+			{text:"description",predicate:"description",sortable:true},
+			{text:"vendorId",predicate:"vendorId",sortable:true,dataType:"number"},
+			{text:"sku",predicate:"sku",sortable:true,dataType:"number"},
+			{text:"locationId",predicate:"locationId",sortable:true,dataType:"number"},
+			{text:"quantity",predicate:"quantity",sortable:true,dataType:"number"},
+			{text:"leadTime",predicate:"leadTime",sortable:true,dataType:"number"},
+			{text:"alertId",predicate:"alertId",sortable:true,dataType:"number"},
+			{text:"finishedProductId",predicate:"finishedProductId",sortable:true,dataType:"number"},
+		];
+
+
 
 
 
