@@ -12,6 +12,7 @@
 
 function angularModule() {
 // wrapping angular.module within a javaScript function
+
 var app = angular.module("FoodInventory", ["ngRoute", "ui.bootstrap","ngMessage", "ngAnimate"]);
 	app.config(["$routeProvider",
 	function($routeProvider){
@@ -23,13 +24,8 @@ var app = angular.module("FoodInventory", ["ngRoute", "ui.bootstrap","ngMessage"
 				controller:"productsCtrl"
 			})
 			//set route definition that will be used on route change when no other route definition matches
-			.otherwise
+			.otherwise({
+				redirectTo:"/"
+			})
 	}])
-
-
-
-
-
-
-
 }
