@@ -60,22 +60,15 @@ function angularModule() {
 					p.leadTime = selectedObject.leadTime;
 					p.sku = selectedObject.sku;
 					p.title = selectedObject.title;
-					p.locations = selectedObject.locations;
-					p.notifications = selectedObject.notifications;
-					p.unitOfMeasures = selectedObject.unitOfMeasures;
-					p.finishedProducts = selectedObject.finishedProducts;
+					p.location = selectedObject.location;
+					p.notification = selectedObject.notification;
+					p.unitOfMeasure = selectedObject.unitOfMeasure;
+					p.finishedProduct = selectedObject.finishedProduct;
 				}
 			});
-
-
-
-
-
-
-
-
 		};
 
+		//create $scope columns
 
 
 
