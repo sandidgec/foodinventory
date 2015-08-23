@@ -9,10 +9,56 @@
  */
 
 
-
 function angularModule() {
 // wrapping angular.module within a javaScript function
 
 	var app = angular.module("", []);
 
-}
+	app.controller("productsCtrl", function ($scope, $modal, $filter, Data) {
+
+
+
+
+
+
+
+
+
+
+
+
+	});
+
+
+
+
+	app.controller("product-editCtrl", function ($scope, $modalInstance, item, Data) {
+
+
+
+
+
+
+
+
+
+
+
+	});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	}
