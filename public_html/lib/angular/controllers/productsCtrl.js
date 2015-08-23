@@ -102,6 +102,36 @@ function angularModule() {
 		$scope.isClean = function() {
 			return angular.equals(original, $scope.product);
 		}
+		//saveProduct $scope by updating data to put and inserting data to post
+		$scope.saveProduct = function (product) {
+			product.uid = $scope.uid;
+			if(product.id > 0){
+				Data.put("products/"+product.id, product).then(function (result) {
+					if(result.status != "error"){
+						var x = angular.copy(product);
+						x.save = "update";
+						$modalInstance.close(x);
+					}else{
+						//create results on console—QUESTION is this secure on console as a PUT or does it need to be sanitized???
+						console.log(result);
+					}
+				});
+			}else{
+				product.status = "Active";
+				Data.post("products", product).then(function (result) {
+					if(result.status != "error"){
+						var x = angular.copy(product);
+						x.save = "insert";
+						x.id = result.data;
+						$modalInstance.close(x);
+					}else{
+						//create results on console—QUESTION is this secure on console as a POST or does it need to be sanitized???
+						console.log(result);
+					}
+				});
+			}
+		};
+
 
 
 
