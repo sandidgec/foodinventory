@@ -48,11 +48,4 @@ function angularModule() {
 			};
 			return obj;
 		}]);
-
-
-
-
-
-
-
 }
