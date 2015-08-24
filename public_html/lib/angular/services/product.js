@@ -200,6 +200,25 @@ app.service("ProductEditorService", function($http, $q) {
 			}));
 	};
 
+
+	/**
+	 * method that promises to get all products
+	 *
+	 * @return accepts the promise when products are found, rejected otherwise
+	 **/
+	this.getAllProducts = function() {
+		return ($http.get(this.REGISTER_ENDPOINT)
+			.then(function(reply) {
+				if(typeof reply.data === "object") {
+					return (reply.data);
+				} else {
+					return ($q.reject(reply.data));
+				}
+			}, function(reply) {
+				return ($q.reject(reply.data));
+			}));
+	};
+
 	/**
 	 * method that promises to add a product
 	 *
