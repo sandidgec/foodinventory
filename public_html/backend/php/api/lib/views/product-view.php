@@ -14,7 +14,7 @@
  */
 
 
-class View {
+class ProductView {
 
 
 
