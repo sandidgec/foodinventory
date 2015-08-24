@@ -13,20 +13,20 @@
 function angularModule() {
 // wrapping angular.module within a javaScript function
 //creating var app angular module for FoodInventory with angular.js defined Animation functions used within web app
-var app = angular.module("FoodInventory", ["ui.bootstrap", "ngRoute", "ngMessage", "ngMessages", "ngAnimate",
-	"ngShow", "ngHide", "ngRepeat", "ngView", "ngModel", "ngForm", "ngInclude", "ngSwitch", "ngClass", ]);
+	var app = angular.module("FoodInventory", ["ui.bootstrap", "ngRoute", "ngMessage", "ngMessages", "ngAnimate",
+		"ngShow", "ngHide", "ngRepeat", "ngView", "ngModel", "ngForm", "ngInclude", "ngSwitch", "ngClass", ]);
 	app.config(["$routeProvider",
-	function($routeProvider){
-		$routeProvider.
-			when("/",{
-				//creating $routeProvider definition to match using ng-template reference
-				title:"Products",
-				templateUrl: "partials/products.php",
-				controller:"productsCtrl"
-			})
-			//set route definition that will be used on route change when no other route definition matches
-			.otherwise({
-				redirectTo:"/"
-			})
-	}])
+		function($routeProvider){
+			$routeProvider.
+				when("/",{
+					//creating $routeProvider definition to match using ng-template reference
+					title:"Products",
+					templateUrl: "partials/products.php",
+					controller:"productsCtrl"
+				})
+				//set route definition that will be used on route change when no other route definition matches
+				.otherwise({
+					redirectTo:"/"
+				})
+		}])
 }
