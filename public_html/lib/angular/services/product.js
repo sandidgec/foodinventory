@@ -61,7 +61,7 @@ app.service("ProductEditorService", function($http, $q) {
 	 * @returns accepts the promise when products are found, rejected otherwise
 	 **/
 	this.getProducts = function(description) {
-		return($http.get(this.PRODUCTTEDITOR_ENDPOINT + "?description=" + description)
+		return($http.get(this.PRODUCTEDITOR_ENDPOINT + "?description=" + description)
 			.then(function(reply){
 				if(typeof reply.data === "object") {
 					return(reply.data);
