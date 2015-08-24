@@ -201,24 +201,6 @@ app.service("ProductEditorService", function($http, $q) {
 	};
 
 	/**
-	 * method that promises to get products by Notification
-	 *
-	 * @returns accepts the promise when products are found, rejected otherwise
-	 **/
-	this.getProducts = function(notification) {
-		return($http.get(this.PRODUCTEDITOR_ENDPOINT + "?notification=" + notification)
-			.then(function(reply){
-				if(typeof reply.data === "object") {
-					return(reply.data);
-				} else {
-					return($q.reject(reply.data));
-				}
-			}, function(reply) {
-				return($q.reject(reply.data));
-			}));
-	};
-
-	/**
 	 * method that promises to add a product
 	 *
 	 * @returns accepts the promise when the product is added, rejected otherwise
