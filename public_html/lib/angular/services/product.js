@@ -128,12 +128,12 @@ app.service("ProductEditorService", function($http, $q) {
 	};
 
 	/**
-	 * method that promises to get products by location
+	 * method that promises to get location by productId
 	 *
-	 * @returns accepts the promise when products are found, rejected otherwise
+	 * @returns accepts the promise when locations are found, rejected otherwise
 	 **/
-	this.getProducts = function(location) {
-		return($http.get(this.PRODUCTEDITOR_ENDPOINT + "?location=" + location)
+	this.getLocation = function(productId) {
+		return($http.get(this.PRODUCTEDITOR_ENDPOINT + "?productId=" + productId)
 			.then(function(reply){
 				if(typeof reply.data === "object") {
 					return(reply.data);
@@ -146,12 +146,12 @@ app.service("ProductEditorService", function($http, $q) {
 	};
 
 	/**
-	 * method that promises to get products by UnitOfMeasure
+	 * method that promises to get0 UnitOfMeasure by productId
 	 *
-	 * @returns accepts the promise when products are found, rejected otherwise
+	 * @returns accepts the promise when unit of measure are found, rejected otherwise
 	 **/
-	this.getProducts = function(unitOfMeasure) {
-		return($http.get(this.PRODUCTEDITOR_ENDPOINT + "?unitOfMeasure=" + unitOfMeasure)
+	this.getUnitOfMeasure = function(productId) {
+		return($http.get(this.PRODUCTEDITOR_ENDPOINT + "?productId=" + productId)
 			.then(function(reply){
 				if(typeof reply.data === "object") {
 					return(reply.data);
@@ -165,12 +165,12 @@ app.service("ProductEditorService", function($http, $q) {
 
 
 	/**
-	 * method that promises to get products by FinishedProduct
+	 * method that promises to get FinishedProduct by productId
 	 *
-	 * @returns accepts the promise when products are found, rejected otherwise
+	 * @returns accepts the promise when finishedProduct are found, rejected otherwise
 	 **/
-	this.getProducts = function(finishedProduct) {
-		return($http.get(this.PRODUCTEDITOR_ENDPOINT + "?finishedProduct=" + finishedProduct)
+	this.getFinishedProduct = function(productId) {
+		return($http.get(this.PRODUCTEDITOR_ENDPOINT + "?productId=" + productId)
 			.then(function(reply){
 				if(typeof reply.data === "object") {
 					return(reply.data);
@@ -187,8 +187,8 @@ app.service("ProductEditorService", function($http, $q) {
 	 *
 	 * @returns accepts the promise when products are found, rejected otherwise
 	 **/
-	this.getProducts = function(notification) {
-		return($http.get(this.PRODUCTEDITOR_ENDPOINT + "?notification=" + notification)
+	this.getNotification = function(productId) {
+		return($http.get(this.PRODUCTEDITOR_ENDPOINT + "?productId=" + productId)
 			.then(function(reply){
 				if(typeof reply.data === "object") {
 					return(reply.data);
