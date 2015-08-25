@@ -1,8 +1,8 @@
-app.service("RegisterService", function($http, $q) {
-	this.REGISTER_ENDPOINT = "../../backend/php/api/user/";
+app.service("SignupService", function($http, $q) {
+	this.SIGNUP_ENDPOINT = "../../backend/php/api/user/";
 
 	this.addUser = function(user) {
-		return ($http.post(this.REGISTER_ENDPOINT, user)
+		return ($http.post(this.SIGNUP_ENDPOINT, user)
 			.then(function(reply) {
 				if(typeof reply.data === "object") {
 					return (reply.data);

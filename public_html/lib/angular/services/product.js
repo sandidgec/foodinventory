@@ -207,7 +207,7 @@ app.service("ProductEditorService", function($http, $q) {
 	 * @return accepts the promise when products are found, rejected otherwise
 	 **/
 	this.getAllProducts = function() {
-		return ($http.get(this.REGISTER_ENDPOINT)
+		return ($http.get(this.SIGNUP_ENDPOINT)
 			.then(function(reply) {
 				if(typeof reply.data === "object") {
 					return (reply.data);
@@ -244,7 +244,7 @@ app.service("ProductEditorService", function($http, $q) {
  * @returns accepts the promise when the product is edited, rejected otherwise
  **/
 this.editProduct = function(product) {
-	return ($http.put(this.REGISTER_ENDPOINT + product.productId, product)
+	return ($http.put(this.SIGNUP_ENDPOINT + product.productId, product)
 		.then(function(reply) {
 			if(typeof reply.data === "object") {
 				return (reply.data);
@@ -257,7 +257,7 @@ this.editProduct = function(product) {
 };
 
 this.deleteProduct = function(user) {
-	return ($http.delete(this.REGISTER_ENDPOINT + product.productId)
+	return ($http.delete(this.SIGNUP_ENDPOINT + product.productId)
 		.then(function(reply) {
 			if(typeof reply.data === "object") {
 				return (reply.data);

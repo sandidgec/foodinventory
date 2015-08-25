@@ -16,7 +16,7 @@ app.service("AdminService", function($http, $q) {
 	};
 
 	this.getUsersByUserId = function(userId) {
-		return ($http.get(this.REGISTER_ENDPOINT +  userId)
+		return ($http.get(this.SIGNUP_ENDPOINT +  userId)
 			.then(function(reply) {
 				if(typeof reply.data === "object") {
 					return (reply.data);
@@ -29,7 +29,7 @@ app.service("AdminService", function($http, $q) {
 	};
 
 	this.deleteUser = function(user) {
-		return ($http.delete(this.REGISTER_ENDPOINT + user.userId)
+		return ($http.delete(this.SIGNUP_ENDPOINT + user.userId)
 			.then(function(reply) {
 				if(typeof reply.data === "object") {
 					return (reply.data);

@@ -1,1 +1,1 @@
-var app = angular.module("FoodInventory", ["ngMessage", "ui.bootstrap"]);
+var app = angular.module("FoodInventory", ["ngMessages", "ui.bootstrap"]);

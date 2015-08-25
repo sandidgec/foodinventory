@@ -79,7 +79,7 @@ app.service("LocationEditorService", function($http, $q) {
 	 * @return accepts the promise when locations are found, rejected otherwise
 	 **/
 	this.getAllLocations = function() {
-		return ($http.get(this.REGISTER_ENDPOINT)
+		return ($http.get(this.SIGNUP_ENDPOINT)
 			.then(function(reply) {
 				if(typeof reply.data === "object") {
 					return (reply.data);
@@ -116,7 +116,7 @@ app.service("LocationEditorService", function($http, $q) {
  * @returns accepts the promise when the location is edited, rejected otherwise
  **/
 this.editLocation = function(location) {
-	return ($http.put(this.REGISTER_ENDPOINT + location.locationId, location)
+	return ($http.put(this.SIGNUP_ENDPOINT + location.locationId, location)
 		.then(function(reply) {
 			if(typeof reply.data === "object") {
 				return (reply.data);
@@ -129,7 +129,7 @@ this.editLocation = function(location) {
 };
 
 this.deleteLocation = function(user) {
-	return ($http.delete(this.REGISTER_ENDPOINT + location.locationId)
+	return ($http.delete(this.SIGNUP_ENDPOINT + location.locationId)
 		.then(function(reply) {
 			if(typeof reply.data === "object") {
 				return (reply.data);

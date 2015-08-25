@@ -16,7 +16,7 @@ app.service("LoginService", function($http, $q) {
 	};
 
 	this.editUser = function(user) {
-		return ($http.put(this.REGISTER_ENDPOINT + user.userId, user)
+		return ($http.put(this.SIGNUP_ENDPOINT + user.userId, user)
 			.then(function(reply) {
 				if(typeof reply.data === "object") {
 					return (reply.data);

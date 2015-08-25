@@ -1,5 +1,5 @@
 app.service("RegisterService", function($http, $q) {
-	this.REGISTER_ENDPOINT = "../../backend/php/api/notification/";
+	this.SIGNUP_ENDPOINT = "../../backend/php/api/notification/";
 
 	/**
 	 * method that promises to get notifications by notificationId
@@ -7,7 +7,7 @@ app.service("RegisterService", function($http, $q) {
 	 * @return accepts the promise when movements are found, rejected otherwise
 	 **/
 	this.getNotificationByNotificationId = function(notificationId) {
-		return ($http.get(this.REGISTER_ENDPOINT +  notificationId)
+		return ($http.get(this.SIGNUP_ENDPOINT +  notificationId)
 			.then(function(reply) {
 				if(typeof reply.data === "object") {
 					return (reply.data);
@@ -24,7 +24,7 @@ app.service("RegisterService", function($http, $q) {
 	* @return accepts the promise when movements are found, rejected otherwise
 	**/
 	this.getNotificationByAlertId = function(alertId) {
-		return ($http.get(this.REGISTER_ENDPOINT + "?alertId=" + alertId)
+		return ($http.get(this.SIGNUP_ENDPOINT + "?alertId=" + alertId)
 			.then(function(reply) {
 				if(typeof reply.data === "object") {
 					return (reply.data);
@@ -41,7 +41,7 @@ app.service("RegisterService", function($http, $q) {
 	* @return accepts the promise when movements are found, rejected otherwise
 	**/
 	this.getNotificationByEmailStatus = function(emailStatus) {
-		return ($http.get(this.REGISTER_ENDPOINT + "?emailStatus=" + emailStatus)
+		return ($http.get(this.SIGNUP_ENDPOINT + "?emailStatus=" + emailStatus)
 			.then(function(reply) {
 				if(typeof reply.data === "object") {
 					return (reply.data);
@@ -58,7 +58,7 @@ app.service("RegisterService", function($http, $q) {
 	 * @return accepts the promise when movements are found, rejected otherwise
 	 **/
 	this.getNotificationByNotificationDateTime = function(notificationDateTime) {
-		return ($http.get(this.REGISTER_ENDPOINT + "?notificationDateTime=" + notificationDateTime)
+		return ($http.get(this.SIGNUP_ENDPOINT + "?notificationDateTime=" + notificationDateTime)
 			.then(function(reply) {
 				if(typeof reply.data === "object") {
 					return (reply.data);
@@ -75,7 +75,7 @@ app.service("RegisterService", function($http, $q) {
 	 * @return accepts the promise when movements are found, rejected otherwise
 	 **/
 	this.getProductByAlertId = function(alertId) {
-		return ($http.get(this.REGISTER_ENDPOINT + "?alertId=" + alertId)
+		return ($http.get(this.SIGNUP_ENDPOINT + "?alertId=" + alertId)
 			.then(function(reply) {
 				if(typeof reply.data === "object") {
 					return (reply.data);
@@ -92,7 +92,7 @@ app.service("RegisterService", function($http, $q) {
 	 * @return accepts the promise when movements are found, rejected otherwise
 	 **/
 	this.getAllNotifications = function() {
-		return ($http.get(this.REGISTER_ENDPOINT)
+		return ($http.get(this.SIGNUP_ENDPOINT)
 			.then(function(reply) {
 				if(typeof reply.data === "object") {
 					return (reply.data);
@@ -109,7 +109,7 @@ app.service("RegisterService", function($http, $q) {
  * @return accepts the promise when movement is added, rejected otherwise
  **/
 	this.addNotification = function(notification) {
-		return ($http.post(this.REGISTER_ENDPOINT, notification)
+		return ($http.post(this.SIGNUP_ENDPOINT, notification)
 			.then(function(reply) {
 				if(typeof reply.data === "object") {
 					return (reply.data);

@@ -1,4 +1,4 @@
-app.controller("SignUpController", function($http, UserService, $scope) {
+app.controller("SignUpController", function($http, SignupService, $scope) {
 	$scope.user = null;
 	$scope.statusClass = "alert-success";
 	$scope.statusMessage = null;
