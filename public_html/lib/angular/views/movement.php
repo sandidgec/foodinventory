@@ -19,6 +19,7 @@
             </div>
         </div>
 
+        <!--  Movement Reports -->
         <div class="movement reports row">
             <h4>Reports</h4>
             <div class="col-md-12">
@@ -59,7 +60,7 @@
             </div>
         </div>
 
-        <!--  Movement Modal -->
+        <!--  Add Movement Modal -->
         <div class="modal fade" id="MovementModal">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -91,7 +92,7 @@
                                 </div>
                             </div>
                         </form>
-                        <pre>form = {{user | json}}</pre>
+                        <pre>form = {{ movement | json }}</pre>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

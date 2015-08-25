@@ -12,7 +12,7 @@
     <link type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" rel="stylesheet"/>
 
     <!-- LINK TO YOUR CUSTOM CSS FILES HERE -->
-    <link type="text/css" href="styles.css" rel="stylesheet"/>
+    <link type="text/css" href="../../css/styles.css" rel="stylesheet"/>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -32,6 +32,7 @@
 
     <!-- angular.js -->
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.route.min.js"></script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-messages.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.0/ui-bootstrap-tpls.min.js"></script>
     <script type="text/javascript" src="../food-inventory.js"></script>
@@ -40,6 +41,7 @@
     <script type="text/javascript" src="../services/vendor.js"></script>
     <script type="text/javascript" src="../services/location.js"></script>
     <script type="text/javascript" src="../controllers/product.js"></script>
+    <script type="text/javascript" src="../controllers/tab-controller.js"></script>
     <script type="text/javascript" src="../controllers/movement.js"></script>
     <script type="text/javascript" src="../controllers/vendor.js"></script>
     <script type="text/javascript" src="../controllers/location.js"></script>
@@ -53,7 +55,7 @@
 </head>
 
 <body>
-<div class="container">
+<section class="container">
     <!--  Admin Panel Header  -->
     <header>
         <h1 class="text-center">Admin Panel</h1>
@@ -65,16 +67,16 @@
     <section ng-controller="TabController as tab">
         <ul class="nav nav-pills">
             <li ng-class="{ active:tab.isSet(1) }">
-                <a href="" ng-click="tab.setTab(1)">Product</a>
+                <a href="" ng-submit="tab.setTab(1)">Product</a>
             </li>
             <li ng-class="{ active:tab.isSet(2) }">
-                <a href="" ng-click="tab.setTab(2)">Movement</a>
+                <a href="" ng-submit="tab.setTab(2)">Movement</a>
             </li>
             <li ng-class="{ active:tab.isSet(3) }">
-                <a href="" ng-click="tab.setTab(2)">Vendor</a>
+                <a href="" ng-submit="tab.setTab(3)">Vendor</a>
             </li>
             <li ng-class="{ active:tab.isSet(4) }">
-                <a href="" ng-click="tab.setTab(2)">Location</a>
+                <a href="" ng-submit="tab.setTab(4)">Location</a>
             </li>
         </ul>
 
@@ -85,9 +87,7 @@
 
         <!--  Movement Tab's Contents  -->
         <div ng-show="tab.isSet(2)">
-            <movement>
-
-            </movement>
+            <movement></movement>
         </div>
 
         <!--  Vendor Tab's Contents  -->
@@ -104,7 +104,7 @@
         <div ng-show="tab.isSet(5)">
             <notification></notification>
         </div>
-</div>
+    </section>
 
 </body>
 </html>
