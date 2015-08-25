@@ -60,57 +60,87 @@
 							<div class="form-group">
 								<label for="lastName" class="col-sm-3 control-label">Last Name:</label>
 								<div class="col-sm-9">
-									<input type="text" class="form-control" id="lastName" name="lastName" ng-model="user.lastName"/>
+									<input type="text" class="form-control" id="lastName" name="lastName" placeholder=" (e.g. Smith)" ng-model="user.lastName"/>
 								</div>
 							</div>
-							<div class="form-group">
-								<label for="firstName" class="col-sm-3 control-label">First Name</label>
 
+							<div class="form-group">
+								<label for="firstName" class="col-sm-3 control-label">First Name:</label>
 								<div class="col-sm-9">
-									<input type="text" class="form-control" id="firstName" name="firstName" ng-model="user.firstName"/>
+									<input type="text" class="form-control" id="firstName" name="firstName" placeholder=" (e.g. John)" ng-model="user.firstName"/>
 								</div>
 							</div>
+
 							<div class="form-group">
-								<label for="email">Email</label>
-								<input type="email" id="email" name="email" ng-model="user.email"/>
+								<label for="email" class="col-sm-3 control-label">Email:</label>
+								<div class="col-sm-9">
+									<input type="email" class="form-control" id="email" name="email" placeholder=" (e.g. john@smith.com)" ng-model="user.email"/>
+								</div>
 							</div>
+
 							<div class="form-group">
-								<label for="phoneNumber">Phone Number</label>
-								<input type="text" id="phoneNumber" name="phoneNumber" ng-model="user.phoneNumber"/>
+									<label for="phoneNumber" class="col-sm-3 control-label">Phone Number:</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder=" (e.g. 5055551234)" ng-model="user.phoneNumber"/>
+								</div>
 							</div>
-							<div class="form-group">
-								<label for="attention">Attention</label>
-								<input type="text" id="attention" name="attention" ng-model="user.attention"/>
-							</div>
-							<div class="form-group">
-								<label for="addressLineOne">Address Line One</label>
-								<input type="text" id="addressLineOne" name="addressLineOne" ng-model="user.addressLineOne"/>
-							</div>
-							<div class="form-group">
-								<label for="addressLineTwo">Address Line Two</label>
-								<input type="text" id="addressLineTwo" name="addressLineTwo" ng-model="user.addressLineTwo"/>
-							</div>
-							<div class="form-group">
-								<label for="city">City</label>
-								<input type="text" id="city" name="city" ng-model="user.city"/>
-							</div>
-							<div class="form-group">
-								<label for="state">State</label>
-								<input type="text" id="state" name="state" ng-model="user.state"/>
-							</div>
-							<div class="form-group">
-								<label for="zipCode">Zipcode</label>
-								<input type="text" id="zipCode" name="zipCode" ng-model="user.zipCode"/>
-							</div>
-							<div class="form-group">
-								<label for="password">Password</label>
-								<input type="password" id="password" name="password" ng-model="user.password"/>
-							</div>
-							<div class="form-group">
-								<label for="passwordConfirm">Password Confirm</label>
-								<input type="password" id="passwordConfirm" name="passwordConfirm"
-										 ng-model="user.passwordConfirm"/>
-							</div>
+
+								<div class="form-group">
+									<label for="attention" class="col-sm-3 control-label">Attention:</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control" id="attention" name="attention" placeholder=" (e.g. Acme LLC.)" ng-model="user.attention"/>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="addressLineOne" class="col-sm-3 control-label">Address One:</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control" id="addressLineOne" name="addressLineOne" placeholder=" (e.g. 1 Main St.)" ng-model="user.addressLineOne"/>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="addressLineTwo" class="col-sm-3 control-label">Address Two:</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control" id="addressLineTwo" name="addressLineTwo" placeholder=" (e.g. Suite 200)" ng-model="user.addressLineTwo"/>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="city" class="col-sm-3 control-label">City:</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control" id="city" name="city" placeholder=" (e.g. New York)" ng-model="user.city"/>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="state" class="col-sm-3 control-label">State:</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control" id="state" name="state" placeholder=" (e.g. NY)" ng-model="user.state"/>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="zipCode" class="col-sm-3 control-label">Zip Code:</label>
+									<div class="col-sm-9">
+										<input type="text" class="form-control" id="zipCode" name="zipCode" placeholder=" (e.g. 12345-1111)" ng-model="user.zipCode"/>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="password" class="col-sm-3 control-label">Password:</label>
+									<div class="col-sm-9">
+										<input type="password" class="form-control" id="password" name="password" placeholder=" (e.g. password1234)" ng-model="user.password"/>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="passwordConfirm" class="col-sm-3 control-label">Password Confirm:</label>
+									<div class="col-sm-9">
+										<input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" placeholder=" (e.g. password1234)" ng-model="user.passwordConfirm"/>
+									</div>
+								</div>
+
 						</form>
 						<pre>form = {{user | json}}</pre>
 					</div>
