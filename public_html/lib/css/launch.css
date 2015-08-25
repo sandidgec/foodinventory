@@ -1,0 +1,91 @@
+html { display: flex;}
+
+body { width: 100%;
+	background-size: auto 800px;
+	background-position: 0% 0%;
+}
+
+.logo {
+	display: inline-block;
+}
+
+.site {
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+}
+
+.nav>li>a {
+	color: #000000;
+	font-size: 1.1em;
+	padding-right: 40px;
+}
+
+p {
+
+}
+
+.shop {
+	text-align: center;
+	padding-top: 10px;
+	font-size: 3em;
+}
+
+.textbox {
+	margin-top: 350px;
+	background-color: rgba(171,166,166,.95);
+}
+
+.row {
+	margin-top: 700px;
+
+}
+
+.col-md-3 {
+	padding-top: 20px;
+	padding-bottom: 40px;
+}
+
+.description {
+	padding: 40px;
+	font-size: 1.3em;
+}
+
+.site-content {
+	flex: 1;
+}
+
+footer {
+	border: solid;
+	background-color: gray;
+}
+
+form {
+	padding-top: 20px;
+	padding-right: 20px;
+	border: solid;
+	margin: 20px;
+}
+
+.right-divider {
+	border-right: solid;
+}
+
+.pulls-right {
+	text-align: right;
+}
+
+.footer-nav>li>a {
+	color: red;
+}
+
+.footer-nav>li>a:hover {
+	color: #000000;
+}
+
+.social-media {
+	color: red;
+	font-size: 2.2em;
+	padding-top: 10px;
+	padding-right: 20px;
+}

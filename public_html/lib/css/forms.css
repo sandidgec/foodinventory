@@ -1,3 +1,14 @@
-.modal-content { background-color: rgba(191, 252, 255,.70 );
+.modal-content {
+	background-color: rgba(191, 252, 255,.70 );
 }
 
+.signupbtn {
+	margin-top: 10px;
+	background-color: chartreuse;
+}
+
+.loginbtn {
+	margin-top: 10px;
+	margin-left: 10px;
+	background-color: chartreuse;
+}
