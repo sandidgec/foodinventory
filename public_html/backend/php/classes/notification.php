@@ -466,7 +466,7 @@ class Notification implements JsonSerializable {
 	}
 
 	/**
-	 * get Notifications by alert ID
+	 * get products by alert ID
 	 *
 	 * @param PDO $pdo pointer to PDO connection, by reference
 	 * @param int $newAlertId the alertId for table join
