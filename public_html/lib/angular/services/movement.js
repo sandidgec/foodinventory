@@ -1,3 +1,6 @@
+/**
+ * service for the movement api endpoint
+ **/
 app.service("MovementService", function($http, $q) {
 	this.MOVEMENT_ENDPOINT = "../../backend/php/api/movement/";
 
