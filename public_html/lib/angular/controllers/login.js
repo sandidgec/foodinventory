@@ -20,4 +20,27 @@ app.controller("LoginController", function($http, LoginService, $scope) {
 				});
 		}
 	};
+
+	$scope.login = function(user) {
+		var result = $http.post("/~invtext/backend/php/lib/login.php", user)
+			.then(function(reply) {
+				if(typeof reply.data === "object") {
+					return (reply.data);
+				} else {
+					return ($q.reject(reply.data));
+				}
+			}, function(reply) {
+				return ($q.reject(reply.data));
+			});
+
+		if(result.status === 200) {
+			window.open()
+		} else {
+
+		}
+	};
+
+	$scope.logout = function() {
+		$http.get("/~invtext/backend/php/lib/logout.php");
+	};
 });

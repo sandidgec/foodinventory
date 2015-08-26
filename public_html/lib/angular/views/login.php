@@ -13,7 +13,7 @@
 					</div>
 
 					<div class="modal-body" ng-controller="LoginController">
-						<form class="form-horizontal" ng-submit="getUserByEmail(user);">
+						<form class="form-horizontal" ng-submit="login(user);">
 
 					<div class="form-group">
 						<label for="email" class="col-sm-3 control-label">Email:</label>

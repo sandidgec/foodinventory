@@ -54,6 +54,7 @@ try {
 			$requestObject->addressLineOne, $requestObject->addressLineTwo, $requestObject->city, $requestObject->state,
 			$requestObject->zipCode, $requestObject->email, $requestObject->phoneNumber, $salt, $hash);
 		$user->insert($pdo);
+		$_SESSION["user"] = $user;
 		$reply->data = "User created OK";
 
 		// delete an existing User

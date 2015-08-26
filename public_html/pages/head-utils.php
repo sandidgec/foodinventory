@@ -1,5 +1,9 @@
 <?php
 
+if (session_status() !== PHP_SESSION_ACTIVE) {
+	session_start();
+}
+
 /**
  * Get the relative path.
  * @see https://raw.githubusercontent.com/kingscreations/farm-to-you/master/php/lib/_header.php FarmToYou Header
@@ -10,6 +14,8 @@ $ROOT_DEPTH = substr_count($ROOT_PATH, "/");
 $DEPTH_DIFFERENCE = $CURRENT_DEPTH - $ROOT_DEPTH;
 $PREFIX = str_repeat("../", $DEPTH_DIFFERENCE);
 ?>
+
+
 
 <meta charset="utf-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -51,3 +57,5 @@ $PREFIX = str_repeat("../", $DEPTH_DIFFERENCE);
 <script type="text/javascript" src="<?php echo $PREFIX?>lib/angular/controllers/signup.js"></script>
 <script type="text/javascript" src="<?php echo $PREFIX?>lib/angular/services/login.js"></script>
 <script type="text/javascript" src="<?php echo $PREFIX?>lib/angular/controllers/login.js"></script>
+
+

@@ -4,11 +4,12 @@
 
 .signupbtn {
 	margin-top: 10px;
-	background-color: chartreuse;
+	background-color: dodgerblue;
 }
 
 .loginbtn {
 	margin-top: 10px;
-	margin-left: 10px;
-	background-color: chartreuse;
+	margin-left: 20px;
+	margin-right: 20px;
+	background-color: dodgerblue;
 }

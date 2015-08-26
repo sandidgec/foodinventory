@@ -1,91 +1,114 @@
 html { display: flex;}
 
-body { width: 100%;
-	background-size: auto 800px;
-	background-position: 0% 0%;
+body {
+	width: 100%;
+	height: 50%;
 }
 
-.logo {
+.gradient {
+	width: 100%;
+	background: linear-gradient(170deg, #43CF4B 0%, #5AD1E1 100%);
+}
+.placeholder {
+	padding-bottom: 25%;
+}
+
+.headtext{
+	display: inline-block;
+	padding-left: 50px;
+	padding-top: 10px;
+}
+
+.inv {
+	color: dodgerblue;
+	font-size: 1.9em;
+	font-weight: 300;
+	letter-spacing: 2px;
+}
+
+.text {
+	font-size: 2.4em;
+	font-weight: 500;
+}
+
+
+.left-graphic {
 	display: inline-block;
 }
 
-.site {
+.testimonials {
+	 display: inline-block;
+ }
+
+.right-graphic {
+	display: inline-block;
+}
+
+.home {
+}
+
+.main-menu{
+	display: inline-block;
+	padding-top: 12px;
+}
+
+	.logo {
+	display: inline-block;
+}
+
+	.site {
 	display: flex;
 	min-height: 100vh;
 	flex-direction: column;
 }
 
-.nav>li>a {
+	.nav>li>a {
 	color: #000000;
 	font-size: 1.1em;
 	padding-right: 40px;
 }
 
-p {
-
-}
-
-.shop {
-	text-align: center;
-	padding-top: 10px;
-	font-size: 3em;
-}
-
-.textbox {
-	margin-top: 350px;
-	background-color: rgba(171,166,166,.95);
-}
-
-.row {
+	.row {
 	margin-top: 700px;
-
 }
 
-.col-md-3 {
-	padding-top: 20px;
-	padding-bottom: 40px;
-}
 
-.description {
+	.description {
 	padding: 40px;
 	font-size: 1.3em;
 }
 
-.site-content {
+	.site-content {
 	flex: 1;
 }
 
-footer {
-	border: solid;
-	background-color: gray;
+	footer {
+	background-color: whitesmoke;
 }
 
-form {
-	padding-top: 20px;
-	padding-right: 20px;
-	border: solid;
-	margin: 20px;
-}
-
-.right-divider {
+	.right-divider {
 	border-right: solid;
 }
 
-.pulls-right {
+	.pulls-right {
 	text-align: right;
 }
 
-.footer-nav>li>a {
-	color: red;
-}
-
-.footer-nav>li>a:hover {
+	.footer-nav>li>a {
 	color: #000000;
 }
 
-.social-media {
-	color: red;
+	.footer-nav>li>a:hover {
+	color: #000000;
+}
+
+	.social-media {
 	font-size: 2.2em;
 	padding-top: 10px;
 	padding-right: 20px;
 }
+
+/*@media only screen and (min-width: 992px) {*/
+	/*main.home {*/
+		/*margin-top: 425px; }*/
+	/*}*/

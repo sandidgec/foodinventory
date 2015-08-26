@@ -9,34 +9,27 @@ $CURRENT_DIR = __DIR__;
 	</head>
 	<body class="site">
 		<div class="site-content">
-			<header>
-				<?php require_once "header.php"; ?>
-			</header>
+			<div class="gradient">
+				<header>
+					<?php require_once "header.php"; ?>
+				</header>
 
-
-			<div class="textbox">
-				<section class="col-md-12 textbox">
-					<h2 class="shop"> </h2>
-					<p class="description">
-
-
-					<section class="col-md-3 farleftgraphic">
-						<img src="">
-					</section>
-
-					<section class="col-md-3 leftgraphic">
-						<img src="">
-					</section>
-
-					<section class="col-md-3 rightgraphic">
-						<img src="">
-					</section>
-
-					<section class="col-md-3 farrightgraphic">
-						<img src="">
-					</section>
+				<div class="placeholder"></div>
 
 			</div>
+			<main class="home">
+				<section class="col-xs-3 leftgraphic text-center">
+					<h3>The Difference</h3>
+				</section>
+
+				<section class="col-xs-6 testimonials text-center">
+					<h3>Testimonials</h3>
+				</section>
+
+				<section class="col-xs-3 rightgraphic text-center">
+					<h3>About</h3>
+				</section>
+			</main>
 		</div>
 		<footer>
 			<?php require_once "footer.php"; ?>
