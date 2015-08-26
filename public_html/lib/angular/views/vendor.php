@@ -7,7 +7,9 @@
 		<!--  Vendor Buttons -->
 		<div class="vendor button row">
 			<div class="col-md-4">
-				<button class="btn btn-default" ng-click="addVendor(vendor)" value="ADD">+</button>
+				<button type= button" class="btn btn-default" data-toggle="modal" data-target="#VendorModal">
+					Add <br> +
+				</button>
 			</div>
 			<div class="col-md-4">
 				<button class="btn btn-default" ng-click="editVendor(vendor)" value="Edit">E</button>
@@ -18,46 +20,87 @@
 		</div>
 
 
-		<ul>
+		<div class="vendor reports row">
 			<h4>Reports</h4>
-			<li ng-repeat="product in vendor.products">
-				<blockquote>
-					<strong>{{product.title}} </strong>
-					{{product.description}}
-					<cite class="clearfix">-{{product.sku}} on {{product.leadtime}}</cite>
-				</blockquote>
-			</li>
-		</ul>
+			<div class="col-md-12">
+				<table id="example" class="table table-striped table-bordered" width="100%" cellspacing="0">
+					<thead>
+						<tr>
+							<th>Vendor Name</th>
+							<th>Contact Name</th>
+							<th>Email</th>
+							<th>Phone Number</th>
+						</tr>
+					</thead>
 
-		<!--  Review Form -->
-		<form name="VendorForm" class="container" ng-controller="VendorController as VendorCtrl"
-				ng-submit="VendorForm.$valid && VendorCtrl.addVendor(movement)" novalidate>
+					<tfoot>
+						<tr>
+							<th>Vendor Name</th>
+							<th>Contact Name</th>
+							<th>Email</th>
+							<th>Phone Number</th>
+						</tr>
+					</tfoot>
 
-			<!--  Live Preview -->
-			<blockquote ng-show="review">
-				<strong>{{reviewCtrl.review.stars}} Stars</strong>
-				{{reviewCtrl.review.body}}
-				<cite class="clearfix">-{{reviewCtrl.review.author}}</cite>
-			</blockquote>
+					<tbody>
+						<tr ng-repeat="vendor in vendors">
+							<td>{{ vendor.vendorName }}</td>
+							<td>{{ vendor.contactName }}</td>
+							<td>{{ vendor.vendorEmail }}</td>
+							<td>{{ vendor.vendorPhoneNumber }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
 
-			<!--  Review Form -->
-			<h4>Submit a Vendor</h4>
-			<fieldset class="form-group">
-				<input ng-model="VendorCtrl.contactName" type="text" class="form-control" placeholder="Topher Sucks" title="Contact Name" required />
-			</fieldset>
-			<fieldset class="form-group">
-				<input ng-model="VendorCtrl.vendorEmail" type="email" class="form-control" placeholder="topersucks@myunit.test" title="Vendor Email" required />
-			</fieldset>
-			<fieldset class="form-group">
-				<input ng-model="VendorCtrl.vendorName" type="text" class="form-control" placeholder="Angular Company" title="Vendor Name" required />
-			</fieldset>
-			<fieldset class="form-group">
-				<input ng-model="VendorCtrl.vendorPhoneNumber" type="number" class="form-control" placeholder="5555555" title="Phone Number" required />
-			</fieldset>
-			<fieldset class="form-group">
-				<div> VendorForm is {{vendorForm.$valid}}</div>
-				<input type="submit" class="btn btn-primary pull-right" value="Submit Vendor" />
-			</fieldset>
-		</form>
+		<!-- Add Vendor Modal -->
+		<div class="modal fade" id="Vendor Modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span></button>
+						<h3 class="modal-title">Add a Vendor</h3>
+					</div>
+
+					<div class="modal-body" ng-controller="VendorController">
+						<form class="form-horizontal" ng-submit="addVendor(vendor);">
+							<div class="form-group">
+								<label for="vendorName" class="col-sm-3 control-label">Vendor Name</label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control" id="vendorName" name="vendorName" placeholder="e.g. Topher Sucks" ng-model="VendorCtrl.vendorName"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="contactName" class="col-sm-3 control-label">Contact Name</label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control" id="contactName" name="contactName" placeholder="e.g. Topher Sucks" ng-model="VendorCtrl.contactName"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="vendorEmail" class="col-sm-3 control-label">Email</label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control" id="vendorEmail" name="vendorEmail" placeholder="e.g. Topher Sucks" ng-model="VendorCtrl.vendorEmail"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="vendorPhoneNumber" class="col-sm-3 control-label">Phone Number</label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control" id="vendorPhoneNumber" name="vendorPhoneNumber" placeholder="e.g. Topher Sucks" ng-model="VendorCtrl.vendorPhoneNumber"/>
+								</div>
+							</div>
+						</form>
+						<pre>form = {{ vendor | json }}</pre>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary">Sign-Up</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
