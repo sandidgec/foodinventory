@@ -2,7 +2,7 @@
  * service for the movement api endpoint
  **/
 app.service("MovementService", function($http, $q) {
-	this.MOVEMENT_ENDPOINT = "../../backend/php/api/movement/";
+	this.MOVEMENT_ENDPOINT = "/~invtext/backend/php/api/movement/";
 
 	/**
 	 * method that promises to add a movement

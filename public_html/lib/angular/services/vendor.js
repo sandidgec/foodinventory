@@ -1,5 +1,8 @@
+/**
+ * service for the vendor api endpoint
+ **/
 app.service("VendorService", function($http, $q) {
-	this.VENDOR_ENDPOINT = "../../backend/php/api/vendor/";
+	this.VENDOR_ENDPOINT = "/~invtext/backend/php/api/vendor/";
 
 	/**
 	 * method that promises to add vendors

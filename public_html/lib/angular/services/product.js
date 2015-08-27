@@ -1,8 +1,8 @@
 /**
- * service for Product api endpoint
- */
+ * service for the product api endpoint
+ **/
 app.service("ProductService", function($http, $q) {
-	this.PRODUCT_ENDPOINT = "../../backend/php/api/product/";
+	this.PRODUCT_ENDPOINT = "/~invtext/backend/php/api/product/";
 
 	/**
 	 * method that promises to add a product
@@ -239,7 +239,7 @@ this.deleteProduct = function(user) {
 	 * @returns accepts the promise when products are found, rejected otherwise
 	 **/
 	this.getAllProducts = function(page) {
-		return($http.get(this.PRODUCT_ENDPOINT + "?page" + page)
+		return($http.get(this.PRODUCT_ENDPOINT + "?page=" + page)
 			.then(function(reply){
 				if(typeof reply.data === "object") {
 					return(reply.data);

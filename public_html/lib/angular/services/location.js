@@ -2,7 +2,7 @@
  * service for the location api endpoint
  **/
 app.service("LocationService", function($http, $q) {
-	this.LOCATION_ENDPOINT = "../../backend/php/api/location/";
+	this.LOCATION_ENDPOINT = "/~invtext/backend/php/api/location/";
 
 	/**
 	 * method that promises to add a location

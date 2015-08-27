@@ -1,5 +1,8 @@
+/**
+ * service for the movement api endpoint
+ **/
 app.service("NotificationService", function($http, $q) {
-	this.NOTIFICATION_ENDPOINT = "../../backend/php/api/notification/";
+	this.NOTIFICATION_ENDPOINT = "/~invtext/backend/php/api/notification/";
 
 	/**
 	 * method that promises to add a notification

@@ -1,5 +1,8 @@
-app.service("AlertLevelService", function($http, $q) {
-	this.ALERTLEVEL_ENDPOINT = "../../backend/php/api/alert-level/";
+/**
+ * service for the alertLevel api endpoint
+ **/
+app.service("AlertService", function($http, $q) {
+	this.ALERTLEVEL_ENDPOINT = "/~invtext/backend/php/api/alert-level/";
 
 	/**
 	 * method that promises to add vendors
