@@ -34,7 +34,7 @@ app.controller("LoginController", function($http, LoginService, $scope) {
 			});
 
 		if(result.status === 200) {
-			window.open()
+			$window.location.href = "../angular/views/admin-panel.php"
 		} else {
 
 		}

@@ -16,7 +16,6 @@ $PREFIX = str_repeat("../", $DEPTH_DIFFERENCE);
 ?>
 
 
-
 <meta charset="utf-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -25,8 +24,7 @@ $PREFIX = str_repeat("../", $DEPTH_DIFFERENCE);
 <link type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet"/>
 
 <!-- Optional Bootstrap theme -->
-<link type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"
-		rel="stylesheet"/>
+<link type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" rel="stylesheet"/>
 
 <!-- LINK TO YOUR CUSTOM CSS FILES HERE -->
 <link type="text/css" href="<?php echo $PREFIX ?>lib/css/forms.css" rel="stylesheet"/>
@@ -49,10 +47,8 @@ $PREFIX = str_repeat("../", $DEPTH_DIFFERENCE);
 
 <!-- angular.js -->
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
-<script type="text/javascript"
-		  src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-messages.min.js"></script>
-<script type="text/javascript"
-		  src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.0/ui-bootstrap-tpls.min.js"></script>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-messages.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.0/ui-bootstrap-tpls.min.js"></script>
 
 <script type="text/javascript" src="<?php echo $PREFIX?>lib/angular/food-inventory.js"></script>
 <script type="text/javascript" src="<?php echo $PREFIX?>lib/angular/services/signup.js"></script>

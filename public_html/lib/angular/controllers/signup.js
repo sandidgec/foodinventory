@@ -1,5 +1,5 @@
 app.controller("SignUpController", function($http, SignupService, $scope) {
-	$scope.user = null;
+	$scope.users = null;
 	$scope.statusClass = "alert-success";
 	$scope.statusMessage = null;
 
@@ -12,7 +12,7 @@ app.controller("SignUpController", function($http, SignupService, $scope) {
 			UserService.addUser(user)
 				.then(function(reply) {
 					if(reply.status === 200) {
-						$scope.actions = reply.data;
+						$scope.users = reply.data;
 					} else {
 						$scope.statusClass = "alert-danger";
 						$scope.statusMessage = reply.message;
@@ -21,3 +21,4 @@ app.controller("SignUpController", function($http, SignupService, $scope) {
 		}
 	};
 });
+

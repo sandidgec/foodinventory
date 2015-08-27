@@ -10,8 +10,8 @@
 					<span aria-hidden="true">&times;</span></button>
 			</div>
 
-			<div class="modal-body" ng-controller="SignUpController">
-				<form class="form-horizontal" ng-submit="addUser(user);">
+			<form class="form-horizontal" ng-submit="addUser(user);">
+				<div class="modal-body" ng-controller="SignUpController">
 					<div class="form-group">
 						<label for="lastName" class="col-sm-3 control-label">Last Name</label>
 
@@ -119,16 +119,16 @@
 									 placeholder=" (e.g. password1234)" ng-model="user.passwordConfirm"/>
 						</div>
 					</div>
+				</div>
 
-				</form>
-				<pre>form = {{user | json}}</pre>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Sign-Up</button>
-			</div>
+				<pre>form = {{ user | json }}</pre>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Sign-Up</button>
+				</div>
+			</form>
 		</div>
-
 	</div>
 </div>
 
