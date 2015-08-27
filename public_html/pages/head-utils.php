@@ -31,6 +31,8 @@ $PREFIX = str_repeat("../", $DEPTH_DIFFERENCE);
 <!-- LINK TO YOUR CUSTOM CSS FILES HERE -->
 <link type="text/css" href="<?php echo $PREFIX ?>lib/css/forms.css" rel="stylesheet"/>
 <link type="text/css" href="<?php echo $PREFIX ?>lib/css/launch.css" rel="stylesheet"/>
+<link type="text/css" href="<?php echo $PREFIX ?>lib/css/animate.css" rel="stylesheet"/>
+
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

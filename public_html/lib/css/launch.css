@@ -7,10 +7,10 @@ body {
 
 .gradient {
 	width: 100%;
-	background: linear-gradient(170deg, #43CF4B 0%, #5AD1E1 100%);
+	background: linear-gradient(170deg, #81F5FF 0%, #B3C1CC 100%);
 }
 .placeholder {
-	padding-bottom: 25%;
+	padding-bottom: 5%;
 }
 
 .headtext{
@@ -24,6 +24,12 @@ body {
 	font-size: 1.9em;
 	font-weight: 300;
 	letter-spacing: 2px;
+}
+
+.bounceIn {
+ 	padding-left: 100px;
+	padding-bottom: 30px;
+	align-content: center;
 }
 
 .text {

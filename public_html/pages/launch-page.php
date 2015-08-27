@@ -15,6 +15,7 @@ $CURRENT_DIR = __DIR__;
 				</header>
 
 				<div class="placeholder"></div>
+				<img src="../lib/images/emailSample.png" class="bounceIn" alt="email sample image">
 
 			</div>
 			<main class="home">
