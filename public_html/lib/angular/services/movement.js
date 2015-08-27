@@ -5,20 +5,20 @@ app.service("MovementService", function($http, $q) {
 	this.MOVEMENT_ENDPOINT = "../../backend/php/api/movement/";
 
 	/**
-	 * method that promises to get movements
+	 * method that promises to add a movement
 	 *
-	 * @returns accepts the promise when movements are found, rejected otherwise
+	 * @returns accepts the promise when the movement is added, rejected otherwise
 	 **/
-	this.getMovements = function() {
-		return($http.get(this.MOVEMENT_ENDPOINT)
-			.then(function(reply){
+	this.addMovement = function(movement) {
+		return ($http.post(this.MOVEMENT_ENDPOINT + movement)
+			.then(function(reply) {
 				if(typeof reply.data === "object") {
-					return(reply.data);
+					return (reply.data);
 				} else {
-					return($q.reject(reply.data));
+					return ($q.reject(reply.data));
 				}
 			}, function(reply) {
-				return($q.reject(reply.data));
+				return ($q.reject(reply.data));
 			}));
 	};
 
@@ -27,16 +27,16 @@ app.service("MovementService", function($http, $q) {
 	 *
 	 * @returns accepts the promise when movements are found, rejected otherwise
 	 **/
-	this.getMovements = function(movementId) {
-		return($http.get(this.MOVEMENT_ENDPOINT + movementId)
-			.then(function(reply){
+	this.getMovementByMovementId = function(movementId) {
+		return ($http.get(this.MOVEMENT_ENDPOINT + movementId)
+			.then(function(reply) {
 				if(typeof reply.data === "object") {
-					return(reply.data);
+					return (reply.data);
 				} else {
-					return($q.reject(reply.data));
+					return ($q.reject(reply.data));
 				}
 			}, function(reply) {
-				return($q.reject(reply.data));
+				return ($q.reject(reply.data));
 			}));
 	};
 
@@ -45,16 +45,16 @@ app.service("MovementService", function($http, $q) {
 	 *
 	 * @returns accepts the promise when movements are found, rejected otherwise
 	 **/
-	this.getMovements = function(fromLocationId) {
-		return($http.get(this.MOVEMENT_ENDPOINT + "?fromLocationId=" + fromLocationId)
-			.then(function(reply){
+	this.getMovementByFromLocationId = function(fromLocationId) {
+		return ($http.get(this.MOVEMENT_ENDPOINT + "?fromLocationId=" + fromLocationId)
+			.then(function(reply) {
 				if(typeof reply.data === "object") {
-					return(reply.data);
+					return (reply.data);
 				} else {
-					return($q.reject(reply.data));
+					return ($q.reject(reply.data));
 				}
 			}, function(reply) {
-				return($q.reject(reply.data));
+				return ($q.reject(reply.data));
 			}));
 	};
 
@@ -63,16 +63,16 @@ app.service("MovementService", function($http, $q) {
 	 *
 	 * @returns accepts the promise when movements are found, rejected otherwise
 	 **/
-	this.getMovements = function(toLocationId) {
-		return($http.get(this.MOVEMENT_ENDPOINT + "?toLocationId=" + toLocationId)
-			.then(function(reply){
+	this.getMovementByToLocationId = function(toLocationId) {
+		return ($http.get(this.MOVEMENT_ENDPOINT + "?toLocationId=" + toLocationId)
+			.then(function(reply) {
 				if(typeof reply.data === "object") {
-					return(reply.data);
+					return (reply.data);
 				} else {
-					return($q.reject(reply.data));
+					return ($q.reject(reply.data));
 				}
 			}, function(reply) {
-				return($q.reject(reply.data));
+				return ($q.reject(reply.data));
 			}));
 	};
 
@@ -81,16 +81,16 @@ app.service("MovementService", function($http, $q) {
 	 *
 	 * @returns accepts the promise when movements are found, rejected otherwise
 	 **/
-	this.getMovements = function(productId) {
-		return($http.get(this.MOVEMENT_ENDPOINT + "?productId=" + productId)
-			.then(function(reply){
+	this.getMovementByProductId = function(productId) {
+		return ($http.get(this.MOVEMENT_ENDPOINT + "?productId=" + productId)
+			.then(function(reply) {
 				if(typeof reply.data === "object") {
-					return(reply.data);
+					return (reply.data);
 				} else {
-					return($q.reject(reply.data));
+					return ($q.reject(reply.data));
 				}
 			}, function(reply) {
-				return($q.reject(reply.data));
+				return ($q.reject(reply.data));
 			}));
 	};
 
@@ -99,16 +99,16 @@ app.service("MovementService", function($http, $q) {
 	 *
 	 * @returns accepts the promise when movements are found, rejected otherwise
 	 **/
-	this.getMovements = function(userId) {
-		return($http.get(this.MOVEMENT_ENDPOINT + "?userId=" + userId)
-			.then(function(reply){
+	this.getMovementByUserId = function(userId) {
+		return ($http.get(this.MOVEMENT_ENDPOINT + "?userId=" + userId)
+			.then(function(reply) {
 				if(typeof reply.data === "object") {
-					return(reply.data);
+					return (reply.data);
 				} else {
-					return($q.reject(reply.data));
+					return ($q.reject(reply.data));
 				}
 			}, function(reply) {
-				return($q.reject(reply.data));
+				return ($q.reject(reply.data));
 			}));
 	};
 
@@ -117,16 +117,16 @@ app.service("MovementService", function($http, $q) {
 	 *
 	 * @returns accepts the promise when movements are found, rejected otherwise
 	 **/
-	this.getMovements = function(movementDate) {
-		return($http.get(this.MOVEMENT_ENDPOINT + "?movementDate=" + movementDate)
-			.then(function(reply){
+	this.getMovementByMovementDate = function(movementDate) {
+		return ($http.get(this.MOVEMENT_ENDPOINT + "?movementDate=" + movementDate)
+			.then(function(reply) {
 				if(typeof reply.data === "object") {
-					return(reply.data);
+					return (reply.data);
 				} else {
-					return($q.reject(reply.data));
+					return ($q.reject(reply.data));
 				}
 			}, function(reply) {
-				return($q.reject(reply.data));
+				return ($q.reject(reply.data));
 			}));
 	};
 
@@ -135,34 +135,35 @@ app.service("MovementService", function($http, $q) {
 	 *
 	 * @returns accepts the promise when movements are found, rejected otherwise
 	 **/
-	this.getMovements = function(movementType) {
-		return($http.get(this.MOVEMENT_ENDPOINT + "?movementType=" + movementType)
-			.then(function(reply){
+	this.getMovementByMovementType = function(movementType) {
+		return ($http.get(this.MOVEMENT_ENDPOINT + "?movementType=" + movementType)
+			.then(function(reply) {
 				if(typeof reply.data === "object") {
-					return(reply.data);
+					return (reply.data);
 				} else {
-					return($q.reject(reply.data));
+					return ($q.reject(reply.data));
 				}
 			}, function(reply) {
-				return($q.reject(reply.data));
+				return ($q.reject(reply.data));
 			}));
 	};
 
 	/**
-	 * method that promises to add a movement
+	 * method that promises to get all movements
 	 *
-	 * @returns accepts the promise when the movement is added, rejected otherwise
+	 * @returns accepts the promise when movements are found, rejected otherwise
 	 **/
-	this.addMovement = function(movement) {
-		return($http.post(this.MOVEMENT_ENDPOINT + movement)
+	this.getAllMovements = function(page) {
+		return ($http.get(this.MOVEMENT_ENDPOINT + "?page=" + page)
 			.then(function(reply) {
 				if(typeof reply.data === "object") {
-					return(reply.data);
+					return (reply.data);
 				} else {
-					return($q.reject(reply.data));
+					return ($q.reject(reply.data));
 				}
 			}, function(reply) {
-				return($q.reject(reply.data));
+				return ($q.reject(reply.data));
 			}));
 	};
+
 });
