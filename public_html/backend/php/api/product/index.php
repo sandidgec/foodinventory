@@ -84,7 +84,7 @@ try {
 			$reply->data = Product::getProductBySku($pdo, $sku);
 		} else if(empty($title) === false) {
 			$reply->data = Product::getProductByTitle($pdo, $title);
-		} else if(empty($page) === false) {
+		} else if(is_int($page) === true && $page >= 0) {
 			$reply->data = Product::getAllProducts($pdo, $page)->toArray();
 		} else {
 			throw(new InvalidArgumentException("no parameters given", 405));
