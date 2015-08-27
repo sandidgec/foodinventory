@@ -1,0 +1,8 @@
+h1 {
+	/*display: inline-block;*/
+}
+
+.vertical-text {
+	transform: rotate(90deg);
+	transform-origin: left top 0;
+}
