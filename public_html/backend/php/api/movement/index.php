@@ -65,7 +65,7 @@ try {
 			$reply->data = Movement::getMovementByMovementDate($pdo, $movementDateTime);
 		} else if(empty($movementType) === false) {
 			$reply->data = Movement::getMovementByMovementType($pdo, $movementType);
-		} else if(empty($page) === false) {
+		} else if(is_int($page) === true && $page >= 0) {
 			$reply->data = Movement::getAllMovements($pdo, $page)->toArray();
 		} else {
 			throw(new InvalidArgumentException("no parameters given", 405));
