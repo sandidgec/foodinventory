@@ -178,4 +178,15 @@ app.controller("ProductController", function($http, $scope, ProductService, Vend
 				}
 			});
 	};
+	$scope.getVendorByVendorName = function(vendorName) {
+		VendorService.getVendorByVendorName(vendorName)
+			.then(function(reply) {
+				if(reply.status === 200) {
+					$scope.products = reply.data;
+				} else {
+					$scope.statusClass = "alert-danger";
+					$scope.statusMessage = reply.message;
+				}
+			});
+	};
 });
