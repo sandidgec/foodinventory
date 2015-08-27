@@ -189,4 +189,6 @@ app.controller("ProductController", function($http, $scope, ProductService, Vend
 				}
 			});
 	};
+
+	$scope.products = $scope.getAllProducts(0);
 });
