@@ -1,5 +1,11 @@
-app.controller("MovementController", function($http, $scope, MovementService) {
-	$scope.movement = null;
+/**
+ * controller for the movement service
+ **/
+app.controller("MovementController", function($http, $scope, MovementService, LocationService, ProductService) {
+	$scope.movements = null;
+	$scope.locations = null;
+	$scope.products = null;
+
 	$scope.statusClass = "alert-success";
 	$scope.statusMessage = null;
 
@@ -10,7 +16,7 @@ app.controller("MovementController", function($http, $scope, MovementService) {
 		MovementService.addMovement(movement)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.getAllMovements(0);
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -22,7 +28,7 @@ app.controller("MovementController", function($http, $scope, MovementService) {
 		MovementService.getMovementByMovementId(movementId)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.movements = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -34,7 +40,7 @@ app.controller("MovementController", function($http, $scope, MovementService) {
 		MovementService.getMovementByFromLocationId(fromLocationId)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.movements = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -46,7 +52,7 @@ app.controller("MovementController", function($http, $scope, MovementService) {
 		MovementService.getMovementByToLocationId(toLocationId)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.movements = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -58,7 +64,7 @@ app.controller("MovementController", function($http, $scope, MovementService) {
 		MovementService.getMovementByProductId(productId)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.movements = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -70,7 +76,7 @@ app.controller("MovementController", function($http, $scope, MovementService) {
 		MovementService.getMovementByUserId(userId)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.movements = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -82,7 +88,7 @@ app.controller("MovementController", function($http, $scope, MovementService) {
 		MovementService.getMovementByMovementDate(movementDate)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.movements = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -94,7 +100,7 @@ app.controller("MovementController", function($http, $scope, MovementService) {
 		MovementService.getMovementByMovementType(movementType)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.movements = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -106,6 +112,18 @@ app.controller("MovementController", function($http, $scope, MovementService) {
 		MovementService.getAllMovements(page)
 			.then(function(reply) {
 				if(reply.status === 200) {
+					$scope.movements = reply.data;
+				} else {
+					$scope.statusClass = "alert-danger";
+					$scope.statusMessage = reply.message;
+				}
+			});
+	};
+
+	$scope.getLocationByStorageCode = function(storageCode) {
+		LocationService.getLocationByStorageCode(storageCode)
+			.then(function(reply) {
+				if(reply.status === 200) {
 					$scope.actions = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
@@ -113,4 +131,18 @@ app.controller("MovementController", function($http, $scope, MovementService) {
 				}
 			});
 	};
+
+	$scope.getProductByTitle = function(title) {
+		ProductService.getProductByTitle(title)
+			.then(function(reply) {
+				if(reply.status === 200) {
+					$scope.products = reply.data;
+				} else {
+					$scope.statusClass = "alert-danger";
+					$scope.statusMessage = reply.message;
+				}
+			});
+	};
+
+	$scope.movements = $scope.getAllMovements(0);
 });
