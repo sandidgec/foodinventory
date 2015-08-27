@@ -1,3 +1,6 @@
+/**
+ * controller for the location service
+ **/
 app.controller("LocationController", function($http, $scope, LocationService) {
 	$scope.location = null;
 	$scope.statusClass = "alert-success";

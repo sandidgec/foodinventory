@@ -1,3 +1,6 @@
+/**
+ * controller for the alertLevel service
+ **/
 app.controller("AlertLevelController", function($http, $scope, AlertLevelService) {
 	$scope.alertLevel = null;
 	$scope.statusClass = "alert-success";

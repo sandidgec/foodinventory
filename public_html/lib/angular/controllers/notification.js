@@ -1,3 +1,6 @@
+/**
+ * controller for the notification service
+ **/
 app.controller("NotificationController", function($http, $scope, NotificationService) {
 	$scope.notification = null;
 	$scope.statusClass = "alert-success";

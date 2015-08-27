@@ -1,3 +1,6 @@
+/**
+ * controller for the vendor service
+ **/
 app.controller("VendorController", function($http, $scope, VendorService) {
 	$scope.vendor = null;
 	$scope.statusClass = "alert-success";
