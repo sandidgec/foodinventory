@@ -1,14 +1,17 @@
-app.service("LocationEditorService", function($http, $q) {
-	this.LOCATIONEDITOR_ENDPOINT = "../../backend/php/api/location/";
+/**
+ * service for the location api endpoint
+ **/
+app.service("LocationService", function($http, $q) {
+	this.LOCATION_ENDPOINT = "../../backend/php/api/location/";
 
 	/**
-	 * method that promises to get  all locations
+	 * method that promises to add a location
 	 *
-	 * @returns accepts the promise when locations are found, rejected otherwise
+	 * @returns accepts the promise when the product is added, rejected otherwise
 	 **/
-	this.getLocations = function() {
-		return($http.get(this.LOCATIONEDITOR_ENDPOINT)
-			.then(function(reply){
+	this.addLocation = function(location) {
+		return($http.post(this.LOCATION_ENDPOINT + location)
+			.then(function(reply) {
 				if(typeof reply.data === "object") {
 					return(reply.data);
 				} else {
@@ -16,6 +19,42 @@ app.service("LocationEditorService", function($http, $q) {
 				}
 			}, function(reply) {
 				return($q.reject(reply.data));
+			}));
+	};
+
+	/**
+	 * method that promises to edit a location
+	 *
+	 * @returns accepts the promise when the location is edited, rejected otherwise
+	 **/
+	this.editLocation = function(location) {
+		return ($http.put(this.LOCATION_ENDPOINT + location.locationId, location)
+			.then(function(reply) {
+				if(typeof reply.data === "object") {
+					return (reply.data);
+				} else {
+					return ($q.reject(reply.data));
+				}
+			}, function(reply) {
+				return ($q.reject(reply.data));
+			}));
+	};
+
+	/**
+	 * method that promises to delete a location
+	 *
+	 * @returns accepts the promise when the location is deleted, rejected otherwise
+	 **/
+	this.deleteLocation = function(location) {
+		return ($http.delete(this.LOCATION_ENDPOINT + location.locationId, location)
+			.then(function(reply) {
+				if(typeof reply.data === "object") {
+					return (reply.data);
+				} else {
+					return ($q.reject(reply.data));
+				}
+			}, function(reply) {
+				return ($q.reject(reply.data));
 			}));
 	};
 	/**
@@ -23,8 +62,8 @@ app.service("LocationEditorService", function($http, $q) {
 	 *
 	 * @returns accepts the promise when locations are found, rejected otherwise
 	 **/
-	this.getlocations = function(locationId) {
-		return($http.get(this.LOCATIONEDITOR_ENDPOINT + locationId)
+	this.getLocationByLocationId = function(locationId) {
+		return($http.get(this.LOCATION_ENDPOINT + locationId)
 			.then(function(reply){
 				if(typeof reply.data === "object") {
 					return(reply.data);
@@ -35,13 +74,14 @@ app.service("LocationEditorService", function($http, $q) {
 				return($q.reject(reply.data));
 			}));
 	};
+
 	/**
 	 * method that promises to get locations by Storage Code
 	 *
 	 * @returns accepts the promise when locations are found, rejected otherwise
 	 **/
-	this.getLocations = function(storageCode) {
-		return($http.get(this.LOCATIONEDITOR_ENDPOINT + "?storageCode=" + storageCode)
+	this.getLocationByStorageCode = function(storageCode) {
+		return($http.get(this.LOCATION_ENDPOINT + "?storageCode=" + storageCode)
 			.then(function(reply){
 				if(typeof reply.data === "object") {
 					return(reply.data);
@@ -57,8 +97,8 @@ app.service("LocationEditorService", function($http, $q) {
 	 *
 	 * @returns accepts the promise when products are found, rejected otherwise
 	 **/
-	this.getProducts = function(locationId) {
-		return($http.get(this.LOCATIONEDITOR_ENDPOINT + "?locationId=" + locationId)
+	this.getProductByLocationId = function(locationId) {
+		return($http.get(this.LOCATION_ENDPOINT + "?locationId=" + locationId)
 			.then(function(reply){
 				if(typeof reply.data === "object") {
 					return(reply.data);
@@ -75,7 +115,7 @@ app.service("LocationEditorService", function($http, $q) {
 	 * @return accepts the promise when locations are found, rejected otherwise
 	 **/
 	this.getAllLocations = function() {
-		return ($http.get(this.LOCATIONEDITOR_ENDPOINT)
+		return ($http.get(this.LOCATION_ENDPOINT)
 			.then(function(reply) {
 				if(typeof reply.data === "object") {
 					return (reply.data);
@@ -86,55 +126,5 @@ app.service("LocationEditorService", function($http, $q) {
 				return ($q.reject(reply.data));
 			}));
 	};
-	/**
-	 * method that promises to add a location
-	 *
-	 * @returns accepts the promise when the product is added, rejected otherwise
-	 **/
-	this.addLocation = function(location) {
-		return($http.post(this.LOCATIONEDITOR_ENDPOINT + location)
-			.then(function(reply) {
-				if(typeof reply.data === "object") {
-					return(reply.data);
-				} else {
-					return($q.reject(reply.data));
-				}
-			}, function(reply) {
-				return($q.reject(reply.data));
-			}));
-	};
-	/**
-	 * method that promises to edit a location
-	 *
-	 * @returns accepts the promise when the location is edited, rejected otherwise
-	 **/
-	this.editLocation = function(location) {
-		return ($http.put(this.LOCATIONEDITOR_ENDPOINT + location.locationId, location)
-			.then(function(reply) {
-				if(typeof reply.data === "object") {
-					return (reply.data);
-				} else {
-					return ($q.reject(reply.data));
-				}
-			}, function(reply) {
-				return ($q.reject(reply.data));
-			}));
-	};
-	/**
-	 * method that promises to delete a location
-	 *
-	 * @returns accepts the promise when the location is deleted, rejected otherwise
-	 **/
-	this.destroyLocation = function(user) {
-		return ($http.delete(this.LOCATIONEDITOR_ENDPOINT + location.locationId, location)
-			.then(function(reply) {
-				if(typeof reply.data === "object") {
-					return (reply.data);
-				} else {
-					return ($q.reject(reply.data));
-				}
-			}, function(reply) {
-				return ($q.reject(reply.data));
-			}));
-	};
+
 });
