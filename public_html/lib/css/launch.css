@@ -9,8 +9,22 @@ body {
 	width: 100%;
 	background: linear-gradient(170deg, #81F5FF 0%, #B3C1CC 100%);
 }
+
 .placeholder {
-	padding-bottom: 5%;
+	padding-bottom: 8%;
+}
+
+.test {
+	padding-top: 15px;
+}
+
+.welcome {
+	padding-bottom: 2%;
+	text-align: center;
+}
+
+.center-block {
+	padding-bottom: 3%;
 }
 
 .headtext{

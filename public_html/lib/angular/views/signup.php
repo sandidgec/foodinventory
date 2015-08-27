@@ -1,6 +1,7 @@
 <button type="button" class="btn btn-sm signupbtn" data-toggle="modal" data-target="#SignUpModal">
 	Sign-Up
 </button>
+
 <div class="modal fade" id="SignUpModal">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -8,6 +9,7 @@
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span></button>
+				<h3 class="modal-title">Sign-Up</h3>
 			</div>
 
 			<form class="form-horizontal" method="post" ng-submit="addUser(user);">

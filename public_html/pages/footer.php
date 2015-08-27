@@ -3,7 +3,6 @@
 		<nav>
 			<ul class="nav navbar-nav footer-nav">
 				<li><a href="#">Contact Us</a></li>
-				<li><a href="http://www."></a></li>
 			</ul>
 		</nav>
 	</section>
