@@ -1,5 +1,5 @@
 app.controller("LocationController", function($http, $scope, LocationService) {
-	$scope.movement = null;
+	$scope.location = null;
 	$scope.statusClass = "alert-success";
 	$scope.statusMessage = null;
 
