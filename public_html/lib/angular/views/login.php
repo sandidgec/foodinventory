@@ -12,7 +12,7 @@
 			</div>
 
 			<div class="modal-body" ng-controller="LoginController">
-				<form class="form-horizontal" ng-submit="login(user);" novalidate="novalidate">
+				<form class="form-horizontal"  method="post" ng-submit="login(user);" novalidate="novalidate">
 
 					<div class="form-group">
 						<label for="email" class="col-sm-3 control-label">Email:</label>

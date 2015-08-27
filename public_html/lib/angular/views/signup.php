@@ -10,7 +10,7 @@
 					<span aria-hidden="true">&times;</span></button>
 			</div>
 
-			<form class="form-horizontal" ng-submit="addUser(user);">
+			<form class="form-horizontal" method="post" ng-submit="addUser(user);">
 				<div class="modal-body" ng-controller="SignUpController">
 					<div class="form-group">
 						<label for="lastName" class="col-sm-3 control-label">Last Name</label>
