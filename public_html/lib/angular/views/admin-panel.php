@@ -52,6 +52,7 @@
 		<script type="text/javascript" src="../directives/movement.js"></script>
 		<script type="text/javascript" src="../directives/vendor.js"></script>
 		<script type="text/javascript" src="../directives/location.js"></script>
+		<script type="text/javascript" src="../directives/notification.js"></script>
 
 		<!-- Page Title -->
 		<title>Administration</title>
