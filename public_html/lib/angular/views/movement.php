@@ -1,22 +1,22 @@
 <!--  Movement Container  -->
-<div class="container">
+<div class="movement-tab">
 	<h3> Your <em>Movements</em></h3>
 
 	<!--  Movement Buttons -->
 	<div class="movement button row">
-		<div class="col-md-12 text-center">
+		<div class="col-md-3 text-center">
 			<a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#AddMovementModal">
-				<i class="fa fa-plus-square fa-5x"></i>
+				<i class="fa fa-plus fa-2x"></i>
 			</a>
 		</div>
 	</div>
 
 	<!--  Movement Reports -->
-	<div class="container movement reports row">
+	<div class="movement reports">
 		<h4>Reports</h4>
 
-		<div class="col-md-12" ng-controller="MovementController">
-			<table id="movementTable" class="table table-bordered table-hover table-responsive table-striped" width="100%" cellspacing="0">
+		<div ng-controller="MovementController">
+			<table id="movementTable" class="table table-bordered table-hover table-striped">
 				<thead>
 					<tr>
 						<th>From</th>
@@ -29,19 +29,19 @@
 				</thead>
 
 				<tbody>
-					<tr ng-repeat="">
-						<td>{{ movements.fromLocationId }}</td>
-						<td>{{ movements.toLocationId }}</td>
-						<td>{{ movements.productId }}</td>
-						<td>{{ movements.userId }}</td>
-						<td>{{ movements.movementDate }}</td>
-						<td>{{ movements.movementType }}</td>
-						<td>
-<!--							<button class="btn btn-info" ng-click="setEditedMovement(movement);"><i class="fa fa-pencil"></i></button>-->
-<!--							<form ng-submit="deleteMovement(movement.movementId);">-->
-<!--								<button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i></button>-->
-<!--							</form>-->
-						</td>
+					<tr ng-repeat="movement in movements">
+						<td>{{ movement.fromLocationId }}</td>
+						<td>{{ movement.toLocationId }}</td>
+						<td>{{ movement.productId }}</td>
+						<td>{{ movement.userId }}</td>
+						<td>{{ movement.movementDate | date }}</td>
+						<td>{{ movement.movementType }}</td>
+						<!--						<td>-->
+						<!--							<button class="btn btn-info" ng-click="setEditedMovement(movement);"><i class="fa fa-pencil"></i></button>-->
+						<!--							<form ng-submit="deleteMovement(movement.movementId);">-->
+						<!--								<button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i></button>-->
+						<!--							</form>-->
+						<!--						</td>-->
 					</tr>
 				</tbody>
 			</table>
@@ -66,9 +66,10 @@
 
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="product-search" name="product-search" placeholder="Product Search"
-										 ng-model="movement.productId" typeahead="title for title in getProductByTitle($viewValue)"
+										 ng-model="productSearch" typeahead="title for title in getProductByTitle($viewValue)"
 										 typeahead-loading="loadingProducts" typeahead-no-results="noResults">
 								<i ng-show="loadingProducts" class="glyphicon glyphicon-refresh"></i>
+
 								<div ng-show="noResults">
 									<i class="glyphicon glyphicon-remove"></i> No Results Found
 								</div>
@@ -82,6 +83,7 @@
 										 ng-model="movement.locationId" typeahead="storageCode for storageCode in getLocationByStorageCode($viewValue)"
 										 typeahead-loading="loadingFromLocations" typeahead-no-results="noResults">
 								<i ng-show="loadingFromLocations" class="glyphicon glyphicon-refresh"></i>
+
 								<div ng-show="noResults">
 									<i class="glyphicon glyphicon-remove"></i> No Results Found
 								</div>

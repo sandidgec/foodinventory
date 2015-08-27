@@ -58,12 +58,12 @@
 	<body>
 		<section class="container">
 			<!--  Admin Panel Sidebar  -->
-			<div class="vertical-text col-md-2">
-				<h1 class="text-center">Admin Panel</h1>
+			<div class="vertical-text col-md-1">
+				<h1 class="text-center">Admin-Panel</h1>
 			</div>
 
 			<!-- Admin Tabs  -->
-			<section class="col-md-10" ng-controller="TabController as tab">
+			<section class="col-md-11" ng-controller="TabController as tab">
 				<ul class="nav nav-pills">
 					<li ng-class="{ active:tab.isSet(1) }">
 						<a href="" ng-click="tab.setTab(1)">Product</a>
