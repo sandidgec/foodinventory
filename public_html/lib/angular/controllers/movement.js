@@ -4,7 +4,7 @@
 app.controller("MovementController", function($http, $scope, MovementService, LocationService, ProductService) {
 	$scope.movements = null;
 	$scope.locations = null;
-	$scope.products = null;
+	//$scope.products = [];
 
 	$scope.statusClass = "alert-success";
 	$scope.statusMessage = null;
@@ -109,9 +109,25 @@ app.controller("MovementController", function($http, $scope, MovementService, Lo
 	};
 
 	$scope.getAllMovements = function(page) {
+		// first, call the getAllMovements() - the parent service
 		MovementService.getAllMovements(page)
+			// wait for the first promise (Movement)
 			.then(function(reply) {
 				if(reply.status === 200) {
+					// foreach() through the array from the first promise
+					reply.data.forEach(function(movement, index) {
+						// call the getProductByProductId() - the child service
+						ProductService.getProductByProductId(reply.data[index].productId)
+							// wait for the second promise (Product)
+							.then(function(product) {
+								if(reply.status === 200) {
+									// inject the child into the parent
+									reply.data[index].product = product.data;
+								}
+							});
+					});
+
+					// finally, assign the parent array
 					$scope.movements = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
