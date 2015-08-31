@@ -50,7 +50,7 @@ try {
 		$hash = hash_pbkdf2("sha512", $requestObject->password, $salt, 262144, 128);
 
 
-		$user = new User($userId, $requestObject->lastName, $requestObject->firstName, $requestObject->root, $requestObject->attention,
+		$user = new User($userId, $requestObject->lastName, $requestObject->firstName, false, $requestObject->attention,
 			$requestObject->addressLineOne, $requestObject->addressLineTwo, $requestObject->city, $requestObject->state,
 			$requestObject->zipCode, $requestObject->email, $requestObject->phoneNumber, $salt, $hash);
 		$user->insert($pdo);
