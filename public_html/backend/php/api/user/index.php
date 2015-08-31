@@ -49,9 +49,12 @@ try {
 		$salt = bin2hex(openssl_random_pseudo_bytes(32));
 		$hash = hash_pbkdf2("sha512", $requestObject->password, $salt, 262144, 128);
 
+		// handle optional fields
+		$attention = (empty($requestObject->attention) === true ? null : $requestObject->attention);
+		$addressLineTwo = (empty($requestObject->addressLineTwo) === true ? null : $requestObject->addressLineTwo);
 
-		$user = new User($userId, $requestObject->lastName, $requestObject->firstName, false, $requestObject->attention,
-			$requestObject->addressLineOne, $requestObject->addressLineTwo, $requestObject->city, $requestObject->state,
+		$user = new User($userId, $requestObject->lastName, $requestObject->firstName, false, $attention,
+			$requestObject->addressLineOne, $addressLineTwo, $requestObject->city, $requestObject->state,
 			$requestObject->zipCode, $requestObject->email, $requestObject->phoneNumber, $salt, $hash);
 		$user->insert($pdo);
 		$_SESSION["user"] = $user;
