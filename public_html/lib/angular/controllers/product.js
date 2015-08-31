@@ -1,8 +1,9 @@
 /**
  * controller for the product service
  **/
-app.controller("ProductController", function($http, $scope, ProductService, VendorService) {
+app.controller("ProductController", function($http, $modal, $scope, ProductService, VendorService) {
 	$scope.products = null;
+	$scope.vendors = [];
 	$scope.statusClass = "alert-success";
 	$scope.statusMessage = null;
 
@@ -38,16 +39,27 @@ app.controller("ProductController", function($http, $scope, ProductService, Vend
 	/**
 	 * method that controls the action table and will fill the table or display errors
 	 */
-	$scope.deleteProduct = function(product) {
-		ProductService.deleteProduct(product)
-			.then(function(reply) {
-				if(reply.status === 200) {
-					$scope.actions = reply.data;
-				} else {
-					$scope.statusClass = "alert-danger";
-					$scope.statusMessage = reply.message;
-				}
-			});
+	$scope.deleteProduct = function(productId) {
+		var message = "Do you really want to delete this product?";
+		var modalHtml = '<div class="modal-body">' + message + '</div>' +
+			'<div class="modal-footer"><button class="btn btn-primary" ng-click="yes()">Yes</button><button class="btn btn-warning" ng-click="no()">No</button></div>';
+
+		$scope.modalInstance = $modal.open({
+			template: modalHtml,
+			controller: ModalInstanceCtrl
+		});
+
+		$scope.modalInstance.result.then(function() {
+			ProductService.deleteProduct(productId)
+				.then(function(reply) {
+					if(reply.status === 200) {
+						$scope.actions = reply.data;
+					} else {
+						$scope.statusClass = "alert-danger";
+						$scope.statusMessage = reply.message;
+					}
+				});
+		});
 	};
 
 	$scope.getProductByProductId = function(productId) {
@@ -189,15 +201,17 @@ app.controller("ProductController", function($http, $scope, ProductService, Vend
 	};
 
 	$scope.getVendorByVendorName = function(vendorName) {
-		VendorService.getVendorByVendorName(vendorName)
+		var vendors = VendorService.getVendorByVendorName(vendorName)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.products = reply.data;
+					$scope.vendors = reply.data;
+					return($scope.vendors);
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
 				}
 			});
+		return($scope.vendors);
 	};
 
 	$scope.products = $scope.getAllProducts(0);

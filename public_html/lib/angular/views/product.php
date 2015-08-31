@@ -68,7 +68,7 @@
 						<div class="form-group">
 							<label for="product" class="col-sm-3 control-label">Product:</label>
 							<div class="col-sm-9">
-								<input type="text" class="form-control" id="product" name="product" placeholder="Enter Product " ng-model="product.title"/>
+								<input type="text" class="form-control" id="product" name="product" placeholder="Enter Product" ng-model="product.title"/>
 							</div>
 						</div>
 						<div class="form-group">
@@ -81,7 +81,7 @@
 							<label for="vendor-search" class="col-sm-3 control-label">Vendor</label>
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="vendor-search" name="vendor-search" placeholder="Enter Vendor"
-										 ng-model="product.vendorId" typeahead="vendor for vendorName in getVendorByVendorName($viewValue)"
+										 ng-model="product.vendorId" typeahead="vendor.vendorId as vendor.vendorName for vendor in getVendorByVendorName($viewValue)"
 										 typeahead-loading="loadingVendors" typeahead-no-results="noResults"/>
 								<i ng-show="loadingVendors" class="glyphicon glyphicon-refresh"></i>
 								<div ng-show="noResults">
