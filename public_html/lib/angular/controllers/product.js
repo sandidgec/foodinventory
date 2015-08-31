@@ -14,8 +14,8 @@ app.controller("ProductController", function($http, $modal, $scope, ProductServi
 		ProductService.addProduct(product)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.getAllProducts(0);
-					$scope.actions = reply.data;
+					$scope.statusClass = "alert-success";
+					$scope.statusMessage = reply.message;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;

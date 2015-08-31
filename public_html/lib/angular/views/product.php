@@ -64,7 +64,7 @@
 				</div>
 
 				<div class="modal-body" ng-controller="ProductController">
-					<form class="form-horizontal" ng-submit="addProduct(product);">
+					<form class="form-horizontal" method="post" ng-submit="addProduct(product);">
 						<div class="form-group">
 							<label for="product" class="col-sm-3 control-label">Product:</label>
 							<div class="col-sm-9">
@@ -102,11 +102,12 @@
 							</div>
 						</div>
 						<pre>form = {{ product | json }}</pre>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-							<button type="button" class="btn btn-primary">Submit</button>
-						</div>
+						<button type="submit" class="btn btn-primary">Submit</button>
 					</form>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				</div>
 			</div>
 		</div>
