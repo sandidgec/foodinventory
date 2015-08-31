@@ -38,9 +38,9 @@ body {
 }
 
 .inv {
-	color: dodgerblue;
+	color: #002FCC;
 	font-size: 1.9em;
-	font-weight: 300;
+	font-weight: 700;
 	letter-spacing: 2px;
 	font-family: 'Quicksand', sans-serif;
 }
@@ -107,6 +107,10 @@ body {
 	.site-content {
 	flex: 1;
 }
+
+	h3 {
+	font-family: 'Quicksand', sans-serif;
+	}
 
 	footer {
 	background-color: whitesmoke;

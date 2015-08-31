@@ -12,7 +12,7 @@ app.controller("SignUpController", function($http, SignupService, $scope, $windo
 			SignupService.addUser(user)
 				.then(function(reply) {
 					if(reply.status === 200) {
-						$window.location.href = "../views/admin-panel.php";
+						$window.location.href = "../lib/angular/views/admin-panel.php";
 					} else {
 						$scope.statusClass = "alert-danger";
 						$scope.statusMessage = reply.message;
