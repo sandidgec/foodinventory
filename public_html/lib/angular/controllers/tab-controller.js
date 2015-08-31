@@ -1,5 +1,5 @@
 app.controller("TabController", function($scope) {
-	this.tab = 2;
+	this.tab = 1;
 
 	$scope.tabs = {
 		singleSelect: null,
