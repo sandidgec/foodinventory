@@ -13,6 +13,7 @@ app.controller("ProductController", function($http, $scope, ProductService, Vend
 		ProductService.addProduct(product)
 			.then(function(reply) {
 				if(reply.status === 200) {
+					$scope.getAllProducts(0);
 					$scope.actions = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
@@ -171,6 +172,14 @@ app.controller("ProductController", function($http, $scope, ProductService, Vend
 		ProductService.getAllProducts(page)
 			.then(function(reply) {
 				if(reply.status === 200) {
+					reply.data.forEach(function(product, index){
+						VendorService.getVendorByVendorId(reply.data[index].vendorId)
+							.then(function(vendor){
+								if(reply.status === 200){
+									reply.data[index].vendor = vendor.data;
+								}
+							});
+				});
 					$scope.products = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
@@ -178,6 +187,7 @@ app.controller("ProductController", function($http, $scope, ProductService, Vend
 				}
 			});
 	};
+
 	$scope.getVendorByVendorName = function(vendorName) {
 		VendorService.getVendorByVendorName(vendorName)
 			.then(function(reply) {

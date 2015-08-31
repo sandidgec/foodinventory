@@ -1,12 +1,12 @@
 <!--  Product Container  -->
-<div class="list-group">
+<div class="product-tab">
 	<h3> Your <em>Products</em></h3>
 
 	<!--  Product Buttons -->
 	<div class="product button row">
-		<div class="col-md-12 text-center">
+		<div class="col-md-3 text-center">
 			<a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#AddProductModal">
-				<i class="fa fa-plus-square fa 5x"></i>
+				<i class="fa fa-plus fa-2x"></i>
 			</a>
 		</div>
 	</div>
@@ -15,27 +15,27 @@
 	<div class="product reports row">
 		<h4>Reports</h4>
 
-		<div class="col-md-12" ng-controller="ProductController">
-			<table id="productTable" class="table table-bordered table-responsive table-striped" width="100%" cellspacing="0">
+		<div ng-controller="ProductController">
+			<table id="productTable" class="table table-bordered table-hover table-striped">
 				<thead>
 					<tr>
 						<th>Title</th>
-						<th>Desciption</th>
+						<th>Description</th>
 						<th>Vendor</th>
-						<th>Lead Time</th>
 						<th>SKU</th>
+						<th>Lead Time</th>
 					</tr>
 				</thead>
 
 				<tbody>
-					<tr ng-repeat="">
+					<tr ng-repeat="product in products">
 						<td>{{ product.title }}</td>
 						<td>{{ product.description }}</td>
 						<td>{{ product.vendorId }}</td>
-						<td>{{ prpoduct.leadTime }}</td>
 						<td>{{ product.sku }}</td>
+						<td>{{ product.leadTime }}</td>
 						<td>
-							<button class="btn btn-info" ng-click="setEditedProduct(product);"><i class="fa fa-pencil"></i></button>
+							<button class="btn btn-info" ng-click="editProduct(product);"><i class="fa fa-pencil"></i></button>
 							<form ng-submit="deleteProduct(product.productId);">
 								<button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i></button>
 							</form>
@@ -60,51 +60,39 @@
 				<div class="modal-body" ng-controller="ProductController">
 					<form class="form-horizontal" ng-submit="addProduct(product);">
 						<div class="form-group">
-							<label for="product-search" class="col-sm-4 control-label">Product</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" id="product-search" name="product-search" placeholder="Enter Product"
-										 ng-model="product.title" typeahead="title for title in getProductByTitle($viewValue)"
-										typeahead-loading="loadingProducts" typeahead-no-results="noResults"/>
-								<i ng-show="loadingProducts" class="glyphicon glyphicon-refresh"></i>
-								<div ng-show="noResults">
-									<i class="glyphicon glyphicon-remove"></i>No Results Found
-								</div>
+							<label for="product" class="col-sm-3 control-label">Product:</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="product" name="product" placeholder="Enter Product " ng-model="product.title"/>
 							</div>
-							<label for="description-search" class="col-sm-4 control-label">Description</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" id="description-search" name="description-search" placeholder="Enter Description"
-										 ng-model="product.description" typeahead="description for description in getProductByDescription($viewValue)"
-										 typeahead-loading="loadingDescription" typeahead-no-results="noResults"/>
-								<i ng-show="loadingDesciption" class="glyphicon glyphicon-refresh"></i>
-								<div ng-show="noResults">
-									<i class="glyphicon glyphicon-remove"></i>No Results Found
-								</div>
+						</div>
+						<div class="form-group">
+							<label for="Description" class="col-sm-3 control-label">Description</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="description" name="description" placeholder="Enter Product Description" ng-model="product.description"/>
 							</div>
-							<label for="vendor-search" class="col-sm-4 control-label">Vendor</label>
+						</div>
+						<div class="form-group">
+							<label for="vendor-search" class="col-sm-3 control-label">Vendor</label>
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="vendor-search" name="vendor-search" placeholder="Enter Vendor"
-										 ng-model="product.vendorId" typeahead="vendorId for vendorname in getVendorByVendorName($viewValue)"
+										 ng-model="product.vendorId" typeahead="vendor for vendorName in getVendorByVendorName($viewValue)"
 										 typeahead-loading="loadingVendors" typeahead-no-results="noResults"/>
 								<i ng-show="loadingVendors" class="glyphicon glyphicon-refresh"></i>
 								<div ng-show="noResults">
 									<i class="glyphicon glyphicon-remove"></i>No Results Found
 								</div>
 							</div>
-							<label for="sku-search" class="col-sm-4 control-label">SKU</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" id="sku-search" name="sku-search" placeholder="Enter SKU"
-										 ng-model="product.sku" typeahead="sku for sku in getProductBySku($viewValue)"
-										 typeahead-loading="loadingSKUs" typeahead-no-results="noResults"/>
-								<i ng-show="loadingSKUs" class="glyphicon glyphicon-refresh"></i>
-								<div ng-show="noResults">
-									<i class="glyphicon glyphicon-remove"></i>No Results Found
-								</div>
+						</div>
+						<div class="form-group">
+							<label for="sku" class="col-sm-3 control-label">SKU:</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="sku" name="sku" placeholder="Enter SKU " ng-model="product.sku"/>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="leadTime" class="col-sm-3 control-label">Lead Time:</label>
 							<div class="col-sm-9">
-								<input type="text" class="form-control" id="leadTime" name="leadTime" placeholder="e.g. 14(days) " ng-model="product.leadTime"/>
+								<input type="text" class="form-control" id="leadTime" name="leadTime" placeholder="Enter Order Lead Time" ng-model="product.leadTime"/>
 							</div>
 						</div>
 						<pre>form = {{ product | json }}</pre>
