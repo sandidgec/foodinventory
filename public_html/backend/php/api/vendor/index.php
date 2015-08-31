@@ -35,7 +35,7 @@ try {
 		if(empty($vendorId) === false) {
 			$reply->data = Vendor::getVendorByVendorId($pdo, $vendorId);
 		} else if(empty($vendorName) === false) {
-			$reply->data = Vendor::getVendorByVendorName($pdo, $vendorName);
+			$reply->data = Vendor::getVendorByVendorName($pdo, $vendorName)->toArray();
 		} else {
 			$reply->data = Vendor::getAllVendors($pdo)->toArray();
 		}
