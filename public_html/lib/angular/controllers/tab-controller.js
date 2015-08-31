@@ -1,11 +1,22 @@
 app.controller("TabController", function($scope) {
-    this.tab = 2;
+	this.tab = 2;
 
-    this.setTab = function(tab){
-        this.tab = tab;
-    };
+	$scope.tabs = {
+		singleSelect: null,
+		availableOptions: [
+			{id: '1', name: 'Product'},
+			{id: '2', name: 'Movement'},
+			{id: '3', name: 'Vendor'},
+			{id: '4', name: 'Location'},
+			{id: '4', name: 'Notification'}
+		]
+	};
 
-    this.isSet = function(tab){
-        return (this.tab === tab);
-    };
+	this.setTab = function(tab){
+		this.tab = tab;
+	};
+
+	this.isSet = function(tab){
+		return (this.tab === tab);
+	};
 });

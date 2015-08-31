@@ -12,10 +12,12 @@
 	</div>
 
 	<!--  Movement Reports -->
-	<div class="movement reports">
-		<h4>Reports</h4>
+	<div class="movement reports row">
+		<div class="row">
+			<h4>Reports</h4>
+		</div>
 
-		<div ng-controller="MovementController">
+		<div class="row" ng-controller="MovementController">
 			<table id="movementTable" class="table table-bordered table-hover table-striped">
 				<thead>
 					<tr>
@@ -30,9 +32,9 @@
 
 				<tbody>
 					<tr ng-repeat="movement in movements">
-						<td>{{ movement.fromLocationId }}</td>
-						<td>{{ movement.toLocationId }}</td>
-						<td>{{ movement.productId }}</td>
+						<td>{{ movement.fromLocationId.description }}</td>
+						<td>{{ movement.toLocationId.description }}</td>
+						<td>{{ movement.product.title }}</td>
 						<td>{{ movement.userId }}</td>
 						<td>{{ movement.movementDate | date }}</td>
 						<td>{{ movement.movementType }}</td>
@@ -66,7 +68,7 @@
 
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="product-search" name="product-search" placeholder="Product Search"
-										 ng-model="productSearch" typeahead="title for title in getProductByTitle($viewValue)"
+										 ng-model="movement.productId" typeahead="title for title in getProductByTitle($viewValue)"
 										 typeahead-loading="loadingProducts" typeahead-no-results="noResults">
 								<i ng-show="loadingProducts" class="glyphicon glyphicon-refresh"></i>
 
@@ -80,7 +82,7 @@
 
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="fromLocation-search" name="fromLocation-search" placeholder="Location Search"
-										 ng-model="movement.locationId" typeahead="storageCode for storageCode in getLocationByStorageCode($viewValue)"
+										 ng-model="movement.fromLocationId" typeahead="storageCode for storageCode in getLocationByStorageCode($viewValue)"
 										 typeahead-loading="loadingFromLocations" typeahead-no-results="noResults">
 								<i ng-show="loadingFromLocations" class="glyphicon glyphicon-refresh"></i>
 
@@ -110,12 +112,13 @@
 								<input type="text" class="form-control" id="price" name="price" placeholder="e.g. $19.99" ng-model="movement.price"/>
 							</div>
 						</div>
-						<pre>form = {{ movement | json }}</pre>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-							<button type="button" class="btn btn-primary">Sign-Up</button>
-						</div>
+
+							<pre>form = {{ movement | json }}</pre>
 					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Sign-Up</button>
 				</div>
 			</div>
 		</div>
