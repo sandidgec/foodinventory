@@ -254,6 +254,12 @@ class User implements JsonSerializable {
 	 * @throws RangeException if longer than 64 characters
 	 **/
 	public function setAttention($newAttention) {
+		// allow the attention to be null
+		if($newAttention === null) {
+			$this->attention = null;
+			return;
+		}
+
 		//verify attention is no more than 64 varchar
 		$newAttention = trim($newAttention);
 		$newAttention = filter_var($newAttention, FILTER_SANITIZE_STRING);
@@ -311,6 +317,12 @@ class User implements JsonSerializable {
 	 * @throws RangeException if longer than 64 characters
 	 **/
 	public function setAddressLineTwo($newAddressLineTwo) {
+		// allow the address to be null
+		if($newAddressLineTwo === null) {
+			$this->addressLineTwo = null;
+			return;
+		}
+
 		//verify address is no more than 64 varchar
 		$newAddressLineTwo = filter_var($newAddressLineTwo, FILTER_SANITIZE_STRING);
 		if(empty($newAddressLineTwo) === true) {
