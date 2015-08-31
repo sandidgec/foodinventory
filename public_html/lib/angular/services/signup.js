@@ -1,5 +1,5 @@
 app.service("SignupService", function($http, $q) {
-	this.SIGNUP_ENDPOINT = "../../backend/php/api/user/";
+	this.SIGNUP_ENDPOINT = "/~invtext/backend/php/api/user/";
 
 	this.addUser = function(user) {
 		return ($http.post(this.SIGNUP_ENDPOINT, user)

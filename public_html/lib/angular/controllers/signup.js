@@ -1,5 +1,5 @@
-app.controller("SignUpController", function($http, SignupService, $scope) {
-	$scope.users = null;
+app.controller("SignUpController", function($http, SignupService, $scope, $window) {
+	$scope.user = null;
 	$scope.statusClass = "alert-success";
 	$scope.statusMessage = null;
 
@@ -8,17 +8,16 @@ app.controller("SignUpController", function($http, SignupService, $scope) {
 	 *method that controls the action table and will fill the table or display errors
 	 */
 	$scope.addUser = function(user) {
-		if(user.password !== user.confirmPassword) {
-			UserService.addUser(user)
+		if(user.password === user.passwordConfirm) {
+			SignupService.addUser(user)
 				.then(function(reply) {
 					if(reply.status === 200) {
-						$scope.users = reply.data;
+						$window.location.href = "../views/admin-panel.php";
 					} else {
 						$scope.statusClass = "alert-danger";
 						$scope.statusMessage = reply.message;
 					}
 				});
 		}
-	};
-});
+	}});
 

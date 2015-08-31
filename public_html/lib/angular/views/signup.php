@@ -12,8 +12,9 @@
 				<h3 class="modal-title">Sign-Up</h3>
 			</div>
 
-			<form class="form-horizontal" method="post" ng-submit="addUser(user);">
-				<div class="modal-body" ng-controller="SignUpController">
+			<div class="modal-body" ng-controller="SignUpController">
+				<form class="form-horizontal" method="post" ng-submit="addUser(user);">
+
 					<div class="form-group">
 						<label for="lastName" class="col-sm-3 control-label">Last Name</label>
 
@@ -121,14 +122,16 @@
 									 placeholder=" (e.g. password1234)" ng-model="user.passwordConfirm"/>
 						</div>
 					</div>
-					<pre>form = {{ user | json }}</pre>
-				</div>
 
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Sign-Up</button>
-				</div>
-			</form>
+					<pre>form = {{ user | json }}</pre>
+					<button type="submit" class="btn btn-primary">Sign-Up</button>
+				</form>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+
 		</div>
 	</div>
 </div>

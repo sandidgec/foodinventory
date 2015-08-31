@@ -1,4 +1,4 @@
-app.controller("LoginController", function($http, LoginService, $scope) {
+app.controller("LoginController", function($http, LoginService, $window, $scope) {
 	$scope.user = null;
 	$scope.statusClass = "alert-success";
 	$scope.statusMessage = null;
@@ -25,7 +25,12 @@ app.controller("LoginController", function($http, LoginService, $scope) {
 		var result = $http.post("/~invtext/backend/php/lib/login.php", user)
 			.then(function(reply) {
 				if(typeof reply.data === "object") {
-					return (reply.data);
+					if(result.status === 200) {
+						$window.location.href = "../angular/views/admin-panel.php"
+					} else {
+
+					}
+
 				} else {
 					return ($q.reject(reply.data));
 				}
@@ -33,11 +38,7 @@ app.controller("LoginController", function($http, LoginService, $scope) {
 				return ($q.reject(reply.data));
 			});
 
-		if(result.status === 200) {
-			$window.location.href = "../angular/views/admin-panel.php"
-		} else {
 
-		}
 	};
 
 	$scope.logout = function() {

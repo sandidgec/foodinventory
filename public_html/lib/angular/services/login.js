@@ -1,5 +1,5 @@
 app.service("LoginService", function($http, $q) {
-	this.LOGIN_ENDPOINT = "../../backend/php/api/user/";
+	this.LOGIN_ENDPOINT = "/~invtext/backend/php/api/user/";
 
 
 	this.getUsersByEmail = function(email) {

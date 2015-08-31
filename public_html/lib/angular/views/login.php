@@ -1,7 +1,7 @@
 <button type="button" class="btn btn-sm loginbtn" data-toggle="modal" data-target="#LoginModal">
 	Login
 </button>
-<div class="modal fade" id="LoginModal" ng-controller="LoginController">
+<div class="modal fade" id="LoginModal">
 	<div class="modal-dialog">
 		<div class="modal-content">
 
@@ -11,8 +11,8 @@
 				<h3 class="modal-title">Login</h3>
 			</div>
 
-			<div class="modal-body">
-				<form class="form-horizontal"  method="post" ng-submit="login(user);" novalidate="novalidate">
+			<div class="modal-body" ng-controller="LoginController">
+				<form class="form-horizontal" method="post" ng-submit="login(user);" novalidate="novalidate">
 
 					<div class="form-group">
 						<label for="email" class="col-sm-3 control-label">Email:</label>
@@ -31,15 +31,15 @@
 									 placeholder=" (e.g. password1234)" ng-model="user.password"/>
 						</div>
 					</div>
-
 					<pre> form = {{ user | json }} </pre>
-
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button type="submit" class="btn btn-primary">Login</button>
-					</div>
+					<button type="submit" class="btn btn-primary">Login</button>
 				</form>
 			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+
 		</div>
 	</div>
 </div>

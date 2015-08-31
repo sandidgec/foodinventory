@@ -1,8 +1,10 @@
 <?php
+require_once(dirname(__DIR__) . "/backend/php/lib/xsrf.php");
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
 	session_start();
 }
+setXsrfCookie("/");
 
 /**
  * Get the relative path.
