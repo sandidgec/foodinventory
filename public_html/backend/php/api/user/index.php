@@ -46,6 +46,11 @@ try {
 		verifyXsrf();
 		$requestContent = file_get_contents("php://input");
 		$requestObject = json_decode($requestContent);
+
+		if($requestObject->password !== $requestObject->passwordConfirm) {
+			throw(new InvalidArgumentException("passwords do not match", 400));
+		}
+
 		$salt = bin2hex(openssl_random_pseudo_bytes(32));
 		$hash = hash_pbkdf2("sha512", $requestObject->password, $salt, 262144, 128);
 
