@@ -121,9 +121,8 @@
 									 placeholder=" (e.g. password1234)" ng-model="user.passwordConfirm"/>
 						</div>
 					</div>
+					<pre>form = {{ user | json }}</pre>
 				</div>
-
-				<pre>form = {{ user | json }}</pre>
 
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

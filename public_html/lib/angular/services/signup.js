@@ -13,6 +13,5 @@ app.service("SignupService", function($http, $q) {
 				return ($q.reject(reply.data));
 			}));
 	};
-
-
 });
+

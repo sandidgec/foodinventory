@@ -10,11 +10,10 @@
 
 	<div class="collapse navbar-collapse" id="main-menu">
 		<ul class="nav navbar-nav navbar-right">
-			<li><a href="../lib/angular/views/admin-panel.php">Admin Panel</a></li>
 			<li><a href="#">Home</a></li>
 			<li><a href="#">About</a></li>
-			<li><?php require_once($PREFIX . "lib/angular/views/signup.php"); ?></li>
-			<li><?php require_once($PREFIX . "lib/angular/views/login.php"); ?></li>
+			<li><?php require_once($PREFIX . "/lib/angular/views/signup.php"); ?></li>
+			<li><?php require_once($PREFIX . "/lib/angular/views/login.php"); ?></li>
 		</ul>
 	</div>
 </nav>

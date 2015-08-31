@@ -1,7 +1,7 @@
 <button type="button" class="btn btn-sm loginbtn" data-toggle="modal" data-target="#LoginModal">
 	Login
 </button>
-<div class="modal fade" id="LoginModal">
+<div class="modal fade" id="LoginModal" ng-controller="LoginController">
 	<div class="modal-dialog">
 		<div class="modal-content">
 
@@ -11,7 +11,7 @@
 				<h3 class="modal-title">Login</h3>
 			</div>
 
-			<div class="modal-body" ng-controller="LoginController">
+			<div class="modal-body">
 				<form class="form-horizontal"  method="post" ng-submit="login(user);" novalidate="novalidate">
 
 					<div class="form-group">
@@ -36,7 +36,7 @@
 
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button type="submit" class="btn btn-primary">Sign-Up</button>
+						<button type="submit" class="btn btn-primary">Login</button>
 					</div>
 				</form>
 			</div>

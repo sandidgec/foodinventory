@@ -45,6 +45,9 @@ $PREFIX = str_repeat("../", $DEPTH_DIFFERENCE);
 <!-- Latest compiled and minified Bootstrap JavaScript, all compiled plugins included -->
 <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
+<!-- Google Fonts -->
+<link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
+
 <!-- angular.js -->
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-messages.min.js"></script>

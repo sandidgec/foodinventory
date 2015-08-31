@@ -3,7 +3,7 @@ $CURRENT_DIR = __DIR__;
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="FoodInventory">
 	<head>
 		<?php require_once "head-utils.php"; ?>
 	</head>
