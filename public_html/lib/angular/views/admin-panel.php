@@ -40,6 +40,7 @@
 		<script type="text/javascript" src="../services/movement.js"></script>
 		<script type="text/javascript" src="../services/vendor.js"></script>
 		<script type="text/javascript" src="../services/location.js"></script>
+		<script type="text/javascript" src="../controllers/modal-instance-ctrl.js"></script>
 		<script type="text/javascript" src="../controllers/product.js"></script>
 		<script type="text/javascript" src="../controllers/tab-controller.js"></script>
 		<script type="text/javascript" src="../controllers/movement.js"></script>

@@ -2,7 +2,7 @@
  * controller for the vendor service
  **/
 app.controller("VendorController", function($http, $scope, VendorService) {
-	$scope.vendor = null;
+	$scope.vendors = null;
 	$scope.statusClass = "alert-success";
 	$scope.statusMessage = null;
 
@@ -13,7 +13,8 @@ app.controller("VendorController", function($http, $scope, VendorService) {
 		VendorService.addVendor(vendor)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.statusClass = "alert-success";
+					$scope.statusMessage = reply.message;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -25,7 +26,7 @@ app.controller("VendorController", function($http, $scope, VendorService) {
 		VendorService.editVendor(vendor)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.vendors = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -37,7 +38,7 @@ app.controller("VendorController", function($http, $scope, VendorService) {
 		VendorService.deleteVendor(vendor)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.vendors = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -49,7 +50,7 @@ app.controller("VendorController", function($http, $scope, VendorService) {
 		VendorService.getVendorByVendorId(vendorId)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.vendors = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -61,7 +62,7 @@ app.controller("VendorController", function($http, $scope, VendorService) {
 		VendorService.getVendorByVendorEmail(vendorEmail)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.vendors = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -73,7 +74,7 @@ app.controller("VendorController", function($http, $scope, VendorService) {
 		VendorService.getVendorByVendorName(vendorName)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.vendors = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -85,7 +86,7 @@ app.controller("VendorController", function($http, $scope, VendorService) {
 		VendorService.getAllVendors()
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.vendors = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;

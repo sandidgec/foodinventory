@@ -61,7 +61,7 @@ app.service("VendorService", function($http, $q) {
 	 * @return accepts the promise when vendors are found, rejected otherwise
 	 **/
 	this.getVendorByVendorId = function(vendorId) {
-		return ($http.get(this.VENDOR_ENDPOINT +  vendorId)
+		return ($http.get(this.VENDOR_ENDPOINT + vendorId)
 			.then(function(reply) {
 				if(typeof reply.data === "object") {
 					return (reply.data);

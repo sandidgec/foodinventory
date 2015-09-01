@@ -63,7 +63,7 @@
 					</div>
 
 					<div class="modal-body" ng-controller="LocationController">
-						<form class="form-horizontal" ng-submit="addLocation(location);">
+						<form class="form-horizontal" method="post" ng-submit="addLocation(location);">
 							<div class="form-group">
 								<label for="storageCode" class="col-sm-3 control-label">Storage Code:</label>
 								<div class="col-sm-9">

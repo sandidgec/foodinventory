@@ -2,7 +2,7 @@
  * controller for the notification service
  **/
 app.controller("NotificationController", function($http, $scope, NotificationService) {
-	$scope.notification = null;
+	$scope.notifications = null;
 	$scope.statusClass = "alert-success";
 	$scope.statusMessage = null;
 
@@ -13,7 +13,8 @@ app.controller("NotificationController", function($http, $scope, NotificationSer
 		NotificationService.addNotification(notification)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.statusClass = "alert-success";
+					$scope.statusMessage = reply.message;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;

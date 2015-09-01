@@ -66,7 +66,7 @@
 					</div>
 
 					<div class="modal-body" ng-controller="VendorController">
-						<form class="form-horizontal" ng-submit="addVendor(vendor);">
+						<form class="form-horizontal" method="post" ng-submit="addVendor(vendor);">
 							<div class="form-group">
 								<label for="vendorName" class="col-sm-3 control-label">Vendor Name</label>
 								<div class="col-sm-9">

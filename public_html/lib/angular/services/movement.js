@@ -10,7 +10,7 @@ app.service("MovementService", function($http, $q) {
 	 * @returns accepts the promise when the movement is added, rejected otherwise
 	 **/
 	this.addMovement = function(movement) {
-		return ($http.post(this.MOVEMENT_ENDPOINT + movement)
+		return ($http.post(this.MOVEMENT_ENDPOINT, movement)
 			.then(function(reply) {
 				if(typeof reply.data === "object") {
 					return (reply.data);

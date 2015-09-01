@@ -16,7 +16,8 @@ app.controller("MovementController", function($http, $scope, MovementService, Lo
 		MovementService.addMovement(movement)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.getAllMovements(0);
+					$scope.statusClass = "alert-success";
+					$scope.statusMessage = reply.message;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -123,6 +124,15 @@ app.controller("MovementController", function($http, $scope, MovementService, Lo
 								if(reply.status === 200) {
 									// inject the child into the parent
 									reply.data[index].product = product.data;
+								}
+							});
+						// call the getLocationByLocationId() - the child service
+						LocationService.getLocationByLocationId(reply.data[index].locationId)
+							// wait for the third promise (Location)
+							.then(function(location) {
+								if(reply.status === 200) {
+									// inject the child into the parent
+									reply.data[index].location = location.data;
 								}
 							});
 					});

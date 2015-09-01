@@ -2,7 +2,7 @@
  * controller for the location service
  **/
 app.controller("LocationController", function($http, $scope, LocationService) {
-	$scope.location = null;
+	$scope.locations = null;
 	$scope.statusClass = "alert-success";
 	$scope.statusMessage = null;
 
@@ -13,7 +13,8 @@ app.controller("LocationController", function($http, $scope, LocationService) {
 		LocationService.addLocation(location)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.statusClass = "alert-success";
+					$scope.statusMessage = reply.message;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -25,7 +26,7 @@ app.controller("LocationController", function($http, $scope, LocationService) {
 		LocationService.editLocation(location)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.locations = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -37,7 +38,7 @@ app.controller("LocationController", function($http, $scope, LocationService) {
 		LocationService.deleteLocation(location)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.locations = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -49,7 +50,7 @@ app.controller("LocationController", function($http, $scope, LocationService) {
 		LocationService.getLocationByLocationId(locationId)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.locations = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -61,7 +62,7 @@ app.controller("LocationController", function($http, $scope, LocationService) {
 		LocationService.getLocationByStorageCode(storageCode)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.locations = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -73,7 +74,7 @@ app.controller("LocationController", function($http, $scope, LocationService) {
 		LocationService.getProductByLocationId(locationId)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.locations = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -85,7 +86,7 @@ app.controller("LocationController", function($http, $scope, LocationService) {
 		LocationService.getAllLocations()
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.locations = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;

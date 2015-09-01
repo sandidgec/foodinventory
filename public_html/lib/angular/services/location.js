@@ -10,15 +10,15 @@ app.service("LocationService", function($http, $q) {
 	 * @returns accepts the promise when the product is added, rejected otherwise
 	 **/
 	this.addLocation = function(location) {
-		return($http.post(this.LOCATION_ENDPOINT + location)
+		return ($http.post(this.LOCATION_ENDPOINT + location)
 			.then(function(reply) {
 				if(typeof reply.data === "object") {
-					return(reply.data);
+					return (reply.data);
 				} else {
-					return($q.reject(reply.data));
+					return ($q.reject(reply.data));
 				}
 			}, function(reply) {
-				return($q.reject(reply.data));
+				return ($q.reject(reply.data));
 			}));
 	};
 
@@ -63,15 +63,15 @@ app.service("LocationService", function($http, $q) {
 	 * @returns accepts the promise when locations are found, rejected otherwise
 	 **/
 	this.getLocationByLocationId = function(locationId) {
-		return($http.get(this.LOCATION_ENDPOINT + locationId)
-			.then(function(reply){
+		return ($http.get(this.LOCATION_ENDPOINT + locationId)
+			.then(function(reply) {
 				if(typeof reply.data === "object") {
-					return(reply.data);
+					return (reply.data);
 				} else {
-					return($q.reject(reply.data));
+					return ($q.reject(reply.data));
 				}
 			}, function(reply) {
-				return($q.reject(reply.data));
+				return ($q.reject(reply.data));
 			}));
 	};
 
@@ -81,15 +81,15 @@ app.service("LocationService", function($http, $q) {
 	 * @returns accepts the promise when locations are found, rejected otherwise
 	 **/
 	this.getLocationByStorageCode = function(storageCode) {
-		return($http.get(this.LOCATION_ENDPOINT + "?storageCode=" + storageCode)
-			.then(function(reply){
+		return ($http.get(this.LOCATION_ENDPOINT + "?storageCode=" + storageCode)
+			.then(function(reply) {
 				if(typeof reply.data === "object") {
-					return(reply.data);
+					return (reply.data);
 				} else {
-					return($q.reject(reply.data));
+					return ($q.reject(reply.data));
 				}
 			}, function(reply) {
-				return($q.reject(reply.data));
+				return ($q.reject(reply.data));
 			}));
 	};
 	/**
@@ -98,15 +98,15 @@ app.service("LocationService", function($http, $q) {
 	 * @returns accepts the promise when products are found, rejected otherwise
 	 **/
 	this.getProductByLocationId = function(locationId) {
-		return($http.get(this.LOCATION_ENDPOINT + "?locationId=" + locationId)
-			.then(function(reply){
+		return ($http.get(this.LOCATION_ENDPOINT + "?locationId=" + locationId)
+			.then(function(reply) {
 				if(typeof reply.data === "object") {
-					return(reply.data);
+					return (reply.data);
 				} else {
-					return($q.reject(reply.data));
+					return ($q.reject(reply.data));
 				}
 			}, function(reply) {
-				return($q.reject(reply.data));
+				return ($q.reject(reply.data));
 			}));
 	};
 	/**

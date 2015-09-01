@@ -1,5 +1,5 @@
 <!--  Movement Container  -->
-<div class="movement-tab">
+<div class="movement-tab row">
 	<h3> Your <em>Movements</em></h3>
 
 	<!--  Movement Buttons -->
@@ -12,38 +12,32 @@
 	</div>
 
 	<!--  Movement Reports -->
-	<div class="movement reports row">
-		<div class="row">
-			<h4>Reports</h4>
-		</div>
+	<div class="movement reports">
+		<h4>Reports</h4>
 
-		<div class="row" ng-controller="MovementController">
+		<div ng-controller="MovementController">
 			<table id="movementTable" class="table table-bordered table-hover table-striped">
 				<thead>
 					<tr>
+						<th>Product</th>
 						<th>From</th>
 						<th>To</th>
-						<th>Product</th>
 						<th>User</th>
 						<th>Movement Date</th>
 						<th>Movement Type</th>
+						<th>Price</th>
+						<th>Cost</th>
 					</tr>
 				</thead>
 
 				<tbody>
 					<tr ng-repeat="movement in movements">
+						<td>{{ movement.product.title }}</td>
 						<td>{{ movement.fromLocationId.description }}</td>
 						<td>{{ movement.toLocationId.description }}</td>
-						<td>{{ movement.product.title }}</td>
 						<td>{{ movement.userId }}</td>
 						<td>{{ movement.movementDate | date }}</td>
 						<td>{{ movement.movementType }}</td>
-						<!--						<td>-->
-						<!--							<button class="btn btn-info" ng-click="setEditedMovement(movement);"><i class="fa fa-pencil"></i></button>-->
-						<!--							<form ng-submit="deleteMovement(movement.movementId);">-->
-						<!--								<button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i></button>-->
-						<!--							</form>-->
-						<!--						</td>-->
 					</tr>
 				</tbody>
 			</table>
@@ -62,7 +56,7 @@
 				</div>
 
 				<div class="modal-body" ng-controller="MovementController">
-					<form class="form-horizontal" ng-submit="addMovement(movement);">
+					<form class="form-horizontal" method="post" ng-submit="addMovement(movement);">
 						<div class="form-group">
 							<label for="product-search" class="col-sm-4 control-label">Product:</label>
 
@@ -113,7 +107,7 @@
 							</div>
 						</div>
 
-							<pre>form = {{ movement | json }}</pre>
+						<pre>form = {{ movement | json }}</pre>
 					</form>
 				</div>
 				<div class="modal-footer">
