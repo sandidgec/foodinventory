@@ -15,7 +15,7 @@ $CURRENT_DIR = __DIR__;
 				</header>
 
 				<div class="placeholder"></div>
-				<h2 class="welcome">Welcome Your New Employee</h2>
+				<h2 class="welcome">Welcome your new employee.</h2>
 				<img class="center-block" src="../lib/images/invtextboxlogo.png"  alt="Logo Image">
 			</div>
 			<main class="home">
