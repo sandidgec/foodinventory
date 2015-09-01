@@ -81,6 +81,9 @@
 					<li ng-class="{ active:tab.isSet(5) }">
 						<a href="" ng-click="tab.setTab(5)">Notification</a>
 					</li>
+					<li>
+						<logout></logout>
+					</li>
 				</ul>
 
 				<!--  Product Tab's Contents  -->
