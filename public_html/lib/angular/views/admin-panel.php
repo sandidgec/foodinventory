@@ -36,10 +36,13 @@
 		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-messages.min.js"></script>
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.0/ui-bootstrap-tpls.min.js"></script>
 		<script type="text/javascript" src="../food-inventory.js"></script>
+		<script type="text/javascript" src="../services/login.js"></script>
 		<script type="text/javascript" src="../services/product.js"></script>
+		<script type="text/javascript" src="../services/user.js"></script>
 		<script type="text/javascript" src="../services/movement.js"></script>
 		<script type="text/javascript" src="../services/vendor.js"></script>
 		<script type="text/javascript" src="../services/location.js"></script>
+		<script type="text/javascript" src="../controllers/login.js"></script>
 		<script type="text/javascript" src="../controllers/modal-instance-ctrl.js"></script>
 		<script type="text/javascript" src="../controllers/product.js"></script>
 		<script type="text/javascript" src="../controllers/tab-controller.js"></script>
@@ -51,8 +54,6 @@
 		<script type="text/javascript" src="../directives/movement.js"></script>
 		<script type="text/javascript" src="../directives/vendor.js"></script>
 		<script type="text/javascript" src="../directives/location.js"></script>
-		<script type="text/javascript" src="../services/login.js"></script>
-		<script type="text/javascript" src="../controllers/login.js"></script>
 <!--		<script type="text/javascript" src="../directives/notification.js"></script>-->
 
 		<!-- Page Title -->
@@ -65,8 +66,6 @@
 			<div class="vertical-text col-md-1">
 				<h1 class="text-center">Admin-Panel</h1>
 			</div>
-
-
 
 			<!-- Admin Tabs  -->
 			<section class="col-md-9" ng-controller="TabController as tab">
@@ -113,11 +112,13 @@
 					<notification></notification>
 				</div>
 			</section>
-				<header class="logout col-md-2">
-			 		<ul class="nav nav-pulls right">
-						<?php require_once "logout.php"; ?>
-					</ul>
-				</header>
+
+			<header class="logout col-md-2">
+				<ul class="nav nav-pulls right">
+					<?php require_once "logout.php"; ?>
+				</ul>
+			</header>
+
 		</section>
 	</body>
 </html>
