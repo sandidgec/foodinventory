@@ -18,7 +18,7 @@ $CURRENT_DIR = __DIR__;
 				<h2 class="welcome">Welcome Your New Employee</h2>
 				<img class="center-block" src="../lib/images/invtextboxlogo.png"  alt="Logo Image">
 			</div>
-				<main class="home">
+			<main class="home">
 				<section class="col-xs-3 leftgraphic text-center">
 					<h3>The Difference</h3>
 				</section>
@@ -26,7 +26,7 @@ $CURRENT_DIR = __DIR__;
 				<section class="col-xs-6 testimonials text-center">
 					<h3>Testimonials</h3>
 					<p class="test">
-					"This is inventory management done right, and done better!" - John Smith
+						"This is inventory management done right, and done better!" - John Smith
 					</p>
 				</section>
 
