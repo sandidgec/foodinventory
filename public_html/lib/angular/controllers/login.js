@@ -20,10 +20,10 @@ app.controller("LoginController", function($http, LoginService, $window, $scope)
 	};
 
 	$scope.login = function(user) {
-		var result = $http.post("/~invtext/backend/php/lib/login.php", user)
+		$http.post("/~invtext/backend/php/lib/login.php", user)
 			.then(function(reply) {
 				if(typeof reply.data === "object") {
-					if(result.status === 200) {
+					if(reply.status === 200) {
 						$window.location.href = "../lib/angular/views/admin-panel.php"
 					}
 				} else {
