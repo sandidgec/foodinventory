@@ -31,7 +31,6 @@
 									 placeholder=" (e.g. password1234)" ng-model="user.password"/>
 						</div>
 					</div>
-					<pre> form = {{ user | json }} </pre>
 					<button type="submit" class="btn btn-primary">Login</button>
 				</form>
 			</div>

@@ -123,7 +123,6 @@
 						</div>
 					</div>
 
-					<pre>form = {{ user | json }}</pre>
 					<button type="submit" class="btn btn-primary">Sign-Up</button>
 				</form>
 			</div>

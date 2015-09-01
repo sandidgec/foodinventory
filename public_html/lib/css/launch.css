@@ -30,8 +30,8 @@ body {
 .abouttext {
 	padding-bottom: 4%;
 	text-align: center;
-	margin-left: 10%;
-	margin-right: 10%;
+	margin-left: 12%;
+	margin-right: 12%;
 	font-family: 'Quicksand', sans-serif;
 	font-size: 1.5em;
 }
@@ -65,6 +65,10 @@ body {
 	font-weight: 500;
 }
 
+.testys {
+	text-align: center;
+	font-family: 'Quicksand', sans-serif;
+}
 
 .left-graphic {
 	display: inline-block;
@@ -119,6 +123,12 @@ body {
 
 	h3 {
 	font-family: 'Quicksand', sans-serif;
+	}
+
+	h6 {
+	font-family: 'Quicksand', sans-serif;
+	color: #002FCC;
+		font-size: 1.2em;
 	}
 
 	footer {
