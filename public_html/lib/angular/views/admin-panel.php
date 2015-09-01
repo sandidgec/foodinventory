@@ -46,6 +46,7 @@
 		<script type="text/javascript" src="../controllers/movement.js"></script>
 		<script type="text/javascript" src="../controllers/vendor.js"></script>
 		<script type="text/javascript" src="../controllers/location.js"></script>
+		<script type="text/javascript" src="../directives/logout.js"></script>
 		<script type="text/javascript" src="../directives/product.js"></script>
 		<script type="text/javascript" src="../directives/movement.js"></script>
 		<script type="text/javascript" src="../directives/vendor.js"></script>
