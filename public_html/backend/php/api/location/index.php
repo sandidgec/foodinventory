@@ -45,7 +45,7 @@ try {
 					$reply->data = Location::getLocationByLocationId($pdo, $locationId);
 				}
 			} else if(empty($storageCode) === false) {
-				$reply->data = Location::getLocationByStorageCode($pdo, $storageCode)->toArray();
+				$reply->data = Location::getLocationByStorageCode($pdo, $storageCode);
 			} else {
 				$reply->data = Location::getALLLocations($pdo);
 			}

@@ -83,7 +83,7 @@ try {
 		} else if(empty($sku) === false) {
 			$reply->data = Product::getProductBySku($pdo, $sku);
 		} else if(empty($title) === false) {
-			$reply->data = Product::getProductByTitle($pdo, $title);
+			$reply->data = Product::getProductByTitle($pdo, $title)->toArray();
 		} else if(is_int($page) === true && $page >= 0) {
 			$reply->data = Product::getAllProducts($pdo, $page)->toArray();
 		} else {
