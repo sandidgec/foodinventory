@@ -13,3 +13,9 @@ i.fa-plus {
 	transform: rotate(-90deg);
 	transform-origin: left top 0;
 }
+
+.outbtn {
+	color: dodgerblue;
+	font-size: 1.7em;
+	margin-top: 10px;
+}

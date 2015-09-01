@@ -51,6 +51,8 @@
 		<script type="text/javascript" src="../directives/movement.js"></script>
 		<script type="text/javascript" src="../directives/vendor.js"></script>
 		<script type="text/javascript" src="../directives/location.js"></script>
+		<script type="text/javascript" src="../services/login.js"></script>
+		<script type="text/javascript" src="../controllers/login.js"></script>
 <!--		<script type="text/javascript" src="../directives/notification.js"></script>-->
 
 		<!-- Page Title -->
@@ -64,8 +66,10 @@
 				<h1 class="text-center">Admin-Panel</h1>
 			</div>
 
+
+
 			<!-- Admin Tabs  -->
-			<section class="col-md-11" ng-controller="TabController as tab">
+			<section class="col-md-9" ng-controller="TabController as tab">
 				<ul class="nav nav-pills">
 					<li ng-class="{ active:tab.isSet(1) }">
 						<a href="" ng-click="tab.setTab(1)">Product</a>
@@ -81,9 +85,6 @@
 					</li>
 					<li ng-class="{ active:tab.isSet(5) }">
 						<a href="" ng-click="tab.setTab(5)">Notification</a>
-					</li>
-					<li>
-						<logout></logout>
 					</li>
 				</ul>
 
@@ -112,6 +113,11 @@
 					<notification></notification>
 				</div>
 			</section>
+				<header class="logout col-md-2">
+			 		<ul class="nav nav-pulls right">
+						<?php require_once "logout.php"; ?>
+					</ul>
+				</header>
 		</section>
 	</body>
 </html>
