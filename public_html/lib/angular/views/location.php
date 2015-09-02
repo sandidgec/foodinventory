@@ -67,194 +67,41 @@
 				<div class="modal-body">
 					<form name="addLocationForm" id="addLocationForm" class="form-horizontal" ng-submit="addLocation(location);" ng-hide="isEditing" novalidate>
 						<div class="form-group">
+							<label for="storage-code" class="col-sm-3 control-label">Storage Code</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="storage-code" name="storage Code" placeholder="Enter Storage Code" ng-model="location.storageCode" required/>
+							</div>
+						</div>
+						<div class="form-group">
 							<label for="location-description" class="col-sm-3 control-label">Description</label>
 							<div class="col-sm-9">
 								<input type="text" class="form-control" id="location-description" name="location-description" placeholder="Enter Location Description" ng-model="location.description" required/>
 							</div>
 						</div>
+						<pre>form = {{ location | json }}</pre>
+						<button type="submit" class="btn btn-info">Create</button>
+					</form>
+					<form name="editLocationForm" id="editLocationForm" class="form-horizontal" ng-submit="updateLocation(location);" ng-hide="isEditing">
 						<div class="form-group">
-							<label for="sku" class="col-sm-3 control-label">SKU:</label>
-
+							<label for="edit-storage-code" class="col-sm-3 control-label">Storage Code</label>
 							<div class="col-sm-9">
-								<input type="text" class="form-control" id="sku" name="sku" placeholder="Enter SKU " ng-model="product.sku"/>
+								<input type="text" class="form-control" id="edit-storage-code" name="edit-storage Code" placeholder="Enter Storage Code" ng-model="editedLocation.storageCode" required/>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="leadTime" class="col-sm-3 control-label">Lead Time:</label>
-
+							<label for="edit-location-description" class="col-sm-3 control-label">Description</label>
 							<div class="col-sm-9">
-								<input type="text" class="form-control" id="leadTime" name="leadTime" placeholder="Enter Order Lead Time" ng-model="product.leadTime"/>
+								<input type="text" class="form-control" id="edit-location-description" name="edit-location-description" placeholder="Enter Location Description" ng-model="editedLocation.description" required/>
 							</div>
 						</div>
-						<pre>form = {{ product | json }}</pre>
-						<button type="submit" class="btn btn-primary">Submit</button>
+						<pre>form = {{ location | json }}</pre>
+						<button type="submit" class="btn btn-info">save</button>
+						<button class="btn btn-info" ng-click="cancelEditing();">Cancel</button>
 					</form>
 				</div>
 
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- Edit Product Modal -->
-	<div class="modal fade" id="EditProductModal">
-		<div class="modal-dialog">
-			<div class="modal-content">
-
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span></button>
-					<h3 class="modal-title">Edit a Product</h3>
-				</div>
-
-				<div class="modal-body" ng-controller="ProductController">
-					<form class="form-horizontal" ng-submit="addProduct(product);">
-						<div class="form-group">
-							<label for="product" class="col-sm-3 control-label">Product:</label>
-
-							<div class="col-sm-9">
-								<input type="text" class="form-control" id="product" name="product" placeholder="Enter Product " ng-model="product.title"/>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="Description" class="col-sm-3 control-label">Description</label>
-
-							<div class="col-sm-9">
-								<input type="text" class="form-control" id="description" name="description" placeholder="Enter Product Description" ng-model="product.description"/>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="vendor-search" class="col-sm-3 control-label">Vendor</label>
-
-							<div class="col-sm-8">
-								<input type="text" class="form-control" id="vendor-search" name="vendor-search" placeholder="Enter Vendor"
-										 ng-model="product.vendorId" typeahead="vendor for vendorName in getVendorByVendorName($viewValue)"
-										 typeahead-loading="loadingVendors" typeahead-no-results="noResults"/>
-								<i ng-show="loadingVendors" class="glyphicon glyphicon-refresh"></i>
-
-								<div ng-show="noResults">
-									<i class="glyphicon glyphicon-remove"></i>No Results Found
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="sku" class="col-sm-3 control-label">SKU:</label>
-
-							<div class="col-sm-9">
-								<input type="text" class="form-control" id="sku" name="sku" placeholder="Enter SKU " ng-model="product.sku"/>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="leadTime" class="col-sm-3 control-label">Lead Time:</label>
-
-							<div class="col-sm-9">
-								<input type="text" class="form-control" id="leadTime" name="leadTime" placeholder="Enter Order Lead Time" ng-model="product.leadTime"/>
-							</div>
-						</div>
-						<pre>form = {{ product | json }}</pre>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-							<button type="button" class="btn btn-primary">Submit</button>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-
-<!--  Location Container  -->
-<div class="list-group">
-	<!--  Location Container  -->
-	<div class="list-group-item">
-		<h3> Your <em>Location</em></h3>
-
-		<!--  Location Buttons -->
-		<div class="location button row">
-			<div class="col-md-4">
-				<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#LocationModal">
-					Add <br> +
-				</button>
-			</div>
-			<div class="col-md-4">
-				<button class="btn btn-default" ng-click="editLocation(location)" value="Edit"> E</button>
-			</div>
-			<div class="col-md-4">
-				<button class="btn btn-default" ng-click="deleteLocation(location)" value="Delete"> -</button>
-			</div>
-		</div>
-
-		<!--  Location Reports -->
-		<div class="location reports row">
-			<h4>Reports</h4>
-
-			<div class="col-md-12">
-				<table id="example" class="table table-striped table-bordered" width="100%" cellspacing="0">
-					<thead>
-						<tr>
-							<th>Product</th>
-							<th>Storage Code</th>
-							<th>description</th>
-						</tr>
-					</thead>
-
-					<tfoot>
-						<tr>
-							<th>Product</th>
-							<th>Storage Code</th>
-							<th>description</th>
-						</tr>
-					</tfoot>
-
-					<tbody>
-						<tr ng-repeat="location in locations">
-							<td>{{ location.productId }}</td>
-							<td>{{ location.stroageCode }}</td>
-							<td>{{ location.decription }}</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-
-		<!--  Add Location Modal -->
-		<div class="modal fade" id="LocationModal">
-			<div class="modal-dialog">
-				<div class="modal-content">
-
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span></button>
-						<h3 class="modal-title">Add a Location</h3>
-					</div>
-
-					<div class="modal-body" ng-controller="LocationController">
-						<form class="form-horizontal" method="post" ng-submit="addLocation(location);">
-							<div class="form-group">
-								<label for="storageCode" class="col-sm-3 control-label">Storage Code:</label>
-
-								<div class="col-sm-9">
-									<input type="text" class="form-control" id="storageCode" name="storageCode" placeholder="e.g. BR for (Back Room)" ng-model="location.storageCode"/>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="description" class="col-sm-3 control-label">Description:</label>
-
-								<div class="col-sm-9">
-									<input type="text" class="form-control" id="description" name="description" placeholder="e.g. Back room of linda's house" ng-model="location.description"/>
-								</div>
-							</div>
-						</form>
-						<pre>form = {{ location | json }}</pre>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary">Sign-Up</button>
-					</div>
-
 				</div>
 			</div>
 		</div>
