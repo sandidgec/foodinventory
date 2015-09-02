@@ -82,11 +82,6 @@ class ProductAlert {
 	 * @throws InvalidArgumentException for Invalid Alert Id
 	 **/
 	public function setAlertId($newAlertId) {
-		// this is a new alert id without a mySQL assigned Id (yet)
-		if($newAlertId === null) {
-			$this->$newAlertId = null;
-			return;
-		}
 		//verify the alert id is valid
 		$newAlertId = filter_var($newAlertId, FILTER_VALIDATE_INT);
 		if(empty($newAlertId) === true) {
@@ -300,19 +295,20 @@ class ProductAlert {
 		$parameters = array("productId" => $productId);
 		$statement->execute($parameters);
 
-		// grab the ProductLevel from mySQL
-		try {
-			$ProductLevel = null;
-			$statement->setFetchMode(PDO::FETCH_ASSOC);
-			$row = $statement->fetch();
-			if($row !== false) {
-				$ProductLevel = new ProductAlert ($row["alertId"], $row["productId"], $row["alertEnabled"]);
+// build an array of ProductAlert(s)
+		$productAlerts = new SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$productAlert = new ProductAlert($row["alertId"], $row["productId"], $row["alertEnabled"]);
+				$productAlerts[$productAlerts->key()] = $productAlert;
+				$productAlerts->next();
+			} catch(PDOException $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new PDOException($exception->getMessage(), 0, $exception));
 			}
-		} catch(PDOException $exception) {
-			// if the row couldn't be converted rethrow it
-			throw(new PDOException($exception->getMessage(), 0, $exception));
 		}
-		return($ProductLevel);
+		return($productAlerts);
 	}
 
 	/**
@@ -325,7 +321,7 @@ class ProductAlert {
 	 * @throws PDOException if row couldn't be converted in mySQL
 	 **/
 	public static function getProductAlertByAlertEnabled (PDO &$pdo, $alertEnabled) {
-		// sanitize the alertId before searching
+		// sanitize the alertEnabled before searching
 		$alertEnabled = filter_var($alertEnabled, FILTER_VALIDATE_BOOLEAN);
 		if($alertEnabled === false) {
 			throw(new PDOException("alert Enabled is not a valid boolean"));
@@ -335,13 +331,17 @@ class ProductAlert {
 		$query = "SELECT alertId, productId, alertEnabled FROM productAlert WHERE alertEnabled = :alertEnabled";
 		$statement = $pdo->prepare($query);
 
-		//bind the alertId to the place holder in the template
+		//bind the alertEnabled to the place holder in the template
 		$parameters = array("alertEnabled" => $alertEnabled);
 		$statement->execute($parameters);
 
-		// grab the ProductLevel from mySQL
+		//bind the alertEnabled to the place holder in the template
+		$parameters = array("alertEnabled" => $alertEnabled);
+		$statement->execute($parameters);
+
+		// grab the ProductAlert from mySQL
 		try {
-			$ProductLevel = null;
+			$ProductAlert = null;
 			$statement->setFetchMode(PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false) {
@@ -351,6 +351,6 @@ class ProductAlert {
 			// if the row couldn't be converted rethrow it
 			throw(new PDOException($exception->getMessage(), 0, $exception));
 		}
-		return($ProductLevel);
+		return($ProductAlert);
 	}
 }

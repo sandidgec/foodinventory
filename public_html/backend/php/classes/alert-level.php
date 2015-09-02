@@ -202,16 +202,12 @@ class AlertLevel implements JsonSerializable {
 	 * @return RangeException if $newAlertOperator is >10 characters
 	 **/
 	public function setAlertOperator($newAlertOperator){
-		//verify alert operator is secure
-		$newAlertOperator = trim($newAlertOperator);
-		$newAlertOperator = filter_var($newAlertOperator, FILTER_SANITIZE_STRING);
-		if(empty($newAlertOperator)=== true){
-			throw(new InvalidArgumentException("alert operator is empty or insecure"));
+		// verify the operators against a whitelist
+		$validOperators = ["<", ">"];
+		if(in_array($newAlertOperator, $validOperators) === false) {
+			throw(new InvalidArgumentException("not a valid alert operator"));
 		}
-		//verify alert operator will fit into database
-		if(strlen($newAlertOperator) > 10){
-			throw(new RangeException("alert level is too large"));
-		}
+
 		//store alert operator
 		$this->alertOperator = $newAlertOperator;
 	}

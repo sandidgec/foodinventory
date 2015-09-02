@@ -254,7 +254,7 @@ class Notification implements JsonSerializable {
 	public function setNotificationContent($newNotificationContent) {
 		// verify the notification content is secure
 		$newNotificationContent = trim($newNotificationContent);
-		$newNotificationContent = filter_var($newNotificationContent, FILTER_SANITIZE_STRING);
+		$newNotificationContent = filter_var($newNotificationContent, FILTER_SANITIZE_SPECIAL_CHARS);
 		if(empty($newNotificationContent) === true) {
 			throw(new InvalidArgumentException("notification content is empty or insecure"));
 		}

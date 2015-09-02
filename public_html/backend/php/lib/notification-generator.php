@@ -104,9 +104,15 @@ EOF;
 		// the $failedRecipients parameter passed in the send() method now contains contains an array of the Emails that failed
 		throw(new RuntimeException("unable to send email"));
 	}
+	$notification = new Notification(null, $alertLevel->getAlertId(), true, null, "Email", $message);
+	$notification->insert($pdo);
 
 	// report a successful send
-	echo "<div class=\"alert alert-success\" role=\"alert\">Email successfully sent.</div>";
 } catch(Exception $exception) {
-	echo "<div class=\"alert alert-danger\" role=\"alert\"><strong>Oh snap!</strong> Unable to send email: " . $exception->getMessage() . "</div>";
+	try {
+		$notification = new Notification(null, $alertLevel->getAlertId(), false, null, "Email", $message);
+		$notification->insert($pdo);
+	} catch(Exception $exception) {
+		// STFU
+	}
 }
