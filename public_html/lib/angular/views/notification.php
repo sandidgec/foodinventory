@@ -19,32 +19,28 @@
 			<table id="notificationTable" class="table table-bordered table-hover table-striped">
 				<thead>
 					<tr>
-						<th>Title</th>
-						<th>Description</th>
-						<th>Vendor</th>
-						<th>SKU</th>
-						<th>Lead Time</th>
+						<th>Email Status</th>
+						<th>Content</th>
+						<th>Date Time</th>
+						<th class="center"><i class="fa fa-pencil fa-x"></i></th>
+						<th class="center"><i class="fa fa-trash fa-x"></i></th>
 					</tr>
 				</thead>
 
 				<tbody>
 					<tr ng-repeat="notification in notifications">
-						<td>{{ product.title }}</td>
-						<td>{{ product.description }}</td>
-						<td>{{ product.vendor.vendorName }}</td>
-						<td>{{ product.sku }}</td>
-						<td>{{ product.leadTime }}</td>
+						<td>{{ notification.emailStatus }}</td>
+						<td>{{ notification.notificationContent }}</td>
+						<td>{{ notification.notificationDateTime }}</td>
 						<td>
-							<div class="col-sm-6">
-								<a href="#" class="btn btn-md btn-info" data-toggle="modal" data-target="#EditNotificationModal">
-									<i class="fa fa-pencil"></i>
-								</a>
-							</div>
-							<div class="col-sm-6">
-								<form ng-submit="deleteNotification(notification.notificationId);">
-									<button type="submit" class="btn btn-md btn-danger"><i class="fa fa-trash"></i></button>
-								</form>
-							</div>
+							<a href="#" class="btn btn-md btn-info" ng-click="setEditedProduct(product);" data-toggle="modal" data-target="#ProductModal">
+								<i class="fa fa-pencil"></i>
+							</a>
+						</td>
+						<td>
+							<form ng-submit="deleteProduct(product.productId);">
+								<button type="submit" class="btn btn-md btn-danger"><i class="fa fa-trash"></i></button>
+							</form>
 						</td>
 					</tr>
 				</tbody>
