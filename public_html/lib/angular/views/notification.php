@@ -9,6 +9,12 @@
 				<i class="fa fa-plus fa-2x"></i>
 			</a>
 		</div>
+		<div class="col-md-5 col-md-offset-4">
+			<label for="search" class="col-sm-2 control-label">Search: </label>
+			<div class="col-sm-8 col-sm-offset-2">
+				<input type="text" class="form-control" id="search" name="search" placeholder="Search Stuff Here" />
+			</div>
+		</div>
 	</div>
 
 	<!--  Product Reports -->
@@ -48,7 +54,7 @@
 		</div>
 	</div>
 
-	<!-- Add Product Modal -->
+	<!-- Add Notification Modal -->
 	<div class="modal fade" id="AddNotificationModal">
 		<div class="modal-dialog">
 			<div class="modal-content">
