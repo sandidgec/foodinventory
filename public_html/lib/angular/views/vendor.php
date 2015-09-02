@@ -5,9 +5,15 @@
 	<!--  Vendor Buttons -->
 	<div class="vendor button row">
 		<div class="col-md-3 text-center">
-			<a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#AddVendorModal">
+			<a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#VendorModal">
 				<i class="fa fa-plus fa-2x"></i>
 			</a>
+		</div>
+		<div class="col-md-5 col-md-offset-4">
+			<label for="search" class="col-sm-2 control-label">Search: </label>
+			<div class="col-sm-8 col-sm-offset-2">
+				<input type="text" class="form-control" id="search" name="search" placeholder="Search Stuff Here" />
+			</div>
 		</div>
 	</div>
 
@@ -23,6 +29,8 @@
 						<th>Contact Name</th>
 						<th>Email</th>
 						<th>Phone Number</th>
+						<th class="center"><i class="fa fa-pencil fa-x"></i></th>
+						<th class="center"><i class="fa fa-trash fa-x"></i></th>
 					</tr>
 				</thead>
 
@@ -32,55 +40,94 @@
 						<td>{{ vendor.contactName }}</td>
 						<td>{{ vendor.vendorEmail }}</td>
 						<td>{{ vendor.vendorPhoneNumber }}</td>
+						<td>
+							<a href="#" class="btn btn-md btn-info" ng-click="setEditedVendor(vendor);" data-toggle="modal" data-target="#VendorModal">
+								<i class="fa fa-pencil"></i>
+							</a>
+						</td>
+						<td>
+							<form ng-submit="deleteVendor(vendor.vendorId);">
+								<button type="submit" class="btn btn-md btn-danger"><i class="fa fa-trash"></i></button>
+							</form>
+						</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
 
-	<!--  Add Vendor Modal -->
-	<div class="modal fade" id="AddVendorModal">
+	<!--  Add/Edit Vendor Modal -->
+	<div class="modal fade" id="VendorModal">
 		<div class="modal-dialog">
-			<div class="modal-content">
+			<div class="modal-content" ng-controller="VendorControllewr">
 
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span></button>
-					<h3 class="modal-title">Add a Vendor</h3>
+					<h3 class="modal-title" ng-hide="isEditing">Create a Vendor</h3>
+					<h3 class="modal-title" ng-show="isEditing">Edit a Vendor</h3>
 				</div>
 
-				<div class="modal-body" ng-controller="VendorController">
-					<form class="form-horizontal" method="post" ng-submit="addVendor(vendor);">
+				<div class="modal-body">
+					<form name="addVendorForm" id="addVendorForm" class="form-horizontal" ng-submit="addVendor(vendor);" ng-hide="isEditing" novalidate>
 						<div class="form-group">
 							<label for="vendorName" class="col-sm-3 control-label">Vendor Name</label>
 							<div class="col-sm-9">
-								<input type="text" class="form-control" id="vendorName" name="vendorName" placeholder="e.g. Topher Sucks" ng-model="VendorCtrl.vendorName"/>
+								<input type="text" class="form-control" id="vendor-name" name="vendor-name" placeholder="Enter Vendor's Name" ng-model="vendor.vendorName" required/>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="contactName" class="col-sm-3 control-label">Contact Name</label>
 							<div class="col-sm-9">
-								<input type="text" class="form-control" id="contactName" name="contactName" placeholder="e.g. Topher Sucks" ng-model="VendorCtrl.contactName"/>
+								<input type="text" class="form-control" id="contactName" name="contactName" placeholder="Enter Contact'a Name" ng-model="vendor.contactName"/>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="vendorEmail" class="col-sm-3 control-label">Email</label>
 							<div class="col-sm-9">
-								<input type="text" class="form-control" id="vendorEmail" name="vendorEmail" placeholder="e.g. Topher Sucks" ng-model="VendorCtrl.vendorEmail"/>
+								<input type="text" class="form-control" id="vendorEmail" name="vendorEmail" placeholder="Enter Vendor's Email" ng-model="vendor.vendorEmail"/>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="vendorPhoneNumber" class="col-sm-3 control-label">Phone Number</label>
 							<div class="col-sm-9">
-								<input type="text" class="form-control" id="vendorPhoneNumber" name="vendorPhoneNumber" placeholder="e.g. Topher Sucks" ng-model="VendorCtrl.vendorPhoneNumber"/>
+								<input type="text" class="form-control" id="vendorPhoneNumber" name="vendorPhoneNumber" placeholder="Enter Vendor's Phone Number" ng-model="vendor.vendorPhoneNumber"/>
 							</div>
 						</div>
-
 						<pre>form = {{ vendor | json }}</pre>
-
-						<button type="submit" class="btn btn-primary">Add A Vendor</button>
+						<button type="submit" class="btn btn-info">Create</button>
+					</form>
+					<form name="editVendorForm" id="editVendorForm" class="form-horizontal" ng-submit="updateVendor(editVendor);" ng-hide="isEditing" novalidate>
+						<div class="form-group">
+							<label for="edit-vendorName" class="col-sm-3 control-label">Vendor Name</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="edit-vendor-name" name="edit-vendor-name" placeholder="Enter Vendor's Name" ng-model="editedVendor.vendorName" required/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="editContactName" class="col-sm-3 control-label">Contact Name</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="editContactName" name="editContactName" placeholder="Enter Contact'a Name" ng-model="editVendor.contactName"/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="editVendorEmail" class="col-sm-3 control-label">Email</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="editVendorEmail" name="editVendorEmail" placeholder="Enter Vendor's Email" ng-model="editVendor.vendorEmail"/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="editVendorPhoneNumber" class="col-sm-3 control-label">Phone Number</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="editVendorPhoneNumber" name="editVendorPhoneNumber" placeholder="Enter Vendor's Phone Number" ng-model="editVendor.vendorPhoneNumber"/>
+							</div>
+						</div>
+						<pre>form = {{ vendor | json }}</pre>
+						<button type="submit" class="btn btn-info">Save</button>
+						<button class="btn btn-warning" ng-click="cancelEditing()">Cancel</button>
 					</form>
 				</div>
+
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				</div>

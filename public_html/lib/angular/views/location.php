@@ -5,9 +5,15 @@
 	<!--  Location Buttons -->
 	<div class="location button row">
 		<div class="col-md-3 text-center">
-			<a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#AddLocationModal">
+			<a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#LocationModal">
 				<i class="fa fa-plus fa-2x"></i>
 			</a>
+		</div>
+		<div class="col-md-5 col-md-offset-4">
+			<label for="search" class="col-sm-2 control-label">Search: </label>
+			<div class="col-sm-8 col-sm-offset-2">
+				<input type="text" class="form-control" id="search" name="search" placeholder="Search Stuff Here" />
+			</div>
 		</div>
 	</div>
 
@@ -19,7 +25,6 @@
 			<table id="location-table" class="table table-bordered table-hover table-striped">
 				<thead>
 					<tr>
-						<th>Product</th>
 						<th>Storage Code</th>
 						<th>description</th>
 						<th class="center"><i class="fa fa-pencil fa-x"></i></th>
@@ -29,16 +34,15 @@
 
 				<tbody>
 					<tr ng-repeat="location in locations">
-						<td>{{ location.productId }}</td>
-						<td>{{ location.stroageCode }}</td>
+						<td>{{ location.storageCode }}</td>
 						<td>{{ location.decription }}</td>
 						<td>
-							<a href="#" class="btn btn-md btn-info" data-toggle="modal" data-target="#EditProductModal">
+							<a href="#" class="btn btn-md btn-info" ng-click="setEditedLocation(location);" data-toggle="modal" data-target="#LocationModal">
 								<i class="fa fa-pencil"></i>
 							</a>
 						</td>
 						<td>
-							<form ng-submit="deleteProduct(product.productId);">
+							<form ng-submit="deleteLocation(location.productId);">
 								<button type="submit" class="btn btn-md btn-danger"><i class="fa fa-trash"></i></button>
 							</form>
 						</td>
@@ -48,45 +52,24 @@
 		</div>
 	</div>
 
-	<!-- Add Product Modal -->
-	<div class="modal fade" id="AddProductModal">
+	<!-- Add/Edit Product Modal -->
+	<div class="modal fade" id="LocationModal">
 		<div class="modal-dialog">
-			<div class="modal-content">
+			<div class="modal-content" ng-controller="LocationController">
 
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span></button>
-					<h3 class="modal-title">Add a Product</h3>
+					<h3 class="modal-title" ng-hide="isEditing">Create a Location</h3>
+					<h3 class="modal-title" ng-show="isEditing">Edit a Location</h3>
 				</div>
 
-				<div class="modal-body" ng-controller="ProductController">
-					<form class="form-horizontal" method="post" ng-submit="addProduct(product);">
+				<div class="modal-body">
+					<form name="addLocationForm" id="addLocationForm" class="form-horizontal" ng-submit="addLocation(location);" ng-hide="isEditing" novalidate>
 						<div class="form-group">
-							<label for="product" class="col-sm-3 control-label">Product:</label>
-
+							<label for="location-description" class="col-sm-3 control-label">Description</label>
 							<div class="col-sm-9">
-								<input type="text" class="form-control" id="product" name="product" placeholder="Enter Product" ng-model="product.title"/>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="Description" class="col-sm-3 control-label">Description</label>
-
-							<div class="col-sm-9">
-								<input type="text" class="form-control" id="description" name="description" placeholder="Enter Product Description" ng-model="product.description"/>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="vendor-search" class="col-sm-3 control-label">Vendor</label>
-
-							<div class="col-sm-8">
-								<input type="text" class="form-control" id="vendor-search" name="vendor-search" placeholder="Enter Vendor"
-										 ng-model="product.vendorId" typeahead="vendor.vendorId as vendor.vendorName for vendor in getVendorByVendorName($viewValue)"
-										 typeahead-loading="loadingVendors" typeahead-no-results="noResults"/>
-								<i ng-show="loadingVendors" class="glyphicon glyphicon-refresh"></i>
-
-								<div ng-show="noResults">
-									<i class="glyphicon glyphicon-remove"></i>No Results Found
-								</div>
+								<input type="text" class="form-control" id="location-description" name="location-description" placeholder="Enter Location Description" ng-model="location.description" required/>
 							</div>
 						</div>
 						<div class="form-group">
