@@ -1,6 +1,6 @@
 <!--  Movement Container  -->
 <div class="movement-tab row">
-	<h3> Your <em>Movements</em></h3>
+	<h3>Your <em>Movements</em></h3>
 
 	<!--  Movement Buttons -->
 	<div class="movement button row">
@@ -9,6 +9,12 @@
 				<i class="fa fa-plus fa-2x"></i>
 			</a>
 		</div>
+		<div class="col-md-5 col-md-offset-4">
+			<label for="search" class="col-sm-2 control-label">Search: </label>
+			<div class="col-sm-8 col-sm-offset-2">
+				<input type="text" class="form-control" id="search" name="search" placeholder="Search Stuff Here"/>
+			</div>
+		</div>
 	</div>
 
 	<!--  Movement Reports -->
@@ -16,17 +22,17 @@
 		<h4>Reports</h4>
 
 		<div ng-controller="MovementController">
-			<table id="movementTable" class="table table-bordered table-hover table-striped">
+			<table id="movement-table" class="table table-bordered table-hover table-striped">
 				<thead>
 					<tr>
 						<th>Product</th>
 						<th>From</th>
 						<th>To</th>
 						<th>User</th>
+						<th>Cost</th>
 						<th>Movement Date</th>
 						<th>Movement Type</th>
 						<th>Price</th>
-						<th>Cost</th>
 					</tr>
 				</thead>
 
@@ -35,9 +41,11 @@
 						<td>{{ movement.product.title }}</td>
 						<td>{{ movement.fromLocationId.description }}</td>
 						<td>{{ movement.toLocationId.description }}</td>
-						<td>{{ movement.userId }}</td>
+						<td>{{ movement.userId.firstName }}</td>
+						<td>{{ movement.cost }}</td>
 						<td>{{ movement.movementDate | date }}</td>
 						<td>{{ movement.movementType }}</td>
+						<td>{{ movement.price }}</td>
 					</tr>
 				</tbody>
 			</table>
@@ -59,13 +67,11 @@
 					<form class="form-horizontal" method="post" ng-submit="addMovement(movement);">
 						<div class="form-group">
 							<label for="product-search" class="col-sm-4 control-label">Product:</label>
-
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="product-search" name="product-search" placeholder="Product Search"
-										 ng-model="movement.productId" typeahead="title for title in getProductByTitle($viewValue)"
+								<input type="text" class="form-control" id="product-search" name="product-search" placeholder="Enter Product"
+										 ng-model="movement.productId" typeahead="product.productId as product.title for product in getProductByTitle($viewValue)"
 										 typeahead-loading="loadingProducts" typeahead-no-results="noResults">
 								<i ng-show="loadingProducts" class="glyphicon glyphicon-refresh"></i>
-
 								<div ng-show="noResults">
 									<i class="glyphicon glyphicon-remove"></i> No Results Found
 								</div>
@@ -73,23 +79,38 @@
 						</div>
 						<div class="form-group">
 							<label for="fromLocation-search" class="col-sm-4 control-label">From:</label>
-
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="fromLocation-search" name="fromLocation-search" placeholder="Location Search"
-										 ng-model="movement.fromLocationId" typeahead="storageCode for storageCode in getLocationByStorageCode($viewValue)"
+								<input type="text" class="form-control" id="fromLocation-search" name="fromLocation-search" placeholder="Enter Location"
+										 ng-model="movement.fromLocationId" typeahead="location.locationId as location.storageCode for location in getLocationByStorageCode($viewValue)"
 										 typeahead-loading="loadingFromLocations" typeahead-no-results="noResults">
 								<i ng-show="loadingFromLocations" class="glyphicon glyphicon-refresh"></i>
-
 								<div ng-show="noResults">
 									<i class="glyphicon glyphicon-remove"></i> No Results Found
 								</div>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="movementType" class="col-sm-4 control-label">Movement Type:</label>
-
+							<label for="toLocation-search" class="col-sm-4 control-label">To:</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="movementType" name="movementType" placeholder="e.g. RM for (Removed)" ng-model="movement.movementType"/>
+								<input type="text" class="form-control" id="toLocation-search" name="toLocation-search" placeholder="Enter Location"
+										 ng-model="movement.toLocationId" typeahead="location.locationId as location.description for location in getLocationByStorageCode($viewValue)"
+										 typeahead-loading="loadingToLocations" typeahead-no-results="noResults">
+								<i ng-show="loadingToLocations" class="glyphicon glyphicon-refresh"></i>
+								<div ng-show="noResults">
+									<i class="glyphicon glyphicon-remove"></i> No Results Found
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="user-search" class="col-sm-4 control-label">User:</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="user-search" name="user-search" placeholder="Enter A User"
+										 ng-model="movement.userId" typeahead="user.userId as user.email for user in getUserByEmail($viewValue)"
+										 typeahead-loading="loadingUsers" typeahead-no-results="noResults">
+								<i ng-show="loadingUsers" class="glyphicon glyphicon-refresh"></i>
+								<div ng-show="noResults">
+									<i class="glyphicon glyphicon-remove"></i> No Results Found
+								</div>
 							</div>
 						</div>
 						<div class="form-group">
@@ -100,19 +121,26 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label for="movementType" class="col-sm-4 control-label">Movement Type:</label>
+
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="movementType" name="movementType" placeholder="e.g. RM for (Removed)" ng-model="movement.movementType"/>
+							</div>
+						</div>
+						<div class="form-group">
 							<label for="price" class="col-sm-4 control-label">Price (Selling Price):</label>
 
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="price" name="price" placeholder="e.g. $19.99" ng-model="movement.price"/>
 							</div>
 						</div>
-
-						<pre>form = {{ movement | json }}</pre>
+						<pre>form = {{ product | json }}</pre>
+						<button type="submit" class="btn btn-primary">Submit</button>
 					</form>
 				</div>
+
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Sign-Up</button>
 				</div>
 			</div>
 		</div>

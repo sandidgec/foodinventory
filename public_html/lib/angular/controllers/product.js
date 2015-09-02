@@ -4,6 +4,8 @@
 app.controller("ProductController", function($http, $modal, $scope, ProductService, VendorService) {
 	$scope.products = null;
 	$scope.vendors = [];
+	$scope.editedProduct = null;
+	$scope.isEditing = false;
 	$scope.statusClass = "alert-success";
 	$scope.statusMessage = null;
 
@@ -212,6 +214,16 @@ app.controller("ProductController", function($http, $modal, $scope, ProductServi
 				}
 			});
 		return($scope.vendors);
+	};
+
+	$scope.setEditedProduct = function(product) {
+		$scope.editedProduct = angular.copy(product);
+		$scope.isEditing = true;
+	};
+
+	$scope.cancelEditing = function() {
+		$scope.editedProduct = null;
+		$scope.isEditing = false;
 	};
 
 	$scope.products = $scope.getAllProducts(0);

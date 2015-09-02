@@ -1,11 +1,11 @@
 /**
  * controller for the movement service
  **/
-app.controller("MovementController", function($http, $scope, MovementService, LocationService, ProductService) {
+app.controller("MovementController", function($http, $scope, MovementService, ProductService, LocationService, UserService) {
 	$scope.movements = null;
-	$scope.locations = null;
-	//$scope.products = [];
-
+	$scope.products = [];
+	$scope.locations = [];
+	$scope.users = [];
 	$scope.statusClass = "alert-success";
 	$scope.statusMessage = null;
 
@@ -139,18 +139,7 @@ app.controller("MovementController", function($http, $scope, MovementService, Lo
 
 					// finally, assign the parent array
 					$scope.movements = reply.data;
-				} else {
-					$scope.statusClass = "alert-danger";
-					$scope.statusMessage = reply.message;
-				}
-			});
-	};
-
-	$scope.getLocationByStorageCode = function(storageCode) {
-		LocationService.getLocationByStorageCode(storageCode)
-			.then(function(reply) {
-				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					console.log($scope.movements);
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -159,15 +148,45 @@ app.controller("MovementController", function($http, $scope, MovementService, Lo
 	};
 
 	$scope.getProductByTitle = function(title) {
-		ProductService.getProductByTitle(title)
+		var products = ProductService.getProductByTitle(title)
 			.then(function(reply) {
 				if(reply.status === 200) {
 					$scope.products = reply.data;
+					return($scope.products);
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
 				}
 			});
+		return($scope.products);
+	};
+
+	$scope.getLocationByStorageCode = function(storageCode) {
+		var locations = LocationService.getLocationByStorageCode(storageCode)
+			.then(function(reply) {
+				if(reply.status === 200) {
+					$scope.locations = reply.data;
+					return($scope.locations);
+				} else {
+					$scope.statusClass = "alert-danger";
+					$scope.statusMessage = reply.message;
+				}
+			});
+		return($scope.locations);
+	};
+
+	$scope.getUserByEmail = function(email) {
+		var users = UserService.getUserByEmail(email)
+			.then(function(reply) {
+				if(reply.status === 200) {
+					$scope.users = reply.data;
+					return($scope.users);
+				} else {
+					$scope.statusClass = "alert-danger";
+					$scope.statusMessage = reply.message;
+				}
+			});
+		return($scope.users);
 	};
 
 	$scope.movements = $scope.getAllMovements(0);

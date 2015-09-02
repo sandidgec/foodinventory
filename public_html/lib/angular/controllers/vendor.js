@@ -93,4 +93,6 @@ app.controller("VendorController", function($http, $scope, VendorService) {
 				}
 			});
 	};
+
+	$scope.movements = $scope.getAllVendors();
 });
