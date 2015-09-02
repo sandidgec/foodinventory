@@ -37,18 +37,20 @@
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.0/ui-bootstrap-tpls.min.js"></script>
 		<script type="text/javascript" src="../food-inventory.js"></script>
 		<script type="text/javascript" src="../services/login.js"></script>
-		<script type="text/javascript" src="../services/product.js"></script>
 		<script type="text/javascript" src="../services/user.js"></script>
+		<script type="text/javascript" src="../services/product.js"></script>
 		<script type="text/javascript" src="../services/movement.js"></script>
 		<script type="text/javascript" src="../services/vendor.js"></script>
 		<script type="text/javascript" src="../services/location.js"></script>
+		<script type="text/javascript" src="../services/notification.js"></script>
 		<script type="text/javascript" src="../controllers/login.js"></script>
 		<script type="text/javascript" src="../controllers/modal-instance-ctrl.js"></script>
-		<script type="text/javascript" src="../controllers/product.js"></script>
 		<script type="text/javascript" src="../controllers/tab-controller.js"></script>
+		<script type="text/javascript" src="../controllers/product.js"></script>
 		<script type="text/javascript" src="../controllers/movement.js"></script>
 		<script type="text/javascript" src="../controllers/vendor.js"></script>
 		<script type="text/javascript" src="../controllers/location.js"></script>
+		<script type="text/javascript" src="../controllers/notification.js"></script>
 		<script type="text/javascript" src="../directives/logout.js"></script>
 		<script type="text/javascript" src="../directives/product.js"></script>
 		<script type="text/javascript" src="../directives/movement.js"></script>
