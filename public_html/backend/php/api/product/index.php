@@ -117,6 +117,8 @@ try {
 		$productAlert->delete($pdo);
 		$finishedProduct = FinishedProduct::getFinishedProductByFinishedProductId($pdo, $productId);
 		$finishedProduct->delete($pdo);
+		$productLocation = ProductLocation::getProductLocationByProductId($pdo, $productId);
+		$productLocation->delete($pdo);
 		$reply->data = "Product deleted OK";
 	}
 // create an exception to pass back to the RESTful caller
