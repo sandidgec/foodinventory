@@ -3,6 +3,8 @@
  **/
 app.controller("LocationController", function($http, $scope, LocationService) {
 	$scope.locations = null;
+	$scope.editedLocation = null;
+	$scope.isEditing = false;
 	$scope.statusClass = "alert-success";
 	$scope.statusMessage = null;
 
@@ -93,4 +95,15 @@ app.controller("LocationController", function($http, $scope, LocationService) {
 				}
 			});
 	};
+
+	$scope.setEditedLocation = function(location){
+		$scope.editedLocation = angular.copy(location);
+		$scope.isEditing = true;
+	};
+
+	$scope.cancelEditing = function(){
+		$scope.editedLocation = null;
+		$scope.isEditing = false;
+	};
+	$scope.locations = $scope.getAllLocations(0);
 });
