@@ -3,12 +3,14 @@
  **/
 app.controller("VendorController", function($http, $scope, VendorService) {
 	$scope.vendors = null;
+	$scope.editedVendor = null;
+	$scope.isEdited = false;
 	$scope.statusClass = "alert-success";
 	$scope.statusMessage = null;
 
 	/**
 	 * method that controls the action table and will fill the table or display errors
-	 */
+	 **/
 	$scope.addVendor = function(vendor) {
 		VendorService.addVendor(vendor)
 			.then(function(reply) {
@@ -22,6 +24,9 @@ app.controller("VendorController", function($http, $scope, VendorService) {
 			});
 	};
 
+	/**
+	 * method that controls the action table and will fill the table or display errors
+	 **/
 	$scope.editVendor = function(vendor) {
 		VendorService.editVendor(vendor)
 			.then(function(reply) {
@@ -34,16 +39,30 @@ app.controller("VendorController", function($http, $scope, VendorService) {
 			});
 	};
 
-	$scope.deleteVendor = function(vendor) {
-		VendorService.deleteVendor(vendor)
-			.then(function(reply) {
-				if(reply.status === 200) {
-					$scope.vendors = reply.data;
-				} else {
-					$scope.statusClass = "alert-danger";
-					$scope.statusMessage = reply.message;
-				}
-			});
+	/**
+	 * method that controls the action table and will fill the table or display errors
+	 **/
+	$scope.deleteVendor = function(vendorId) {
+		var message = "Do you really want to delete this Vendor?";
+		var modalHtml = '<div class="modal-body">' + message + '</div>' +
+			'<div class="modal-footer"><button class="btn btn-primary" ng-click="yes()">Yes</button><button class="btn btn-warning" ng-click="no()">No</button></div>';
+
+		$scope.modalInstance = $modal.open({
+			template: modalHtml,
+			controller: ModalInstanceCtrl
+		});
+
+		$scope.modalInstance.result.then(function() {
+			VendorService.deleteVendor(vendorId)
+				.then(function(reply) {
+					if(reply.status === 200) {
+						$scope.vendors = reply.data;
+					} else {
+						$scope.statusClass = "alert-danger";
+						$scope.statusMessage = reply.message;
+					}
+				});
+		});
 	};
 
 	$scope.getVendorByVendorId = function(vendorId) {
@@ -92,6 +111,16 @@ app.controller("VendorController", function($http, $scope, VendorService) {
 					$scope.statusMessage = reply.message;
 				}
 			});
+	};
+
+	$scope.setEditedVendor = function(vendor){
+		$scope.editedVendor = null;
+		$scope.isEditing = false;
+	};
+
+	$scope.cancelEditing = function(){
+		$scope.editedVendor = null;
+		$scope.isEdiitng = false;
 	};
 
 	$scope.movements = $scope.getAllVendors();
