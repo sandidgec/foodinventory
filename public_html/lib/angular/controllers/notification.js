@@ -93,4 +93,6 @@ app.controller("NotificationController", function($http, $scope, NotificationSer
 				}
 			});
 	};
+
+	$scope.notifications = $scope.getAllNotifications();
 });
