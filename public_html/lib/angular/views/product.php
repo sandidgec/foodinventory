@@ -5,7 +5,7 @@
 	<!--  Product Buttons -->
 	<div class="product button row">
 		<div class="col-md-3 text-center">
-			<a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#ProductModal">
+			<a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#AddProductModal">
 				<i class="fa fa-plus fa-2x"></i>
 			</a>
 		</div>
