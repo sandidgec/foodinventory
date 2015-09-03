@@ -223,19 +223,14 @@ app.controller("ProductController", function($http, $modal, $scope, ProductServi
 	};
 
 	$scope.setEditedProduct = function(product) {
-		console.log($scope.isEditing);
 		$scope.editedProduct = angular.copy(product);
-		console.log($scope.editedProduct);
 		$scope.isEditing = true;
-		console.log($scope.isEditing);
 		globalProduct = product;
 	};
 
 	$scope.cancelEditing = function() {
 		$scope.editedProduct = null;
-		console.log($scope.editedProduct);
 		$scope.isEditing = false;
-		console.log($scope.isEditing);
 	};
 
 	$("#EditProductModal").on("shown.bs.modal", function() {
