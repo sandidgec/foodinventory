@@ -43,9 +43,9 @@
 						<td>{{ product.sku }}</td>
 						<td>{{ product.leadTime }}</td>
 						<td>
-							<a href="#" class="btn btn-md btn-info" ng-click="setEditedProduct(product);" data-toggle="modal" data-target="#ProductModal">
+							<button class="btn btn-md btn-info" ng-click="setEditedProduct(product);" data-toggle="modal" data-target="#EditProductModal">
 								<i class="fa fa-pencil"></i>
-							</a>
+							</button>
 						</td>
 						<td>
 							<form ng-submit="deleteProduct(product.productId);">
@@ -59,88 +59,26 @@
 	</div>
 
 	<!-- Add Product Modal -->
-<!--	<div class="modal fade" id="AddProductModal">-->
-<!--		<div class="modal-dialog">-->
-<!--			<div class="modal-content">-->
-<!---->
-<!--				<div class="modal-header">-->
-<!--					<button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--						<span aria-hidden="true">&times;</span></button>-->
-<!--					<h3 class="modal-title">Add a Product</h3>-->
-<!--				</div>-->
-<!---->
-<!--				<div class="modal-body" ng-controller="ProductController">-->
-<!--					<form class="form-horizontal" method="post" ng-submit="addProduct(product);">-->
-<!--						<div class="form-group">-->
-<!--							<label for="product-title" class="col-sm-3 control-label">Title:</label>-->
-<!--							<div class="col-sm-9">-->
-<!--								<input type="text" class="form-control" id="product-title" name="product-title" placeholder="Enter Product Title" ng-model="product.title"/>-->
-<!--							</div>-->
-<!--						</div>-->
-<!--						<div class="form-group">-->
-<!--							<label for="Description" class="col-sm-3 control-label">Description</label>-->
-<!--							<div class="col-sm-9">-->
-<!--								<input type="text" class="form-control" id="description" name="description" placeholder="Enter Product Description" ng-model="product.description"/>-->
-<!--							</div>-->
-<!--						</div>-->
-<!--						<div class="form-group">-->
-<!--							<label for="vendor-search" class="col-sm-3 control-label">Vendor</label>-->
-<!--							<div class="col-sm-8">-->
-<!--								<input type="text" class="form-control" id="vendor-search" name="vendor-search" placeholder="Enter Vendor"-->
-<!--										 ng-model="product.vendorId" typeahead="vendor.vendorId as vendor.vendorName for vendor in getVendorByVendorName($viewValue)"-->
-<!--										 typeahead-loading="loadingVendors" typeahead-no-results="noResults"/>-->
-<!--								<i ng-show="loadingVendors" class="glyphicon glyphicon-refresh"></i>-->
-<!--								<div ng-show="noResults">-->
-<!--									<i class="glyphicon glyphicon-remove"></i>No Results Found-->
-<!--								</div>-->
-<!--							</div>-->
-<!--						</div>-->
-<!--						<div class="form-group">-->
-<!--							<label for="sku" class="col-sm-3 control-label">SKU:</label>-->
-<!--							<div class="col-sm-9">-->
-<!--								<input type="text" class="form-control" id="sku" name="sku" placeholder="Enter SKU " ng-model="product.sku"/>-->
-<!--							</div>-->
-<!--						</div>-->
-<!--						<div class="form-group">-->
-<!--							<label for="leadTime" class="col-sm-3 control-label">Lead Time:</label>-->
-<!--							<div class="col-sm-9">-->
-<!--								<input type="text" class="form-control" id="leadTime" name="leadTime" placeholder="Enter Order Lead Time" ng-model="product.leadTime"/>-->
-<!--							</div>-->
-<!--						</div>-->
-<!--						<pre>form = {{ product | json }}</pre>-->
-<!--						<button type="submit" class="btn btn-primary">Submit</button>-->
-<!--					</form>-->
-<!--				</div>-->
-<!---->
-<!--				<div class="modal-footer">-->
-<!--					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-<!--				</div>-->
-<!--			</div>-->
-<!--		</div>-->
-<!--	</div>-->
-
-	<!-- Add/Edit Product Modal -->
-	<div class="modal fade" id="ProductModal">
+	<div class="modal fade" id="AddProductModal">
 		<div class="modal-dialog">
-			<div class="modal-content" ng-controller="ProductController">
+			<div class="modal-content">
 
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span></button>
-					<h3 class="modal-title" ng-hide="isEditing">Create a Product</h3>
-					<h3 class="modal-title" ng-show="isEditing">Edit a Product</h3>
+					<h3 class="modal-title">Add a Product</h3>
 				</div>
 
-				<div class="modal-body">
-					<form name="addProductForm" id="addProductForm" class="form-horizontal" ng-submit="addProduct(product);" ng-hide="isEditing" novalidate>
+				<div class="modal-body" ng-controller="ProductController">
+					<form class="form-horizontal" method="post" ng-submit="addProduct(product);">
 						<div class="form-group">
 							<label for="product-title" class="col-sm-3 control-label">Title:</label>
 							<div class="col-sm-9">
-								<input type="text" class="form-control" id="product-title" name="product-title" placeholder="Enter Product Title" ng-model="product.title" required/>
+								<input type="text" class="form-control" id="product-title" name="product-title" placeholder="Enter Product Title" ng-model="product.title"/>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="description" class="col-sm-3 control-label">Description</label>
+							<label for="Description" class="col-sm-3 control-label">Description</label>
 							<div class="col-sm-9">
 								<input type="text" class="form-control" id="description" name="description" placeholder="Enter Product Description" ng-model="product.description"/>
 							</div>
@@ -170,9 +108,30 @@
 							</div>
 						</div>
 						<pre>form = {{ product | json }}</pre>
-						<button type="submit" class="btn btn-info">Create</button>
+						<button type="submit" class="btn btn-primary">Submit</button>
 					</form>
-					<form id="editProductForm" class="form-horizontal" ng-submit="updateProduct(editedProduct);" ng-show="isEditing">
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Edit Product Modal -->
+	<div class="modal fade" id="EditProductModal" ng-controller="ProductController" ng-show="isEditing">
+		<div class="modal-dialog">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span></button>
+					<h3 class="modal-title">Edit a Product</h3>
+				</div>
+
+				<div class="modal-body">
+					<form class="form-horizontal" method="post" ng-submit="editProduct(editedProduct);">
 						<div class="form-group">
 							<label for="edit-product-title" class="col-sm-3 control-label">Title:</label>
 							<div class="col-sm-9">
@@ -183,6 +142,18 @@
 							<label for="edit-description" class="col-sm-3 control-label">Description</label>
 							<div class="col-sm-9">
 								<input type="text" class="form-control" id="edit-description" name="edit-description" placeholder="Enter Product Description" ng-model="editedProduct.description"/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="vendor-search" class="col-sm-3 control-label">Vendor</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="vendor-search" name="vendor-search" placeholder="Enter Vendor"
+										 ng-model="editedProduct.vendorId" typeahead="vendor.vendorId as vendor.vendorName for vendor in getVendorByVendorName($viewValue)"
+										 typeahead-loading="loadingVendors" typeahead-no-results="noResults"/>
+								<i ng-show="loadingVendors" class="glyphicon glyphicon-refresh"></i>
+								<div ng-show="noResults">
+									<i class="glyphicon glyphicon-remove"></i>No Results Found
+								</div>
 							</div>
 						</div>
 						<div class="form-group">
@@ -197,14 +168,13 @@
 								<input type="text" class="form-control" id="edit-leadTime" name="edit-leadTime" placeholder="Enter Order Lead Time" ng-model="editedProduct.leadTime"/>
 							</div>
 						</div>
-						<pre>form = {{ editedProduct | json }}</pre>
 						<button type="submit" class="btn btn-info">Save</button>
-						<button class="btn btn-warning" ng-click="cancelEditing();">Cancel</button>
+						<button class="btn btn-warning" data-dismiss="modal" ng-click="cancelEditing();">Cancel</button>
 					</form>
 				</div>
 
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancelEditing();">Close</button>
 				</div>
 			</div>
 		</div>

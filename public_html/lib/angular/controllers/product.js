@@ -1,3 +1,5 @@
+var globalProduct = null;
+
 /**
  * controller for the product service
  **/
@@ -24,6 +26,7 @@ app.controller("ProductController", function($http, $modal, $scope, ProductServi
 				}
 			});
 	};
+
 	/**
 	 * method that controls the action table and will fill the table or display errors
 	 */
@@ -38,6 +41,7 @@ app.controller("ProductController", function($http, $modal, $scope, ProductServi
 				}
 			});
 	};
+
 	/**
 	 * method that controls the action table and will fill the table or display errors
 	 */
@@ -159,6 +163,7 @@ app.controller("ProductController", function($http, $modal, $scope, ProductServi
 				}
 			});
 	};
+
 	$scope.getFinishedProductByProductId = function(productId) {
 		ProductService.getFinishedProductByProductId(productId)
 			.then(function(reply) {
@@ -170,6 +175,7 @@ app.controller("ProductController", function($http, $modal, $scope, ProductServi
 				}
 			});
 	};
+
 	$scope.getNotificationByProductId = function(productId) {
 		ProductService.getNotificationByProductId(productId)
 			.then(function(reply) {
@@ -217,14 +223,29 @@ app.controller("ProductController", function($http, $modal, $scope, ProductServi
 	};
 
 	$scope.setEditedProduct = function(product) {
+		console.log($scope.isEditing);
 		$scope.editedProduct = angular.copy(product);
+		console.log($scope.editedProduct);
 		$scope.isEditing = true;
+		console.log($scope.isEditing);
+		globalProduct = product;
 	};
 
 	$scope.cancelEditing = function() {
 		$scope.editedProduct = null;
+		console.log($scope.editedProduct);
 		$scope.isEditing = false;
+		console.log($scope.isEditing);
 	};
+
+	$("#EditProductModal").on("shown.bs.modal", function() {
+		var angularRoot = angular.element(document.querySelector("#EditProductModal"));
+		var scope = angularRoot.scope();
+		scope.$apply(function() {
+			$scope.isEditing = true;
+			$scope.editedProduct = globalProduct;
+		});
+	});
 
 	$scope.products = $scope.getAllProducts(0);
 });
