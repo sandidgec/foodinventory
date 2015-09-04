@@ -1,3 +1,5 @@
+var globalLocation = null;
+
 /**
  * controller for the location service
  **/
@@ -104,11 +106,22 @@ app.controller("LocationController", function($http, $scope, LocationService) {
 	$scope.setEditedLocation = function(location){
 		$scope.editedLocation = angular.copy(location);
 		$scope.isEditing = true;
+		globalLocation = location;
 	};
 
 	$scope.cancelEditing = function(){
 		$scope.editedLocation = null;
 		$scope.isEditing = false;
 	};
+
+	$("#EditLocationModal").on("shown.bs.modal", function() {
+		var angularRoot = angular.element(document.querySelector("#EditLocationModal"));
+		var scope = angularRoot.scope();
+		scope.$apply(function() {
+			$scope.isEditing = true;
+			$scope.editedLocation = globalLocation;
+		});
+	});
+
 	$scope.locations = $scope.getAllLocations(0);
 });
