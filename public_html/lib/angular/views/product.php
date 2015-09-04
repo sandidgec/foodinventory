@@ -174,7 +174,7 @@
 								<input type="text" class="form-control" id="edit-leadTime" name="edit-leadTime" placeholder="Enter Order Lead Time" ng-model="editedProduct.leadTime"/>
 							</div>
 						</div>
-						<button type="submit" class="btn btn-info">Save</button>
+						<button type="submit" ng-click="closeModal()" class="btn btn-info">Save</button>
 						<button class="btn btn-warning" data-dismiss="modal" ng-click="cancelEditing();">Cancel</button>
 					</form>
 				</div>

@@ -123,5 +123,10 @@ app.controller("LocationController", function($http, $scope, LocationService) {
 		});
 	});
 
+	$scope.closeModal = function(){
+		var angularRoot = angular.element(document.querySelector("#EditLocationModal"));
+		angularRoot.modal("hide");
+	};
+
 	$scope.locations = $scope.getAllLocations(0);
 });

@@ -111,7 +111,7 @@
 								<input type="text" class="form-control" id="edit-location-description" name="edit-location-description" placeholder="Enter Location Description" ng-model="editedLocation.description" required/>
 							</div>
 						</div>
-						<button type="submit" class="btn btn-info">Save</button>
+						<button type="submit" ng-click="closeModal()" class="btn btn-info">Save</button>
 						<button class="btn btn-warning" data-dismiss="modal" ng-click="cancelEditing();">Cancel</button>
 					</form>
 				</div>

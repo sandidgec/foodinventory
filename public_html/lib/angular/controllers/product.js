@@ -3,7 +3,7 @@ var globalProduct = null;
 /**
  * controller for the product service
  **/
-app.controller("ProductController", function($http, $modal, $scope, ProductService, VendorService) {
+app.controller("ProductController", function($http, $modal, $scope, ProductService, VendorService, MovementService) {
 	$scope.products = null;
 	$scope.vendors = [];
 	$scope.editedProduct = null;
@@ -189,18 +189,30 @@ app.controller("ProductController", function($http, $modal, $scope, ProductServi
 	};
 
 	$scope.getAllProducts = function(page) {
+		// first, call the getAllProducts() - the parent service
 		ProductService.getAllProducts(page)
+			// wait for the first promise (Product)
 			.then(function(reply) {
 				if(reply.status === 200) {
+					// foreach() through the array from the first promise
 					reply.data.forEach(function(product, index){
+						// call the getVendorByVendorId() - the child service
 						VendorService.getVendorByVendorId(reply.data[index].vendorId)
 							.then(function(vendor){
 								if(reply.status === 200){
 									reply.data[index].vendor = vendor.data;
 								}
 							});
+						// call the getMovementByProductId() - the child service
+						MovementService.getMovementByProductId(reply.data[index].productId)
+							.then(function(movement){
+								if(reply.status === 200){
+									reply.data[index].movement = movement.data;
+								}
+							});
 				});
 					$scope.products = reply.data;
+					console.log($scope.products);
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -241,6 +253,11 @@ app.controller("ProductController", function($http, $modal, $scope, ProductServi
 			$scope.editedProduct = globalProduct;
 		});
 	});
+
+	$scope.closeModal = function(){
+		var angularRoot = angular.element(document.querySelector("#EditProductModal"));
+		angularRoot.modal("hide");
+	};
 
 	$scope.products = $scope.getAllProducts(0);
 });
