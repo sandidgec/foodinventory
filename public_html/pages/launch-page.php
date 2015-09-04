@@ -1,5 +1,9 @@
 <?php
 $CURRENT_DIR = __DIR__;
+require_once(dirname(__DIR__) . "/backend/php/classes/autoload.php");
+if(session_status() !== PHP_SESSION_ACTIVE) {
+	session_start();
+}
 ?>
 
 <!DOCTYPE html>
@@ -19,8 +23,8 @@ $CURRENT_DIR = __DIR__;
 				<img class="center-block" src="../lib/images/invtextboxlogo.png"  alt="Logo Image">
 			</div>
 			<main class="home">
+
 				<section class="col-xs-3 leftgraphic text-center">
-					<h3>The Difference</h3>
 				</section>
 
 				<section class="col-xs-6 testimonials text-center">
@@ -31,7 +35,6 @@ $CURRENT_DIR = __DIR__;
 				</section>
 
 				<section class="col-xs-3 rightgraphic text-center">
-					<h3>About</h3>
 				</section>
 
 			</main>

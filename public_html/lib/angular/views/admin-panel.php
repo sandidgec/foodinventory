@@ -1,3 +1,9 @@
+<?php
+require_once(dirname(dirname(dirname(__DIR__))) . "/backend/php/classes/autoload.php");
+if(session_status() !== PHP_SESSION_ACTIVE) {
+	session_start();
+}
+?>
 <!DOCTYPE html>
 <html lang="en" ng-app="FoodInventory">
 	<head>
@@ -62,65 +68,95 @@
 		<title>Administration</title>
 	</head>
 
-	<body>
-		<section class="container">
-			<!--  Admin Panel Sidebar  -->
-			<div class="vertical-text col-md-1">
-				<h1 class="text-center">Admin-Panel</h1>
-			</div>
-
-			<!-- Admin Tabs  -->
-			<section class="col-md-9" ng-controller="TabController as tab">
-				<ul class="nav nav-pills">
-					<li ng-class="{ active:tab.isSet(1) }">
-						<a href="" ng-click="tab.setTab(1)">Product</a>
-					</li>
-					<li ng-class="{ active:tab.isSet(2) }">
-						<a href="" ng-click="tab.setTab(2)">Movement</a>
-					</li>
-					<li ng-class="{ active:tab.isSet(3) }">
-						<a href="" ng-click="tab.setTab(3)">Vendor</a>
-					</li>
-					<li ng-class="{ active:tab.isSet(4) }">
-						<a href="" ng-click="tab.setTab(4)">Location</a>
-					</li>
-					<li ng-class="{ active:tab.isSet(5) }">
-						<a href="" ng-click="tab.setTab(5)">Notification</a>
-					</li>
-				</ul>
-
-				<!--  Product Tab's Contents  -->
-				<div ng-show="tab.isSet(1)">
-					<product></product>
+	<body class="adminback">
+		<?php
+		if(empty($_SESSION["user"]) === false && $_SESSION["user"]->getUserId() > 0) {
+			?>
+			<section class="container">
+				<!--  Admin Panel Sidebar  -->
+				<div class="vertical-text col-md-1">
+					<h1 class="text-center">Admin-Panel</h1>
 				</div>
 
-				<!--  Movement Tab's Contents  -->
-				<div ng-show="tab.isSet(2)">
-					<movement></movement>
-				</div>
+				<!-- Admin Tabs  -->
+				<section class="col-md-9" ng-controller="TabController as tab">
+					<ul class="nav nav-pills">
+						<li ng-class="{ active:tab.isSet(1) }">
+							<a href="" ng-click="tab.setTab(1)">Product</a>
+						</li>
+						<li ng-class="{ active:tab.isSet(2) }">
+							<a href="" ng-click="tab.setTab(2)">Movement</a>
+						</li>
+						<li ng-class="{ active:tab.isSet(3) }">
+							<a href="" ng-click="tab.setTab(3)">Vendor</a>
+						</li>
+						<li ng-class="{ active:tab.isSet(4) }">
+							<a href="" ng-click="tab.setTab(4)">Location</a>
+						</li>
+						<li ng-class="{ active:tab.isSet(5) }">
+							<a href="" ng-click="tab.setTab(5)">Notification</a>
+						</li>
+					</ul>
 
-				<!--  Vendor Tab's Contents  -->
-				<div ng-show="tab.isSet(3)">
-					<vendor></vendor>
-				</div>
+					<!--  Product Tab's Contents  -->
+					<div ng-show="tab.isSet(1)">
+						<product></product>
+					</div>
 
-				<!--  Location Tab's Contents  -->
-				<div ng-show="tab.isSet(4)">
-					<location></location>
-				</div>
+					<!--  Movement Tab's Contents  -->
+					<div ng-show="tab.isSet(2)">
+						<movement></movement>
+					</div>
 
-				<!--  Notification Tab's Contents  -->
-				<div ng-show="tab.isSet(5)">
-					<notification></notification>
-				</div>
+					<!--  Vendor Tab's Contents  -->
+					<div ng-show="tab.isSet(3)">
+						<vendor></vendor>
+					</div>
+
+					<!--  Location Tab's Contents  -->
+					<div ng-show="tab.isSet(4)">
+						<location></location>
+					</div>
+
+					<!--  Notification Tab's Contents  -->
+					<div ng-show="tab.isSet(5)">
+						<notification></notification>
+					</div>
+				</section>
+
+				<header class="logout col-md-2">
+					<ul class="nav nav-pulls right">
+						<?php require_once "logout.php"; ?>
+					</ul>
+				</header>
+
 			</section>
+		<?php
+		} else {
+			?>
+			<section>
 
-			<header class="logout col-md-2">
-				<ul class="nav nav-pulls right">
-					<?php require_once "logout.php"; ?>
-				</ul>
-			</header>
+				<div class="headtext"><a href="../../../pages/launch-page.php"><span class="inv">Inventory</span><span class="text">TEXT</span></a></div>
 
-		</section>
+				<nav class="navbar pull-right main-menu">
+					<div class="navbar-header">
+						<button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-menu">
+							<span class="sr-only">Menu</span>
+							<span class="glyphicon glyphicon-menu-hamburger"></span>
+						</button>
+					</div>
+
+					<div class="collapse navbar-collapse" id="main-menu">
+						<ul class="nav navbar-nav navbar-right">
+							<li><?php require_once("signup.php"); ?></li>
+							<li><?php require_once("login.php"); ?></li>
+						</ul>
+					</div>
+				</nav>
+				<h2>Please Log In </h2>
+			</section>
+		<?php
+		}
+		?>
 	</body>
 </html>

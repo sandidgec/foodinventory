@@ -25,7 +25,7 @@
 
 	<!--  Product Reports -->
 	<div class="product reports">
-		<h4>Reports</h4>
+		<h4>Report</h4>
 
 		<div ng-controller="ProductController">
 			<table id="productTable" class="table table-bordered table-hover table-striped">
@@ -49,13 +49,13 @@
 						<td>{{ product.vendor.vendorName }}</td>
 						<td>{{ product.sku }}</td>
 						<td>
-							<button class="btn btn-md btn-info" ng-click="setEditedProduct(product);" data-toggle="modal" data-target="#EditProductModal">
-								<i class="fa fa-pencil"></i>
+							<button class="btn btn-xs btn-info" ng-click="setEditedProduct(product);" data-toggle="modal" data-target="#EditProductModal">
+								<i class="fa fa-pencil tableicons"></i>
 							</button>
 						</td>
 						<td>
 							<form ng-submit="deleteProduct(product.productId);">
-								<button type="submit" class="btn btn-md btn-danger"><i class="fa fa-trash"></i></button>
+								<button type="submit" class="btn btn-xs btn-danger"><i class="fa fa-trash tableicons"></i></button>
 							</form>
 						</td>
 					</tr>

@@ -14,7 +14,7 @@ body {
 }
 
 .placeholder {
-	padding-bottom: 8%;
+	padding-bottom: 6%;
 }
 
 .test {
@@ -63,6 +63,7 @@ body {
 .text {
 	font-size: 2.4em;
 	font-weight: 500;
+	color: #474747;
 }
 
 .testys {
@@ -143,6 +144,11 @@ body {
 	text-align: right;
 }
 
+	.contact-header {
+	text-align: center;
+}
+
+
 	.footer-nav>li>a {
 	color: #000000;
 }
@@ -152,10 +158,11 @@ body {
 }
 
 	.social-media {
-	font-size: 2.2em;
 	padding-top: 10px;
 	padding-right: 20px;
+	color: #67D2FF;
 }
+
 
 /*@media only screen and (min-width: 992px) {*/
 	/*main.home {*/

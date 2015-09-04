@@ -1,4 +1,4 @@
-<div class="headtext"><span class="inv">Inventory</span><span class="text">TEXT</span></div>
+<div class="headtext"><a href="launch-page.php"><span class="inv">Inventory</span><span class="text">TEXT</span></a></div>
 
 <nav class="navbar pull-right main-menu">
 	<div class="navbar-header">
@@ -11,6 +11,7 @@
 	<div class="collapse navbar-collapse" id="main-menu">
 		<ul class="nav navbar-nav navbar-right">
 			<li><a href="about.php">About</a></li>
+			<li><a href="contact.php">Contact</a></li>
 			<li><?php require_once($PREFIX . "/lib/angular/views/signup.php"); ?></li>
 			<li><?php require_once($PREFIX . "/lib/angular/views/login.php"); ?></li>
 		</ul>
