@@ -89,7 +89,13 @@ try {
 		} else if(empty($title) === false) {
 			$reply->data = Product::getProductByTitle($pdo, $title)->toArray();
 		} else if(is_int($page) === true && $page >= 0) {
-			$reply->data = Product::getAllProducts($pdo, $page)->toArray();
+			$allProducts = Product::getAllProducts($pdo, $page);
+			$replyData = [];
+			foreach($allProducts as $index => $product) {
+				$replyData[$index] = json_decode(json_encode($product));
+				$replyData[$index]->quantityOnHand = $product->getQuantityOnHand($pdo);
+			}
+			$reply->data = $replyData;
 		} else {
 			throw(new InvalidArgumentException("no parameters given", 405));
 		} // post to a new Product
