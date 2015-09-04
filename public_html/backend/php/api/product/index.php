@@ -72,7 +72,11 @@ try {
 			} else if($getFinishedProducts) {
 				$reply->data = Product::getFinishedProductByProductId($pdo, $productId);
 			} else {
-				$reply->data = Product::getProductByProductId($pdo, $productId);
+				$product = Product::getProductByProductId($pdo, $productId);
+				$quantityOnHand = $product->getQuantityOnHand($pdo);
+				$flatObject = json_decode(json_encode($product));
+				$flatObject->quantityOnHand = $quantityOnHand;
+				$reply->data = $flatObject;
 			}
 		} else if(empty($vendorId) === false) {
 			$reply->data = Product::getProductByVendorId($pdo, $vendorId);
