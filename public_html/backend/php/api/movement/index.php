@@ -50,21 +50,21 @@ try {
 		// set an XSRF cookie on GET requests
 		setXsrfCookie("/");
 		if(empty($movementId) === false) {
-			$reply->data = Movement::getMovementByMovementId($pdo, $movementId);
+			$reply->data = Movement::getMovementByMovementId($pdo, $movementId)->toArray();
 		} else if(empty($fromLocationId) === false) {
-			$reply->data = Movement::getMovementByFromLocationId($pdo, $fromLocationId);
+			$reply->data = Movement::getMovementByFromLocationId($pdo, $fromLocationId)->toArray();
 		} else if(empty($toLocationId) === false) {
-			$reply->data = Movement::getMovementByToLocationId($pdo, $toLocationId);
+			$reply->data = Movement::getMovementByToLocationId($pdo, $toLocationId)->toArray();
 		} else if(empty($productId) === false) {
-			$reply->data = Movement::getMovementByProductId($pdo, $productId);
+			$reply->data = Movement::getMovementByProductId($pdo, $productId)->toArray();
 		} else if(empty($userId) === false) {
-			$reply->data = Movement::getMovementByUserId($pdo, $userId);
+			$reply->data = Movement::getMovementByUserId($pdo, $userId)->toArray();
 		} else if(empty($movementDate) === false) {
 			$movementDateTime = new DateTime();
 			$movementDateTime->setTimestamp($movementDate / 1000);
 			$reply->data = Movement::getMovementByMovementDate($pdo, $movementDateTime);
 		} else if(empty($movementType) === false) {
-			$reply->data = Movement::getMovementByMovementType($pdo, $movementType);
+			$reply->data = Movement::getMovementByMovementType($pdo, $movementType)->toArray();
 		} else if(is_int($page) === true && $page >= 0) {
 			$reply->data = Movement::getAllMovements($pdo, $page)->toArray();
 		} else {
