@@ -11,8 +11,14 @@
 		</div>
 		<div class="col-md-5 col-md-offset-4">
 			<label for="search" class="col-sm-2 control-label">Search: </label>
-			<div class="col-sm-8 col-sm-offset-2">
-				<input type="text" class="form-control" id="search" name="search" placeholder="Search Stuff Here" />
+			<div class="col-sm-8 col-sm-offset-2" ng-controller="ProductController">
+				<input type="text" class="form-control" id="product-search" name="product-search" placeholder="Enter Product Title"
+						 ng-model="product.title" typeahead="product.title for product in getProductByTitle($viewValue)"
+						 typeahead-loading="loadingProducts" typeahead-no-results="noResults"/>
+				<i ng-show="loadingProducts" class="glyphicon glyphicon-refresh"></i>
+				<div ng-show="noResults">
+					<i class="glyphicon glyphicon-remove"></i>No Results Found
+				</div>
 			</div>
 		</div>
 	</div>
@@ -27,8 +33,7 @@
 					<tr>
 						<th>Title</th>
 						<th>Description</th>
-						<th>Price</th>
-						<th>Cost</th>
+						<th>Quantity</th>
 						<th>Vendor</th>
 						<th>SKU</th>
 						<th class="center"><i class="fa fa-pencil fa-x"></i></th>
@@ -40,8 +45,7 @@
 					<tr ng-repeat="product in products">
 						<td>{{ product.title }}</td>
 						<td>{{ product.description }}</td>
-						<td>{{ product.movement.price }}</td>
-						<td>{{ product.movement.cost }}</td>
+						<td>{{ product.productId.quantityOnHand }}</td>
 						<td>{{ product.vendor.vendorName }}</td>
 						<td>{{ product.sku }}</td>
 						<td>
@@ -80,13 +84,13 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="Description" class="col-sm-3 control-label">Description</label>
+							<label for="Description" class="col-sm-3 control-label">Description:</label>
 							<div class="col-sm-9">
 								<input type="text" class="form-control" id="description" name="description" placeholder="Enter Product Description" ng-model="product.description"/>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="vendor-search" class="col-sm-3 control-label">Vendor</label>
+							<label for="vendor-search" class="col-sm-3 control-label">Vendor:</label>
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="vendor-search" name="vendor-search" placeholder="Enter Vendor"
 										 ng-model="product.vendorId" typeahead="vendor.vendorId as vendor.vendorName for vendor in getVendorByVendorName($viewValue)"
@@ -104,7 +108,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="leadTime" class="col-sm-3 control-label">Lead Time:</label>
+							<label for="leadTime" class="col-sm-3 control-label">Quantity:</label>
 							<div class="col-sm-9">
 								<input type="text" class="form-control" id="leadTime" name="leadTime" placeholder="Enter Order Lead Time" ng-model="product.leadTime"/>
 							</div>
@@ -165,7 +169,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="edit-leadTime" class="col-sm-3 control-label">Lead Time:</label>
+							<label for="edit-leadTime" class="col-sm-3 control-label">Quantity:</label>
 							<div class="col-sm-9">
 								<input type="text" class="form-control" id="edit-leadTime" name="edit-leadTime" placeholder="Enter Order Lead Time" ng-model="editedProduct.leadTime"/>
 							</div>
