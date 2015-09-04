@@ -36,7 +36,12 @@ app.controller("LocationController", function($http, $scope, LocationService) {
 			});
 	};
 
-	$scope.deleteLocation = function(location) {
+	$scope.deleteLocation = function(locationId) {
+		var medage = "Do you really want to delete this location?";
+		var modalHTML = '<div class="modal-body">' + message + '</div>' +
+			'<div class="modal-footer"><button class="btn btn-primary" ng-click="yes()">Yes</button><button class="btn btn-warning" ng-click="no()">No</button></div>';
+
+
 		LocationService.deleteLocation(location)
 			.then(function(reply) {
 				if(reply.status === 200) {
