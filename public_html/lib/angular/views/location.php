@@ -112,7 +112,7 @@
 							</div>
 						</div>
 						<button type="submit" class="btn btn-info">Save</button>
-						<button class="btn btn-info" ng-click="cancelEditing();">Cancel</button>
+						<button class="btn btn-warning" data-dismiss="modal" ng-click="cancelEditing();">Cancel</button>
 					</form>
 				</div>
 
