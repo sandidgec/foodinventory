@@ -363,9 +363,9 @@ class Product implements JsonSerializable {
 	public function getQuantityOnHand(PDO &$pdo) {
 		// create query template
 		$query = "SELECT SUM(productLocation.quantity * unitOfMeasure.quantity) AS quantityOnHand
-FROM productLocation
-INNER JOIN unitOfMeasure ON unitOfMeasure.unitId = productLocation.unitId
-WHERE productId = :productId;";
+					FROM productLocation
+					INNER JOIN unitOfMeasure ON unitOfMeasure.unitId = productLocation.unitId
+					WHERE productId = :productId;";
 		$statement = $pdo->prepare($query);
 
 		// bind the product id to the place holder in the template
