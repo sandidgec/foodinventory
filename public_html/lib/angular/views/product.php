@@ -27,9 +27,10 @@
 					<tr>
 						<th>Title</th>
 						<th>Description</th>
+						<th>Price</th>
+						<th>Cost</th>
 						<th>Vendor</th>
 						<th>SKU</th>
-						<th>Lead Time</th>
 						<th class="center"><i class="fa fa-pencil fa-x"></i></th>
 						<th class="center"><i class="fa fa-trash fa-x"></i></th>
 					</tr>
@@ -39,9 +40,10 @@
 					<tr ng-repeat="product in products">
 						<td>{{ product.title }}</td>
 						<td>{{ product.description }}</td>
+						<td>{{ product.movement.price }}</td>
+						<td>{{ product.movement.cost }}</td>
 						<td>{{ product.vendor.vendorName }}</td>
 						<td>{{ product.sku }}</td>
-						<td>{{ product.leadTime }}</td>
 						<td>
 							<button class="btn btn-md btn-info" ng-click="setEditedProduct(product);" data-toggle="modal" data-target="#EditProductModal">
 								<i class="fa fa-pencil"></i>
