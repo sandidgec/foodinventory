@@ -1,7 +1,7 @@
 /**
  * controller for the vendor service
  **/
-app.controller("VendorController", function($http, $scope, VendorService) {
+app.controller("VendorController", function($http, $modal, $scope, VendorService) {
 	$scope.vendors = null;
 	$scope.editedVendor = null;
 	$scope.isEdited = false;
@@ -114,7 +114,7 @@ app.controller("VendorController", function($http, $scope, VendorService) {
 	};
 
 	$scope.setEditedVendor = function(vendor){
-		$scope.editedVendor = null;
+		$scope.editedVendor = angular.copy(location);
 		$scope.isEditing = false;
 	};
 
@@ -122,6 +122,15 @@ app.controller("VendorController", function($http, $scope, VendorService) {
 		$scope.editedVendor = null;
 		$scope.isEdiitng = false;
 	};
+
+	$("#EditVendorModal").on("shown.bs.modal", function(){
+		var angularRoot = angular.element(document.querySelector("#EditVendorModal"));
+		var scope = angularRoot.scope();
+		scope.$apply(function(){
+			$scope.isEditing = true;
+			$scope.editedVendor = globalVendor;
+		});
+	});
 
 	$scope.movements = $scope.getAllVendors();
 });
