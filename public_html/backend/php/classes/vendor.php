@@ -403,6 +403,7 @@ class Vendor implements JsonSerializable {
 		// create query template
 		$query = "SELECT vendorId, contactName, vendorEmail, vendorName, vendorPhoneNumber FROM vendor";
 		$statement = $pdo->prepare($query);
+		$statement->execute();
 
 		//build an array of vendors
 		$vendors = new SplFixedArray($statement->rowCount());

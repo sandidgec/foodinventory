@@ -1,3 +1,4 @@
+var globalVendor = null;
 /**
  * controller for the vendor service
  **/
@@ -114,8 +115,9 @@ app.controller("VendorController", function($http, $modal, $scope, VendorService
 	};
 
 	$scope.setEditedVendor = function(vendor){
-		$scope.editedVendor = angular.copy(location);
-		$scope.isEditing = false;
+		$scope.editedVendor = angular.copy(vendor);
+		$scope.isEditing = true;
+		globalVendor = vendor;
 	};
 
 	$scope.cancelEditing = function(){
@@ -132,5 +134,5 @@ app.controller("VendorController", function($http, $modal, $scope, VendorService
 		});
 	});
 
-	$scope.movements = $scope.getAllVendors();
+	$scope.vendors = $scope.getAllVendors();
 });
