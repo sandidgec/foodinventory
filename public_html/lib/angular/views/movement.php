@@ -39,9 +39,9 @@
 				<tbody>
 					<tr ng-repeat="movement in movements">
 						<td>{{ movement.product.title }}</td>
-						<td>{{ movement.fromLocationId.description }}</td>
-						<td>{{ movement.toLocationId.description }}</td>
-						<td>{{ movement.userId.firstName }}</td>
+						<td>{{ movement.fromLocation.description }}</td>
+						<td>{{ movement.toLocation.description }}</td>
+						<td>{{ movement.user.firstName }}</td>
 						<td>{{ movement.cost }}</td>
 						<td>{{ movement.movementDate | date }}</td>
 						<td>{{ movement.movementType }}</td>
