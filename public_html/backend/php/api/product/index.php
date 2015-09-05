@@ -107,7 +107,8 @@ try {
 
 		$product = new Product(null, $requestObject->vendorId, $requestObject->description, $requestObject->leadTime, $requestObject->sku, $requestObject->title);
 		$product->insert($pdo);
-		$reply->data = "Product created OK";
+		$reply->data->productId = $product->getProductId();
+		$reply->data->message = "Product created OK";
 		// put to an existing Product
 	} else if($method === "PUT") {
 		// convert PUTed JSON to an object
