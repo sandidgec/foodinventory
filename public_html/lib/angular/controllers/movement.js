@@ -127,19 +127,37 @@ app.controller("MovementController", function($http, $scope, MovementService, Pr
 								}
 							});
 						// call the getLocationByLocationId() - the child service
-						LocationService.getLocationByLocationId(reply.data[index].locationId)
+						LocationService.getLocationByLocationId(reply.data[index].toLocationId)
 							// wait for the third promise (Location)
 							.then(function(location) {
 								if(reply.status === 200) {
 									// inject the child into the parent
-									reply.data[index].location = location.data;
+									reply.data[index].toLocation = location.data;
+								}
+							});
+						// call the getLocationByLocationId() - the child service
+						LocationService.getLocationByLocationId(reply.data[index].fromLocationId)
+							// wait for the fourth promise (Location)
+							.then(function(location) {
+								if(reply.status === 200) {
+									// inject the child into the parent
+									reply.data[index].fromLocation = location.data;
+								}
+							});
+						// call the getLocationByLocationId() - the child service
+						UserService.getUserByUserId(reply.data[index].userId)
+							// wait for the fifth promise (User)
+							.then(function(user) {
+								if(reply.status === 200) {
+									// inject the child into the parent
+									console.log(user.data);
+									reply.data[index].user = user.data;
 								}
 							});
 					});
 
 					// finally, assign the parent array
 					$scope.movements = reply.data;
-					console.log($scope.movements);
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
