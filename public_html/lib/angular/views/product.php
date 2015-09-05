@@ -117,8 +117,8 @@
 						</div>
 						<div class="movement-inputs">
 							<div class="form-group">
-								<label for="toLocation-search" class="col-sm-4 control-label">Destination:</label>
-								<div class="col-sm-8">
+								<label for="toLocation-search" class="col-sm-3 control-label">Destination:</label>
+								<div class="col-sm-9">
 									<input type="text" class="form-control" id="toLocation-search" name="toLocation-search" placeholder="Enter Location Destination"
 											 ng-model="movement.toLocationId" typeahead="location.locationId as location.description for location in getLocationByStorageCode($viewValue)"
 											 typeahead-loading="loadingToLocations" typeahead-no-results="noResults">
@@ -129,15 +129,15 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="cost" class="col-sm-4 control-label">Cost (Purchase Price):</label>
-								<div class="col-sm-8">
-									<input type="text" class="form-control" id="cost" name="cost" placeholder="e.g. $15.00" ng-model="movement.cost"/>
+								<label for="cost" class="col-sm-3 control-label">Cost:</label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control" id="cost" name="cost" placeholder=" (Purchase Price) e.g. $15.00 " ng-model="movement.cost"/>
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="price" class="col-sm-4 control-label">Price (Selling Price):</label>
-								<div class="col-sm-8">
-									<input type="text" class="form-control" id="price" name="price" placeholder="e.g. $19.99" ng-model="movement.price"/>
+								<label for="price" class="col-sm-3 control-label">Price:</label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control" id="price" name="price" placeholder=" (Selling Price) e.g. $19.99 " ng-model="movement.price"/>
 								</div>
 							</div>
 						</div>
