@@ -85,6 +85,12 @@ try {
 			$movementDate, $requestObject->movementType, $requestObject->price);
 		$movement->insert($pdo);
 		$reply->data = "Movement created OK";
+
+		if($requestObject->quantity !== null) {
+			$productLocation = new ProductLocation($requestObject->toLocationId, $requestObject->productId, $requestObject->unitId, $requestObject->quantity);
+			$productLocation->insert($pdo);
+			$reply->data = "ProductLocation created OK";
+		}
 	}
 	// create an exception to pass back to the RESTful caller
 } catch(Exception $exception) {
