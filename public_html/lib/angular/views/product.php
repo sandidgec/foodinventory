@@ -45,7 +45,7 @@
 					<tr ng-repeat="product in products">
 						<td>{{ product.title }}</td>
 						<td>{{ product.description }}</td>
-						<td>{{ product.productId.quantityOnHand }}</td>
+						<td>{{ product.quantityOnHand }}</td>
 						<td>{{ product.vendor.vendorName }}</td>
 						<td>{{ product.sku }}</td>
 						<td>
@@ -110,7 +110,7 @@
 						<div class="form-group">
 							<label for="leadTime" class="col-sm-3 control-label">Quantity:</label>
 							<div class="col-sm-9">
-								<input type="text" class="form-control" id="leadTime" name="leadTime" placeholder="Enter Order Lead Time" ng-model="product.leadTime"/>
+								<input type="text" class="form-control" id="leadTime" name="leadTime" placeholder="Enter Quantity" ng-model="product.quantityOnHand"/>
 							</div>
 						</div>
 						<pre>form = {{ product | json }}</pre>
