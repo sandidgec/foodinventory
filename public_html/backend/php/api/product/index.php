@@ -122,14 +122,22 @@ try {
 		// delete an existing Product
 	} else if($method === "DELETE") {
 		verifyXsrf();
-		$productAlert = ProductAlert::getProductAlertByProductId($pdo, $productId);
-		$productAlert->delete($pdo);
-		$finishedProduct = FinishedProduct::getFinishedProductByFinishedProductId($pdo, $productId);
-		$finishedProduct->delete($pdo);
-		$productLocation = ProductLocation::getProductLocationByProductId($pdo, $productId);
-		$productLocation->delete($pdo);
-		$movement = Movement::getMovementByProductId($pdo, $productId);
-		$movement->delete($pdo);
+		$productAlerts = ProductAlert::getProductAlertByProductId($pdo, $productId);
+		foreach($productAlerts as $productAlert) {
+			$productAlert->delete($pdo);
+		}
+		$finishedProducts = FinishedProduct::getFinishedProductByFinishedProductId($pdo, $productId);
+		foreach($finishedProducts as $finishedProduct) {
+			$finishedProduct->delete($pdo);
+		}
+		$productLocations = ProductLocation::getProductLocationByProductId($pdo, $productId);
+		foreach($productLocations as $productLocation) {
+			$productLocation->delete($pdo);
+		}
+		$movements = Movement::getMovementByProductId($pdo, $productId);
+		foreach($movements as $movement) {
+			$movement->delete($pdo);
+		}
 		$product = Product::getProductByProductId($pdo, $productId);
 		$product->delete($pdo);
 		$reply->data = "Product deleted OK";
