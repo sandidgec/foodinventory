@@ -127,7 +127,7 @@ try {
 		foreach($productAlerts as $productAlert) {
 			$productAlert->delete($pdo);
 		}
-		$finishedProducts = FinishedProduct::getFinishedProductByFinishedProductId($pdo, $productId);
+		$finishedProducts = FinishedProduct::getFinishedProductByRawMaterialId($pdo, $productId);
 		foreach($finishedProducts as $finishedProduct) {
 			$finishedProduct->delete($pdo);
 		}
