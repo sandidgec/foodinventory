@@ -98,6 +98,8 @@ app.controller("ProductController", function($http, $modal, $scope, ProductServi
 					}
 				});
 		});
+
+		$scope.movements = $scope.getAllMovements(0);
 	};
 
 	$scope.getProductByProductId = function(productId) {
