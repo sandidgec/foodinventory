@@ -42,10 +42,10 @@
 						<td>{{ movement.fromLocation.description }}</td>
 						<td>{{ movement.toLocation.description }}</td>
 						<td>{{ movement.user.firstName }}</td>
-						<td>{{ movement.cost }}</td>
+						<td>{{ movement.cost | currency}}</td>
 						<td>{{ movement.movementDate | date }}</td>
 						<td>{{ movement.movementType }}</td>
-						<td>{{ movement.price }}</td>
+						<td>{{ movement.price | currency }}</td>
 					</tr>
 				</tbody>
 			</table>
@@ -114,24 +114,21 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="cost" class="col-sm-4 control-label">Cost (Purchase Price):</label>
-
+							<label for="cost" class="col-sm-4 control-label">Cost:</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="cost" name="cost" placeholder="e.g. $15.00" ng-model="movement.cost"/>
+								<input type="text" class="form-control" id="cost" name="cost" placeholder=" (Purchase Price) e.g. $15.00 " ng-model="movement.cost"/>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="movementType" class="col-sm-4 control-label">Movement Type:</label>
-
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="movementType" name="movementType" placeholder="e.g. RM for (Removed)" ng-model="movement.movementType"/>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="price" class="col-sm-4 control-label">Price (Selling Price):</label>
-
+							<label for="price" class="col-sm-4 control-label">Price:</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="price" name="price" placeholder="e.g. $19.99" ng-model="movement.price"/>
+								<input type="text" class="form-control" id="price" name="price" placeholder=" (Selling Price) e.g. $19.99 " ng-model="movement.price"/>
 							</div>
 						</div>
 						<pre>form = {{ product | json }}</pre>
