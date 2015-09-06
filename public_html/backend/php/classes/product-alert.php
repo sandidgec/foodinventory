@@ -134,7 +134,7 @@ class ProductAlert {
 	}
 
 	/**
-	 * Inserts product alert into mySQL
+	 * Inserts ProductAlert into mySQL
 	 *
 	 * Insert PDO
 	 * @param PDO $pdo pointer to PDO connection, by reference
@@ -153,7 +153,7 @@ class ProductAlert {
 	}
 
 	/**
-	 * Updates product alert in mySQL
+	 * Updates ProductAlert in mySQL
 	 *
 	 * Update PDO
 	 * @param PDO $pdo pointer to the PDO connection, by reference
@@ -167,6 +167,27 @@ class ProductAlert {
 
 		//bind the member variables
 		$parameters = array("alertId" => $this->alertId, "productId" => $this->productId,  "alertEnabled" => $this->alertEnabled);
+		$statement->execute($parameters);
+	}
+
+	/**
+	 * deletes this ProductAlert from mySQL
+	 *
+	 * @param PDO $pdo pointer to PDO connection, by reference
+	 * @throws PDOException when mySQL related errors occur
+	 **/
+	public function delete(PDO &$pdo) {
+		// enforce the ProductId is not null (i.e., don't delete a ProductAlert that hasn't been inserted)
+		if($this->productId === null) {
+			throw(new PDOException("unable to delete a ProductAlert that does not exist"));
+		}
+
+		// create query template
+		$query = "DELETE FROM productAlert WHERE productId = :productId";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holder in the template
+		$parameters = array("productId" => $this->productId);
 		$statement->execute($parameters);
 	}
 
