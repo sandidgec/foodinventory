@@ -77,72 +77,56 @@
 
 				<div class="modal-body" ng-controller="ProductController">
 					<form class="form-horizontal" method="post" ng-submit="addProduct(product);">
-						<div class="product-inputs">
-							<div class="form-group">
-								<label for="edit-product-title" class="col-sm-3 control-label">Title:</label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control" id="edit-product-title" name="edit-product-title" placeholder="Enter Product Title" ng-model="editedProduct.title" required/>
-								</div>
+						<div class="form-group">
+							<label for="product-title" class="col-sm-3 control-label">Title:</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="product-title" name="product-title" placeholder="Enter Product Title" ng-model="product.title"/>
 							</div>
-							<div class="form-group">
-								<label for="edit-description" class="col-sm-3 control-label">Description</label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control" id="edit-description" name="edit-description" placeholder="Enter Product Description" ng-model="editedProduct.description"/>
-								</div>
+						</div>
+						<div class="form-group">
+							<label for="Description" class="col-sm-3 control-label">Description:</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="description" name="description" placeholder="Enter Product Description" ng-model="product.description"/>
 							</div>
-							<div class="form-group">
-								<label for="vendor-search" class="col-sm-3 control-label">Vendor</label>
-								<div class="col-sm-8">
-									<input type="text" class="form-control" id="vendor-search" name="vendor-search" placeholder="Enter Vendor"
-											 ng-model="editedProduct.vendorId" typeahead="vendor.vendorId as vendor.vendorName for vendor in getVendorByVendorName($viewValue)"
-											 typeahead-loading="loadingVendors" typeahead-no-results="noResults"/>
-									<i ng-show="loadingVendors" class="glyphicon glyphicon-refresh"></i>
-									<div ng-show="noResults">
-										<i class="glyphicon glyphicon-remove"></i>No Results Found
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="edit-sku" class="col-sm-3 control-label">SKU:</label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control" id="edit-sku" name="edit-sku" placeholder="Enter SKU " ng-model="editedProduct.sku"/>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="edit-leadTime" class="col-sm-3 control-label">Quantity:</label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control" id="edit-leadTime" name="edit-leadTime" placeholder="Enter Order Lead Time" ng-model="editedProduct.leadTime"/>
+						</div>
+						<div class="form-group">
+							<label for="vendor-search" class="col-sm-3 control-label">Vendor:</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="vendor-search" name="vendor-search" placeholder="Enter Vendor"
+										 ng-model="product.vendorId" typeahead="vendor.vendorId as vendor.vendorName for vendor in getVendorByVendorName($viewValue)"
+										 typeahead-loading="loadingVendors" typeahead-no-results="noResults"/>
+								<i ng-show="loadingVendors" class="glyphicon glyphicon-refresh"></i>
+								<div ng-show="noResults">
+									<i class="glyphicon glyphicon-remove"></i>No Results Found
 								</div>
 							</div>
 						</div>
-						<div class="movement-inputs">
-							<div class="form-group">
-								<label for="toLocation-search" class="col-sm-3 control-label">Destination:</label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control" id="toLocation-search" name="toLocation-search" placeholder="Enter Location Destination"
-											 ng-model="movement.toLocationId" typeahead="location.locationId as location.description for location in getLocationByStorageCode($viewValue)"
-											 typeahead-loading="loadingToLocations" typeahead-no-results="noResults">
-									<i ng-show="loadingToLocations" class="glyphicon glyphicon-refresh"></i>
-									<div ng-show="noResults">
-										<i class="glyphicon glyphicon-remove"></i> No Results Found
-									</div>
-								</div>
+						<div class="form-group">
+							<label for="sku" class="col-sm-3 control-label">SKU:</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="sku" name="sku" placeholder="Enter SKU " ng-model="product.sku"/>
 							</div>
-							<div class="form-group">
-								<label for="cost" class="col-sm-3 control-label">Cost:</label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control" id="cost" name="cost" placeholder=" (Purchase Price) e.g. $15.00 " ng-model="movement.cost"/>
-								</div>
+						</div>
+						<div class="form-group">
+							<label for="cost" class="col-sm-3 control-label">Cost:</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="cost" name="cost" placeholder="(Purchase Price) - e.g. $15.00 " ng-model="product.cost"/>
 							</div>
-							<div class="form-group">
-								<label for="price" class="col-sm-3 control-label">Price:</label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control" id="price" name="price" placeholder=" (Selling Price) e.g. $19.99 " ng-model="movement.price"/>
-								</div>
+						</div>
+						<div class="form-group">
+							<label for="leadTime" class="col-sm-3 control-label">Quantity:</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="quantity" name="quantity" placeholder="Enter Quantity" ng-model="product.quantity"/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="price" class="col-sm-3 control-label">Price:</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="price" name="price" placeholder="(Selling Price) - e.g. $19.99 " ng-model="product.price"/>
 							</div>
 						</div>
 						<pre>form = {{ product | json }}</pre>
-						<button type="submit" class="btn btn-primary">Submit</button>
+						<button type="submit" ng-click="closeAddModal()" class="btn btn-primary">Submit</button>
 					</form>
 				</div>
 
@@ -166,71 +150,43 @@
 
 				<div class="modal-body">
 					<form class="form-horizontal" method="post" ng-submit="editProduct(editedProduct);">
-						<div class="product-inputs">
-							<div class="form-group">
-								<label for="edit-product-title" class="col-sm-3 control-label">Title:</label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control" id="edit-product-title" name="edit-product-title" placeholder="Enter Product Title" ng-model="editedProduct.title" required/>
-								</div>
+						<div class="form-group">
+							<label for="edit-product-title" class="col-sm-3 control-label">Title:</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="edit-product-title" name="edit-product-title" placeholder="Enter Product Title" ng-model="editedProduct.title" required/>
 							</div>
-							<div class="form-group">
-								<label for="edit-description" class="col-sm-3 control-label">Description</label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control" id="edit-description" name="edit-description" placeholder="Enter Product Description" ng-model="editedProduct.description"/>
-								</div>
+						</div>
+						<div class="form-group">
+							<label for="edit-description" class="col-sm-3 control-label">Description</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="edit-description" name="edit-description" placeholder="Enter Product Description" ng-model="editedProduct.description"/>
 							</div>
-							<div class="form-group">
-								<label for="vendor-search" class="col-sm-3 control-label">Vendor</label>
-								<div class="col-sm-8">
-									<input type="text" class="form-control" id="vendor-search" name="vendor-search" placeholder="Enter Vendor"
-											 ng-model="editedProduct.vendorId" typeahead="vendor.vendorId as vendor.vendorName for vendor in getVendorByVendorName($viewValue)"
-											 typeahead-loading="loadingVendors" typeahead-no-results="noResults"/>
-									<i ng-show="loadingVendors" class="glyphicon glyphicon-refresh"></i>
-									<div ng-show="noResults">
-										<i class="glyphicon glyphicon-remove"></i>No Results Found
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="edit-sku" class="col-sm-3 control-label">SKU:</label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control" id="edit-sku" name="edit-sku" placeholder="Enter SKU " ng-model="editedProduct.sku"/>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="edit-leadTime" class="col-sm-3 control-label">Quantity:</label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control" id="edit-leadTime" name="edit-leadTime" placeholder="Enter Order Lead Time" ng-model="editedProduct.leadTime"/>
+						</div>
+						<div class="form-group">
+							<label for="vendor-search" class="col-sm-3 control-label">Vendor</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="vendor-search" name="vendor-search" placeholder="Enter Vendor"
+										 ng-model="editedProduct.vendorId" typeahead="vendor.vendorId as vendor.vendorName for vendor in getVendorByVendorName($viewValue)"
+										 typeahead-loading="loadingVendors" typeahead-no-results="noResults"/>
+								<i ng-show="loadingVendors" class="glyphicon glyphicon-refresh"></i>
+								<div ng-show="noResults">
+									<i class="glyphicon glyphicon-remove"></i>No Results Found
 								</div>
 							</div>
 						</div>
-						<div class="movement-inputs">
-							<div class="form-group">
-								<label for="toLocation-search" class="col-sm-4 control-label">Destination:</label>
-								<div class="col-sm-8">
-									<input type="text" class="form-control" id="toLocation-search" name="toLocation-search" placeholder="Enter Location Destination"
-											 ng-model="movement.toLocationId" typeahead="location.locationId as location.description for location in getLocationByStorageCode($viewValue)"
-											 typeahead-loading="loadingToLocations" typeahead-no-results="noResults">
-									<i ng-show="loadingToLocations" class="glyphicon glyphicon-refresh"></i>
-									<div ng-show="noResults">
-										<i class="glyphicon glyphicon-remove"></i> No Results Found
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="cost" class="col-sm-4 control-label">Cost (Purchase Price):</label>
-								<div class="col-sm-8">
-									<input type="text" class="form-control" id="cost" name="cost" placeholder="e.g. $15.00" ng-model="movement.cost"/>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="price" class="col-sm-4 control-label">Price (Selling Price):</label>
-								<div class="col-sm-8">
-									<input type="text" class="form-control" id="price" name="price" placeholder="e.g. $19.99" ng-model="movement.price"/>
-								</div>
+						<div class="form-group">
+							<label for="edit-sku" class="col-sm-3 control-label">SKU:</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="edit-sku" name="edit-sku" placeholder="Enter SKU " ng-model="editedProduct.sku"/>
 							</div>
 						</div>
-						<button type="submit" ng-click="closeModal()" class="btn btn-info">Save</button>
+						<div class="form-group">
+							<label for="edit-leadTime" class="col-sm-3 control-label">Quantity:</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="edit-leadTime" name="edit-leadTime" placeholder="Enter Order Lead Time" ng-model="editedProduct.leadTime"/>
+							</div>
+						</div>
+						<button type="submit" ng-click="closeEditModal()" class="btn btn-info">Save</button>
 						<button class="btn btn-warning" data-dismiss="modal" ng-click="cancelEditing();">Cancel</button>
 					</form>
 				</div>
