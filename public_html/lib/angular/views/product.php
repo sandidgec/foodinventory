@@ -36,6 +36,8 @@
 						<th>Quantity</th>
 						<th>Vendor</th>
 						<th>SKU</th>
+						<th>Sell Price</th>
+						<th>Purchase Cost</th>
 						<th class="center"><i class="fa fa-pencil fa-x"></i></th>
 						<th class="center"><i class="fa fa-trash fa-x"></i></th>
 					</tr>
@@ -48,6 +50,8 @@
 						<td>{{ product.quantityOnHand }}</td>
 						<td>{{ product.vendor.vendorName }}</td>
 						<td>{{ product.sku }}</td>
+						<td>{{ product.movement[0].price | currency }}</td>
+						<td>{{ product.movement[0].cost | currency }}</td>
 						<td>
 							<button class="btn btn-xs btn-info" ng-click="setEditedProduct(product);" data-toggle="modal" data-target="#EditProductModal">
 								<i class="fa fa-pencil tableicons"></i>
