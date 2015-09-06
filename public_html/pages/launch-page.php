@@ -13,14 +13,12 @@ if(session_status() !== PHP_SESSION_ACTIVE) {
 	</head>
 	<body class="site">
 		<div class="site-content">
-
 			<header>
 				<?php require_once "header.php"; ?>
 			</header>
-
-			<img class="center-block" src="../lib/images/frontimage.png" alt="Logo Image">
-
-			<h2 class="welcome">Welcome your new employee.</h2>
+			<div class="warehouse">
+				<h2 class="welcome">Welcome your new employee.</h2>
+			</div>
 		</div>
 		<main class="home">
 

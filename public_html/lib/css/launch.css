@@ -3,16 +3,20 @@ html {
 }
 
 .site {
-	background: url("../lib/images/frontimages.png") no-repeat;
+
 	width: 100%;
 	height: 50%;
 	background-position: 0% 0%;
 }
 
-.gradient {
-	width: 100%;
-	background: linear-gradient(170deg, #81F5FF 0%, #B3C1CC 100%);
+.warehouse {
+	background-image: url("images/frontimage.png") no-repeat;
 }
+
+/*.gradient {*/
+	/*width: 100%;*/
+	/*background: linear-gradient(170deg, #81F5FF 0%, #B3C1CC 100%);*/
+/*}*/
 
 .placeholder {
 	padding-bottom: 6%;
