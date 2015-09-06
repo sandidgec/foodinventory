@@ -15,11 +15,43 @@ app.controller("ProductController", function($http, $modal, $scope, ProductServi
 	 * method that controls the action table and will fill the table or display errors
 	 */
 	$scope.addProduct = function(product) {
-		ProductService.addProduct(product)
+		var newProduct = {
+			productId: null,
+			vendorId: 1,
+			description: product.description,
+			leadTime: 5,
+			sku: product.sku,
+			title: product.title
+		};
+		ProductService.addProduct(newProduct)
 			.then(function(reply) {
 				if(reply.status === 200) {
 					$scope.statusClass = "alert-success";
 					$scope.statusMessage = reply.message;
+
+					console.log(reply);
+
+					var movement = {
+						// TODO: figure these ids out :D
+						fromLocationId: 1,
+						toLocationId: 2,
+						productId: reply.productId,
+						unitId: 1,
+						userId: 1,
+						cost: product.cost,
+						quantity: product.quantity,
+						movementDate: null,
+						movementType: "IN",
+						price: product.price
+					};
+
+					MovementService.addMovement(movement)
+						.then(function(reply) {
+							$scope.statusClass = "alert-success";
+							$scope.statusMessage = reply.message;
+						});
+
+					$scope.products = $scope.getAllProducts(0);
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -59,7 +91,7 @@ app.controller("ProductController", function($http, $modal, $scope, ProductServi
 			ProductService.deleteProduct(productId)
 				.then(function(reply) {
 					if(reply.status === 200) {
-						$scope.actions = reply.data;
+						$scope.products = $scope.getAllProducts(0);
 					} else {
 						$scope.statusClass = "alert-danger";
 						$scope.statusMessage = reply.message;
@@ -212,7 +244,6 @@ app.controller("ProductController", function($http, $modal, $scope, ProductServi
 							});
 				});
 					$scope.products = reply.data;
-					console.log($scope.products);
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -254,7 +285,12 @@ app.controller("ProductController", function($http, $modal, $scope, ProductServi
 		});
 	});
 
-	$scope.closeModal = function(){
+	$scope.closeAddModal = function(){
+		var angularRoot = angular.element(document.querySelector("#AddProductModal"));
+		angularRoot.modal("hide");
+	};
+
+	$scope.closeEditModal = function(){
 		var angularRoot = angular.element(document.querySelector("#EditProductModal"));
 		angularRoot.modal("hide");
 	};
