@@ -425,6 +425,7 @@ class AlertLevel implements JsonSerializable {
 		// create query template
 		$query = "SELECT alertId, alertCode, alertFrequency, alertPoint, alertOperator FROM alertLevel";
 		$statement = $pdo->prepare($query);
+		$statement->execute();
 
 		// build an array of alertLevels
 		$alertLevels = new SplFixedArray($statement->rowCount());

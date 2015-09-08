@@ -43,7 +43,7 @@ try {
 		} else if(empty($alertCode) === false) {
 			$reply->data = AlertLevel::getAlertLevelByAlertCode($pdo, $alertCode);
 		} else {
-			$reply->data = AlertLevel::getAllAlertLevels($pdo);
+			$reply->data = AlertLevel::getAllAlertLevels($pdo)->toArray();
 		}
 
 		// post a new AlertLevel
