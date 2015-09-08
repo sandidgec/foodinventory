@@ -21,7 +21,11 @@ try {
 	$notificationId = filter_input(INPUT_GET, "notificationId", FILTER_VALIDATE_INT);
 
 	//sanitize the email status
-	$emailStatus = filter_input(INPUT_GET,"emailStatus", FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+	if(isset($_GET["emailStatus"]) === true) {
+		$emailStatus = filter_input(INPUT_GET, "emailStatus", FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+	} else {
+		$emailStatus = null;
+	}
 
 	//sanitize the date
 	$notificationDateTime = filter_input(INPUT_GET, "notificationDateTime", FILTER_VALIDATE_INT);
