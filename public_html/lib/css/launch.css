@@ -14,10 +14,10 @@ html {
 	background-image: url(../images/frontimage.png);
 }
 
-/*.gradient {*/
-/*width: 100%;*/
-/*background: linear-gradient(170deg, #81F5FF 0%, #B3C1CC 100%);*/
-/*}*/
+.gradient {
+width: 100%;
+background: linear-gradient(170deg, #81F5FF 0%, #B3C1CC 100%);
+}
 
 .placeholder {
 	padding-bottom: 6%;
