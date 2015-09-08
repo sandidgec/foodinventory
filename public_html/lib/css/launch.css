@@ -10,12 +10,13 @@ html {
 }
 
 .warehouse {
-	background-image: url("images/frontimage.png") no-repeat;
+	height: 300px;
+	background-image: url(../images/frontimage.png);
 }
 
 /*.gradient {*/
-	/*width: 100%;*/
-	/*background: linear-gradient(170deg, #81F5FF 0%, #B3C1CC 100%);*/
+/*width: 100%;*/
+/*background: linear-gradient(170deg, #81F5FF 0%, #B3C1CC 100%);*/
 /*}*/
 
 .placeholder {
@@ -27,9 +28,13 @@ html {
 }
 
 .welcome {
+	padding-top: 150px;
 	padding-bottom: 1%;
 	text-align: center;
 	font-family: 'Quicksand', sans-serif;
+	font-size: 3.5em;
+	font-weight: 700;
+	color: #262626;
 }
 
 .abouttext {
@@ -45,7 +50,7 @@ html {
 	padding-bottom: 3%;
 }
 
-.headtext{
+.headtext {
 	display: inline-block;
 	padding-left: 50px;
 	padding-top: 10px;
@@ -60,7 +65,7 @@ html {
 }
 
 .bounceIn {
- 	padding-left: 100px;
+	padding-left: 100px;
 	padding-bottom: 30px;
 	align-content: center;
 }
@@ -81,8 +86,8 @@ html {
 }
 
 .testimonials {
-	 display: inline-block;
- }
+	display: inline-block;
+}
 
 .right-graphic {
 	display: inline-block;
@@ -91,88 +96,84 @@ html {
 .home {
 }
 
-.main-menu{
+.main-menu {
 	display: inline-block;
 	padding-top: 12px;
 }
 
-	.logo {
+.logo {
 	display: inline-block;
 }
 
-	.site {
+.site {
 	display: flex;
 	min-height: 100vh;
 	flex-direction: column;
 }
 
-	.nav>li>a {
+.nav > li > a {
 	color: #000000;
 	font-size: 1.1em;
 	padding-right: 40px;
 	font-family: 'Quicksand', sans-serif;
 }
 
-	.row {
+.row {
 	margin-top: 700px;
 }
 
-
-	.description {
+.description {
 	padding: 40px;
 	font-size: 1.3em;
 }
 
-	.site-content {
+.site-content {
 	flex: 1;
 }
 
-	h3 {
+h3 {
 	font-family: 'Quicksand', sans-serif;
-	}
+}
 
-	h6 {
+h6 {
 	font-family: 'Quicksand', sans-serif;
 	color: #002FCC;
-		font-size: 1.2em;
-	}
+	font-size: 1.2em;
+}
 
-	footer {
+footer {
 	background-color: whitesmoke;
 }
 
-	.right-divider {
+.right-divider {
 	border-right: solid;
 }
 
-	.pulls-right {
+.pulls-right {
 	text-align: right;
 }
 
-	.contact-header {
-	text-align: center;
-}
 
 
-	.footer-nav>li>a {
+.footer-nav > li > a {
 	color: #000000;
 }
 
-	.footer-nav>li>a:hover {
+.footer-nav > li > a:hover {
 	color: #000000;
 }
 
-	.social-media {
+.social-media {
 	padding-top: 10px;
 	padding-right: 20px;
 	color: #67D2FF;
 }
 
-	.outtests {
+.outtests {
 	padding-top: 25%;
-	}
+}
 
 /*@media only screen and (min-width: 992px) {*/
-	/*main.home {*/
-		/*margin-top: 425px; }*/
-	/*}*/
+/*main.home {*/
+/*margin-top: 425px; }*/
+/*}*/

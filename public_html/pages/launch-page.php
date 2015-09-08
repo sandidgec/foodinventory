@@ -33,7 +33,7 @@ if(session_status() !== PHP_SESSION_ACTIVE) {
 				<h3>Testimonials</h3>
 
 				<p class="test">
-					"This is inventory management done right, and done better! Ease of use and a simple interface made me choose Inventory Text." - John Smith
+					<img src="../lib/images/invtextboxlogo.png" alt="box logo">
 				</p>
 			</section>
 
