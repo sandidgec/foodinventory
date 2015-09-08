@@ -43,16 +43,24 @@ app.controller("LocationController", function($http, $scope, LocationService) {
 		var modalHTML = '<div class="modal-body">' + message + '</div>' +
 			'<div class="modal-footer"><button class="btn btn-primary" ng-click="yes()">Yes</button><button class="btn btn-warning" ng-click="no()">No</button></div>';
 
+		$scope.modalInstance = $modal.open({
+			template: modalHtml,
+			controller: ModalInstanceCtrl
+		});
 
-		LocationService.deleteLocation(location)
-			.then(function(reply) {
-				if(reply.status === 200) {
-					$scope.locations = reply.data;
-				} else {
-					$scope.statusClass = "alert-danger";
-					$scope.statusMessage = reply.message;
-				}
-			});
+		$scope.modalInstance.result.then(function() {
+			LocationService.deleteLocation(locationId)
+				.then(function(reply) {
+					if(reply.status === 200) {
+						$scope.locations = reply.data;
+					} else {
+						$scope.statusClass = "alert-danger";
+						$scope.statusMessage = reply.message;
+					}
+				});
+		});
+
+		$scope.location = $scope.getAllLocations(0);
 	};
 
 	$scope.getLocationByLocationId = function(locationId) {
@@ -122,6 +130,11 @@ app.controller("LocationController", function($http, $scope, LocationService) {
 			$scope.editedLocation = globalLocation;
 		});
 	});
+
+	$scope.closeModal = function(){
+		var angularRoot = angular.element(document.querySelector("#AddLocationModal"));
+		angularRoot.modal("hide");
+	};
 
 	$scope.closeModal = function(){
 		var angularRoot = angular.element(document.querySelector("#EditLocationModal"));

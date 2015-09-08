@@ -11,8 +11,14 @@
 		</div>
 		<div class="col-md-5 col-md-offset-4">
 			<label for="search" class="col-sm-2 control-label">Search: </label>
-			<div class="col-sm-8 col-sm-offset-2">
-				<input type="text" class="form-control" id="search" name="search" placeholder="Search Stuff Here" />
+			<div class="col-sm-8 col-sm-offset-2" ng-controller="LocationController">
+				<input type="text" class="form-control" id="location-search" name="location-search" placeholder="Enter Location"
+						 ng-model="location.description" typeahead="location.description for location in getLocationByDescription($viewValue)"
+						 typeahead-loading="loadingLocations" typeahead-no-results="noResults"/>
+				<i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+				<div ng-show="noResults">
+					<i class="glyphicon glyphicon-remove"></i>No Results Found
+				</div>
 			</div>
 		</div>
 	</div>
@@ -38,12 +44,12 @@
 						<td>{{ location.storageCode }}</td>
 						<td>
 							<a href="#" class="btn btn-md btn-info" ng-click="setEditedLocation(location);" data-toggle="modal" data-target="#EditLocationModal">
-								<i class="fa fa-pencil"></i>
+								<i class="fa fa-pencil tableicons"></i>
 							</a>
 						</td>
 						<td>
 							<form ng-submit="deleteLocation(location.locationId);">
-								<button type="submit" class="btn btn-md btn-danger"><i class="fa fa-trash"></i></button>
+								<button type="submit" class="btn btn-md btn-danger"><i class="fa fa-trash tableicons"></i></button>
 							</form>
 						</td>
 					</tr>
