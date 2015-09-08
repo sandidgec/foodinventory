@@ -50,7 +50,7 @@ try {
 			$reply->data = Notification::getNotificationByNotificationDateTime($pdo, $notificationDateTimeInt);
 		}	else if(empty($alertId) === false){
 			$reply->data = Notification::getProductByAlertId($pdo, $alertId);
-		} else if(empty($page) === false) {
+		} else if($page >= 0) {
 			$reply->data = Notification::getAllNotifications($pdo, $page)->toArray();
 		} else {
 			throw(new InvalidArgumentException("no parameters given", 405));
