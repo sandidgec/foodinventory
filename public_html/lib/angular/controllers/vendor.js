@@ -134,5 +134,15 @@ app.controller("VendorController", function($http, $modal, $scope, VendorService
 		});
 	});
 
+	$scope.closeAddModal = function(){
+		var angularRoot = angular.element(document.querySelector("#AddVendorModal"));
+		angularRoot.modal("hide");
+	};
+
+	$scope.closeEditModal = function(){
+		var angularRoot = angular.element(document.querySelector("#EditVendorModal"));
+		angularRoot.modal("hide");
+	};
+
 	$scope.vendors = $scope.getAllVendors();
 });
