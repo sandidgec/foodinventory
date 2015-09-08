@@ -10,11 +10,14 @@
 			</a>
 		</div>
 		<div class="col-md-5 col-md-offset-4">
-			<label for="search" class="col-sm-2 control-label">Search: </label>
+			<label for="search" class="col-sm-2 control-label"></label>
 			<div class="col-sm-8 col-sm-offset-2" ng-controller="ProductController">
-				<input type="text" class="form-control" id="product-search" name="product-search" placeholder="Enter Product Title"
+				<div class="input-group">
+				<input type="text" class="form-control" id="product-search" name="product-search" placeholder="Search"
 						 ng-model="product.title" typeahead="product.title for product in getProductByTitle($viewValue)"
 						 typeahead-loading="loadingProducts" typeahead-no-results="noResults"/>
+					<span class="input-group-addon"> <i class="fa fa-search"></i></span>
+					</div>
 				<i ng-show="loadingProducts" class="glyphicon glyphicon-refresh"></i>
 				<div ng-show="noResults">
 					<i class="glyphicon glyphicon-remove"></i>No Results Found

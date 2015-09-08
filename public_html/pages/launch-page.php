@@ -30,7 +30,7 @@ if(session_status() !== PHP_SESSION_ACTIVE) {
 			</section>
 
 			<section class="col-xs-6 testimonials text-center">
-				<h3>Testimonials</h3>
+				<h3></h3>
 
 				<p class="test">
 					<img src="../lib/images/invtextboxlogo.png" alt="box logo">
@@ -39,7 +39,7 @@ if(session_status() !== PHP_SESSION_ACTIVE) {
 
 			<section class="col-xs-3 rightgraphic text-center">
 				<p class="outtests">
-					"There's a million inventory management products, but Inventory Text really acts like an extra employee." - Anne Miller
+					"There's a million inventory management products, but Inventory Text really acts like an extra employee." - Ann Miller
 				</p>
 			</section>
 
