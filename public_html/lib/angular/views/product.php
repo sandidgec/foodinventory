@@ -187,24 +187,6 @@
 								<input type="text" class="form-control" id="edit-sku" name="edit-sku" placeholder="Enter SKU " ng-model="editedProduct.sku"/>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="edit-cost" class="col-sm-3 control-label">Cost:</label>
-							<div class="col-sm-9">
-								<input type="text" class="form-control" id="edit-cost" name="edit-cost" placeholder="(Purchase Price) - e.g. $15.00 " ng-model="editedProduct.cost"/>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="edit-quantity" class="col-sm-3 control-label">Quantity:</label>
-							<div class="col-sm-9">
-								<input type="text" class="form-control" id="edit-quantity" name="edit-quantity" placeholder="Enter Quantity" ng-model="editedProduct.quantity"/>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="price" class="col-sm-3 control-label">Price:</label>
-							<div class="col-sm-9">
-								<input type="text" class="form-control" id="price" name="price" placeholder="(Selling Price) - e.g. $19.99 " ng-model="editedProduct.price"/>
-							</div>
-						</div>
 						<pre>form = {{ product | json }}</pre>
 						<button type="submit" ng-click="closeEditModal()" class="btn btn-info">Save</button>
 						<button class="btn btn-warning" data-dismiss="modal" ng-click="cancelEditing();">Cancel</button>
