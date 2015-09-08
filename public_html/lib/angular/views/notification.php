@@ -12,7 +12,7 @@
 		<div class="col-md-5 col-md-offset-4">
 			<label for="search" class="col-sm-2 control-label">Search: </label>
 			<div class="col-sm-8 col-sm-offset-2" ng-controller="NotificationController">
-				<input type="text" class="form-control" id="notifcation-search" name="notification-search" placeholder="Enter Date"
+				<input type="text" class="form-control" id="notification-search" name="notification-search" placeholder="Enter Date"
 						 ng-model="notification.notificationDateTime" typeahead="notification.notificationDateTime for notification in getNotificationByNotificationDateTime($viewValue)"
 						 typeahead-loading="loadingNotifications" typeahead-no-results="noResults"/>
 				<span class="input-group-addon"><i class=" fa fa-search"></i></span>
@@ -40,9 +40,10 @@
 
 				<tbody>
 					<tr ng-repeat="notification in notifications">
-						<td>{{ notification.product.alertId</td>
+						<td>{{ notification.product.alertId }}</td>
 						<td>{{ notification.emailStatus }}</td>
-						<td>{{ notification.notificationDateTime }}</td>
+<!--						<td>{{ notification.notificationDateTime }}</td>-->
+						<td>{{ notification | json }}</td>
 					</tr>
 				</tbody>
 			</table>
@@ -50,7 +51,7 @@
 	</div>
 
 	<!-- Add Alert Modal -->
-	<div class="modal fade" id="AddAlertModal">
+	<div class="modal fade" id="AddAlertLevelModal">
 		<div class="modal-dialog">
 			<div class="modal-content">
 
@@ -60,8 +61,8 @@
 					<h3 class="modal-title">Add an Alert</h3>
 				</div>
 
-				<div class="modal-body" ng-controller="AlertController">
-					<form class="form-horizontal" method="post" ng-submit="addAlert(alert);">
+				<div class="modal-body" ng-controller="AlertLevelController">
+					<form class="form-horizontal" method="post" ng-submit="addAlertLevel(alertLevel);">
 						<div class="form-group">
 							<label for="product-search" class="col-sm-3 control-label">Product:</label>
 							<div class="col-sm-8">
@@ -99,7 +100,7 @@
 	</div>
 
 	<!-- Edit Product Modal -->
-	<div class="modal fade" id="EditAlertModal" ng-controller="AlertController" ng-show="isEditing" >
+	<div class="modal fade" id="EditAlertLevelModal" ng-controller="AlertLevelController" ng-show="isEditing" >
 		<div class="modal-dialog">
 			<div class="modal-content">
 
@@ -109,7 +110,7 @@
 					<h3 class="modal-title">Edit an Alert</h3>
 				</div>
 
-				<div class="modal-body" ng-controller="AlertController">
+				<div class="modal-body" ng-controller="AlertLevelController">
 					<form class="form-horizontal" ng-submit="editAlert(editedalert);">
 						<div class="form-group">
 							<label for="product-search" class="col-sm-3 control-label">Product:</label>

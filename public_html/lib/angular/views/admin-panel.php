@@ -49,6 +49,7 @@ if(session_status() !== PHP_SESSION_ACTIVE) {
 		<script type="text/javascript" src="../services/vendor.js"></script>
 		<script type="text/javascript" src="../services/location.js"></script>
 		<script type="text/javascript" src="../services/notification.js"></script>
+		<script type="text/javascript" src="../services/alert.js"></script>
 		<script type="text/javascript" src="../controllers/login.js"></script>
 		<script type="text/javascript" src="../controllers/modal-instance-ctrl.js"></script>
 		<script type="text/javascript" src="../controllers/tab-controller.js"></script>
@@ -57,12 +58,14 @@ if(session_status() !== PHP_SESSION_ACTIVE) {
 		<script type="text/javascript" src="../controllers/vendor.js"></script>
 		<script type="text/javascript" src="../controllers/location.js"></script>
 		<script type="text/javascript" src="../controllers/notification.js"></script>
+		<script type="text/javascript" src="../controllers/alert.js"></script>
 		<script type="text/javascript" src="../directives/logout.js"></script>
 		<script type="text/javascript" src="../directives/product.js"></script>
 		<script type="text/javascript" src="../directives/movement.js"></script>
 		<script type="text/javascript" src="../directives/vendor.js"></script>
 		<script type="text/javascript" src="../directives/location.js"></script>
 		<script type="text/javascript" src="../directives/notification.js"></script>
+		<script type="text/javascript" src="../directives/alert.js"></script>
 
 		<!-- Page Title -->
 		<title>Administration</title>
@@ -154,6 +157,7 @@ if(session_status() !== PHP_SESSION_ACTIVE) {
 					</div>
 				</nav>
 				<h2>Please Log In </h2>
+				<?php var_dump($_SESSION); ?>
 			</section>
 		<?php
 		}

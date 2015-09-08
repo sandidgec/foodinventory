@@ -1,7 +1,7 @@
 /**
  * service for the alertLevel api endpoint
  **/
-app.service("AlertService", function($http, $q) {
+app.service("AlertLevelService", function($http, $q) {
 	this.ALERTLEVEL_ENDPOINT = "/~invtext/backend/php/api/alert-level/";
 
 	/**

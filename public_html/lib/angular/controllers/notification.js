@@ -87,7 +87,8 @@ app.controller("NotificationController", function($http, $scope, NotificationSer
 		NotificationService.getAllNotifications()
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.notifications = reply.data;
+					console.log(reply.data);
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -115,5 +116,5 @@ app.controller("NotificationController", function($http, $scope, NotificationSer
 		});
 	});
 
-	$scope.notifications = $scope.getAllNotifications();
+	$scope.notifications = $scope.getAllNotifications(0);
 });
