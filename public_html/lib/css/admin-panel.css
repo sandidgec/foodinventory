@@ -21,10 +21,15 @@ i.fa-plus {
 	border-color: #BABABA;
 	margin-top: 5%;
 	padding: 1%;
+	margin-bottom: 100px;
 }
 
 .tableicons {
 font-size: .9em;
+}
+
+.input-group-addon {
+	background: white;
 }
 
 .vertical-text {
