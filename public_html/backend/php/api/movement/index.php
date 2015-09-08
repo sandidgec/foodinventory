@@ -78,7 +78,9 @@ try {
 		$requestObject = json_decode($requestContent);
 
 		$movementDate = new DateTime();
-		$movementDate->setTimestamp($requestObject->movementDate / 1000);
+		if(empty($requestObject->movementDate) === false) {
+			$movementDate->setTimestamp($requestObject->movementDate / 1000);
+		}
 
 		$movement = new Movement(null, $requestObject->fromLocationId, $requestObject->toLocationId,
 			 $requestObject->productId, $requestObject->unitId, $requestObject->userId, $requestObject->cost,
