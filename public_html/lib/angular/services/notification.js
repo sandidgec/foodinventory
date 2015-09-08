@@ -111,8 +111,8 @@ app.service("NotificationService", function($http, $q) {
 	 *
 	 * @return accepts the promise when movements are found, rejected otherwise
 	 **/
-	this.getAllNotifications = function() {
-		return ($http.get(this.NOTIFICATION_ENDPOINT)
+	this.getAllNotifications = function(page) {
+		return ($http.get(this.NOTIFICATION_ENDPOINT + "?page=" + page)
 			.then(function(reply) {
 				if(typeof reply.data === "object") {
 					return (reply.data);

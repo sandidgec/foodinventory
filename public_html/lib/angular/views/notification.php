@@ -5,7 +5,7 @@
 	<!--  Product Buttons -->
 	<div class="notification button row">
 		<div class="col-md-3 text-center">
-			<a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#AddNotificationModal">
+			<a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#AddAlertLevelModal">
 				<i class="fa fa-plus fa-2x"></i>
 			</a>
 		</div>
@@ -26,7 +26,7 @@
 
 	<!--  Product Reports -->
 	<div class="notification reports">
-		<h4>Reports</h4>
+		<h4>Report History</h4>
 
 		<div ng-controller="NotificationController">
 			<table id="notificationTable" class="table table-bordered table-hover table-striped">
@@ -40,10 +40,9 @@
 
 				<tbody>
 					<tr ng-repeat="notification in notifications">
-						<td>{{ notification.product.alertId }}</td>
+						<td>{{ notification.product.title }}</td>
 						<td>{{ notification.emailStatus }}</td>
-<!--						<td>{{ notification.notificationDateTime }}</td>-->
-						<td>{{ notification | json }}</td>
+						<td>{{ notification.notificationDateTime | date }}</td>
 					</tr>
 				</tbody>
 			</table>
@@ -67,7 +66,7 @@
 							<label for="product-search" class="col-sm-3 control-label">Product:</label>
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="product-search" name="product-search" placeholder="Enter Product"
-										 ng-model="product.alertId" typeahead="product.alertId as product.alertId for alert in getProductByAlertId($viewValue)"
+										 ng-model="product.productId" typeahead="product.productId as product.Title for alert in getProductByTitle($viewValue)"
 										 typeahead-loading="loadingProducts" typeahead-no-results="noResults"/>
 								<i ng-show="loadingproducts" class="glyphicon glyphicon-refresh"></i>
 								<div ng-show="noResults">

@@ -2,8 +2,9 @@ var globalAlert = null;
 /**
  * controller for the alertLevel service
  **/
-app.controller("AlertLevelController", function($http, $scope, AlertLevelService) {
-	$scope.alertLevel = null;
+app.controller("AlertLevelController", function($http, $scope, AlertLevelService, ProductService) {
+	$scope.alertLevels = null;
+	$scope.products =[];
 	$scope.editedAlert= null;
 	$scope.isEditing= false;
 	$scope.statusClass = "alert-success";
@@ -101,6 +102,18 @@ app.controller("AlertLevelController", function($http, $scope, AlertLevelService
 			.then(function(reply) {
 				if(reply.status === 200) {
 					$scope.actions = reply.data;
+				} else {
+					$scope.statusClass = "alert-danger";
+					$scope.statusMessage = reply.message;
+				}
+			});
+	};
+
+	$scope.getProductByTitle = function(title) {
+		ProductService.getProductByTitle(title)
+			.then(function(reply) {
+				if(reply.status === 200) {
+					$scope.products = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;

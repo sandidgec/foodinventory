@@ -55,7 +55,17 @@ try {
 		}	else if(empty($alertId) === false){
 			$reply->data = Notification::getProductByAlertId($pdo, $alertId);
 		} else if($page >= 0) {
-			$reply->data = Notification::getAllNotifications($pdo, $page)->toArray();
+			$notifications = Notification::getAllNotifications($pdo, $page)->toArray();
+			foreach($notifications as $index => $notification) {
+				$product = null;
+				$productAlert = ProductAlert::getProductAlertByAlertId($pdo, $notification->getAlertId());
+				if($productAlert !== null) {
+					$product = Product::getProductByProductId($pdo, $productAlert->getProductId());
+				}
+				$notifications[$index] = json_decode(json_encode($notification));
+				$notifications[$index]->product = $product;
+			}
+			$reply->data = $notifications;
 		} else {
 			throw(new InvalidArgumentException("no parameters given", 405));
 		}
