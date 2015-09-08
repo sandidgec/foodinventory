@@ -34,7 +34,7 @@ try {
 	if($method === "GET") {
 		// set an XSRF cookie on GET requests
 		setXsrfCookie("/");
-		if(empty($locationId) === false) {
+		if(empty($alertId) === false) {
 			if($getProducts === true) {
 				$reply->data = AlertLevel::getProductByAlertId($pdo, $alertId);
 			} else {
