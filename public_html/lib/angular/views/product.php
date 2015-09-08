@@ -132,7 +132,7 @@
 								<input type="text" class="form-control" id="price" name="price" placeholder="(Selling Price) - e.g. $19.99 " ng-model="product.price"/>
 							</div>
 						</div>
-						<pre>form = {{ product | json }}</pre>
+<!--						<pre>form = {{ product | json }}</pre>-->
 						<button type="submit" ng-click="closeAddModal()" class="btn btn-primary">Submit</button>
 					</form>
 				</div>
@@ -187,7 +187,7 @@
 								<input type="text" class="form-control" id="edit-sku" name="edit-sku" placeholder="Enter SKU " ng-model="editedProduct.sku"/>
 							</div>
 						</div>
-						<pre>form = {{ product | json }}</pre>
+<!--						<pre>form = {{ product | json }}</pre>-->
 						<button type="submit" ng-click="closeEditModal()" class="btn btn-info">Save</button>
 						<button class="btn btn-warning" data-dismiss="modal" ng-click="cancelEditing();">Cancel</button>
 					</form>

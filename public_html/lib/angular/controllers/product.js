@@ -3,7 +3,7 @@ var globalProduct = null;
 /**
  * controller for the product service
  **/
-app.controller("ProductController", function($http, $modal, $scope, ProductService, VendorService, MovementService) {
+app.controller("ProductController", function($http, $modal, $scope, $rootScope, ProductService, VendorService, MovementService) {
 	$scope.products = null;
 	$scope.vendors = [];
 	$scope.editedProduct = null;
@@ -26,10 +26,7 @@ app.controller("ProductController", function($http, $modal, $scope, ProductServi
 		ProductService.addProduct(newProduct)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.statusClass = "alert-success";
-					$scope.statusMessage = reply.message;
-
-					console.log(reply);
+					$scope.getAllProducts(0);
 
 					var movement = {
 						fromLocationId: 1,
@@ -46,7 +43,8 @@ app.controller("ProductController", function($http, $modal, $scope, ProductServi
 
 					MovementService.addMovement(movement)
 						.then(function(reply) {
-							$scope.products = $scope.getAllProducts(0);
+							MovementService.getAllMovements(0)
+								.then();
 						});
 				} else {
 					$scope.statusClass = "alert-danger";
@@ -87,15 +85,14 @@ app.controller("ProductController", function($http, $modal, $scope, ProductServi
 			ProductService.deleteProduct(productId)
 				.then(function(reply) {
 					if(reply.status === 200) {
-						$scope.products = $scope.getAllProducts(0);
+						$scope.getAllProducts(0);
+						$scope.getAllMovements(0);
 					} else {
 						$scope.statusClass = "alert-danger";
 						$scope.statusMessage = reply.message;
 					}
 				});
 		});
-
-		$scope.movements = $scope.getAllMovements(0);
 	};
 
 	$scope.getProductByProductId = function(productId) {
@@ -241,7 +238,8 @@ app.controller("ProductController", function($http, $modal, $scope, ProductServi
 								}
 							});
 				});
-					$scope.products = reply.data;
+					//$scope.products = reply.data;
+					$rootScope.$broadcast("updateProducts", reply.data);
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -293,5 +291,9 @@ app.controller("ProductController", function($http, $modal, $scope, ProductServi
 		angularRoot.modal("hide");
 	};
 
-	$scope.products = $scope.getAllProducts(0);
+	$scope.$on("updateProducts", function(event, products) {
+		$scope.products = products;
+	});
+
+	$scope.getAllProducts(0);
 });

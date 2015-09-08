@@ -28,7 +28,6 @@
 						<th>Product</th>
 						<th>From</th>
 						<th>To</th>
-						<th>User</th>
 						<th>Cost</th>
 						<th>Movement Date</th>
 						<th>Movement Type</th>
@@ -41,7 +40,6 @@
 						<td>{{ movement.product.title }}</td>
 						<td>{{ movement.fromLocation.description }}</td>
 						<td>{{ movement.toLocation.description }}</td>
-						<td>{{ movement.user.firstName }}</td>
 						<td>{{ movement.cost | currency}}</td>
 						<td>{{ movement.movementDate | date }}</td>
 						<td>{{ movement.movementType }}</td>
@@ -96,18 +94,6 @@
 										 ng-model="movement.toLocationId" typeahead="location.locationId as location.description for location in getLocationByStorageCode($viewValue)"
 										 typeahead-loading="loadingToLocations" typeahead-no-results="noResults">
 								<i ng-show="loadingToLocations" class="glyphicon glyphicon-refresh"></i>
-								<div ng-show="noResults">
-									<i class="glyphicon glyphicon-remove"></i> No Results Found
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="user-search" class="col-sm-4 control-label">User:</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" id="user-search" name="user-search" placeholder="Enter A User"
-										 ng-model="movement.userId" typeahead="user.userId as user.email for user in getUserByEmail($viewValue)"
-										 typeahead-loading="loadingUsers" typeahead-no-results="noResults">
-								<i ng-show="loadingUsers" class="glyphicon glyphicon-refresh"></i>
 								<div ng-show="noResults">
 									<i class="glyphicon glyphicon-remove"></i> No Results Found
 								</div>

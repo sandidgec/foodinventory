@@ -1,7 +1,7 @@
 /**
  * controller for the movement service
  **/
-app.controller("MovementController", function($http, $scope, MovementService, ProductService, LocationService, UserService) {
+app.controller("MovementController", function($http, $scope, $rootScope, MovementService, ProductService, LocationService) {
 	$scope.movements = null;
 	$scope.products = [];
 	$scope.locations = [];
@@ -13,11 +13,22 @@ app.controller("MovementController", function($http, $scope, MovementService, Pr
 	 * method that controls the action table and will fill the table or display errors
 	 */
 	$scope.addMovement = function(movement) {
+		var newmovement = {
+			fromLocationId: movement.fromLocationId,
+			toLocationId: movement.toLocationId,
+			productId: movement.productId,
+			unitId: 1,
+			userId: 1,
+			cost: movement.cost,
+			quantity: movement.quantity,
+			movementDate: null,
+			movementType: movement.movementType,
+			price: movement.price
+		};
 		MovementService.addMovement(movement)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.statusClass = "alert-success";
-					$scope.statusMessage = reply.message;
+					$scope.getAllMovements(0);
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -144,20 +155,11 @@ app.controller("MovementController", function($http, $scope, MovementService, Pr
 									reply.data[index].fromLocation = location.data;
 								}
 							});
-						// call the getLocationByLocationId() - the child service
-						UserService.getUserByUserId(reply.data[index].userId)
-							// wait for the fifth promise (User)
-							.then(function(user) {
-								if(reply.status === 200) {
-									// inject the child into the parent
-									console.log(user.data);
-									reply.data[index].user = user.data;
-								}
-							});
 					});
 
 					// finally, assign the parent array
-					$scope.movements = reply.data;
+					//$scope.movements = reply.data;
+					$rootScope.$broadcast("updateMovements", reply.data);
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -170,13 +172,13 @@ app.controller("MovementController", function($http, $scope, MovementService, Pr
 			.then(function(reply) {
 				if(reply.status === 200) {
 					$scope.products = reply.data;
-					return($scope.products);
+					return ($scope.products);
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
 				}
 			});
-		return($scope.products);
+		return ($scope.products);
 	};
 
 	$scope.getLocationByStorageCode = function(storageCode) {
@@ -184,28 +186,18 @@ app.controller("MovementController", function($http, $scope, MovementService, Pr
 			.then(function(reply) {
 				if(reply.status === 200) {
 					$scope.locations = reply.data;
-					return($scope.locations);
+					return ($scope.locations);
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
 				}
 			});
-		return($scope.locations);
+		return ($scope.locations);
 	};
 
-	$scope.getUserByEmail = function(email) {
-		var users = UserService.getUserByEmail(email)
-			.then(function(reply) {
-				if(reply.status === 200) {
-					$scope.users = reply.data;
-					return($scope.users);
-				} else {
-					$scope.statusClass = "alert-danger";
-					$scope.statusMessage = reply.message;
-				}
-			});
-		return($scope.users);
-	};
+	$scope.$on("updateMovements", function(event, movements) {
+		$scope.movements = movements;
+	});
 
-	$scope.movements = $scope.getAllMovements(0);
+	$scope.getAllMovements(0);
 });
