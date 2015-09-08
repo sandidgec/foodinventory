@@ -46,63 +46,28 @@ app.controller("ProductController", function($http, $modal, $scope, ProductServi
 
 					MovementService.addMovement(movement)
 						.then(function(reply) {
-							$scope.statusClass = "alert-success";
-							$scope.statusMessage = reply.message;
+							$scope.products = $scope.getAllProducts(0);
 						});
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
 				}
 			});
-
-		$scope.products = $scope.getAllProducts(0);
 	};
 
 	/**
 	 * method that controls the action table and will fill the table or display errors
 	 */
 	$scope.editProduct = function(product) {
-		var pullProduct = {
-			productId: null,
-			vendorId: product.vendorId,
-			description: product.description,
-			leadTime: 5,
-			sku: product.sku,
-			title: product.title
-		};
-		ProductService.editProduct(pullProduct)
+		ProductService.editProduct(product)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.statusClass = "alert-success";
-					$scope.statusMessage = reply.message;
-
-					console.log(reply);
-
-					var movement = {
-						fromLocationId: 1,
-						toLocationId: 2,
-						productId: reply.productId,
-						unitId: 1,
-						userId: 1,
-						cost: product.cost,
-						quantity: product.quantity,
-						movementDate: null,
-						movementType: "IN",
-						price: product.price
-					};
-
-					MovementService.addMovement(movement)
-						.then(function(reply) {
-							$scope.statusClass = "alert-success";
-							$scope.statusMessage = reply.message;
-						});
+					$scope.products = $scope.getAllProducts(0);
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
 				}
 			});
-
-		$scope.products = $scope.getAllProducts(0);
 	};
 
 	/**
