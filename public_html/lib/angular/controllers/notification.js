@@ -1,3 +1,4 @@
+var globalNotification = null;
 /**
  * controller for the notification service
  **/
@@ -93,6 +94,26 @@ app.controller("NotificationController", function($http, $scope, NotificationSer
 				}
 			});
 	};
+
+	$scope.setEditedNotification = function(notification){
+		$scope.editedNotification = angular.copy(notification);
+		$scope.isEditing = true;
+		globalNotification = notification;
+	};
+
+	$scope.cancelEditing = function(){
+		$scope.editedNotification = null;
+		$scope.isEdiitng = false;
+	};
+
+	$("#EditNotificationModal").on("shown.bs.modal", function(){
+		var angularRoot = angular.element(document.querySelector("#EditNotificationModal"));
+		var scope = angularRoot.scope();
+		scope.$apply(function(){
+			$scope.isEditing = true;
+			$scope.editedNotification = globalNotification;
+		});
+	});
 
 	$scope.notifications = $scope.getAllNotifications();
 });

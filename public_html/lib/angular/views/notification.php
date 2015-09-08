@@ -11,9 +11,16 @@
 		</div>
 		<div class="col-md-5 col-md-offset-4">
 			<label for="search" class="col-sm-2 control-label">Search: </label>
-			<div class="col-sm-8 col-sm-offset-2">
-				<input type="text" class="form-control" id="search" name="search" placeholder="Search Stuff Here" />
-			</div>
+			<div class="col-sm-8 col-sm-offset-2" ng-controller="NotificationController">
+				<input type="text" class="form-control" id="notifcation-search" name="notification-search" placeholder="Enter Date"
+						 ng-model="notification.notificationDateTime" typeahead="notification.notificationDateTime for notification in getNotificationByNotificationDateTime($viewValue)"
+						 typeahead-loading="loadingNotifications" typeahead-no-results="noResults"/>
+				<span class="input-group-addon"><i class=" fa fa-search"></i></span>
+				</div>
+			<i ng-show="loadingNotifications" class="glyphicon glyphicon-refresh"></i>
+				<div ng-show="noResults">
+					<i class="glyphicon glyphicon-remove"></i>No Results Found
+				</div>
 		</div>
 	</div>
 
@@ -25,67 +32,61 @@
 			<table id="notificationTable" class="table table-bordered table-hover table-striped">
 				<thead>
 					<tr>
+						<th>Product</th>
 						<th>Email Status</th>
-						<th>Content</th>
 						<th>Date Time</th>
-						<th class="center"><i class="fa fa-pencil fa-x"></i></th>
-						<th class="center"><i class="fa fa-trash fa-x"></i></th>
 					</tr>
 				</thead>
 
 				<tbody>
 					<tr ng-repeat="notification in notifications">
+						<td>{{ notification.product.alertId</td>
 						<td>{{ notification.emailStatus }}</td>
-						<td>{{ notification.notificationContent }}</td>
 						<td>{{ notification.notificationDateTime }}</td>
-						<td>
-							<a href="#" class="btn btn-md btn-info" ng-click="setEditedProduct(product);" data-toggle="modal" data-target="#ProductModal">
-								<i class="fa fa-pencil"></i>
-							</a>
-						</td>
-						<td>
-							<form ng-submit="deleteProduct(product.productId);">
-								<button type="submit" class="btn btn-md btn-danger"><i class="fa fa-trash"></i></button>
-							</form>
-						</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
 
-	<!-- Add Notification Modal -->
-	<div class="modal fade" id="AddNotificationModal">
+	<!-- Add Alert Modal -->
+	<div class="modal fade" id="AddAlertModal">
 		<div class="modal-dialog">
 			<div class="modal-content">
 
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span></button>
-					<h3 class="modal-title">Add a Notification</h3>
+					<h3 class="modal-title">Add an Alert</h3>
 				</div>
 
-				<div class="modal-body" ng-controller="NotificationController">
-					<form class="form-horizontal" method="post" ng-submit="addNotification(notification);">
+				<div class="modal-body" ng-controller="AlertController">
+					<form class="form-horizontal" method="post" ng-submit="addAlert(alert);">
 						<div class="form-group">
-							<label for="notification-content" class="col-sm-3 control-label">Notification Content:</label>
-							<div class="col-sm-9">
-								<textarea class="form-control" id="notification-content" name="notification-content" placeholder="Enter Notification" ng-model="notification.notificationContent"></textarea>
+							<label for="product-search" class="col-sm-3 control-label">Product:</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="product-search" name="product-search" placeholder="Enter Product"
+										 ng-model="product.alertId" typeahead="product.alertId as product.alertId for alert in getProductByAlertId($viewValue)"
+										 typeahead-loading="loadingProducts" typeahead-no-results="noResults"/>
+								<i ng-show="loadingproducts" class="glyphicon glyphicon-refresh"></i>
+								<div ng-show="noResults">
+									<i class="glyphicon glyphicon-remove"></i>No Results Found
+								</div>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="notification-datetime" class="col-sm-3 control-label">Notification DateTime: </label>
+							<label for="alertPoint" class="col-sm-3 control-label">Alert Level: </label>
 							<div class="col-sm-9">
-								<input type="text" class="form-control" id="notification-datetime" name="notification-datetime" placeholder="Enter Notification DateTime" ng-model="notification.notificationDateTime"/>
+								<input type="text" class="form-control" id="alertPoint" name="alertPoint" placeholder="Enter Alert Level" ng-model="alert.alertPoint"/>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="vendor-search" class="col-sm-3 control-label">Notification Handle:</label>
+							<label for="alert operator" class="col-sm-3 control-label">Alert Operator</label>
 							<div class="col-sm-9">
-								<input type="text" class="form-control" id="notification-datetime" name="notification-datetime" placeholder="Enter Notification DateTime" ng-model="notification.notificationDateTime"/>
+								<input type="text" class="form-control" id="alertOperator" name="alertOperator" placeholder="Enter Alert Operator" ng-model="alert.alertOperator"/>
 							</div>
 						</div>
-						<pre>form = {{ notification | json }}</pre>
+						<pre>form = {{ alert | json }}</pre>
 						<button type="submit" class="btn btn-primary">Submit</button>
 					</form>
 				</div>
@@ -98,60 +99,50 @@
 	</div>
 
 	<!-- Edit Product Modal -->
-	<div class="modal fade" id="EditProductModal">
+	<div class="modal fade" id="EditAlertModal" ng-controller="AlertController" ng-show="isEditing" >
 		<div class="modal-dialog">
 			<div class="modal-content">
 
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span></button>
-					<h3 class="modal-title">Edit a Notification</h3>
+					<h3 class="modal-title">Edit an Alert</h3>
 				</div>
 
-				<div class="modal-body" ng-controller="ProductController">
-					<form class="form-horizontal" ng-submit="addProduct(product);">
+				<div class="modal-body" ng-controller="AlertController">
+					<form class="form-horizontal" ng-submit="editAlert(editedalert);">
 						<div class="form-group">
-							<label for="product" class="col-sm-3 control-label">Product:</label>
-							<div class="col-sm-9">
-								<input type="text" class="form-control" id="product" name="product" placeholder="Enter Product " ng-model="product.title"/>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="Description" class="col-sm-3 control-label">Description</label>
-							<div class="col-sm-9">
-								<input type="text" class="form-control" id="description" name="description" placeholder="Enter Product Description" ng-model="product.description"/>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="vendor-search" class="col-sm-3 control-label">Vendor</label>
+							<label for="product-search" class="col-sm-3 control-label">Product:</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="vendor-search" name="vendor-search" placeholder="Enter Vendor"
-										 ng-model="product.vendorId" typeahead="vendor for vendorName in getVendorByVendorName($viewValue)"
-										 typeahead-loading="loadingVendors" typeahead-no-results="noResults"/>
-								<i ng-show="loadingVendors" class="glyphicon glyphicon-refresh"></i>
+								<input type="text" class="form-control" id="product-search" name="product-search" placeholder="Enter Product"
+										 ng-model="product.alertId" typeahead="product.alertId as product.alertId for alert in getProductByAlertId($viewValue)"
+										 typeahead-loading="loadingProducts" typeahead-no-results="noResults"/>
+								<i ng-show="loadingProducts" class="glyphicon glyphicon-refresh"></i>
 								<div ng-show="noResults">
 									<i class="glyphicon glyphicon-remove"></i>No Results Found
 								</div>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="sku" class="col-sm-3 control-label">SKU:</label>
+							<label for="alertPoint" class="col-sm-3 control-label">Alert Level: </label>
 							<div class="col-sm-9">
-								<input type="text" class="form-control" id="sku" name="sku" placeholder="Enter SKU " ng-model="product.sku"/>
+								<input type="text" class="form-control" id="alertPoint" name="alertPoint" placeholder="Enter Alert Level" ng-model="alert.alertPoint"/>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="leadTime" class="col-sm-3 control-label">Lead Time:</label>
+							<label for="alert operator" class="col-sm-3 control-label">Alert Operator</label>
 							<div class="col-sm-9">
-								<input type="text" class="form-control" id="leadTime" name="leadTime" placeholder="Enter Order Lead Time" ng-model="product.leadTime"/>
+								<input type="text" class="form-control" id="alertOperator" name="alertOperator" placeholder="Enter Alert Operator" ng-model="alert.alertOperator"/>
 							</div>
 						</div>
-						<pre>form = {{ product | json }}</pre>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-							<button type="button" class="btn btn-primary">Submit</button>
-						</div>
+						<button type="submit" ng-click="closeEditModal()" class="btn btn-info">Save</button>
+						<button class="btn btn-warning" data-dismiss="modal" ng-click="cancelEditing();">Cancel</button>
+						<pre>form = {{ alert | json }}</pre>
 					</form>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancelEditing();">Close</button>
 				</div>
 			</div>
 		</div>
