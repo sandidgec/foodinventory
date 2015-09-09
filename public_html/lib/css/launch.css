@@ -67,6 +67,14 @@ background: linear-gradient(170deg, #81F5FF 0%, #B3C1CC 100%);
 	padding-top: 10px;
 }
 
+.headshot {
+	border-radius: 50%;
+	width: 80px;
+	height: auto;
+	border: solid 3px darkgrey;
+	margin-top: 16%;
+}
+
 .inv {
 	color: #002FCC;
 	font-size: 1.9em;
@@ -94,6 +102,7 @@ background: linear-gradient(170deg, #81F5FF 0%, #B3C1CC 100%);
 
 .left-graphic {
 	display: inline-block;
+	margin-bottom: 25%;
 }
 
 .testimonials {
@@ -102,6 +111,7 @@ background: linear-gradient(170deg, #81F5FF 0%, #B3C1CC 100%);
 
 .right-graphic {
 	display: inline-block;
+	margin-bottom: 25%;
 }
 
 .home {
@@ -194,7 +204,18 @@ footer {
 }
 
 .outtests {
-	padding-top: 25%;
+	padding-top: 5%;
+}
+
+.testtext{
+	font-size:.8em;
+	margin-bottom: 20%;
+}
+
+.nametext {
+	font-family: 'Quicksand', sans-serif;
+	font-size: 1.2em;
+	font-weight: 500;
 }
 
 /*@media only screen and (min-width: 992px) {*/

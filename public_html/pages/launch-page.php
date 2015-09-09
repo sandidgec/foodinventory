@@ -23,9 +23,12 @@ if(session_status() !== PHP_SESSION_ACTIVE) {
 		<main class="home">
 
 			<section class="col-xs-3 leftgraphic text-center">
+				<img src="../lib/images/dylanhead.png" class="headshot" alt="testimonial pic">
 				<p class="outtests">
-					"Being a small business owner, I've tried every inventory management software out there. Inventory Text is the easiest and most complete package I've come
-					across. 10 out of 10!" - Dylan McDonald
+					<p class="nametext"> - Dylan McDonald, Acme Inc.</p>
+
+					<p class="testtext">"Being a small business owner, I've tried every inventory management software out there. Inventory Text is the easiest and most complete package I've come
+					across. 10 out of 10!"
 				</p>
 			</section>
 
@@ -38,8 +41,11 @@ if(session_status() !== PHP_SESSION_ACTIVE) {
 			</section>
 
 			<section class="col-xs-3 rightgraphic text-center">
+				<img src="../lib/images/womanheadshot.jpg" class="headshot" alt="testimonial pic">
 				<p class="outtests">
-					"There's a million inventory management products, but Inventory Text really acts like an extra employee." - Ann Miller
+					<p class="nametext"> - Ann Miller, Cogs N' Things</p>
+
+					<p class="testtext">"There's a million inventory management products, but Inventory Text really acts like an extra employee." - Ann Miller</p>
 				</p>
 			</section>
 
