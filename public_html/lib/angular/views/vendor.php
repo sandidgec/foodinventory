@@ -99,13 +99,9 @@
 								<input type="text" class="form-control" id="vendorPhoneNumber" name="vendorPhoneNumber" placeholder="Enter Vendor's Phone Number" ng-model="vendor.vendorPhoneNumber"/>
 							</div>
 						</div>
-						<pre>form = {{ vendor | json }}</pre>
 						<button type="submit" class="btn btn-info">Submit</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					</form>
-				</div>
-
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				</div>
 			</div>
 		</div>
@@ -150,10 +146,6 @@
 						<button type="submit" class="btn btn-info">Save</button>
 						<button class="btn btn-warning" data-dismiss="modal" ng-click="cancelEditing()">Cancel</button>
 					</form>
-				</div>
-
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancelEditing();">Close</button>
 				</div>
 			</div>
 		</div>
