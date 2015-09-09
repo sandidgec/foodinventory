@@ -88,7 +88,7 @@ app.controller("NotificationController", function($http, $scope, NotificationSer
 			.then(function(reply) {
 				if(reply.status === 200) {
 					$scope.notifications = reply.data;
-					console.log(reply.data);
+					//console.log(reply.data);
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;

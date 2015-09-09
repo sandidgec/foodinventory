@@ -34,6 +34,7 @@ try {
 	if($method === "GET") {
 		// set an XSRF cookie on GET requests
 		setXsrfCookie("/");
+		$reply->getProducts = $getProducts;
 		if(empty($alertId) === false) {
 			if($getProducts === true) {
 				$reply->data = AlertLevel::getProductByAlertId($pdo, $alertId);
@@ -41,7 +42,7 @@ try {
 				$reply->data = AlertLevel::getAlertLevelByAlertId($pdo, $alertId);
 			}
 		} else if(empty($alertCode) === false) {
-			$reply->data = AlertLevel::getAlertLevelByAlertCode($pdo, $alertCode);
+			$reply->data = AlertLevel::getAlertLevelByAlertCode($pdo, $alertCode)->toArray();
 		} else {
 			$reply->data = AlertLevel::getAllAlertLevels($pdo)->toArray();
 		}

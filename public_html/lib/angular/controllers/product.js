@@ -3,7 +3,7 @@ var globalProduct = null;
 /**
  * controller for the product service
  **/
-app.controller("ProductController", function($http, $modal, $scope, $rootScope, ProductService, VendorService, MovementService) {
+app.controller("ProductController", function($http, $modal, $scope, ProductService, VendorService, MovementService) {
 	$scope.products = null;
 	$scope.vendors = [];
 	$scope.editedProduct = null;
@@ -26,7 +26,10 @@ app.controller("ProductController", function($http, $modal, $scope, $rootScope, 
 		ProductService.addProduct(newProduct)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.getAllProducts(0);
+					$scope.statusClass = "alert-success";
+					$scope.statusMessage = reply.message;
+
+					console.log(reply);
 
 					var movement = {
 						fromLocationId: 1,
@@ -43,8 +46,7 @@ app.controller("ProductController", function($http, $modal, $scope, $rootScope, 
 
 					MovementService.addMovement(movement)
 						.then(function(reply) {
-							MovementService.getAllMovements(0)
-								.then();
+							$scope.products = $scope.getAllProducts(0);
 						});
 				} else {
 					$scope.statusClass = "alert-danger";
@@ -85,14 +87,15 @@ app.controller("ProductController", function($http, $modal, $scope, $rootScope, 
 			ProductService.deleteProduct(productId)
 				.then(function(reply) {
 					if(reply.status === 200) {
-						$scope.getAllProducts(0);
-						$scope.getAllMovements(0);
+						$scope.products = $scope.getAllProducts(0);
 					} else {
 						$scope.statusClass = "alert-danger";
 						$scope.statusMessage = reply.message;
 					}
 				});
 		});
+
+		$scope.movements = $scope.getAllMovements(0);
 	};
 
 	$scope.getProductByProductId = function(productId) {
@@ -222,24 +225,23 @@ app.controller("ProductController", function($http, $modal, $scope, $rootScope, 
 			.then(function(reply) {
 				if(reply.status === 200) {
 					// foreach() through the array from the first promise
-					reply.data.forEach(function(product, index){
+					reply.data.forEach(function(product, index) {
 						// call the getVendorByVendorId() - the child service
 						VendorService.getVendorByVendorId(reply.data[index].vendorId)
-							.then(function(vendor){
-								if(reply.status === 200){
+							.then(function(vendor) {
+								if(reply.status === 200) {
 									reply.data[index].vendor = vendor.data;
 								}
 							});
 						// call the getMovementByProductId() - the child service
 						MovementService.getMovementByProductId(reply.data[index].productId)
-							.then(function(movement){
-								if(reply.status === 200){
+							.then(function(movement) {
+								if(reply.status === 200) {
 									reply.data[index].movement = movement.data;
 								}
 							});
-				});
-					//$scope.products = reply.data;
-					$rootScope.$broadcast("updateProducts", reply.data);
+					});
+					$scope.products = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -252,13 +254,13 @@ app.controller("ProductController", function($http, $modal, $scope, $rootScope, 
 			.then(function(reply) {
 				if(reply.status === 200) {
 					$scope.vendors = reply.data;
-					return($scope.vendors);
+					return ($scope.vendors);
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
 				}
 			});
-		return($scope.vendors);
+		return ($scope.vendors);
 	};
 
 	$scope.setEditedProduct = function(product) {
@@ -281,19 +283,15 @@ app.controller("ProductController", function($http, $modal, $scope, $rootScope, 
 		});
 	});
 
-	$scope.closeAddModal = function(){
+	$scope.closeAddModal = function() {
 		var angularRoot = angular.element(document.querySelector("#AddProductModal"));
 		angularRoot.modal("hide");
 	};
 
-	$scope.closeEditModal = function(){
+	$scope.closeEditModal = function() {
 		var angularRoot = angular.element(document.querySelector("#EditProductModal"));
 		angularRoot.modal("hide");
 	};
 
-	$scope.$on("updateProducts", function(event, products) {
-		$scope.products = products;
-	});
-
-	$scope.getAllProducts(0);
+	$scope.products = $scope.getAllProducts(0);
 });

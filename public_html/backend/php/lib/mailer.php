@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(dirname(dirname(dirname(__DIR__)))) . "/vendor/autoload.php");
+require_once(dirname(dirname(__DIR__)) . "/vendor/autoload.php");
 
 /**
  * create a swift message
@@ -21,7 +21,7 @@ try{
 	$swiftMessage->setTo($recipients);
 
 	// attach the subject line to the message
-	$swiftMessage->setSubject("Testing Email Delivery and anti spam");
+	$swiftMessage->setSubject("Inventory Alerts");
 
 	/**
 	 * attach the actual message to the message
@@ -30,12 +30,7 @@ try{
 	 * notice one tactic used is to display the entire $confirmLink to plain text; this lets users
 	 * who aren't viewing HTML content in Emails still access your links
 	 **/
-	$confirmLink = "https://" . $_SERVER["SERVER_NAME"] . "/important-link/confirm.php?confirmationCode=abc123";
-	$message = <<< EOF
-<h1>Inventory Report</h1>
-<p>Dear Customer This is your inventory report for the week of blah</p>
-<p>To certify this email has reached its intended recipient, please comfirm by visiting: <a href="$confirmLink">$confirmLink</a></p>
-EOF;
+
 	$swiftMessage->setBody($message, "text/html");
 	$swiftMessage->addPart(html_entity_decode(filter_var($message, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES)), "text/plain");
 

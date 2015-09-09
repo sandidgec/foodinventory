@@ -17,7 +17,7 @@ app.controller("AlertLevelController", function($http, $scope, AlertLevelService
 		AlertLevelService.addAlertLevel(alertLevel)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.alertLevels = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -29,7 +29,7 @@ app.controller("AlertLevelController", function($http, $scope, AlertLevelService
 		AlertLevelService.editAlertLevel(alertLevel)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.alertLevels = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -65,7 +65,7 @@ app.controller("AlertLevelController", function($http, $scope, AlertLevelService
 		AlertLevelService.getAlertLevelByAlertId(alertId)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.alertLevels = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -77,7 +77,7 @@ app.controller("AlertLevelController", function($http, $scope, AlertLevelService
 		AlertLevelService.getAlertLevelByAlertCode(alertCode)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.alertLevels = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -89,7 +89,7 @@ app.controller("AlertLevelController", function($http, $scope, AlertLevelService
 		AlertLevelService.getProductByAlertId(alertId)
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					$scope.products = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -101,7 +101,16 @@ app.controller("AlertLevelController", function($http, $scope, AlertLevelService
 		AlertLevelService.getAllAlerts()
 			.then(function(reply) {
 				if(reply.status === 200) {
-					$scope.actions = reply.data;
+					console.log(reply);
+					reply.data.forEach(function(alertLevel, index) {
+						ProductService.getProductByProductId(reply.data[index].productId)
+							.then(function(product) {
+								if(reply.status === 200) {
+									reply.data[index].product = product.data;
+								}
+							});
+					});
+					$scope.alertLevels = reply.data;
 				} else {
 					$scope.statusClass = "alert-danger";
 					$scope.statusMessage = reply.message;
@@ -110,7 +119,7 @@ app.controller("AlertLevelController", function($http, $scope, AlertLevelService
 	};
 
 	$scope.getProductByTitle = function(title) {
-		ProductService.getProductByTitle(title)
+		var products = ProductService.getProductByTitle(title)
 			.then(function(reply) {
 				if(reply.status === 200) {
 					$scope.products = reply.data;
@@ -119,6 +128,7 @@ app.controller("AlertLevelController", function($http, $scope, AlertLevelService
 					$scope.statusMessage = reply.message;
 				}
 			});
+		return($scope.products);
 	};
 
 	$scope.setEditedAlert = function(alert) {

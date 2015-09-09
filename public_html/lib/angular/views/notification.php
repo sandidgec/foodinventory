@@ -32,17 +32,15 @@
 			<table id="notificationTable" class="table table-bordered table-hover table-striped">
 				<thead>
 					<tr>
-						<th>Product</th>
-						<th>Email Status</th>
 						<th>Date Time</th>
+						<th>Email Status</th>
 					</tr>
 				</thead>
 
 				<tbody>
 					<tr ng-repeat="notification in notifications">
-						<td>{{ notification.product.title }}</td>
-						<td>{{ notification.emailStatus }}</td>
 						<td>{{ notification.notificationDateTime | date }}</td>
+						<td>{{ notification.emailStatus }}</td>
 					</tr>
 				</tbody>
 			</table>
@@ -66,7 +64,7 @@
 							<label for="product-search" class="col-sm-3 control-label">Product:</label>
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="product-search" name="product-search" placeholder="Enter Product"
-										 ng-model="product.productId" typeahead="product.productId as product.Title for alert in getProductByTitle($viewValue)"
+										 ng-model="product.productId" typeahead="product.productId as product.title for product in getProductByTitle($viewValue)"
 										 typeahead-loading="loadingProducts" typeahead-no-results="noResults"/>
 								<i ng-show="loadingproducts" class="glyphicon glyphicon-refresh"></i>
 								<div ng-show="noResults">
