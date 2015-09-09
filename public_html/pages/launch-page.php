@@ -45,7 +45,7 @@ if(session_status() !== PHP_SESSION_ACTIVE) {
 				<p class="outtests">
 					<p class="nametext"> - Ann Miller, Cogs N' Things</p>
 
-					<p class="testtext">"There's a million inventory management products, but Inventory Text really acts like an extra employee." - Ann Miller</p>
+					<p class="testtext">"There's a million inventory management products, but Inventory Text really acts like an extra employee."</p>
 				</p>
 			</section>
 
