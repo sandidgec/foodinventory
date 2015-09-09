@@ -1,6 +1,6 @@
 <div ng-controller="LoginController">
 	<form class="form-horizontal" method="get" ng-submit="logout();" novalidate="novalidate">
-		<button class="btn" type="submit"><i class="fa fa-sign-out outbtn"></i>Sign Out</button>
+		<button class="btn btn-sm" type="submit"><span class="signout">Sign Out</span></button>
 	</form>
 </div>
 

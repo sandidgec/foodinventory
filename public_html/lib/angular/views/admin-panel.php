@@ -12,7 +12,7 @@ if(session_status() !== PHP_SESSION_ACTIVE) {
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 
 		<!-- Font Awesome -->
-		<link type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+		<link type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"/>
 
 		<!-- Bootstrap Latest compiled and minified CSS -->
 		<link type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet"/>
@@ -99,6 +99,7 @@ if(session_status() !== PHP_SESSION_ACTIVE) {
 						<li ng-class="{ active:tab.isSet(5) }">
 							<a href="" ng-click="tab.setTab(5)">Notification</a>
 						</li>
+						<li> <?php require_once "logout.php"; ?></li>
 					</ul>
 
 					<!--  Product Tab's Contents  -->
@@ -127,11 +128,6 @@ if(session_status() !== PHP_SESSION_ACTIVE) {
 					</div>
 				</section>
 
-				<header class="logout col-md-2">
-					<ul class="nav nav-pulls right">
-						<?php require_once "logout.php"; ?>
-					</ul>
-				</header>
 
 			</section>
 		<?php
