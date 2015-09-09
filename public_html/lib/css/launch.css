@@ -71,7 +71,7 @@ background: linear-gradient(170deg, #81F5FF 0%, #B3C1CC 100%);
 	border-radius: 50%;
 	width: 80px;
 	height: auto;
-	border: solid 2px #002FCC;
+	border: solid 2px rgba(0, 47, 204, .50);
 	margin-top: 16%;
 }
 
