@@ -10,10 +10,18 @@
 			</a>
 		</div>
 		<div class="col-md-5 col-md-offset-4">
-			<label for="search" class="col-sm-2 control-label">Search: </label>
+			<div class="col-sm-8 col-sm-offset-2" ng-controller="MovementController">
+				<div class="input-group">
+					<input type="text" class="form-control" id="movement-search" name="movement-search" placeholder="Search"
+							 ng-model="product.title" typeahead="product.title for product in getProductByTitle($viewValue)"
+							 typeahead-loading="loadingSearch" typeahead-no-results="noResults"/>
+					<span class="input-group-addon"> <i class="fa fa-search"></i></span>
+				</div>
+				<i ng-show="loadingSearch" class="glyphicon glyphicon-refresh"></i>
 
-			<div class="col-sm-8 col-sm-offset-2">
-				<input type="text" class="form-control" id="search" name="search" placeholder="Search Stuff Here"/>
+				<div ng-show="noResults">
+					<i class="glyphicon glyphicon-remove"></i>No Results Found
+				</div>
 			</div>
 		</div>
 	</div>
@@ -68,10 +76,9 @@
 							<label for="product-search" class="col-sm-4 control-label">Product:</label>
 
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="product-search" name="product-search" placeholder="Search"
+								<input type="text" class="form-control" id="product-search" name="product-search" placeholder="Enter Product"
 										 ng-model="movement.productId" typeahead="product.productId as product.title for product in getProductByTitle($viewValue)"
 										 typeahead-loading="loadingProducts" typeahead-no-results="noResults">
-								<span class="input-group-addon"> <i class="fa fa-search"></i></span>
 								<i ng-show="loadingProducts" class="glyphicon glyphicon-refresh"></i>
 
 								<div ng-show="noResults">

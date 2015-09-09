@@ -10,7 +10,6 @@
 			</a>
 		</div>
 		<div class="col-md-5 col-md-offset-4">
-			<label for="search" class="col-sm-2 control-label"></label>
 			<div class="col-sm-8 col-sm-offset-2" ng-controller="ProductController">
 				<div class="input-group">
 					<input type="text" class="form-control" id="product-search" name="product-search" placeholder="Search"
@@ -19,6 +18,7 @@
 					<span class="input-group-addon"> <i class="fa fa-search"></i></span>
 				</div>
 				<i ng-show="loadingSearch" class="glyphicon glyphicon-refresh"></i>
+
 				<div ng-show="noResults">
 					<i class="glyphicon glyphicon-remove"></i>No Results Found
 				</div>

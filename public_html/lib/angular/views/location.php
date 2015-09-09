@@ -10,14 +10,14 @@
 			</a>
 		</div>
 		<div class="col-md-5 col-md-offset-4">
-			<label for="search" class="col-sm-2 control-label">Search: </label>
-
 			<div class="col-sm-8 col-sm-offset-2" ng-controller="LocationController">
-				<input type="text" class="form-control" id="location-search" name="location-search" placeholder="Search"
-						 ng-model="location.description" typeahead="location.description for location in getLocationByDescription($viewValue)"
-						 typeahead-loading="loadingLocations" typeahead-no-results="noResults"/>
-				<span class="input-group-addon"> <i class="fa fa-search"></i></span>
-				<i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+				<div class="input-group">
+					<input type="text" class="form-control" id="location-search" name="location-search" placeholder="Search"
+							 ng-model="location.description" typeahead="location.description for location in getLocationByDescription($viewValue)"
+							 typeahead-loading="loadingSearch" typeahead-no-results="noResults"/>
+					<span class="input-group-addon"> <i class="fa fa-search"></i></span>
+				</div>
+				<i ng-show="loadingSearch" class="glyphicon glyphicon-refresh"></i>
 
 				<div ng-show="noResults">
 					<i class="glyphicon glyphicon-remove"></i>No Results Found
