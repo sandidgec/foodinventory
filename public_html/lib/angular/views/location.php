@@ -11,11 +11,14 @@
 		</div>
 		<div class="col-md-5 col-md-offset-4">
 			<label for="search" class="col-sm-2 control-label">Search: </label>
+
 			<div class="col-sm-8 col-sm-offset-2" ng-controller="LocationController">
-				<input type="text" class="form-control" id="location-search" name="location-search" placeholder="Enter Location"
+				<input type="text" class="form-control" id="location-search" name="location-search" placeholder="Search"
 						 ng-model="location.description" typeahead="location.description for location in getLocationByDescription($viewValue)"
 						 typeahead-loading="loadingLocations" typeahead-no-results="noResults"/>
+				<span class="input-group-addon"> <i class="fa fa-search"></i></span>
 				<i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+
 				<div ng-show="noResults">
 					<i class="glyphicon glyphicon-remove"></i>No Results Found
 				</div>
@@ -72,12 +75,14 @@
 					<form class="form-horizontal" method="post" ng-submit="addLocation(location);">
 						<div class="form-group">
 							<label for="location-description" class="col-sm-3 control-label">Location</label>
+
 							<div class="col-sm-9">
 								<input type="text" class="form-control" id="location-description" name="location-description" placeholder="Enter Location" ng-model="location.description"/>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="storage-code" class="col-sm-3 control-label">Storage Code</label>
+
 							<div class="col-sm-9">
 								<input type="text" class="form-control" id="storage-code" name="storage Code" placeholder="Enter Storage Code" ng-model="location.storageCode"/>
 							</div>
@@ -105,14 +110,17 @@
 					<form class="form-horizontal" ng-submit="updateLocation(location);">
 						<div class="form-group">
 							<label for="edit-storage-code" class="col-sm-3 control-label">Storage Code</label>
+
 							<div class="col-sm-9">
 								<input type="text" class="form-control" id="edit-storage-code" name="edit-storage Code" placeholder="Enter Storage Code" ng-model="editedLocation.storageCode" required/>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="edit-location-description" class="col-sm-3 control-label">Description</label>
+
 							<div class="col-sm-9">
-								<input type="text" class="form-control" id="edit-location-description" name="edit-location-description" placeholder="Enter Location Description" ng-model="editedLocation.description" required/>
+								<input type="text" class="form-control" id="edit-location-description" name="edit-location-description" placeholder="Enter Location Description"
+										 ng-model="editedLocation.description" required/>
 							</div>
 						</div>
 						<button type="submit" class="btn btn-info">Save</button>

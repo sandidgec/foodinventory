@@ -11,11 +11,14 @@
 		</div>
 		<div class="col-md-5 col-md-offset-4">
 			<label for="search" class="col-sm-2 control-label">Search: </label>
+
 			<div class="col-sm-8 col-sm-offset-2" ng-controller="VendorController">
-				<input type="text" class="form-control" id="vendor-search" name="vendor-search" placeholder="Enter Vendor Name"
+				<input type="text" class="form-control" id="vendor-search" name="vendor-search" placeholder="Search
 						 ng-model="vendor.vendorName" typeahead="vendor.vendorName for vendor in getVendorByVendorName($viewValue)"
 						 typeahead-loading="loadingVendors" typeahead-no-results="noResults"/>
+				<span class="input-group-addon"> <i class="fa fa-search"></i></span>
 				<i ng-show="loadingVendors" class="glyphicon glyphicon-refresh"></i>
+
 				<div ng-show="noResults">
 					<i class="glyphicon glyphicon-remove"></i>No Results Found
 				</div>
@@ -77,24 +80,28 @@
 					<form class="form-horizontal" method="post" ng-submit="addVendor(vendor);">
 						<div class="form-group">
 							<label for="vendorName" class="col-sm-3 control-label">Vendor Name</label>
+
 							<div class="col-sm-9">
 								<input type="text" class="form-control" id="vendor-name" name="vendor-name" placeholder="Enter Vendor's Name" ng-model="vendor.vendorName"/>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="contactName" class="col-sm-3 control-label">Contact Name</label>
+
 							<div class="col-sm-9">
 								<input type="text" class="form-control" id="contactName" name="contactName" placeholder="Enter Contact'a Name" ng-model="vendor.contactName"/>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="vendorEmail" class="col-sm-3 control-label">Email</label>
+
 							<div class="col-sm-9">
 								<input type="text" class="form-control" id="vendorEmail" name="vendorEmail" placeholder="Enter Vendor's Email" ng-model="vendor.vendorEmail"/>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="vendorPhoneNumber" class="col-sm-3 control-label">Phone Number</label>
+
 							<div class="col-sm-9">
 								<input type="text" class="form-control" id="vendorPhoneNumber" name="vendorPhoneNumber" placeholder="Enter Vendor's Phone Number" ng-model="vendor.vendorPhoneNumber"/>
 							</div>
@@ -121,24 +128,28 @@
 					<form class="form-horizontal" method="post" ng-submit="editVendor(vendor);">
 						<div class="form-group">
 							<label for="vendorName" class="col-sm-3 control-label">Vendor Name</label>
+
 							<div class="col-sm-9">
 								<input type="text" class="form-control" id="vendor-name" name="vendor-name" placeholder="Enter Vendor's Name" ng-model="vendor.vendorName" required/>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="contactName" class="col-sm-3 control-label">Contact Name</label>
+
 							<div class="col-sm-9">
 								<input type="text" class="form-control" id="contactName" name="contactName" placeholder="Enter Contact'a Name" ng-model="vendor.contactName"/>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="vendorEmail" class="col-sm-3 control-label">Email</label>
+
 							<div class="col-sm-9">
 								<input type="text" class="form-control" id="vendorEmail" name="vendorEmail" placeholder="Enter Vendor's Email" ng-model="vendor.vendorEmail"/>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="vendorPhoneNumber" class="col-sm-3 control-label">Phone Number</label>
+
 							<div class="col-sm-9">
 								<input type="text" class="form-control" id="vendorPhoneNumber" name="vendorPhoneNumber" placeholder="Enter Vendor's Phone Number" ng-model="vendor.vendorPhoneNumber"/>
 							</div>

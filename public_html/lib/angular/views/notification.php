@@ -11,15 +11,18 @@
 		</div>
 		<div class="col-md-5 col-md-offset-4">
 			<label for="search" class="col-sm-2 control-label">Search: </label>
+
 			<div class="col-sm-8 col-sm-offset-2" ng-controller="NotificationController">
 				<input type="text" class="form-control" id="notification-search" name="notification-search" placeholder="Enter Date"
 						 ng-model="notification.notificationDateTime" typeahead="notification.notificationDateTime for notification in getNotificationByNotificationDateTime($viewValue)"
 						 typeahead-loading="loadingNotifications" typeahead-no-results="noResults"/>
-				</div>
+				<span class="input-group-addon"> <i class="fa fa-search"></i></span>
+			</div>
 			<i ng-show="loadingNotifications" class="glyphicon glyphicon-refresh"></i>
-				<div ng-show="noResults">
-					<i class="glyphicon glyphicon-remove"></i>No Results Found
-				</div>
+
+			<div ng-show="noResults">
+				<i class="glyphicon glyphicon-remove"></i>No Results Found
+			</div>
 		</div>
 	</div>
 
@@ -61,11 +64,13 @@
 					<form class="form-horizontal" method="post" ng-submit="addAlertLevel(alertLevel);">
 						<div class="form-group">
 							<label for="product-search" class="col-sm-3 control-label">Product:</label>
+
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="product-search" name="product-search" placeholder="Enter Product"
 										 ng-model="product.productId" typeahead="product.productId as product.title for product in getProductByTitle($viewValue)"
 										 typeahead-loading="loadingProducts" typeahead-no-results="noResults"/>
 								<i ng-show="loadingproducts" class="glyphicon glyphicon-refresh"></i>
+
 								<div ng-show="noResults">
 									<i class="glyphicon glyphicon-remove"></i>No Results Found
 								</div>
@@ -73,12 +78,14 @@
 						</div>
 						<div class="form-group">
 							<label for="alertPoint" class="col-sm-3 control-label">Alert Level: </label>
+
 							<div class="col-sm-9">
 								<input type="text" class="form-control" id="alertPoint" name="alertPoint" placeholder="Enter Alert Level" ng-model="alert.alertPoint"/>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="alert operator" class="col-sm-3 control-label">Alert Operator</label>
+
 							<div class="col-sm-9">
 								<input type="text" class="form-control" id="alertOperator" name="alertOperator" placeholder="Enter Alert Operator" ng-model="alert.alertOperator"/>
 							</div>
@@ -92,7 +99,7 @@
 	</div>
 
 	<!-- Edit Product Modal -->
-	<div class="modal fade" id="EditAlertLevelModal" ng-controller="AlertLevelController" ng-show="isEditing" >
+	<div class="modal fade" id="EditAlertLevelModal" ng-controller="AlertLevelController" ng-show="isEditing">
 		<div class="modal-dialog">
 			<div class="modal-content">
 
@@ -106,11 +113,13 @@
 					<form class="form-horizontal" ng-submit="editAlert(editedalert);">
 						<div class="form-group">
 							<label for="product-search" class="col-sm-3 control-label">Product:</label>
+
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="product-search" name="product-search" placeholder="Enter Product"
 										 ng-model="product.alertId" typeahead="product.alertId as product.alertId for alert in getProductByAlertId($viewValue)"
 										 typeahead-loading="loadingProducts" typeahead-no-results="noResults"/>
 								<i ng-show="loadingProducts" class="glyphicon glyphicon-refresh"></i>
+
 								<div ng-show="noResults">
 									<i class="glyphicon glyphicon-remove"></i>No Results Found
 								</div>
@@ -118,12 +127,14 @@
 						</div>
 						<div class="form-group">
 							<label for="alertPoint" class="col-sm-3 control-label">Alert Level: </label>
+
 							<div class="col-sm-9">
 								<input type="text" class="form-control" id="alertPoint" name="alertPoint" placeholder="Enter Alert Level" ng-model="alert.alertPoint"/>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="alert operator" class="col-sm-3 control-label">Alert Operator</label>
+
 							<div class="col-sm-9">
 								<input type="text" class="form-control" id="alertOperator" name="alertOperator" placeholder="Enter Alert Operator" ng-model="alert.alertOperator"/>
 							</div>

@@ -11,6 +11,7 @@
 		</div>
 		<div class="col-md-5 col-md-offset-4">
 			<label for="search" class="col-sm-2 control-label">Search: </label>
+
 			<div class="col-sm-8 col-sm-offset-2">
 				<input type="text" class="form-control" id="search" name="search" placeholder="Search Stuff Here"/>
 			</div>
@@ -65,11 +66,14 @@
 					<form class="form-horizontal" method="post" ng-submit="addMovement(movement);">
 						<div class="form-group">
 							<label for="product-search" class="col-sm-4 control-label">Product:</label>
+
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="product-search" name="product-search" placeholder="Enter Product"
+								<input type="text" class="form-control" id="product-search" name="product-search" placeholder="Search"
 										 ng-model="movement.productId" typeahead="product.productId as product.title for product in getProductByTitle($viewValue)"
 										 typeahead-loading="loadingProducts" typeahead-no-results="noResults">
+								<span class="input-group-addon"> <i class="fa fa-search"></i></span>
 								<i ng-show="loadingProducts" class="glyphicon glyphicon-refresh"></i>
+
 								<div ng-show="noResults">
 									<i class="glyphicon glyphicon-remove"></i> No Results Found
 								</div>
@@ -77,11 +81,13 @@
 						</div>
 						<div class="form-group">
 							<label for="fromLocation-search" class="col-sm-4 control-label">From:</label>
+
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="fromLocation-search" name="fromLocation-search" placeholder="Enter Location"
 										 ng-model="movement.fromLocationId" typeahead="location.locationId as location.storageCode for location in getLocationByStorageCode($viewValue)"
 										 typeahead-loading="loadingFromLocations" typeahead-no-results="noResults">
 								<i ng-show="loadingFromLocations" class="glyphicon glyphicon-refresh"></i>
+
 								<div ng-show="noResults">
 									<i class="glyphicon glyphicon-remove"></i> No Results Found
 								</div>
@@ -89,11 +95,13 @@
 						</div>
 						<div class="form-group">
 							<label for="toLocation-search" class="col-sm-4 control-label">To:</label>
+
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="toLocation-search" name="toLocation-search" placeholder="Enter Location"
 										 ng-model="movement.toLocationId" typeahead="location.locationId as location.description for location in getLocationByStorageCode($viewValue)"
 										 typeahead-loading="loadingToLocations" typeahead-no-results="noResults">
 								<i ng-show="loadingToLocations" class="glyphicon glyphicon-refresh"></i>
+
 								<div ng-show="noResults">
 									<i class="glyphicon glyphicon-remove"></i> No Results Found
 								</div>
@@ -101,18 +109,21 @@
 						</div>
 						<div class="form-group">
 							<label for="cost" class="col-sm-4 control-label">Cost:</label>
+
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="cost" name="cost" placeholder=" (Purchase Price) e.g. $15.00 " ng-model="movement.cost"/>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="movementType" class="col-sm-4 control-label">Movement Type:</label>
+
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="movementType" name="movementType" placeholder="e.g. RM for (Removed)" ng-model="movement.movementType"/>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="price" class="col-sm-4 control-label">Price:</label>
+
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="price" name="price" placeholder=" (Selling Price) e.g. $19.99 " ng-model="movement.price"/>
 							</div>
