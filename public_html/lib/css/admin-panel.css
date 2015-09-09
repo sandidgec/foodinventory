@@ -3,7 +3,6 @@
 }
 
 body {
-	font-size: 1em;
 }
 
 h1 {
@@ -51,6 +50,31 @@ font-size: .9em;
 .invtext {
 	margin: 0;
 	font-family: 'Quicksand', sans-serif;
+}
+
+.table {
+	vertical-align: middle;
+}
+
+.table-bordered {
+	border: 3px solid #BAB8B9;
+}
+
+.table-bordered > thead > tr {
+	border: 3px solid #BAB8B9;
+	font-size: 12px;
+ }
+
+.table-bordered > thead > tr > th {
+	border: 3px solid #BAB8B9;
+}
+
+.table-bordered > tbody > tr {
+	border: 3px solid #BAB8B9;
+}
+
+.table-bordered > tbody > tr > td {
+	border: 3px solid #BAB8B9;
 }
 
 .outbtn {
