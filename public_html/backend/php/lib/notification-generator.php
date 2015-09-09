@@ -28,8 +28,8 @@ try{
 	$pdo = connectToEncryptedMySql("/etc/apache2/capstone-mysql/invtext.ini");
 
 	$message = <<< EOF
-		<h1>Inventory Report</h1>
-		<p>Dear Customer <br/> This is your inventory report for the week</p>
+		<h1>Low Inventory Report</h1>
+		<p>Dear Customer <br/> This is your low inventory report for the week</p>
 		<table id="emailReportTable" class="table table-bordered table-hover table-striped">
 				<thead>
 					<tr>
