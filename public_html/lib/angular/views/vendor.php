@@ -47,13 +47,13 @@
 						<td>{{ vendor.vendorEmail }}</td>
 						<td>{{ vendor.vendorPhoneNumber }}</td>
 						<td>
-							<a href="#" class="btn btn-md btn-info" ng-click="setEditedVendor(vendor);" data-toggle="modal" data-target="#EditVendorModal">
+							<a href="#" class="btn btn-xs btn-info" ng-click="setEditedVendor(vendor);" data-toggle="modal" data-target="#EditVendorModal">
 								<i class="fa fa-pencil tableicons"></i>
 							</a>
 						</td>
 						<td>
 							<form ng-submit="deleteVendor(vendor.vendorId);">
-								<button type="submit" class="btn btn-md btn-danger"><i class="fa fa-trash tableicons"></i></button>
+								<button type="submit" class="btn btn-xs btn-danger"><i class="fa fa-trash tableicons"></i></button>
 							</form>
 						</td>
 					</tr>

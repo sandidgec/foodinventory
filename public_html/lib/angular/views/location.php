@@ -43,13 +43,13 @@
 						<td>{{ location.description }}</td>
 						<td>{{ location.storageCode }}</td>
 						<td>
-							<a href="#" class="btn btn-md btn-info" ng-click="setEditedLocation(location);" data-toggle="modal" data-target="#EditLocationModal">
+							<a href="#" class="btn btn-xs btn-info" ng-click="setEditedLocation(location);" data-toggle="modal" data-target="#EditLocationModal">
 								<i class="fa fa-pencil tableicons"></i>
 							</a>
 						</td>
 						<td>
 							<form ng-submit="deleteLocation(location.locationId);">
-								<button type="submit" class="btn btn-md btn-danger"><i class="fa fa-trash tableicons"></i></button>
+								<button type="submit" class="btn btn-xs btn-danger"><i class="fa fa-trash tableicons"></i></button>
 							</form>
 						</td>
 					</tr>
