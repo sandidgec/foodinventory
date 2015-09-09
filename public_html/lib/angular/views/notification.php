@@ -15,7 +15,6 @@
 				<input type="text" class="form-control" id="notification-search" name="notification-search" placeholder="Enter Date"
 						 ng-model="notification.notificationDateTime" typeahead="notification.notificationDateTime for notification in getNotificationByNotificationDateTime($viewValue)"
 						 typeahead-loading="loadingNotifications" typeahead-no-results="noResults"/>
-				<span class="input-group-addon"><i class=" fa fa-search"></i></span>
 				</div>
 			<i ng-show="loadingNotifications" class="glyphicon glyphicon-refresh"></i>
 				<div ng-show="noResults">
