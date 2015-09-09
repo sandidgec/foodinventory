@@ -8,6 +8,7 @@
 	</section>
 	<section class="col-xs-2">
 		<a href="#"><i class="fa fa-facebook-square fa-2x social-media"></i></a>
+		<a href="#"><i class="fa fa-twitter-square fa-2x social-media"></i></a>
 	</section>
 </div>
 

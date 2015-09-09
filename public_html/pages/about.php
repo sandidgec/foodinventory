@@ -15,7 +15,7 @@ $CURRENT_DIR = __DIR__;
 				</header>
 
 				<div class="placeholder"></div>
-				<h2 class="welcome">About your new employee.</h2><br>
+				<h2 class="about">About your new employee.</h2><br>
 				<h5 class="abouttext">Your new employee is on board to help any small business owner that needs inventory management that intuitively
 					messages you when key inventory items reach a low level so the small business owner can stay ahead of ordering new supplies and keeping
 					the shelves fully stocked. A missed sale is a missed opportunity for a happy customer. </h5>

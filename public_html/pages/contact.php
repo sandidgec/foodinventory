@@ -15,7 +15,8 @@ $CURRENT_DIR = __DIR__;
 				</header>
 
 				<div class="placeholder"></div>
-				<h2 class="welcome">Contact Us Today.</h2><br>
+				<h2 class="about">Contact Us Today.</h2><br>
+
 				<?php require_once "emailform.php"; ?>
 
 			</div>

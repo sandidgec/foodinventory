@@ -29,20 +29,22 @@ if(isset($_POST["submit"])) {
 		<form class="form-horizontal" role="form" method="post" action="contact.php#contact">
 			<div class="col-sm-6 col-sm-offset-3">
 				<div class="form-group ">
-					<label for="email" class="col-sm-2 control-label">Email</label>
+					<label for="email" class="col-sm-2 control-label"></label>
 
 					<div class="col-sm-8">
-						<input type="email" class="form-control" id="email" name="email"
-								 placeholder="email@example.com" value="">
+						<div class="input-group">
+							<input type="email" class="form-control" id="email" name="email"
+									 placeholder="email@example.com" value="">
+							<span class="input-group-btn">
+                            <button id="send-email" type="submit" class="btn sendbtn"><i
+											 class="fa fa-envelope envelope"></i></button>
+                        </span>
+						</div>
 						<?php if(isset($errEmail)) {
 							echo "<p class='text-danger'>$errEmail</p>";
 						} ?>
 					</div>
-					<div class="form-group">
-						<div class="col-sm-2">
-							<input id="submit" name="submit" type="submit" value="Send" class="btn contact-button">
-						</div>
-					</div>
+
 				</div>
 			</div>
 			<div class="form-group">
