@@ -80,12 +80,12 @@ if(session_status() !== PHP_SESSION_ACTIVE) {
 			?>
 			<section class="container">
 				<!--  Admin Panel Sidebar  -->
-				<div class="vertical-text col-md-1">
+				<div class="vertical-text col-xs-1">
 					<h1 class="text-center adminpanel">Admin-Panel</h1>
 				</div>
 
 				<!-- Admin Tabs  -->
-				<section class="col-md-10" ng-controller="TabController as tab">
+				<section class="col-xs-10" ng-controller="TabController as tab">
 					<ul class="nav nav-pills">
 						<li ng-class="{ active:tab.isSet(1) }">
 							<a href="" ng-click="tab.setTab(1)">Product</a>
@@ -131,7 +131,7 @@ if(session_status() !== PHP_SESSION_ACTIVE) {
 					</div>
 				</section>
 
-				<div class="vertical-text-rev col-md-1">
+				<div class="vertical-text-rev col-xs-1">
 					<h1 class="text-center invtext">Inventory-Text</h1>
 				</div>
 
