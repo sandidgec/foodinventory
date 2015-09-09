@@ -4,7 +4,7 @@
 
 	<!--  Product Buttons -->
 	<div class="notification button row">
-		<div class="col-md-3 text-center">
+		<div class="col-md-3">
 			<a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#AddAlertLevelModal">
 				<i class="fa fa-plus fa-2x"></i>
 			</a>
