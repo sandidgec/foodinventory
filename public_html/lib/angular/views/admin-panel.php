@@ -14,6 +14,9 @@ if(session_status() !== PHP_SESSION_ACTIVE) {
 		<!-- Font Awesome -->
 		<link type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"/>
 
+		<!-- Google Font -->
+		<link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'>
+
 		<!-- Bootstrap Latest compiled and minified CSS -->
 		<link type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet"/>
 
@@ -78,11 +81,11 @@ if(session_status() !== PHP_SESSION_ACTIVE) {
 			<section class="container">
 				<!--  Admin Panel Sidebar  -->
 				<div class="vertical-text col-md-1">
-					<h1 class="text-center">Admin-Panel</h1>
+					<h1 class="text-center adminpanel">Admin-Panel</h1>
 				</div>
 
 				<!-- Admin Tabs  -->
-				<section class="col-md-9" ng-controller="TabController as tab">
+				<section class="col-md-10" ng-controller="TabController as tab">
 					<ul class="nav nav-pills">
 						<li ng-class="{ active:tab.isSet(1) }">
 							<a href="" ng-click="tab.setTab(1)">Product</a>
@@ -128,6 +131,9 @@ if(session_status() !== PHP_SESSION_ACTIVE) {
 					</div>
 				</section>
 
+				<div class="vertical-text-rev col-md-1">
+					<h1 class="text-center invtext">Inventory-Text</h1>
+				</div>
 
 			</section>
 		<?php

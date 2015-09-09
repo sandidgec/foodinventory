@@ -33,9 +33,24 @@ font-size: .9em;
 }
 
 .vertical-text {
-	margin-top: 350px;
+	margin-top: 401px;
 	transform: rotate(-90deg);
 	transform-origin: left top 0;
+}
+
+.vertical-text-rev {
+	margin-top: 143px;
+	transform: rotate(90deg);
+	/*transform-origin: left top 0;*/
+}
+
+.adminpanel {
+	font-family: 'Quicksand', sans-serif;
+}
+
+.invtext {
+	margin: 0;
+	font-family: 'Quicksand', sans-serif;
 }
 
 .outbtn {
