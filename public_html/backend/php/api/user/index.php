@@ -25,7 +25,7 @@ try {
 
 
 	// grab the mySQL connection
-	$pdo = connectToEncryptedMySql("/etc/apache2/capstone-mysql/invtext.ini");
+	$pdo = connectToEncryptedMySql("/etc/apache2/ecnchurch.ini");
 
 	// handle all RESTful calls to User today
 	// get some or all Users

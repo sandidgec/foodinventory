@@ -148,27 +148,27 @@ app.controller("MovementController", function($http, $scope, $rootScope, Movemen
 							});
 						// call the getLocationByLocationId() - the child service
 						LocationService.getLocationByLocationId(reply.data[index].fromLocationId)
-							// wait for the fourth promise (Location)
-							.then(function(location) {
-								if(reply.status === 200) {
-									// inject the child into the parent
-									reply.data[index].fromLocation = location.data;
-								}
-							});
-					});
+		// wait for the fourth promise (Location)
+		.then(function(location) {
+			if(reply.status === 200) {
+				// inject the child into the parent
+				reply.data[index].fromLocation = location.data;
+			}
+		});
+});
 
-					// finally, assign the parent array
-					//$scope.movements = reply.data;
-					$rootScope.$broadcast("updateMovements", reply.data);
-				} else {
-					$scope.statusClass = "alert-danger";
-					$scope.statusMessage = reply.message;
-				}
-			});
-	};
+// finally, assign the parent array
+//$scope.movements = reply.data;
+$rootScope.$broadcast("updateMovements", reply.data);
+} else {
+	$scope.statusClass = "alert-danger";
+	$scope.statusMessage = reply.message;
+}
+});
+};
 
-	$scope.getProductByTitle = function(title) {
-		var products = ProductService.getProductByTitle(title)
+$scope.getProductByTitle = function(title) {
+	var products = ProductService.getProductByTitle(title)
 			.then(function(reply) {
 				if(reply.status === 200) {
 					$scope.products = reply.data;
@@ -178,11 +178,11 @@ app.controller("MovementController", function($http, $scope, $rootScope, Movemen
 					$scope.statusMessage = reply.message;
 				}
 			});
-		return ($scope.products);
-	};
+	return ($scope.products);
+};
 
-	$scope.getLocationByStorageCode = function(storageCode) {
-		var locations = LocationService.getLocationByStorageCode(storageCode)
+$scope.getLocationByStorageCode = function(storageCode) {
+	var locations = LocationService.getLocationByStorageCode(storageCode)
 			.then(function(reply) {
 				if(reply.status === 200) {
 					$scope.locations = reply.data;
@@ -192,12 +192,12 @@ app.controller("MovementController", function($http, $scope, $rootScope, Movemen
 					$scope.statusMessage = reply.message;
 				}
 			});
-		return ($scope.locations);
-	};
+	return ($scope.locations);
+};
 
-	$scope.$on("updateMovements", function(event, movements) {
-		$scope.movements = movements;
-	});
+$scope.$on("updateMovements", function(event, movements) {
+	$scope.movements = movements;
+});
 
-	$scope.getAllMovements(0);
+$scope.getAllMovements(0);
 });
